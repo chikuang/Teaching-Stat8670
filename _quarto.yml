@@ -1,0 +1,36 @@
+project:
+  type: book
+
+book:
+  title: "STAT 8670 - Computational Methods in Statistics"
+  author: "Chi-Kuang Yeh"
+  date: today
+  chapters:
+    - index.qmd
+    - 01-intro.qmd
+    - 02-summary.qmd
+    - 03-references.qmd
+    - part: "Appendix"
+      chapters:
+        - app-A-whyR.qmd
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/yourusername/your-repo
+        aria-label: GitHub
+      - icon: file-pdf
+        href: ./_book/STAT-8670---Computational-Methods-in-Statistics.pdf
+        aria-label: Download PDF
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

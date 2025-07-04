@@ -1,0 +1,84 @@
+# Appendix: Why R? {.unnumbered}
+
+## A.1 R and RStudio
+
+For conducting analyses with data sets of hundreds to thousands of observations, calculating by hand is not feasible and you will need a statistical software. **R** is one of those. **R** can also be thought of as a high-level programming language. In fact, **R** is one of the top languages to be used by data analysts and data scientists. There are a lot of analysis packages in R that are currently developed and maintained by researchers around the world to deal with different data problems. And most importantly, **R** is free. In this book, we will learn how to use **R** to conduct basic statistical analyses.
+
+## A.2 RStudio Layout
+
+RStudio consists of several panes: - **Source**: Where you write scripts and markdown documents. - **Console**: Where you type and execute R commands. - **Environment/History**: Shows your variables and command history. - **Files/Plots/Packages/Help/Viewer**: For file management, viewing plots, managing packages, accessing help, and viewing web content.
+
+## A.3 R Scripts
+
+R scripts are plain text files containing R code. You can create a new script in RStudio by clicking `File > New File > R Script`.
+
+## A.4 R Help
+
+Use `?function_name` or `help(function_name)` to access help for any R function. For example:
+
+``` r
+?mean
+help(mean)
+```
+
+## A.5 R Packages
+
+Packages extend R's functionality. Install a package with:
+
+``` r
+install.packages("package_name")
+```
+
+Load a package with:
+
+``` r
+library(package_name)
+```
+
+## A.6 R Markdown
+
+R Markdown allows you to combine text, code, and output in a single document. Create a new R Markdown file in RStudio via `File > New File > R Markdown...`.
+
+## A.7 Vectors
+
+Vectors are the most basic data structure in R.
+
+``` r
+x <- c(1, 2, 3, 4, 5)
+x
+```
+
+## \[1\] 1 2 3 4 5
+
+```         
+
+You can perform operations on vectors:
+
+```r
+x * 2
+```
+
+```         
+## [1]  2  4  6  8 10
+```
+
+## A.8 Data Sets
+
+Data frames are used for storing data tables. Create a data frame:
+
+``` r
+df <- data.frame(Name = c("Alice", "Bob"), Score = c(90, 85))
+df
+```
+
+```         
+##    Name Score
+## 1 Alice    90
+## 2   Bob    85
+```
+
+You can import data from files using `read.csv()` or `read.table()`.
+
+------------------------------------------------------------------------
+
+This appendix is adapted from [Why R?](https://tqtbui.github.io/introbook/app-rintro.html).
