@@ -12,14 +12,14 @@ book:
     - 03-references.qmd
     - part: "Appendix"
       chapters:
-        - app-A-whyR.qmd
+        - app-A-intro-R.qmd
   navbar:
     right:
       - icon: github
-        href: https://github.com/yourusername/your-repo
+        href: https://github.com/chikuang/Teaching-Stat8670
         aria-label: GitHub
       - icon: file-pdf
-        href: ./_book/STAT-8670---Computational-Methods-in-Statistics.pdf
+        href: ./STAT-8670---Computational-Methods-in-Statistics.pdf
         aria-label: Download PDF
 
 bibliography: references.bib
@@ -33,4 +33,3 @@ format:
     documentclass: scrreprt
 
 editor: visual
-
