@@ -1,9 +1,61 @@
-# Introduction
+# Data Structure and R Programming
 
-This is a book created from markdown and executable code.
+Data types, operators, variables
 
-See @knuth84 for additional discussion of literate programming.
+Two basic types of objects: (1) data & (2) functions
+
+* Data: can be a number, a vector, a matrix, a dataframe, a list or other datatypes
+
+* Function: a function is a set of instructions that takes input, processes it, and returns output. Functions can be built-in or user-defined.
+
+## Data type
+
+* Boolean/Logical: Yes or No, Head or Tail, True or False
+
+* Integers: Whole numbers $\mathbb{Z}$, e.g., 1, 2, 3, -1, -2, -3
+
+* Characters: Text strings, e.g., "Hello", "World"
+
+* Floats: 
+
+* Missing data
 
 ```{r}
-1 + 1
+day <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+weather <- c("Raining", "Sunny", NA, "Windy", "Snowing")
+data.frame(rbind(day, weather))
 ```
+
+* Other more complex type
+
+
+### To change data type
+
+
+
+## Operators 
+
++ Unary: One argument
+
++ Binary: Two arguments
+
+### Comparison Operator
+
+### Logical Operator
+
+## Indexing
+
+## Naming
+
+## Arrray and Matrix
+
+## Key and Value Pair
+
+## Data Frame
+
+## Tidyverse 
+
+
+------------------------------------------------------------------------
+
+Some of the materials are adapted from [CMU Stat36-350](https://www.stat.cmu.edu/~ryantibs/statcomp/).

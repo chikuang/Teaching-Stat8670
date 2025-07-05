@@ -43,3 +43,15 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | Density estimation                                      | TBA                        |
 | Monte Carlo Methods | TBA | 
 
+## Recommended Textbooks
+
++ Givens, G.H. and Hoeting, J.A. Computational Statistics. Wiley, 2012.
+	
++ Rizzo, M.L. Statistical Computing with R. Chapman & Hall/CRC, 2007.
+
++ Hothorn, T. and Everitt, B.S. A Handbook of Statistical Analyses Using R. Chapman & Hall/CRC.
+
+
+
+
+
