@@ -14,11 +14,11 @@ Two basic types of objects: (1) data & (2) functions
 
 * Integers: Whole numbers $\mathbb{Z}$, e.g., 1, 2, 3, -1, -2, -3
 
-* Characters: Text strings, e.g., "Hello", "World"
+* Characters: Text strings, e.g., "Hello", "World."
 
-* Floats: 
+* Floats: Noninteger fractional numbers, e.g., $\pi$, $e$.
 
-* Missing data
+* Missing data: `NA` in R, which stands for "Not Available." It is used to represent missing or undefined values in a dataset.
 
 ```{r}
 day <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
@@ -26,35 +26,94 @@ weather <- c("Raining", "Sunny", NA, "Windy", "Snowing")
 data.frame(rbind(day, weather))
 ```
 
-* Other more complex type
+* Other more complex types
 
 
 ### To change data type
 
+You may change the data type using the following functions, but the chance is that some of the information will be missing. Do this with caution!
+
+
+```{r}
+x <- pi
+print(x)
+x_int <- as.integer(x)
+print(x_int)
+```
+
+Some of the conversion functions:
+
++ `as.integer()`: Convert to integer.
++ `as.numeric()`: Convert to numeric (float).
++ `as.character()`: Convert to character.
++ `as.logical()`: Convert to logical (boolean).
++ `as.Date()`: Convert to date.
++ `as.factor()`: Convert to factor (categorical variable).
++ `as.list()`: Convert to list.
++ `as.matrix()`: Convert to matrix.
++ `as.data.frame()`: Convert to data frame.
++ `as.vector()`: Convert to vector.
++ `as.complex()`: Convert to complex number.
 
 
 ## Operators 
 
-+ Unary: One argument
++ Unary: With only **one** argument. E.g., `-x` (negation), `!x` (logical negation).
 
-+ Binary: Two arguments
++ Binary: With **two** arguments. E.g., `x + y` (addition), `x - y` (subtraction), `x * y` (multiplication), `x / y` (division).
 
 ### Comparison Operator
 
+Comparing two objects. E.g., `x == y` (equal), `x != y` (not equal), `x < y` (less than), `x > y` (greater than), `x <= y` (less than or equal to), `x >= y` (greater than or equal to).
+
 ### Logical Operator
+Logical operators are used to combine or manipulate logical values (TRUE or FALSE). E.g., `x & y` (logical AND), `x | y` (logical OR), `!x` (logical NOT).
+
+We shall note that the logical operators in R are vectorized, `x | y` and `x || y` are different. The former is vectorized, while the latter is not.
+
+``` r 
+x <- c(TRUE, FALSE, FALSE)
+y <- c(TRUE, FALSE, FALSE)
+x | y  # [1]  TRUE FALSE FALSE
+x || y # This will return an error
+```
 
 ## Indexing
 
+Indexing is a way to access or modify specific elements in a data structure. In **R**, indexing can be done using square brackets `[]` for vectors and matrices, or the `$` operator for data frames. Note that the index starts from **0** in **R**, which is different from some other programming languages like Python.
+
 ## Naming
 
+
 ## Arrray and Matrix
+
 
 ## Key and Value Pair
 
 ## Data Frame
+Dataframe is a two-dimensional, tabular data structure in R that can hold different types of variables (numeric, character, factor, etc.) in each column. It is similar to a spreadsheet or SQL table.
+
+```{r}
+iris <- datasets::iris
+head(iris)
+```
 
 ## Tidyverse 
 
+The tidyverse is a collection of open source packages for the R programming language introduced by Hadley Wickham and his team that "share an underlying design philosophy, grammar, and data structures" of tidy data. Characteristic features of tidyverse packages include extensive use of non-standard evaluation and encouraging piping. 
+
+``` r
+## Load all tidyverse packages
+library(tidyverse)
+
+## Or load specific packages in the tidy family
+library(dplyr) # Data manipulation
+library(ggplot2) # Data visualization
+library(readr) # Data import
+library(tibble) # Tidy data frames
+library(tidyr) # Data tidying
+# ...
+```
 
 ------------------------------------------------------------------------
 

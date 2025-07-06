@@ -14,18 +14,45 @@ For GLMs or non-linear regression, we need to do this **iterativelly**!
 
 ## Speed comparison
 
-```{r}
+``` r
 set.seed(2017-07-13)
 X <- matrix(rnorm(5000 * 100), 5000, 100)
 y <- rnorm(5000)
 library(microbenchmark)
 microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y)
+```
 
+```
+Warning in microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y): less accurate
+nanosecond times to avoid potential integer overflows
+Unit: milliseconds
+                             expr      min       lq     mean   median       uq
+ solve(t(X) %*% X) %*% t(X) %*% y 28.57097 29.23575 30.04752 29.87713 30.62448
+      max neval
+ 32.21641   100
+```
+
+``` r
 microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y,
                solve(crossprod(X), crossprod(X, y)))
 ```
 
-------------------------------------------------------------------------
+``` 
+Unit: milliseconds
+                                 expr      min       lq     mean   median
+     solve(t(X) %*% X) %*% t(X) %*% y 28.39886 29.03231 29.73657 29.41512
+ solve(crossprod(X), crossprod(X, y)) 24.96937 25.01504 25.25663 25.05457
+       uq      max neval
+ 30.23379 32.94231   100
+ 25.16457 28.50168   100
+```
+
+## Type of Optimization Algorithms
+
+There are in general two types of the optimization algorithms: (1). **deterministic** and (2). **metaheuristic**. Deterministic and metaheuristic algorithms represent two distinct paradigms in optimization. Deterministic methods, such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum. In contrast, metaheuristic approaches—like genetic algorithms—incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
+
+
+------------------------------------------------------
 
 Examples are borrowed from the following sources:
 
