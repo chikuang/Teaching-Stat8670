@@ -1,0 +1,32 @@
+# Optimization
+
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+
+The optimization plays an important role in statistical computing, especially in the context of maximum likelihood estimation (MLE) and other statistical inference methods. This chapter will cover various optimization techniques used in statistical computing.
+
+For instance, for a linear regression
+$$
+  y = X\bbeta + \varepsilon.
+$$
+From regression class, we know that the (ordinary) least-squares estimation (OLE) for $\bbeta$ is given by $\hat{\bbeta}=(X^\top X)^{-1} X^\top y$. It is convenient as the solution is in the **closed-form**! However, in the most case, the closed-form solutions will not be available.
+
+For GLMs or non-linear regression, we need to do this **iterativelly**!
+
+## Speed comparison
+
+```{r}
+set.seed(2017-07-13)
+X <- matrix(rnorm(5000 * 100), 5000, 100)
+y <- rnorm(5000)
+library(microbenchmark)
+microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y)
+
+microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y,
+               solve(crossprod(X), crossprod(X, y)))
+```
+
+------------------------------------------------------------------------
+
+Examples are borrowed from the following sources:
+
++ Peng, R.D. [Advanced Statistical Computing](https://bookdown.org/rdpeng/advstatcomp/).

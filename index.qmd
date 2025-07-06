@@ -45,13 +45,12 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 ## Recommended Textbooks
 
-+ Givens, G.H. and Hoeting, J.A. Computational Statistics. Wiley, 2012.
++ Givens, G.H. and Hoeting, J.A. (2012). *[Computational Statistics](https://www.stat.colostate.edu/computationalstatistics/)*. Wiley, New York.
 	
-+ Rizzo, M.L. Statistical Computing with R. Chapman & Hall/CRC, 2007.
++ Rizzo, M.L. (2007) *[Statistical Computing with R](https://a-roshani.ir/files/SC/[4]%20[Maria%20L.%20Rizzo][2019]%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf)*. CRC Press, Roca Baton.
 
-+ Hothorn, T. and Everitt, B.S. A Handbook of Statistical Analyses Using R. Chapman & Hall/CRC.
++ Hothorn, T. and Everitt, B.S. (2006). *[A Handbook of Statistical Analyses Using R](https://digitallibrary.tsu.ge/book/2019/september/books/A-Handbook-of-Statistical-Analyses.pdf)*. CRC Press, Boca Raton.
 
+## Side Readings
 
-
-
-
++ Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023). *[R for Data Science](https://r4ds.hadley.nz/)*. O'Reilly.

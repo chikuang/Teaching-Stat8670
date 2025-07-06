@@ -1,0 +1,19 @@
+# Resampling, Jackknife and Bootstrap
+
+## Introduction
+
+This chapter covers resampling methods including the jackknife and bootstrap techniques.
+
+## Jackknife
+
+The jackknife is a resampling technique used to estimate the bias and variance of a statistic.
+
+## Bootstrap
+
+The bootstrap is a resampling method that allows estimation of the sampling distribution of almost any statistic using random sampling methods.
+
+## Applications
+
+These methods are widely used in statistical inference and have applications in various fields.
+
+------------------------------------------------------------------------

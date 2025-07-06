@@ -8,8 +8,9 @@ book:
   chapters:
     - index.qmd
     - 01-intro.qmd
-    - 02-summary.qmd
-    - 03-references.qmd
+    - 02-optimization.qmd
+    - 03-resampling.qmd
+    - 99-references.qmd
     - part: "Appendix"
       chapters:
         - app-A-intro-R.qmd
