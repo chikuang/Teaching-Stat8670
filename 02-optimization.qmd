@@ -51,6 +51,27 @@ Unit: milliseconds
 
 There are in general two types of the optimization algorithms: (1). **deterministic** and (2). **metaheuristic**. Deterministic and metaheuristic algorithms represent two distinct paradigms in optimization. Deterministic methods, such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum. In contrast, metaheuristic approaches—like genetic algorithms—incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
 
+## Heuristic Algorithms
+
+Many of the heuristic algorithms are inspired by the nature, such as the genetic algorithm (GA) and particle swarm optimization (PSO). These algorithms are often used for complex optimization problems where traditional methods may struggle to find a solution.
+Some of the popular heuristic algorithms include:
+
++ Genetic Algorithm (GA)
++ Particle Swarm Optimization (PSO)
++ Simulated Annealing (SA)
++ Ant Colony Optimization (ACO)
+
+## Deterministic Algorithms
+
+Numerical approximation, what you learned in the mathmeatical optimization course. Some of the algorithms include:
+
++ Gradient Descent
++ Newton's Method
++ Conjugate Gradient Method
++ Quasi-Newton Methods (e.g., BFGS)
++ Interior Point Methods
+
+They often reply on the KKT conditions.
 
 ------------------------------------------------------
 
