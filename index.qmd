@@ -12,45 +12,44 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 [Chi-Kuang Yeh](https://chikuang.github.io/), I am a postdoctoral scholar at the Department of Statistics and Actuarial Science, McGill University.
 
-+ Office: 1216 Burnside Hall.
-+ Email: [chi-kuang.yeh@mail.mcgill.ca](mailto:chi-kuang.yeh@mail.mcgill.ca).
-
+-   Office: 1216 Burnside Hall.
+-   Email: [chi-kuang.yeh\@mail.mcgill.ca](mailto:chi-kuang.yeh@mail.mcgill.ca).
 
 ## Office Hour
 
-[By appointment and a online link will be provided later]
+\[By appointment and a online link will be provided later\]
 
 ## Assignment
 
-+ [ ] Assignment 1: Date and topics TBA 
+-   [ ] Assignment 1: Date and topics TBA
 
 ## Midterm
 
-+ [ ] Midterm 1: Date and topics TBA 
+-   [ ] Midterm 1: Date and topics TBA
 
 ## Topics and Corresponding Lectures
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-| Topic                                                      | Lecture Covered            |
-|--------------------------------------------------------------|:--------------------------:|
-| Optimization                                            | TBA                        |
-| Numerical integration                                   | TBA                        |
-|Jackknife |  TBA | 
-| Bootstrap                                      | TBA                        |
-| Cross-validation                          | TBA                        |
-| Smoothing                                               | TBA                        |                    |
-| Density estimation                                      | TBA                        |
-| Monte Carlo Methods | TBA | 
+| Topic                 | Lecture Covered |
+|-----------------------|:---------------:|
+| Optimization          |       TBA       |
+| Numerical integration |       TBA       |
+| Jackknife             |       TBA       |
+| Bootstrap             |       TBA       |
+| Cross-validation      |       TBA       |
+| Smoothing             |       TBA       |
+| Density estimation    |       TBA       |
+| Monte Carlo Methods   |       TBA       |
 
 ## Recommended Textbooks
 
-+ Givens, G.H. and Hoeting, J.A. (2012). *[Computational Statistics](https://www.stat.colostate.edu/computationalstatistics/)*. Wiley, New York.
-	
-+ Rizzo, M.L. (2007) *[Statistical Computing with R](https://a-roshani.ir/files/SC/[4]%20[Maria%20L.%20Rizzo][2019]%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf)*. CRC Press, Roca Baton.
+-   Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.
 
-+ Hothorn, T. and Everitt, B.S. (2006). *[A Handbook of Statistical Analyses Using R](https://digitallibrary.tsu.ge/book/2019/september/books/A-Handbook-of-Statistical-Analyses.pdf)*. CRC Press, Boca Raton.
+-   Rizzo, M.L. (2007) [*Statistical Computing with R*](https://a-roshani.ir/files/SC/%5B4%5D%20%5BMaria%20L.%20Rizzo%5D%5B2019%5D%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf). CRC Press, Roca Baton.
+
+-   Hothorn, T. and Everitt, B.S. (2006). [*A Handbook of Statistical Analyses Using R*](https://digitallibrary.tsu.ge/book/2019/september/books/A-Handbook-of-Statistical-Analyses.pdf). CRC Press, Boca Raton.
 
 ## Side Readings
 
-+ Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023). *[R for Data Science](https://r4ds.hadley.nz/)*. O'Reilly.
+-   Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023). [*R for Data Science*](https://r4ds.hadley.nz/). O'Reilly.

@@ -84,11 +84,82 @@ Indexing is a way to access or modify specific elements in a data structure. In 
 
 ## Naming
 
+In **R**, you can assign names to objects using the `names()` function. This is useful for making your code more readable and for accessing specific elements in a data structure.
 
-## Arrray and Matrix
+A good practice is to use `_` (underscore) to separate words in variable names, e.g., `my_variable`. This makes the code more readable and easier to understand.
 
+```{r}
+# Assign names to a vector
+temp <- c(20, 30, 27, 31, 45)
+names(temp) <- c("Mon", "Tues", "Wed", "Thurs", "Fri")
+print(temp)
+```
+
+``` r
+rownames(temp) <- "Day1" # error
+```
+
+```{r}
+temp_mat <- matrix(c(20, 30, 27, 31, 45), nrow = 1, ncol = 5)
+colnames(temp_mat) <- c("Mon", "Tues", "Wed", "Thurs", "Fri")
+rownames(temp_mat) <- "Day1" # error
+print(temp_mat)
+```
+
+## Array and Matrix
+
+One may define an array or a matrix in **R** using the `array()` or `matrix()` functions, respectively. An array is a multi-dimensional data structure, while a matrix is a two-dimensional array.
+
+```{r}
+# Create a 1-dimensional array
+array_1d <- array(1:10, dim = 10)
+array_1d
+
+# Create a 2-dimensional array
+array_2d <- array(1:12, dim = c(4, 3))
+array_2d
+
+# Create a 3-dimensional array
+array_3d <- array(1:24, dim = c(4, 3, 2))
+array_3d
+
+# Create a matrix
+my_matrix <- matrix(1:12, nrow = 4, ncol = 3)
+my_matrix
+```
+
+Note here, the matrix is a special case of an array, where the number of dimensions is exactly 2. 
+
+``` r
+is.matrix(array_2d)   # TRUE
+is.matrix(my_matrix)  # TRUE
+
+is.array(array_2d)    # TRUE
+is.array(my_matrix)   # TRUE
+```
 
 ## Key and Value Pair
+
+Key-Value Pair is a data structure that consists of a key and its corresponding value. In **R**, this can be implemented using named vectors, lists, or data frames. Usually, the most commonly used case is in the lists and data frames. The values can be extra by providing the corresonding key
+
+```{r}
+key1 <- "Tues"
+value1 <- 32
+key2 <- "Wed"
+value2 <- 28
+
+list_temp <- list()
+list_temp[[ key1 ]] <- value1
+list_temp[[ key2 ]] <- value2
+
+print(list_temp)
+
+## Now providing a key - Tues
+### First way
+list_temp[["Tues"]]
+### Second way
+list_temp$Tues
+```
 
 ## Data Frame
 Dataframe is a two-dimensional, tabular data structure in R that can hold different types of variables (numeric, character, factor, etc.) in each column. It is similar to a spreadsheet or SQL table.
@@ -114,6 +185,34 @@ library(tibble) # Tidy data frames
 library(tidyr) # Data tidying
 # ...
 ```
+
+## Pipe
+
+Pipe operator `|>` (native after R version 4.0) or `%>$` (from magrittr package) is a powerful tool in **R** that allows you to chain together multiple operations in a clear and concise way. It takes the output of one function and passes it as the first argument to the next function.
+
+For example, we can write
+
+```{r}
+set.seed(777)
+x <- rnorm(5)
+
+## Without using pipe
+print(round(mean(x), 2))
+
+## Using pipe
+x |> 
+  mean() |> # applying the mean function
+  round(2) |> #round to 2nd decimal place
+  print()
+```
+
+We can see that, without using the pipe, if we are applying multiple functions to the same object, we may have hard time to track. This can make the code less readable and harder to maintain. On the other hand, using pipe, we can clearly see the sequence of operations being applied to the data, making it easier to understand and modify.
+
+### Some rules
+
+`|>` should **always have a space before it** and should typically **be the last thing on a line**. This simplifies adding new steps, reorganizing existing ones, and modifying elements within each step.
+
+Note that all of the packages in the tidyverse family support the pipe operator (except `ggplot2`!), so you can use it with any of them.
 
 ------------------------------------------------------------------------
 

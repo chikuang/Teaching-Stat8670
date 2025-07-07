@@ -10,6 +10,7 @@ book:
     - 01-intro.qmd
     - 02-optimization.qmd
     - 03-resampling.qmd
+    - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
       chapters:

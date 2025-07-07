@@ -1,5 +1,7 @@
 # Resampling, Jackknife and Bootstrap
 
+\newcommand{\bx}{\mathbf{x}}
+
 ## Introduction
 
 This chapter covers resampling methods including the jackknife and bootstrap techniques.
@@ -7,6 +9,14 @@ This chapter covers resampling methods including the jackknife and bootstrap tec
 ## Jackknife
 
 The jackknife is a resampling technique used to estimate the bias and variance of a statistic.
+
+Jackknife is like a **leave-one-out cross-validation**. Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
+
+For the parameter of interest $\theta$, if the statistics is $T(\bx)=:\hat{\theta}$ is computed on the full
+
+### When does jackknife not work?
+
+Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
 
 ## Bootstrap
 
