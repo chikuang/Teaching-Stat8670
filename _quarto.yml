@@ -31,7 +31,12 @@ format:
     theme:
       - minty
       - brand
+    css: custom-callouts.css
+    filters:
+      - addcalloutid.lua
   pdf:
     documentclass: scrreprt
+    filters:
+      - addcalloutid.lua
 
 editor: visual

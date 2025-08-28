@@ -63,7 +63,7 @@ Some of the popular heuristic algorithms include:
 
 ## Deterministic Algorithms
 
-Numerical approximation, what you learned in the mathmeatical optimization course. Some of the algorithms include:
+Numerical approximation, what you learned in the mathematical optimization course. Some of the algorithms include:
 
 + Gradient Descent
 + Newton's Method
@@ -72,6 +72,30 @@ Numerical approximation, what you learned in the mathmeatical optimization cours
 + Interior Point Methods
 
 They often reply on the KKT conditions.
+
+### In R
+
+`optim()` function, `nlm()` function or `mle()` function.
+
+### EM Algorithm
+
+The EM (Expectation–Maximization) algorithm is an optimization method that is often applied to find maximum likelihood estimates when data is incomplete or has missing values. It iteratively refines estimates of parameters by alternating between (1) expectation step (E-step) and (2) maximization step (M-step).
+
+::: {.callout-note title="Tip with Title"}
+For example, consider the function $f(x) = x^2$.
+:::
+
+::: {.callout-example}
+Example
+
+$$
+f(x) = x^2
+$$
+:::
+
+::: {.callout-theorem}
+Example Theorem
+:::
 
 ------------------------------------------------------
 

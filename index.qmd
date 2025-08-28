@@ -2,7 +2,7 @@
 
 ## Description
 
-Topics included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
+Topics ins included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
 
 ### Prerequisites
 
@@ -10,14 +10,14 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ### Instructor
 
-[Chi-Kuang Yeh](https://chikuang.github.io/), I am a postdoctoral scholar at the Department of Statistics and Actuarial Science, McGill University.
+[Chi-Kuang Yeh](https://chikuang.github.io/), I am an Assistant Professor in the Department of Mathematics and Statistics, Georgia State University.
 
--   Office: 1216 Burnside Hall.
--   Email: [chi-kuang.yeh\@mail.mcgill.ca](mailto:chi-kuang.yeh@mail.mcgill.ca).
+-   Office: 1407, 25 Park Place.
+-   Email: [cyeh\@gsu.edu](mailto:cyeh@gsu.edu).
 
 ## Office Hour
 
-\[By appointment and a online link will be provided later\]
+\[To be announced. By appointment for now\]
 
 ## Assignment
 
@@ -26,6 +26,11 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 ## Midterm
 
 -   [ ] Midterm 1: Date and topics TBA
+-   [ ] Midterm 2: Date and topics TBA
+
+## Final Exam
+
+-   [ ] Final Project: Date and topics TBA
 
 ## Topics and Corresponding Lectures
 
