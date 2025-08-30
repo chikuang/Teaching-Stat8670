@@ -12,7 +12,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 [Chi-Kuang Yeh](https://chikuang.github.io/), I am an Assistant Professor in the Department of Mathematics and Statistics, Georgia State University.
 
--   Office: 1407, 25 Park Place.
+-   Office: Suite 1407, 25 Park Place.
 -   Email: [cyeh\@gsu.edu](mailto:cyeh@gsu.edu).
 
 ## Office Hour
@@ -38,7 +38,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Topic                 | Lecture Covered |
 |-----------------------|:---------------:|
-| Optimization          |       TBA       |
+| Introduction to R Programming          |       1--2  |
+| Optimization          |       3--       |
 | Numerical integration |       TBA       |
 | Jackknife             |       TBA       |
 | Bootstrap             |       TBA       |

@@ -4,11 +4,9 @@
 
 The optimization plays an important role in statistical computing, especially in the context of maximum likelihood estimation (MLE) and other statistical inference methods. This chapter will cover various optimization techniques used in statistical computing.
 
-For instance, for a linear regression
-$$
-  y = X\bbeta + \varepsilon.
-$$
-From regression class, we know that the (ordinary) least-squares estimation (OLE) for $\bbeta$ is given by $\hat{\bbeta}=(X^\top X)^{-1} X^\top y$. It is convenient as the solution is in the **closed-form**! However, in the most case, the closed-form solutions will not be available.
+For instance, for a linear regression $$
+  y = X\boldsymbol{\beta}+ \varepsilon.
+$$ From regression class, we know that the (ordinary) least-squares estimation (OLE) for $\boldsymbol{\beta}$ is given by $\hat{\boldsymbol{\beta}}=(X^\top X)^{-1} X^\top y$. It is convenient as the solution is in the **closed-form**! However, in the most case, the closed-form solutions will not be available.
 
 For GLMs or non-linear regression, we need to do this **iterativelly**!
 
@@ -22,7 +20,7 @@ library(microbenchmark)
 microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y)
 ```
 
-```
+```         
 Warning in microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y): less accurate
 nanosecond times to avoid potential integer overflows
 Unit: milliseconds
@@ -37,7 +35,7 @@ microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y,
                solve(crossprod(X), crossprod(X, y)))
 ```
 
-``` 
+```         
 Unit: milliseconds
                                  expr      min       lq     mean   median
      solve(t(X) %*% X) %*% t(X) %*% y 28.39886 29.03231 29.73657 29.41512
@@ -53,23 +51,22 @@ There are in general two types of the optimization algorithms: (1). **determinis
 
 ## Heuristic Algorithms
 
-Many of the heuristic algorithms are inspired by the nature, such as the genetic algorithm (GA) and particle swarm optimization (PSO). These algorithms are often used for complex optimization problems where traditional methods may struggle to find a solution.
-Some of the popular heuristic algorithms include:
+Many of the heuristic algorithms are inspired by the nature, such as the genetic algorithm (GA) and particle swarm optimization (PSO). These algorithms are often used for complex optimization problems where traditional methods may struggle to find a solution. Some of the popular heuristic algorithms include:
 
-+ Genetic Algorithm (GA)
-+ Particle Swarm Optimization (PSO)
-+ Simulated Annealing (SA)
-+ Ant Colony Optimization (ACO)
+-   Genetic Algorithm (GA)
+-   Particle Swarm Optimization (PSO)
+-   Simulated Annealing (SA)
+-   Ant Colony Optimization (ACO)
 
 ## Deterministic Algorithms
 
 Numerical approximation, what you learned in the mathematical optimization course. Some of the algorithms include:
 
-+ Gradient Descent
-+ Newton's Method
-+ Conjugate Gradient Method
-+ Quasi-Newton Methods (e.g., BFGS)
-+ Interior Point Methods
+-   Gradient Descent
+-   Newton's Method
+-   Conjugate Gradient Method
+-   Quasi-Newton Methods (e.g., BFGS)
+-   Interior Point Methods
 
 They often reply on the KKT conditions.
 
@@ -85,7 +82,7 @@ The EM (Expectation–Maximization) algorithm is an optimization method that is 
 For example, consider the function $f(x) = x^2$.
 :::
 
-::: {.callout-example}
+::: callout-example
 Example
 
 $$
@@ -93,12 +90,12 @@ f(x) = x^2
 $$
 :::
 
-::: {.callout-theorem}
+::: callout-theorem
 Example Theorem
 :::
 
-------------------------------------------------------
+------------------------------------------------------------------------
 
 Examples are borrowed from the following sources:
 
-+ Peng, R.D. [Advanced Statistical Computing](https://bookdown.org/rdpeng/advstatcomp/).
+-   Peng, R.D. [Advanced Statistical Computing](https://bookdown.org/rdpeng/advstatcomp/).

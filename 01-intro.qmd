@@ -289,3 +289,7 @@ my_df %>% { f(.$x, .$y) }
 ------------------------------------------------------------------------
 
 Some of the materials are adapted from [CMU Stat36-350](https://www.stat.cmu.edu/~ryantibs/statcomp/).
+
+A comprehensive reference for all the *tidyverse* tools is [R for Data Science](https://r4ds.had.co.nz/). 
+
+A comprehensive reference for *ggplot2* is [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/).
