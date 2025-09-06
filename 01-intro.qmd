@@ -185,17 +185,17 @@ rbind(cbind(x, Rtot = row.sums), Ctot = c(col.sums, sum(col.sums)))
 
 Some of the commonly used apply functions:
 
-* **lapply**: Apply a Function over a List or Vector
+-   **lapply**: Apply a Function over a List or Vector
 
-* **sapply**: a user-friendly version and wrapper of lapply by default returning a vector, matrix
+-   **sapply**: a user-friendly version and wrapper of lapply by default returning a vector, matrix
 
-* **vapply**: similar to sapply, but has a pre-specified type of return value, so it can be safer (and sometimes faster) to use.
+-   **vapply**: similar to sapply, but has a pre-specified type of return value, so it can be safer (and sometimes faster) to use.
 
 ## Tidyverse
 
 The tidyverse is a collection of open source packages for the R programming language introduced by Hadley Wickham and his team that "share an underlying design philosophy, grammar, and data structures" of tidy data. Characteristic features of tidyverse packages include extensive use of non-standard evaluation and encouraging piping.
 
-``` {r}
+```{r}
 ## Load all tidyverse packages
 library(tidyverse)
 
@@ -242,8 +242,7 @@ Note that all of the packages in the tidyverse family support the pipe operator 
 
 Q1. If I know Python already, why learn R?
 
-Reply: My general take are 
-1). R is more specialized for statistical analysis and data visualization, while Python is a more general-purpose programming language. 2). R has a rich ecosystem of packages and libraries specifically designed for statistical computing, making it a popular choice among statisticians and data scientists. 3). R's syntax and data structures are often more intuitive for statistical tasks, which can lead to faster development and easier collaboration with other statisticians. 4). Also, the tidyverse ecosystem including *ggplot* and others are a big plus when dealing with big dataframes. 5). They are not meant to replace each other, but work as a complement.
+Reply: My general take are 1). R is more specialized for statistical analysis and data visualization, while Python is a more general-purpose programming language. 2). R has a rich ecosystem of packages and libraries specifically designed for statistical computing, making it a popular choice among statisticians and data scientists. 3). R's syntax and data structures are often more intuitive for statistical tasks, which can lead to faster development and easier collaboration with other statisticians. 4). Also, the tidyverse ecosystem including *ggplot* and others are a big plus when dealing with big dataframes. 5). They are not meant to replace each other, but work as a complement.
 
 Q2. Why my installation of R sometimes failed on a Windows machine?
 
@@ -251,16 +250,15 @@ Reply: There are many reasons. One of the most common reasons is that you may ne
 
 ### Lecture 2, August 27, 2025
 
-Q1. What's the difference of using ``apply`` v.s. ``looping`` in R?
-
+Q1. What's the difference of using `apply` v.s. `looping` in R?
 
 Reply: The apply functions are often faster and more efficient than looping, especially for large datasets, because they have done some vectorization under the hood. Also, it has much higher readibility and better conciseness. However, depends on the task, you may want to do the **benchmarking** to see the performance difference.
 
-Q2. How to use ``pipe`` with two or more variables?
+Q2. How to use `pipe` with two or more variables?
 
 Reply: There are several ways to do this.
 
-1. Within the tidyverse family: One way is to use the `dplyr` package, which provides a set of functions that work well with the pipe operator. For example, you can use the `mutate()` function to create a new variable based on two existing variables. For example, you can do
+1.  Within the tidyverse family: One way is to use the `dplyr` package, which provides a set of functions that work well with the pipe operator. For example, you can use the `mutate()` function to create a new variable based on two existing variables. For example, you can do
 
 ```{r, message = F, warning = F}
 library(dplyr)
@@ -274,7 +272,7 @@ my_df %>%
   mutate(z = f(x, y))
 ```
 
-2. Using base R, you may do something like the following through the ``magrittr`` package’s exposition pipe ``%$%``:
+2.  Using base R, you may do something like the following through the `magrittr` package’s exposition pipe `%$%`:
 
 ```{r}
 library(magrittr)
@@ -285,11 +283,10 @@ my_df %$% f(x, y)
 my_df %>% { f(.$x, .$y) }
 ```
 
-
 ------------------------------------------------------------------------
 
 Some of the materials are adapted from [CMU Stat36-350](https://www.stat.cmu.edu/~ryantibs/statcomp/).
 
-A comprehensive reference for all the *tidyverse* tools is [R for Data Science](https://r4ds.had.co.nz/). 
+A comprehensive reference for all the *tidyverse* tools is [R for Data Science](https://r4ds.had.co.nz/).
 
 A comprehensive reference for *ggplot2* is [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/).

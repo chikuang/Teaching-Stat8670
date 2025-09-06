@@ -1,7 +1,5 @@
 # Resampling, Jackknife and Bootstrap
 
-\newcommand{\bx}{\mathbf{x}}
-
 ## Introduction
 
 This chapter covers resampling methods including the jackknife and bootstrap techniques.

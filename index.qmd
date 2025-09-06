@@ -36,17 +36,17 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-| Topic                 | Lecture Covered |
-|-----------------------|:---------------:|
-| Introduction to R Programming          |       1--2  |
-| Optimization          |       3--       |
-| Numerical integration |       TBA       |
-| Jackknife             |       TBA       |
-| Bootstrap             |       TBA       |
-| Cross-validation      |       TBA       |
-| Smoothing             |       TBA       |
-| Density estimation    |       TBA       |
-| Monte Carlo Methods   |       TBA       |
+| Topic                         | Lecture Covered |
+|-------------------------------|:---------------:|
+| Introduction to R Programming |      1--2       |
+| Numerical Approaches and Optimization                  |       3--       |
+| Numerical integration         |       TBA       |
+| Jackknife                     |       TBA       |
+| Bootstrap                     |       TBA       |
+| Cross-validation              |       TBA       |
+| Smoothing                     |       TBA       |
+| Density estimation            |       TBA       |
+| Monte Carlo Methods           |       TBA       |
 
 ## Recommended Textbooks
 
