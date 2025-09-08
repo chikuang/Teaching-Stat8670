@@ -319,21 +319,21 @@ Thus, a knowledge of statistics and numerical analysis can often lead to better 
 
 ## Nonlinear functions
 
-On the top, we have *linear functions*, such as $y=f(x) = ax + b$ or in the linear regression $y=X\beta +\epsilon$. It is a small class of the functions, and may be relatively limited. 
+On the top, we have *linear functions*, such as $y=f(x) = ax + b$ or in the linear regression $y=X\beta +\epsilon$. It is a small class of the functions, and may be relatively limited.
 
-E.g., what if we have a quadratic relationship? Then $y=f(x) = ax^2 + bx + c$. 
+E.g., what if we have a quadratic relationship? Then $y=f(x) = ax^2 + bx + c$.
 
-Such nonlinear relationship is very common, , such as $f(x) = a\sin(bx + c)$ or $f(x) = a\exp(bx) + c$, and they may not have a closed-form solution like in the linear regression case. 
+Such nonlinear relationship is very common, , such as $f(x) = a\sin(bx + c)$ or $f(x) = a\exp(bx) + c$, and they may not have a closed-form solution like in the linear regression case.
 
-From now on, we will be talking about the numerical approaches to solve these problems. 
+From now on, we will be talking about the numerical approaches to solve these problems.
 
 ## Type of Optimization Algorithms
 
-There are in general two types of the optimization algorithms: (1). **deterministic** and (2). **metaheuristic**. Deterministic and metaheuristic algorithms represent two distinct paradigms in optimization. 
+There are in general two types of the optimization algorithms: (1). **deterministic** and (2). **metaheuristic**. Deterministic and metaheuristic algorithms represent two distinct paradigms in optimization.
 
-*. **Deterministic methods**:  such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum. 
+\*. **Deterministic methods**: such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum.
 
-*. In contrast, **metaheuristic approaches**: incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
+\*. In contrast, **metaheuristic approaches**: incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
 
 ## Deterministic Algorithms
 
@@ -347,39 +347,32 @@ Numerical approximation, what you learned in the mathematical optimization cours
 
 They often rely on the **Karush–Kuhn–Tucker** (KKT) conditions.
 
-
 ### Root finding
 
-The *root finding* is probably the first numerical approach you learned in the numerical analysis course. Consider a function $f: \R \to \R$. The point $x\in \R$ is called a *root* of $f$ if $f(x) = 0$.
+The *root finding* is probably the first numerical approach you learned in the numerical analysis course. Consider a function $f: \mathbb R\to \mathbb R$. The point $x\in \mathbb R$ is called a *root* of $f$ if $f(x) = 0$.
 
 Q: Why do we care about the root finding?
 
-This idea has broad applications. While finding the values of x such that f(x) = 0 is useful in many settings, a more general task is to determine the values of x for which f(x) = y. The same techniques used to find the roots of a function can be applied here by rewriting the problem as
-$$
+This idea has broad applications. While finding the values of x such that f(x) = 0 is useful in many settings, a more general task is to determine the values of x for which f(x) = y. The same techniques used to find the roots of a function can be applied here by rewriting the problem as $$
 \tilde{f}(x) := f(x) - y = 0.
-$$
-In this way, new function $\tilde{f}(x)$
-has a root at the solution to, $f(x)=y$, original equation.
+$$ In this way, new function $\tilde{f}(x)$ has a root at the solution to, $f(x)=y$, original equation.
 
 For linear function, it is trivial. For quadratic function, we can use the quadratic formula, i.e., $$
 x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.
-$$
-However, for more complex functions, we need to use numerical methods to solve it iteratively. Below, we are going to go over some numerical algorithms.
+$$ However, for more complex functions, we need to use numerical methods to solve it iteratively. Below, we are going to go over some numerical algorithms.
 
 ### One-dimensional case
 
-We first look at the one-dimensional case. The function we want to optimize is  
+We first look at the one-dimensional case. The function we want to optimize is
 
 $$f(x) = x^3 - x + 1$$
 
-
-
 ### Bisection method
 
-Bisection method is just like a *binary search*. 
+Bisection method is just like a *binary search*.
 
 ::: {.callout-algorithm title="Bisection Method"}
-**Step 1.** Selection two points $a,b\in \chi \subseteq \R$, where $\chi$ is the domain of $f$. Make sure that $a$ and $b$ have opposite signs, i.e., $f(a)f(b) < 0$.
+**Step 1.** Selection two points $a,b\in \chi \subseteq \mathbb R$, where $\chi$ is the domain of $f$. Make sure that $a$ and $b$ have opposite signs, i.e., $f(a)f(b) < 0$.
 
 **Step 2.** Compute the midpoint $c = (a+b)/2$.
 
@@ -390,20 +383,17 @@ Bisection method is just like a *binary search*.
 
 The intuition here is that we are shirking the search space $\chi$ by half in each iteration.
 
-Q: Why this algorithm work and what are the assumptions?
-    1. We require the function to be continuous
-    2. We require the function to have opposite signs at the two endpoints $a,b\in\chi\subseteq \R$.
-    3. We do not require the differentiability! 
-    
+Q: Why this algorithm work and what are the assumptions? 1. We require the function to be continuous 2. We require the function to have opposite signs at the two endpoints $a,b\in\chi\subseteq \mathbb R$. 3. We do not require the differentiability!
+
 Q: But what's the cost?
-    
+
 Q: Can this work for every function?
 
 #### Example
 
-Suppose the design region is 
+Suppose the design region is
 
-``` {r}
+```{r}
 a <- 1
 b <- 4
 curve(0.5*x^3 - 0.5*x - 18, from = a, to = b, xlab = "x", ylab = "f(x)")
@@ -456,61 +446,146 @@ text(res$root, par("usr")[3] + 5,
 
 ### Newton-Raphson method
 
-The Newton-Raphson method (or simply Newton's method) is an iterative numerical method for finding successively better approximations to the roots (or zeroes) of a real-valued function. 
+The Newton-Raphson method (or simply Newton's method) is an iterative numerical method for finding successively better approximations to the roots (or zeroes) of a real-valued function.
 
-
-
-Here, we assume that the function $f$ is differentiable. The idea here is to use the Taylor expansion of the function. Suppose we are search a small neighbour of the solution $x \in \R$, say $x_j \in \R$ is a small number. Then
-Then we first order Taylor series to approximate $f(x_j+h)$ around $x_j$ is
-$$
+Here, we assume that the function $f$ is differentiable. The idea here is to use the Taylor expansion of the function. Suppose we are search a small neighbour of the solution $x \in \mathbb R$, say $x_j \in \mathbb R$ is a small number. Then Then we first order Taylor series to approximate $f(x_j+h)$ around $x_j$ is $$
 f(x)\approx f(x_j) +  f^\prime(x_j) (x-x_j),
-$$
-where $f^\prime(x) := \partial_x f(x)$ is the first derivative of $f(x)$. So the root of this approximation can be improved by updating its place to where $f(x_{j+1}) = 0$.
+$$ where $f^\prime(x) := \partial_x f(x)$ is the first derivative of $f(x)$. So the root of this approximation can be improved by updating its place to where $f(x_{j+1}) = 0$.
 
-So if $f(x_j+h)$ is the root, then we have
-$$ 0 = f(x_j) + f^\prime(x_j) h \implies h = -\frac{f(x_j)}{f^\prime(x_j)}.$$
+So if $f(x_j+h)$ is the root, then we have $$ 0 = f(x_j) + f^\prime(x_j) h \implies h = -\frac{f(x_j)}{f^\prime(x_j)}.$$
 
-Then, we can come back to $x_{j+1}= x_j+h$, and plug the value of $h$ in from above, we have
-$$
+Then, we can come back to $x_{j+1}= x_j+h$, and plug the value of $h$ in from above, we have $$
 x_{j+1} = x_j - \frac{f(x_j)}{f^\prime(x_j)}.
 $$
 
 The algorithm is given as below:
 
 ::: {.callout-algorithm title="Newton-Raphson Method"}
-Let $f:\R\to\R$ be differentiable. Given a current iterate $x_j$ near a root $r$ with $f(r)=0$, use the first-order Taylor expansion of $f$ at $x_j$:
-$$f(x)\;\approx\; f(x_j) + f’(x_j)\,(x - x_j).$$
-To obtain the next iterate, set this linear approximation to zero and solve for x:
-$$0 \approx f(x_j) + f’(x_j)\,(x - x_j)
+Let $f:\mathbb R\to\mathbb R$ be differentiable. Given a current iterate $x_j$ near a root $r$ with $f(r)=0$, use the first-order Taylor expansion of $f$ at $x_j$: $$f(x)\;\approx\; f(x_j) + f’(x_j)\,(x - x_j).$$ To obtain the next iterate, set this linear approximation to zero and solve for x: $$0 \approx f(x_j) + f’(x_j)\,(x - x_j)
 \quad\Longrightarrow\quad
-x \approx x_j - \frac{f(x_j)}{f’(x_j)}.$$
-Define
-$$\boxed{\,x_{j+1} \;=\; x_j - \dfrac{f(x_j)}{f’(x_j)}\,}.$$
+x \approx x_j - \frac{f(x_j)}{f’(x_j)}.$$ Define $$\boxed{\,x_{j+1} \;=\; x_j - \dfrac{f(x_j)}{f’(x_j)}\,}.$$
+
+
+
+
+Step 0: Choose a function $f(x)$: This is the function for which you want to find a root (i.e., solve $f(x) = 0)$. 
+
+Step 1: Calculate the derivative $f^\prime(x)$: You will need it to apply the formula. 
+
+Step 2:  Make an initial guess $x_0$: Select a starting point $x_0$ near the expected root. 
+
+Step 3: Update the estimate: Use the Newton's method formula to compute the next estimate $x_1$ using $x_0$ by 
+$$x_{j+1} = x_j - \frac{f(x_j)}{f^\prime(x_j)}.$$
+
+Step 4:  Repeat Steps 2 and 3 until the values converge to a root or reach a desired tolerance. 
 :::
 
+``` {r newton}
+## Function and derivative
+f  <- function(x) 0.5*x^3 - 0.5*x - 18
+df <- function(x) 1.5*x^2 - 0.5
+
+## Newton–Raphson with iterate tracking
+newton_raphson <- function(f, df, x0, tol = 1e-5, 
+                           maxit = 100, eps = 1e-5) {
+  x <- x0
+  xs <- x0      # store iterates (x0, x1, x2, ...)
+  for (k in 1:maxit) {
+    fx  <- f(x)
+    dfx <- df(x)
+    x_new <- x - fx/dfx
+    xs <- c(xs, x_new)
+    if (abs(x_new - x) < tol || abs(fx) < tol) {
+      return(list(root = x_new, iter = k, path = xs))
+    }
+    x <- x_new
+  }
+  list(root = x, iter = maxit, path = xs)
+}
+
+## Starting point
+```
+
+If we start at -1 which is far away from 
+
+``` {r}
+x0 <- 3
+res <- newton_raphson(f, df, x0)
+```
+
+If we start at 3 which is near to the point
+``` {r}
+x0 <- 3
+res <- newton_raphson(f, df, x0)
+## Plot range that shows the iterates and root
+a <- -2; b <- 5
+plot(function(x) f(x), from = a, to = b, 
+     xlab = "x", ylab = "f(x)",
+     main = paste("Newton-Raphson (Iterations:", res$iter, ")"))
+abline(h = 0, col = "blue", lty = 2)
+
+## Draw vertical lines for each iterate with labels 0,1,2,...
+for (i in seq_along(res$path)) {
+  xi <- res$path[i]
+  abline(v = xi, col = "red", lty = 2)
+  text(xi, par("usr")[3] + 2, labels = i - 1, col = "blue", pos = 3, cex = 0.9)
+}
+
+## Final root marker + label
+abline(v = res$root, col = "darkgreen", lwd = 2)
+text(res$root, par("usr")[3] + 5,
+     labels = paste0("Root ≈ ", round(res$root, 5),
+                     " ; f(root) ≈ ", signif(f(res$root), 3)),
+     col = "darkgreen", pos = 3, cex = 0.95, font = 2)
+
+res
+```
+
+
+``` {r}
+a <- -2; b <- 5
+plot(function(x) f(x), from = a, to = b, 
+     xlab = "x", ylab = "f(x)",
+     main = paste("Newton-Raphson (Iterations:", res$iter, ")"))
+abline(h = 0, col = "blue", lty = 2)
+
+## Draw vertical lines for each iterate with labels 0,1,2,...
+for (i in seq_along(res$path)) {
+  xi <- res$path[i]
+  abline(v = xi, col = "red", lty = 2)
+  text(xi, par("usr")[3] + 2, labels = i - 1, col = "blue", pos = 3, cex = 0.9)
+}
+
+## Final root marker + label
+abline(v = res$root, col = "darkgreen", lwd = 2)
+text(res$root, par("usr")[3] + 5,
+     labels = paste0("Root ≈ ", round(res$root, 5),
+                     " ; f(root) ≈ ", signif(f(res$root), 3)),
+     col = "darkgreen", pos = 3, cex = 0.95, font = 2)
+
+res
+```
 
 Notes & common pitfalls
 
-+ Assumptions: $f$ is differentiable in a neighborhood of the root $r$ and $f’(r)\neq 0$. Under these and a sufficiently good initial guess, convergence is quadratic.
-	
-+ Failure cases: if $f^\prime(x_j)=0$ (or is very small), the update is ill-defined/unstable; if the initial guess is far, the method can diverge or jump to a different root.
-	
-+ Practical checks: stop when $|f(x_j)|\le \delta$ or $|x_{j+1}-x_j| \le \delta$ is below tolerance; cap iterations; guard against tiny $f’(x_j)$.
+-   Assumptions: $f$ is differentiable in a neighborhood of the root $r$ and $f’(r)\neq 0$. Under these and a sufficiently good initial guess, convergence is quadratic.
 
+-   Failure cases: if $f^\prime(x_j)=0$ (or is very small), the update is ill-defined/unstable; if the initial guess is far, the method can diverge or jump to a different root.
+
+-   Practical checks: stop when $|f(x_j)|\le \delta$ or $|x_{j+1}-x_j| \le \delta$ is below tolerance; cap iterations; guard against tiny $f’(x_j)$.
 
 ### Second Method
 
 The secant method can be thought of as a finite-difference approximation of Newton's method, so it is considered a quasi-Newton method. It is simialr to Newton's method, but it does not require the computation of the derivative of the function. Instead, it approximates the derivative using two previous points.
 
-In the second method, we require the **first two point**s, say $x_0, x_1 \in \R$. Then, we can approximate the derivative of $f$ at $x_1$ using the finite difference formula:
+In the second method, we require the **first two point**s, say $x_0, x_1 \in \R$. Then, we can approximate the derivative of $f$ at $x_1$ using the finite difference formula. Instead of calculate the derivative $f^\prime(x_1)$, we approximate it as using the secant line. In calculate, we know that, $f^\prime(x_1) \approx \frac{f(x_1)-f(x_0)}{x_1-x_0}$, if $x_1$ and $x_0$ are close. Then, we can plug this approximation into the Newton's update formula to get 
+$$x_j  = x_{j-1}  - f(x_{j-1}) \frac{x_{j-1}-x_{j-2}}{f(x_{j-1}) - f(x_{j-2})} = \frac{x_{j-2} f\left(x_{j-1}\right)-x_{j-1} f\left(x_{j-2}\right)}{f\left(x_{j-1}\right)-f\left(x_{j-2}\right)} .$$
 
-::: {.callout-algorithm title="Secant Method"}
 
-:::
 
- ### Multivariate Case
- 
+### Multivariate Case
 
+We need to calculate the gradient/Jacobian matrix and Hessian matrix.
 
 ## Heuristic Algorithms
 
@@ -521,8 +596,6 @@ Many of the heuristic algorithms are inspired by the nature, such as the genetic
 -   Simulated Annealing (SA)
 -   Ant Colony Optimization (ACO)
 
-
-
 ### In R
 
 `optim()` function, `nlm()` function or `mle()` function.
@@ -532,19 +605,27 @@ Many of the heuristic algorithms are inspired by the nature, such as the genetic
 The EM (Expectation–Maximization) algorithm is an optimization method that is often applied to find maximum likelihood estimates when data is incomplete or has missing values. It iteratively refines estimates of parameters by alternating between (1) expectation step (E-step) and (2) maximization step (M-step).
 
 <!-- ::: {.callout-note title="Tip with Title"} -->
+
 <!-- For example, consider the function $f(x) = x^2$. -->
+
 <!-- ::: -->
 
 <!-- ::: callout-example -->
+
 <!-- Example -->
 
 <!-- $$ -->
+
 <!-- f(x) = x^2 -->
+
 <!-- $$ -->
+
 <!-- ::: -->
 
 <!-- ::: callout-theorem -->
+
 <!-- Example Theorem -->
+
 <!-- ::: -->
 
 ------------------------------------------------------------------------
