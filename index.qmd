@@ -28,8 +28,8 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Assignment
 
--   [ ] Assignment 1: Due on September 12th, 2025
--   [ ] Assignment 2: TBA
+-   [x] Assignment 1: Due on September 12th, 2025
+-   [ ] Assignment 2: Due on September 19th, 2025
 
 ## Midterm
 

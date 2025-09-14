@@ -461,21 +461,20 @@ $$
 The algorithm is given as below:
 
 ::: {.callout-algorithm title="Newton-Raphson Method"}
-Let $f:\mathbb R\to\mathbb R$ be differentiable. 
+Let $f:\mathbb R\to\mathbb R$ be differentiable.
 
-Step 0: Choose a function $f(x)$: This is the function for which you want to find a root (i.e., solve $f(x) = 0$). 
+Step 0: Choose a function $f(x)$: This is the function for which you want to find a root (i.e., solve $f(x) = 0$).
 
-Step 1: Calculate the derivative $f^\prime(x)$: You will need it to apply the formula. 
+Step 1: Calculate the derivative $f^\prime(x)$: You will need it to apply the formula.
 
-Step 2:  Make an initial guess $x_0$: Select a starting point $x_0$ near the expected root. 
+Step 2: Make an initial guess $x_0$: Select a starting point $x_0$ near the expected root.
 
-Step 3: Update the estimate: Use the Newton's method formula to compute the next estimate $x_1$ using $x_0$ by 
-$$x_{j+1} = x_j - \frac{f(x_j)}{f^\prime(x_j)}.$$
+Step 3: Update the estimate: Use the Newton's method formula to compute the next estimate $x_1$ using $x_0$ by $$x_{j+1} = x_j - \frac{f(x_j)}{f^\prime(x_j)}.$$
 
-Step 4:  Repeat Steps 2 and 3 until the values converge to a root or reach a desired tolerance. 
+Step 4: Repeat Steps 2 and 3 until the values converge to a root or reach a desired tolerance.
 :::
 
-``` {r newton}
+```{r newton}
 ## Function and derivative
 f  <- function(x) 0.5*x^3 - 0.5*x - 18
 df <- function(x) 1.5*x^2 - 0.5
@@ -501,9 +500,9 @@ newton_raphson <- function(f, df, x0, tol = 1e-5,
 ## Starting point
 ```
 
-If we start at -1 which is far away from 
+If we start at -1 which is far away from
 
-``` {r}
+```{r}
 x0 <- -1
 res <- newton_raphson(f, df, x0)
 a <- -2; b <- 5
@@ -531,7 +530,7 @@ res
 
 If we start at 3 which is near to the point
 
-``` {r}
+```{r}
 x0 <- 3
 res <- newton_raphson(f, df, x0)
 ## Plot range that shows the iterates and root
@@ -560,7 +559,7 @@ res
 
 Remarks:
 
--   Assumptions: $f$ is differentiable in a neighborhood of the root $r$. 
+-   Assumptions: $f$ is differentiable in a neighborhood of the root $r$.
 
 -   Failure cases: if $f^\prime(x_j)=0$ (or is very small), the update is ill-defined/unstable; if the initial guess is far, the method can diverge or jump to a different root.
 
@@ -570,9 +569,7 @@ Remarks:
 
 The secant method can be thought of as a finite-difference approximation of Newton's method, so it is considered a quasi-Newton method. It is simialr to Newton's method, but it does not require the computation of the derivative of the function. Instead, it approximates the derivative using two previous points.
 
-In the second method, we require the **first two point**s, say $x_0, x_1 \in \R$. Then, we can approximate the derivative of $f$ at $x_1$ using the finite difference formula. Instead of calculate the derivative $f^\prime(x_1)$, we approximate it as using the secant line. In calculate, we know that, $f^\prime(x_1) \approx \frac{f(x_1)-f(x_0)}{x_1-x_0}$, if $x_1$ and $x_0$ are close. Then, we can plug this approximation into the Newton's update formula to get 
-$$x_j  = x_{j-1}  - f(x_{j-1}) \frac{x_{j-1}-x_{j-2}}{f(x_{j-1}) - f(x_{j-2})} = \frac{x_{j-2} f\left(x_{j-1}\right)-x_{j-1} f\left(x_{j-2}\right)}{f\left(x_{j-1}\right)-f\left(x_{j-2}\right)} .$$
-
+In the second method, we require the **first two point**s, say $x_0, x_1 \in \mathbb R$. Then, we can approximate the derivative of $f$ at $x_1$ using the finite difference formula. Instead of calculate the derivative $f^\prime(x_1)$, we approximate it as using the secant line. In calculate, we know that, $f^\prime(x_1) \approx \frac{f(x_1)-f(x_0)}{x_1-x_0}$, if $x_1$ and $x_0$ are close. Then, we can plug this approximation into the Newton's update formula to get $$x_j  = x_{j-1}  - f(x_{j-1}) \frac{x_{j-1}-x_{j-2}}{f(x_{j-1}) - f(x_{j-2})} = \frac{x_{j-2} f\left(x_{j-1}\right)-x_{j-1} f\left(x_{j-2}\right)}{f\left(x_{j-1}\right)-f\left(x_{j-2}\right)} .$$
 
 ## Hill climbing
 
@@ -580,19 +577,19 @@ In numerical analysis, *hill climbing* is a mathematical optimization technique 
 
 The algorithm starts with an arbitrary solution to a problem, then iteratively makes small changes to the solution, each time moving to a neighboring solution that is better than the current one. The process continues until no neighboring solution is better than the current solution, at which point the algorithm terminates.
 
-In the world of optimization, finding the best solution to complex problems can be challenging, especially when the solution space is vast and filled with local optima. 
+In the world of optimization, finding the best solution to complex problems can be challenging, especially when the solution space is vast and filled with local optima.
 
 ### In R
 
-`uniroot()`,  `optim()` , `nlm()`, and `mle()` functions. Note that you may *approximate the derivative/gradient*.  
+`uniroot()`, `optim()` , `nlm()`, and `mle()` functions. Note that you may *approximate the derivative/gradient*.
 
-## Converegence 
+## Converegence
 
 In order to compare the efficiency of the set of algorithms, one may compare *their abilities* for finding the optimals. However, what if, say, two algorithms both can find optimals, which one is better? The **convergence rate** comes in. Convergence rate is a measure of how quickly an iterative algorithm approaches its limit or optimal solution, which mean, how fast the algorithm converges to the optimals.
 
 In the previous lecture(s), we saw that we can use R functions such `microbenchmark::microbenchmark()`, to measure the performance. However, it may takes a long time and a lot of computational resources. For such cases, we may use the theoretical convergence rate to compare the efficiency of the algorithms.
 
-The convergence rate is often classified into several categories. It acts like the sequence $\{x_j\}$ we learned in grade schools. Here, $\{x_j\}$ is a sequence of estimates generated by the algorithm at each iterations, and $x^*$ is the true solution or optimal value we are trying to reach. The error at iteration $n$ is defined as $e_j = d(x_j,x^*)$, where the typical metric here is the absolute distance $d(x_j,x^*)=|x_j-x^*|$ (note, in spaces, different metric to define the distance). The convergence rate describes how quickly this error sequence $\{e_j\}$ decreases as $j$ increases. For 
+The convergence rate is often classified into several categories. It acts like the sequence $\{x_j\}$ we learned in grade schools. Here, $\{x_j\}$ is a sequence of estimates generated by the algorithm at each iterations, and $x^*$ is the true solution or optimal value we are trying to reach. The error at iteration $n$ is defined as $e_j = d(x_j,x^*)$, where the typical metric here is the absolute distance $d(x_j,x^*)=|x_j-x^*|$ (note, in spaces, different metric to define the distance). The convergence rate describes how quickly this error sequence $\{e_j\}$ decreases as $j$ increases. For
 
 $$
 \lim_{j \to \infty} \frac{\left|x_{j+1}-x^* \right|}{\left|x_j-x^* \right|^q }=\mu.
@@ -600,22 +597,20 @@ $$
 
 ### Linear Convergence
 
-If order $q = 1$ and $0 < \mu < 1$, the sequence $\{x_j\}\in\R^d$ converges to $x^*$ linearly. That is, $x_j\to x^*$ as $j\to\infty$ in $\R^d$ if there existence a constant $\mu$ such that 
-$$
+If order $q = 1$ and $0 < \mu < 1$, the sequence $\{x_j\}\in\mathbb R^d$ converges to $x^*$ linearly. That is, $x_j\to x^*$ as $j\to\infty$ in $\mathbb R^d$ if there existence a constant $\mu$ such that $$
   \frac{\left\|x_{n+1}-x_{\infty}\right\|}{\left\|x_n-x_{\infty}\right\|} \le \mu,\quad \text{ as } \quad n\to\infty.
-$$
-This means that the error decreases proportionally to its current value, leading to a steady but relatively slow convergence. 
+$$ This means that the error decreases proportionally to its current value, leading to a steady but relatively slow convergence.
 
 ### Superlinear Convergence
 
-Suppose $\{x_n\}$ converges to $x^*$, if order $q = 1$ and $\mu = 0$, the sequence $\{x_n\}$ converges to $x^*$ superlinearly. That is, $x_n$ is said to be converges to $x^*$ as $n\to\infty$ superlinearly if 
+Suppose $\{x_n\}$ converges to $x^*$, if order $q = 1$ and $\mu = 0$, the sequence $\{x_n\}$ converges to $x^*$ superlinearly. That is, $x_n$ is said to be converges to $x^*$ as $n\to\infty$ superlinearly if
 
 $$
 \lim _{n \to \infty} \frac{\left\|x_{n+1}-x_{\infty}\right\|}{\left\|x_n-x_{\infty}\right\|}=0.
-$$
-It is clearly that the superlinear is a stronger condition than the linear convergence, such that $\mu=0$.
+$$ It is clearly that the superlinear is a stronger condition than the linear convergence, such that $\mu=0$.
 
 ### Quadratic Convergence
+
 If order $q = 2$ and $\mu > 0$, the sequence $\{x_n\}$ converges to $x^*$ quadratically. That is, $x_n$ is said to be converges to $x^*$ as $n\to\infty$ quadratically if
 
 $$
@@ -633,27 +628,24 @@ Many of the heuristic algorithms are inspired by the nature, such as the genetic
 
 ### Simulating Annealing
 
-Simulated annealing (SA) is a **stochastic** technique for approximating the global optimum of a given function. 
+Simulated annealing (SA) is a **stochastic** technique for approximating the global optimum of a given function.
 
-Inspired by the physical process of annealing in metallurgy, Simulated Annealing is a probabilistic technique used for solving both combinatorial and continuous optimization problems. 
+Inspired by the physical process of annealing in metallurgy, Simulated Annealing is a probabilistic technique used for solving both combinatorial and continuous optimization problems.
 
 What is Simulated Annealing?
 
 Simulated Annealing is an optimization algorithm designed to search for an optimal or near-optimal solution in a large solution space. The name and concept are derived from the process of annealing in metallurgy, where a material is heated and then slowly cooled to remove defects and achieve a stable crystalline structure. In Simulated Annealing, the "heat" corresponds to the degree of randomness in the search process, which decreases over time (cooling schedule) to refine the solution. The method is widely used in combinatorial optimization, where problems often have numerous local optima that standard techniques like gradient descent might get stuck in. Simulated Annealing excels in escaping these local minima by introducing controlled randomness in its search, allowing for a more thorough exploration of the solution space.
 
-Some terminology: 
+Some terminology:
 
-* Temperature: controls how likely the algorithm is to accept worse solutions as it explores the search space.
+-   Temperature: controls how likely the algorithm is to accept worse solutions as it explores the search space.
 
 ::: {.callout-algorithm title="Simulated Annealing"}
+Step 1 (Initilization): Begin with an initial solution $S_ο$ and an initial temperature $T_ο$.
 
-Step 1 (Initilization): Begin with an initial solution $S_ο$ and an initial temperature $T_ο$. 
+Step 2 (Neighborhood Search): At step $j$, a new solution $S^\prime$ is generated by making a small change (or perturbation) to $S_j$.
 
-Step 2 (Neighborhood Search): At step $j$, a new solution $S^\prime$  is generated by making a small change (or perturbation) to $S_j$.
-
-Step 3 (Evaluation): evaluate the objective function $f(S^\prime)$
-    Step 3.1: If $f^(S^\prime)$ is *better* than $f(S_j)$, we *accept* it and take it as $S_{j+1}$.
-    Step 3.2: If $f(S^\prime)$ is *worse* than $f(S_j)$, we may still accept it with a certain probability $P(S_{j+1}=S^\prime)=\exp(-\Delta E/T_j)$, where $E$ is the energy $f(S^\prime)-f(S_j)$. 
+Step 3 (Evaluation): evaluate the objective function $f(S^\prime)$ Step 3.1: If $f^(S^\prime)$ is *better* than $f(S_j)$, we *accept* it and take it as $S_{j+1}$. Step 3.2: If $f(S^\prime)$ is *worse* than $f(S_j)$, we may still accept it with a certain probability $P(S_{j+1}=S^\prime)=\exp(-\Delta E/T_j)$, where $E$ is the energy $f(S^\prime)-f(S_j)$.
 
 Step 4 Cooling Schedule: Decrease the temperature according to a cooling schedule, e.g., $T_{j+1} = \alpha T_j$ where $\alpha \in (0,1)$ is a cooling rate.
 
@@ -664,42 +656,37 @@ Example:
 
 Figure 1 in [my paper](https://arxiv.org/pdf/2405.02983)
 
-
-
 Advantages:
 
-* Global optimization
+-   Global optimization
 
-* Flexibility
+-   Flexibility
 
-* Intuitive
+-   Intuitive
 
-* Derivative?
+-   Derivative?
 
-Limitations: 
+Limitations:
 
-* Parameter semsitivity
+-   Parameter semsitivity
 
-* Computational time
+-   Computational time
 
-* Slow convergence
+-   Slow convergence
 
 #### R implementation
-An paper about an implementation in R by [Husmann et al.](https://www.maths.bris.ac.uk/R/web/packages/optimization/vignettes/vignette_master.pdf) and another package called [GenSA](https://cran.r-project.org/web/packages/GenSA/GenSA.pdf). 
 
+An paper about an implementation in R by [Husmann et al.](https://www.maths.bris.ac.uk/R/web/packages/optimization/vignettes/vignette_master.pdf) and another package called [GenSA](https://cran.r-project.org/web/packages/GenSA/GenSA.pdf).
 
 ## Genetic Algorthm
 
 Genetic Algorithm (GA) is a metaheuristic optimization technique inspired by the process of natural evolution/selection.
 
-GA are based on an analogy with the genetic structure and behavior of chromosomes of the population. 
+GA are based on an analogy with the genetic structure and behavior of chromosomes of the population.
 
 STEP 1: Start with an initial generation $G_0$ of potential solutions (individuals). Each individual is represented by a chromosome, which is typically encoded as a binary string, real-valued vector, or other suitable representation. Evaluate the objective function on those points.
 
-Step 2: Generate the next generation $G_{j+1}$ from the current generation $G_j$ using genetic operators:
-    a). Selection: Retain the individual that is considered as *good*
-    b). Crossover: Create children variables from the parents
-    c). Mutation
+Step 2: Generate the next generation $G_{j+1}$ from the current generation $G_j$ using genetic operators: a). Selection: Retain the individual that is considered as *good* b). Crossover: Create children variables from the parents c). Mutation
 
 Step 3: Repeat Step 2 until the algorithm converges or reaches a stopping criterion.
 
@@ -707,24 +694,21 @@ Step 3: Repeat Step 2 until the algorithm converges or reaches a stopping criter
 
 Particle Swarm Optimization (PSO) was proposed by Kennedy and Eberhart in 1995. It is inspried by the movement of the species in nature, such as fishes or birds.
 
-The algorithm is based on a *population*, not a single current point. 
+The algorithm is based on a *population*, not a single current point.
 
 At iteration $n$ of the algorithm, a particle has a velocity $v(n)$ that depends on the follows.
 
-* The location of the best objective function value that it has encountered, $s(n)$.
+-   The location of the best objective function value that it has encountered, $s(n)$.
 
-* The location of the best objective function value among its neighbors, $g(n)$.
+-   The location of the best objective function value among its neighbors, $g(n)$.
 
-* The previous velocity $v(n – 1)$.
+-   The previous velocity $v(n – 1)$.
 
-The position of a particle x(n) updates according to its velocity:
-$$x(n+1)=x(n)+v(n),$$
-adjusted to stay within the bounds. The velocity of a particle updates approximately according to this equation:
-
+The position of a particle x(n) updates according to its velocity: $$x(n+1)=x(n)+v(n),$$ adjusted to stay within the bounds. The velocity of a particle updates approximately according to this equation:
 
 $$v(n+1) = W(n)v(n)+r(1)(s(n)−x(n))+r(2)(g(n)−x(n)).$$
 
-Here, $r(1),r(2) \in [0,1]$ are random scalar values, and $W(n)$ is an *inertia factor* that adjusts during the iterations. The full algorithm uses randomly varying neighborhoods and includes modifications when it encounters an improving point. 
+Here, $r(1),r(2) \in [0,1]$ are random scalar values, and $W(n)$ is an *inertia factor* that adjusts during the iterations. The full algorithm uses randomly varying neighborhoods and includes modifications when it encounters an improving point.
 
 Note: There are A LOT of variations of the PSO and other swarm-based algorithms used in the literature.
 
@@ -733,8 +717,6 @@ In R, there is a PSO implementation in the `pso` package. The associated manual 
 ## Multivariate Case
 
 We need to calculate the gradient/Jacobian matrix and Hessian matrix.
-
-
 
 ### EM Algorithm
 
