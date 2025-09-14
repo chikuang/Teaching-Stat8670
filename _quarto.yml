@@ -14,8 +14,8 @@ book:
     - 99-references.qmd
     - part: "Appendix"
       chapters:
-        - app-A-intro-R.qmd
-        - app-B-distribution.qmd
+        - App_A-intro-R.qmd
+        - App_B-distribution.qmd
   navbar:
     right:
       - icon: github
