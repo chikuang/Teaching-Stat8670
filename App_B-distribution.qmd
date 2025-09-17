@@ -7,7 +7,7 @@
 
 ### Discrete uniform distributions
 
-if the variation can take on finite, countable values with equal probability, it is said to be discrete uniform. The probability mass function of a discrete unfiromt random variable $X$ is given by
+if the variable can take on finite, countable values with equal probability, it is said to be discrete uniform. The probability mass function of a discrete uniform. random variable $X$ is given by
 $$
 f(x) = \frac{1}{x_n-x_1+1},\quad \text{for}\quad x=x_1,\dots,x_n.
 $$
@@ -39,7 +39,7 @@ var(A)
 (mean.est <- (min(A) + max(A)) / 2)
 
 # Theoretical variance of Uniform(a, b) is (b - a)^2 / 12
-(var.est <- ((max(A) - min(A))^2) / 12)
+(var.est <- ((max(A) - min(A) + 1 )^2 -1 ) / 12)
 ```
 
 ### Bernoulli Distribution
@@ -57,7 +57,7 @@ rbinom(10, 1, 0.7) # 0.7 is the probability of success
 
 ### Binomial Distribution
 
-Bernoulli trials (experiment where a Bernoulli Distribution applies) are not very relaise in real-life scenario. In staitsitcs, repeated experiments are important. When the experiments is repeated, $\theta$ is the same for each of the trials, and the trials are indpeendnet, and they are only two mutally excluses outcomes (T, and F), we can model this using the *Binomial Distribution*. If $X$ follows the Binomial Distribution, it has a probablitliy mass function as
+Bernoulli trials (experiment where a Bernoulli Distribution applies) are not very realistic in real-life scenario. In statistics, repeated experiments are important. When the experiments is repeated, $\theta$ is the same for each of the trials, and the trials are independent, and they are only two mutually excludes outcomes (T, and F), we can model this using the *Binomial Distribution*. If $X$ follows the Binomial Distribution, it has a probablitliy mass function as
 $$b(x ; n, \theta)=\binom{n}{x} \theta^x(1-\theta)^{n-x}, x=0,1,2,3, \ldots, n.$$
 
 The Binomial Distribution is useful to predict the number of heads in $n$ coin tosses, the number of people infected with a disease in a certain population of known size, etc. The parameters $n$ and $\theta$ must be given.
@@ -204,14 +204,18 @@ $$\E X = \lambda, \qquad \var(X) = \lambda$$
 :::
 
 The Poisson distribution is derived as the limiting case of the Binomial (with the above mentioned restrictions) BUT there are many more applications. It models:
-	1.	Number of successes to occur in a given time period
-	2.	Number of telephone calls received in a given time
-	3.	Number of misprints on a page
-	4.	Number of customers entering a bank during various intervals of time
+
+1.	Number of successes to occur in a given time period
+
+2.	Number of telephone calls received in a given time
+
+3.	Number of misprints on a page
+
+4.	Number of customers entering a bank during various intervals of time
 
 ⸻
 
-We are now moving onto the continuous distributions that play an important role in Statistical Theory.
+We are now moving onto the *continuous distributions* that play an important role in Statistical Theory.
 
 ## Continuous Distributions
 
