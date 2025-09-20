@@ -1,0 +1,430 @@
+# Generating Random Variables
+
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\beta}{\operatorname{Beta}}
+
+``` {r setup, message =FALSE, warning = FALSE, include = FALSE}
+library(ggplot2)
+
+# Set global theme
+theme_set(
+  theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5)  # center title
+    )
+)
+```
+
+One of the fundamental tools required in computational statistics is the
+ability to *simulate random variables* (rvs) from specified probability distributions. 
+
+## Overview
+
+In the simplest case, to simulate drawing an observation at random from
+a finite population, a method of generating rvs from the discrete uniform distribution is required. Therefore, a suitable generator of
+uniform pseudo-random numbers is essential. 
+
+Methods for generating random
+variates from other probability distributions all depend on the uniform random number generator (RNG).
+
+In the Appendices, we have seen that how to use the built-in R functions to generate RVs from some common distributions, such as `runif()`, `rnorm()`, `rbinom()`, etc. In this Section, we will go over some of the common methods to generate RVs from a costume distributions.
+
+Example Theorem
+
+::: {.callout-example title="Sampling from a finite population"}
+If we already have a finite population of size $N$ with values $x_1, x_2, \ldots, x_N$ in hand, we can sample from this population *with* and *without* replacement.
+
+``` {r example1}
+set.seed(777)
+sample(c(0,1), size = 10, replace = TRUE)  # with replacement
+
+# Lottery ticket
+sample(1:999999, size = 5, replace = FALSE)
+
+sample(toupper(letters))
+```
+:::
+
+| Distribution       | cdf     | Generator | Parameters           |
+|--------------------|---------|-----------|----------------------|
+| beta               | pbeta   | rbeta     | shape1, shape2       |
+| binomial           | pbinom  | rbinom    | size, prob           |
+| chi-squared        | pchisq  | rchisq    | df                   |
+| exponential        | pexp    | rexp      | rate                 |
+| F                  | pf      | rf        | df1, df2             |
+| gamma              | pgamma  | rgamma    | shape, rate or scale |
+| geometric          | pgeom   | rgeom     | prob                 |
+| lognormal          | plnorm  | rlnorm    | meanlog, sdlog       |
+| negative binomial  | pnbinom | rnbinom   | size, prob           |
+| normal             | pnorm   | rnorm     | mean, sd             |
+| Poisson            | ppois   | rpois     | lambda               |
+| Student's t        | pt      | rt        | df                   |
+| uniform            | punif   | runif     | min, max             |
+: Common probability distributions and their corresponding R functions for cumulative distribution function (CDF) and random number generation (borrowed from Table 3.1 in reference [2]). {#tbl-my-table}
+
+## Inverse Transformation Method
+
+The first method to simulate rvs is the *inverse transformation method* (ITM).
+
+::: {.callout-theorem title="Probability Integral Transformation"}
+If $X\sim F_x(X)$ is a continuous rv, then the rv $U = F_x(X) \sim \unif(0,1)$.
+:::
+
+ITM of generating rvs applies the
+probability integral transformation. Define the inverse transformation
+$$ F^{−1}_X(u) = \inf\{x : FX (x) = u\},\quad  0 < u < 1.$$
+Then, if $U \sim \unif(0,1)$, the rv $X = F^{−1}_X(U)$ has the distribution $F_X$. This can be shown as, for all $x \in R$
+\begin{align}
+P\left(F_X^{-1}(U) \leq x\right) & =P\left(\inf \left\{t: F_X(t)=U\right\} \leq x\right) \\
+& =P\left(U \leq F_X(x)\right) \\
+& =F_U\left(F_X(x)\right)=F_X(x),
+\end{align}
+
+Hence, $F_X^{-1}(U)$ and $X$ have the same distribution. So, in order to generate rv $X$, we can simulate $U\sim \unif(0,1)$ first, then apply the inverse $F_X^{-1}(u)$. 
+
+::: {.callout-note title="Procedure with inverse transformation method"}
+
+Given a distribution function $F_X(\cdot)$, we can simulate/generate a rv $X$ using the ITM in **three** steps:
+
+1. Derive the inverse function $F_X^{-1}(u)$. 
+
+2. Write a (**R**) command or function to compute $F_X^{-1}(u)$.
+
+3. For each random variate required:
+    i) Generate a random $u\sim \unif(0,1)$.
+    ii) Obtain $x = F_X^{-1}(u)$.
+:::
+
+
+### Continuous case
+
+When the distribution function $F_X(\cdot)$ is continuous, the ITM is straightforward to implement.
+
+::: {.callout-example}
+Suppose we want to use the ITM to simulate $N=1000$ rvs from the density $f_X(x)=3x^2,\quad x\in(0,1)$.
+
+1. The cdf is $F_X(x)=x^3$, so the inverse function is $F_X^{-1}(u)=u^{1/3}$.
+
+2. Simulate $N=1000$ rvs from $u\sum \unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
+
+``` {r example2}
+library(ggplot2)
+set.seed(777)
+N <- 1000
+uVec <- runif(N)
+xVec <- uVec^(1/3)
+
+df <- data.frame(x = xVec)
+
+# Density histogram with theoretical density overlay
+ggplot(df, aes(x)) +
+  geom_histogram(aes(y = ..density..), bins = 30,
+                 fill = "lightblue", color = "black") +
+  stat_function(fun = function(x) 3*x^2,
+                color = "red", size = 1) +
+  labs(title = expression(f(x) == 3*x^2),
+       y = "Density", x = "x")
+```
+:::
+
+::: {.callout-example, title = "Exponential"}
+
+Suppose $X\sim \exp(\lambda)$ where $\lambda$ is the rate parameter. Then $F_X(x) = 1 - e^{-\lambda x}$, so the inverse function is $F_X^{-1}(u) = -\frac{1}{\lambda}\log(1-u)$. The other fact, is the $U$ and $1-U$ have the same distribution, so we can use either of them, i.e., $x= -\frac{1}{\lambda}\log(u)$ or $x= -\frac{1}{\lambda}\log(1-u)$. 
+
+
+``` {r example-exponential}
+set.seed(777)
+N <- 1000
+lambda <- 0.7
+uVec <- runif(N)
+xVec_1 <- - (1/lambda) * log(uVec)
+xVec_2 <- - (1/lambda) * log(1-uVec)
+
+# Put data into long format for ggplot
+df <- data.frame(
+  value = c(xVec_1, xVec_2),
+  method = rep(c("log(U)", "log(1-U)"), each = N)
+)
+
+# Theoretical density function
+exp_density <- function(x) lambda * exp(-lambda * x)
+
+# Plot
+ggplot(df, aes(x = value, fill = method)) +
+  geom_histogram(aes(y = ..density..), bins = 40,
+                 position = "identity", alpha = 0.4, color = "black") +
+  stat_function(fun = exp_density, color = "red", size = 1) +
+  labs(title = bquote("Exponential(" ~ lambda == .(lambda) ~ ")"),
+       x = "x", y = "Density") 
+```
+:::
+
+### Discrete case
+
+Although it is slightly more complicated than the continuous case, the ITM can also be applied to *discrete distributions*. Why?
+
+First, in the discrete case, the cdf $F_X(x)$ is **NOT continuous**, instead, a step function, so the inverse function $F_X^{-1}(u)$ is not unique.
+
+Here, if we order the random variable 
+$$\cdots < x_{(i-1)} < x_{(i)} < x_{(i+1)}< cdots,$$
+then the inverse transformation is $F_X^{-1}(u)=x_i$, where $F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})$.
+
+Then the procedure is:
+
+::: {.callout-note title="Procedure with ITM for discrete case"}
+
+1. Derive the cdf $F_X(x)$ and tabulate the values of $x_i$ and $F_X(x_i)$.
+
+2. Write a (**R**) command or function to compute $F_X^{-1}(u)$.
+
+3. For each random variate required:
+    i) Generate a random $u\sim \unif(0,1)$.
+    ii) Find $x_i$ such that $F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})$ and set $x = x_i$.
+
+:::
+
+::: {.callout-example title="Two point distribution"}
+
+In this example, $F_X(0) = f_X(0) = 1 - p$ and $F_X(1) = 1$. 
+
+
+Thus,
+$$
+F_X^{-1}(u) = 
+\begin{cases}
+1, & u > 0.6,
+0, & u \leq 0.6.
+\end{cases}
+$$
+
+The generator should therefore deliver the numerical value of the logical expression $u > 0.6$.
+
+``` {r}
+set.seed(777)
+n <- 1000
+p <- 0.4
+u <- runif(n)
+x <- as.integer(u > 0.6)  # (u > 0.6) is a logical vector
+
+(m_x <- mean(x));  (v_x <- var(x))
+```
+
+
+Compare the sample statistics with the theoretical moments. 
+The sample mean of a generated sample should be approximately $p = 0.4$ 
+and the sample variance should be approximately $p(1 - p) = 0.24$, versus our simulated values `r m_x` and `r v_x`.
+:::
+
+::: {.callout-example title="Geometric distribution"}
+In this example, we will use ITM to simulate $X\sim \geom(1/4)$. 
+
+Let $q:=1-p$. The pmf is $f(x) = p q^x$, $x = 0,1,2,\ldots$.
+At the points of discontinuity $x = 0,1,2,\ldots$, the cdf is
+$$
+F(x) = 1 - q^{x+1}.
+$$
+For each sample element we need to generate a $u\sim \unif(0,1)$ and solve
+$$
+1 - q^x < u \leq 1 - q^{x+1}.
+$$
+
+Which is equivalent to 
+$x < \frac{\log(1 - u)}{\log(q)} \leq x+1.$
+The solution is
+$$
+x + 1 = \left\lceil \frac{\log(1 - u)}{\log(q)} \right\rceil,
+$$
+where $\lceil \cdot \rceil$ denotes the ceiling function (and $\lfloor \cdot \rfloor$ is the floor function). Hence, we have,
+
+``` {r geom}
+set.seed(999)
+n <- 1000
+p <- 0.25
+u <- runif(n)
+k1 <- ceiling(log(1-u) / log(1-p)) - 1
+
+```
+
+
+Note again that $U$ and $1 - U$ have the same distribution. Also, the probability that $\log(1 - u)/\log(1 - p)$ equals an integer is zero. Thus, we can simplify it to
+``` {r geom2}
+k2 <- floor(log(u) / log(1-p))
+df <- data.frame(
+  value = c(k1, k2),
+  group = rep(c("k1", "k2"), each = length(k1))
+)
+
+# Plot both histograms side by side
+ggplot(df, aes(x = value, fill = group)) +
+  geom_histogram(alpha = 0.6, position = "identity", bins = 40, color = "black") +
+  labs(title = "Histograms of k1 and k2", x = "Value", y = "Count")
+```
+
+The geometric distribution was particularly easy to simulate by the inverse transform method because it was easy to solve the inequality
+\[
+F(x-1) < u \leq F(x)
+\]
+rather than compare each $u$ to all the possible values $F(x)$.
+\medskip
+
+The same method applied to the Poisson distribution is more complicated because we do not have an explicit formula for the value of $x$ such that
+$$
+F(x-1) < u \leq F(x).
+$$
+
+The R function \texttt{rpois} generates random Poisson samples. The basic method to generate a Poisson($\lambda$) variate is to generate and store the cdf via the recursive formula
+$$
+f(x+1) = \frac{\lambda f(x)}{x+1}, 
+\qquad 
+F(x+1) = F(x) + f(x+1).
+$$
+:::
+
+## Acceptance-Rejection Method
+
+In the previous section, we have seen that the ITM is straightforward to implement when the inverse cdf is available in closed form. However, for many distributions, the *inverse cdf is not available in closed form or is difficult to compute*. In those cases, we need to have other strategies!
+
+
+The *acceptance-rejection method* (ARM) is a general method for generating rvs from a distribution with pdf $f_X(x)$, when the inverse cdf is not available in closed form or is difficult to compute.
+
+::: {.callout-definition title="The Acceptance--Rejection Method"}
+
+Suppose $X$ and $Y$ are rvs with pdfs/pmds $f_X(x)$ and $g_Y(y)$, respectively. Further we suppose there is a constant $k$ such that 
+$$
+\frac{f_X(t)}{g_Y(t)} \leq k,
+$$
+for all $t$ such that $f_X(t) > 0$.
+
+Then we can simulate $X$ using the following procedure:
+
+1. Find a rv $Y$ with density $g_Y(\cdot)$ satisfying 
+$f_X(t)/g_Y(t) \le k,$ for all $t$ such that $f(t) > 0$.
+
+2. For each rv, required:
+    (i) Generate a random $y$ from the distribution with density $g_Y$.
+    (ii) Generate a random $u\sim \unif(0,1)$.
+    (iii) If $u < f_X(y)/(k g_Y(y))$, accept $y$ and set $x = y$; o.w. reject $y$ and jump back to (i)
+:::
+
+Why it work?Note that in Step 2c,
+$$
+P(\text{accept} \mid Y) 
+= P\!\left(U < \frac{f(Y)}{c g(Y)} \,\Big|\, Y\right) 
+= \frac{f_X(Y)}{c g_X(Y)}.
+$$
+
+The total probability of acceptance for any iteration is therefore
+$$
+\sum_y P(\text{accept} \mid y) P(Y = y) 
+= \sum_y \frac{f(y)}{c g(y)} g(y) 
+= \frac{1}{k},
+$$
+and the number of iterations until acceptance has the geometric distribution
+with mean $k$. That means, in order to sample $X$, in average, we need $k$ iterations.
+
+Note: The choice of $Y$ and $k$ is crucial for the efficiency of the ARM. A poor choice can lead to a large $k$, resulting in many rejections and inefficiency. We want $Y$ to be easy to simulate, and $k$ to be as small as possible.
+
+Does this have anything to do with $X$?
+
+To see that the accepted sample has the same distribution as $X$, apply Bayes' Theorem. 
+In the discrete case, for each $\ell$ such that $f(\ell) > 0$,
+$$
+P(\ell \mid \text{accepted}) 
+= \frac{P(\text{accepted} \mid \ell) g(\ell)}{P(\text{accepted})} 
+= \frac{\big[f(\ell)/(k g(\ell))\big] g(\ell)}{1/k} 
+= f(\ell).
+$$
+
+::: {.callout-example title="ARM for beta" }
+This example illustrates the acceptance--rejection method for the beta distribution.
+
+Q:  On average, how many random numbers must be simulated to generate $N=1000$ samples from the $\beta$(\alpha=2,\beta=2)$ distribution by ARM? 
+
+A: Depends on the upper bound $k$ of $f_X(t)/_Yg(t)$, which depends on the choice of the function $g_Y(\cdot)$.
+
+Recall that the $\beta(2,2)$ density is 
+$$
+f(t) = 6t(1-t), \quad 0 < t < 1.
+$$ 
+Let $g(\cdot)$ be the Uniform(0,1) density. Then
+$$
+\frac{f(t)}{g(t)} = \frac{6t(1-t)}{(1)} = 6t(1-t) \leq k \quad \text{for all } 0 < t < 1.
+$$
+It is easy to see that $k = 6$. A random $x$ from $g(x)$ is accepted if
+$$
+\frac{f(x)}{kg(x)} = \frac{6x(1-x)}{6(1)} = x(1-x) > u.
+$$
+
+On average, $kN = 6\cdot 1000 =6000$ iterations (12000 random numbers as we need $X$ and $Y$) will be required for $N=1000$. In the following simulation, the counter $\operatorname{iter}$ for iterations is not necessary, but included to record how many iterations were actually needed to generate the 1000 beta rvs.
+
+``` {r beta}
+set.seed(7777)
+N <- 1000
+ell_accept <- 0       # counter for accepted
+iter <- 0       # iterations
+y <- rep(0, N)
+
+while (ell_accept < N) {
+  u <- runif(1)
+  iter <- iter + 1
+  x <- runif(1)   # random variate from g
+  if (x * (1-x) > u) {
+    # we accept x
+    ell_accept <- ell_accept + 1
+    y[ell_accept] <- x
+  }
+}
+
+iter
+
+
+```
+
+In this simulation, `r iter` iterations ( `r iter * 2` random numbers) were required to generate the 1000 beta samples.
+:::
+
+## Using known probability distribution theory
+
+Many types of transformations other than the probability inverse transformation can be applied to simulate random variables. Some examples are
+
+1). If $Z \sim N(0,1)$, then $V = Z^2 \sim \chi^2(1)$.
+  
+2). If $U \sim \chi^2(m)$ and $V \sim \chi^2(n)$ are independent, then 
+  $$
+  F = \frac{U/m}{V/n}
+  $$
+  has the $F$ distribution with $(m,n)$ degrees of freedom.
+  
+3). If $Z \sim N(0,1)$ and $V \sim \chi^2(n)$ are independent, then 
+  $$
+  T = \frac{Z}{\sqrt{V/n}}
+  $$
+  has the Student $t$ distribution with $n$ degrees of freedom.
+  
+4). If $U,V \sim \text{Unif}(0,1)$ are independent, then
+  $$
+  Z_1 = \sqrt{-2 \log U}\, \cos(2\pi V), 
+  \qquad
+  Z_2 = \sqrt{-2 \log U}\, \sin(2\pi V)
+  $$
+  are independent standard normal variables.
+  
+5). If $U \sim \text{Gamma}(r,\lambda)$ and $V \sim \text{Gamma}(s,\lambda)$ are independent, then 
+  $$
+  X = \frac{U}{U+V}
+  $$
+  has the $\text{Beta}(r,s)$ distribution.
+  
+6). If $U,V \sim \text{Unif}(0,1)$ are independent, then
+  $$
+  X = \left\lfloor 1 + \frac{\log(V)}{\log\big(1 - (1-\theta)U\big)} \right\rfloor.
+  $$
+
+
+
+------------------------------------------------------------------------
+
+Reference used:
+
+-  Reference book [2]

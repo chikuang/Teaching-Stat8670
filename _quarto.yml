@@ -9,7 +9,9 @@ book:
     - index.qmd
     - 01-intro.qmd
     - 02-optimization.qmd
-    - 03-resampling.qmd
+    - 03-generating-rv.qmd
+    - 04-integration.qmd
+    - 05-resample.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
@@ -27,6 +29,10 @@ book:
 
 bibliography: references.bib
 
+execute:
+  cache: true
+  freeze: auto
+
 format:
   html:
     theme:
@@ -35,9 +41,11 @@ format:
     css: custom-callouts.css
     filters:
       - addcalloutid.lua
+    cache: true
   pdf:
     documentclass: scrreprt
     filters:
       - addcalloutid.lua
+    cache: true
 
 editor: visual

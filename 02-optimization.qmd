@@ -1,13 +1,4 @@
-# Numerical Approaches and Optimization
-
-\newcommand{\bbeta}{\boldsymbol{\beta}}
-\newcommand{\bX}{\boldsymbol{X}}
-\newcommand{\bx}{\boldsymbol{x}}
-\newcommand{\bZ}{\boldsymbol{Z}}
-\newcommand{\bz}{\boldsymbol{z}}
-\newcommand{\bv}{\boldsymbol{v}}
-\newcommand{\bmu}{\boldsymbol{\mu}}
-\newcommand{\R}{\mathbb R}
+# Numerical Approaches and Optimization in 1-D
 
 The optimization plays an important role in statistical computing, especially in the context of maximum likelihood estimation (MLE) and other statistical inference methods. This chapter will cover various optimization techniques used in statistical computing.
 
@@ -440,7 +431,7 @@ abline(h = 0, col = "blue", lty = 2)
 title(main = paste0("Bisection Method with ", res$iter, " iterations"))
 abline(v = res$root, col = "red", lwd = 2)
 text(res$root, par("usr")[3] + 5, 
-     labels = paste0("Root ≈ ", round(res$root, 3)), 
+     labels = paste0("Root ~= ", round(res$root, 3)), 
      col = "red", pos = 3, cex = 0.9, font = 2)
 ```
 
@@ -521,8 +512,8 @@ for (i in seq_along(res$path)) {
 ## Final root marker + label
 abline(v = res$root, col = "darkgreen", lwd = 2)
 text(res$root, par("usr")[3] + 5,
-     labels = paste0("Root ≈ ", round(res$root, 5),
-                     " ; f(root) ≈ ", signif(f(res$root), 3)),
+     labels = paste0("Root ~= ", round(res$root, 5),
+                     " ; f(root) ~= ", signif(f(res$root), 3)),
      col = "darkgreen", pos = 3, cex = 0.95, font = 2)
 
 res
@@ -550,8 +541,8 @@ for (i in seq_along(res$path)) {
 ## Final root marker + label
 abline(v = res$root, col = "darkgreen", lwd = 2)
 text(res$root, par("usr")[3] + 5,
-     labels = paste0("Root ≈ ", round(res$root, 5),
-                     " ; f(root) ≈ ", signif(f(res$root), 3)),
+     labels = paste0("Root ~= ", round(res$root, 5),
+                     " ; f(root) ~= ", signif(f(res$root), 3)),
      col = "darkgreen", pos = 3, cex = 0.95, font = 2)
 
 res
@@ -713,38 +704,6 @@ Here, $r(1),r(2) \in [0,1]$ are random scalar values, and $W(n)$ is an *inertia 
 Note: There are A LOT of variations of the PSO and other swarm-based algorithms used in the literature.
 
 In R, there is a PSO implementation in the `pso` package. The associated manual may be found [here](https://cran.r-project.org/web/packages/pso/pso.pdf).
-
-## Multivariate Case
-
-We need to calculate the gradient/Jacobian matrix and Hessian matrix.
-
-### EM Algorithm
-
-The EM (Expectation–Maximization) algorithm is an optimization method that is often applied to find maximum likelihood estimates when data is incomplete or has missing values. It iteratively refines estimates of parameters by alternating between (1) expectation step (E-step) and (2) maximization step (M-step).
-
-<!-- ::: {.callout-note title="Tip with Title"} -->
-
-<!-- For example, consider the function $f(x) = x^2$. -->
-
-<!-- ::: -->
-
-<!-- ::: callout-example -->
-
-<!-- Example -->
-
-<!-- $$ -->
-
-<!-- f(x) = x^2 -->
-
-<!-- $$ -->
-
-<!-- ::: -->
-
-<!-- ::: callout-theorem -->
-
-<!-- Example Theorem -->
-
-<!-- ::: -->
 
 ------------------------------------------------------------------------
 
