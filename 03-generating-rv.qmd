@@ -4,7 +4,7 @@
 \newcommand{\geom}{\operatorname{Geom}}
 \newcommand{\beta}{\operatorname{Beta}}
 
-``` {r setup, message =FALSE, warning = FALSE, include = FALSE}
+``` {r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
 library(ggplot2)
 
 # Set global theme
@@ -108,8 +108,7 @@ Suppose we want to use the ITM to simulate $N=1000$ rvs from the density $f_X(x)
 
 2. Simulate $N=1000$ rvs from $u\sum \unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
 
-``` {r example2}
-library(ggplot2)
+``` {r example2, warning = FALSE, message = FALSE}
 set.seed(777)
 N <- 1000
 uVec <- runif(N)
@@ -124,16 +123,17 @@ ggplot(df, aes(x)) +
   stat_function(fun = function(x) 3*x^2,
                 color = "red", size = 1) +
   labs(title = expression(f(x) == 3*x^2),
-       y = "Density", x = "x")
+       y = "Density", x = "x") + theme_minimal()
 ```
+
 :::
 
-::: {.callout-example, title = "Exponential"}
+::: {.callout-example title = "Exponential"}
 
 Suppose $X\sim \exp(\lambda)$ where $\lambda$ is the rate parameter. Then $F_X(x) = 1 - e^{-\lambda x}$, so the inverse function is $F_X^{-1}(u) = -\frac{1}{\lambda}\log(1-u)$. The other fact, is the $U$ and $1-U$ have the same distribution, so we can use either of them, i.e., $x= -\frac{1}{\lambda}\log(u)$ or $x= -\frac{1}{\lambda}\log(1-u)$. 
 
 
-``` {r example-exponential}
+``` {r example-exponential, message=FALSE, warning = FALSE}
 set.seed(777)
 N <- 1000
 lambda <- 0.7
@@ -158,6 +158,7 @@ ggplot(df, aes(x = value, fill = method)) +
   labs(title = bquote("Exponential(" ~ lambda == .(lambda) ~ ")"),
        x = "x", y = "Density") 
 ```
+
 :::
 
 ### Discrete case
@@ -258,7 +259,8 @@ df <- data.frame(
 # Plot both histograms side by side
 ggplot(df, aes(x = value, fill = group)) +
   geom_histogram(alpha = 0.6, position = "identity", bins = 40, color = "black") +
-  labs(title = "Histograms of k1 and k2", x = "Value", y = "Count")
+  labs(title = "Histograms of k1 and k2", x = "Value", y = "Count") + 
+  theme_minimal()
 ```
 
 The geometric distribution was particularly easy to simulate by the inverse transform method because it was easy to solve the inequality
@@ -310,14 +312,14 @@ $f_X(t)/g_Y(t) \le k,$ for all $t$ such that $f(t) > 0$.
 Why it work?Note that in Step 2c,
 $$
 P(\text{accept} \mid Y) 
-= P\!\left(U < \frac{f(Y)}{c g(Y)} \,\Big|\, Y\right) 
-= \frac{f_X(Y)}{c g_X(Y)}.
+= P\!\left(U < \frac{f(Y)}{k g(Y)} \,\Big|\, Y\right) 
+= \frac{f_X(Y)}{k g_X(Y)}.
 $$
 
 The total probability of acceptance for any iteration is therefore
 $$
 \sum_y P(\text{accept} \mid y) P(Y = y) 
-= \sum_y \frac{f(y)}{c g(y)} g(y) 
+= \sum_y \frac{f(y)}{k g(y)} g(y) 
 = \frac{1}{k},
 $$
 and the number of iterations until acceptance has the geometric distribution
@@ -389,20 +391,25 @@ In this simulation, `r iter` iterations ( `r iter * 2` random numbers) were requ
 Many types of transformations other than the probability inverse transformation can be applied to simulate random variables. Some examples are
 
 1). If $Z \sim N(0,1)$, then $V = Z^2 \sim \chi^2(1)$.
+
+2). If $Z_1,\ldots,Z_n \sim N(0,1)$ are independent, then 
+  $$
+  U = \sum_{i=1}^n Z_i^2 \sim \chi^2(n).
+  $$
   
-2). If $U \sim \chi^2(m)$ and $V \sim \chi^2(n)$ are independent, then 
+3). If $U \sim \chi^2(m)$ and $V \sim \chi^2(n)$ are independent, then 
   $$
   F = \frac{U/m}{V/n}
   $$
   has the $F$ distribution with $(m,n)$ degrees of freedom.
   
-3). If $Z \sim N(0,1)$ and $V \sim \chi^2(n)$ are independent, then 
+4). If $Z \sim N(0,1)$ and $V \sim \chi^2(n)$ are independent, then 
   $$
   T = \frac{Z}{\sqrt{V/n}}
   $$
   has the Student $t$ distribution with $n$ degrees of freedom.
   
-4). If $U,V \sim \text{Unif}(0,1)$ are independent, then
+5). If $U,V \sim \text{Unif}(0,1)$ are independent, then
   $$
   Z_1 = \sqrt{-2 \log U}\, \cos(2\pi V), 
   \qquad
@@ -410,18 +417,54 @@ Many types of transformations other than the probability inverse transformation 
   $$
   are independent standard normal variables.
   
-5). If $U \sim \text{Gamma}(r,\lambda)$ and $V \sim \text{Gamma}(s,\lambda)$ are independent, then 
+6). If $U \sim \text{Gamma}(r,\lambda)$ and $V \sim \text{Gamma}(s,\lambda)$ are independent, then 
   $$
   X = \frac{U}{U+V}
   $$
   has the $\text{Beta}(r,s)$ distribution.
   
-6). If $U,V \sim \text{Unif}(0,1)$ are independent, then
+7). If $U,V \sim \text{Unif}(0,1)$ are independent, then
   $$
   X = \left\lfloor 1 + \frac{\log(V)}{\log\big(1 - (1-\theta)U\big)} \right\rfloor.
   $$
+  has logarithmic distribution with parameter $\theta$. 
+  
+::: {.callout-example title="Beta distribution"}
+Using the distribution theory, we recall the relationship between beta and gamma distributions provides another beta generator.
 
+If $U \sim \mathrm{Gamma}(r,\lambda)$ and $V \sim \mathrm{Gamma}(s,\lambda)$ are independent, then
+$$
+X=\frac{U}{U+V}
+$$
+has the $\mathrm{Beta}(r,s)$ distribution. This transformation determines an algorithm for generating random $\mathrm{Beta}(a,b)$ variates.
 
+1. Generate a random $u$ from $\mathrm{Gamma}(a,1)$.
+
+2. Generate a random $v$ from $\mathrm{Gamma}(b,1)$.
+
+3. Obtain $x=\dfrac{u}{u+v}$.
+
+This method is applied below to generate a random $\mathrm{Beta}(3,2)$ sample.
+
+```{r beta-combined}
+set.seed(777)
+n <- 1000
+a <- 3
+b <- 2
+u <- rgamma(n, shape = a, rate = 1)
+v <- rgamma(n, shape = b, rate = 1)
+x <- u / (u + v)
+```
+
+The sample data can be compared with the Beta$(3,2)$ distribution using a quantile--quantile (QQ) plot. If the sampled distribution is Beta$(3,2)$, the QQ plot should be nearly linear.
+
+```{r}
+q <- qbeta(ppoints(n), a, b)
+qqplot(q, x, cex = 0.25, xlab = "Beta(3, 2)", ylab = "Sample")
+abline(0, 1)
+```
+
+:::
 
 ------------------------------------------------------------------------
 

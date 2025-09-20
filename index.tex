@@ -355,8 +355,9 @@ Topic & Lecture Covered \\
 Introduction to R Programming & 1--2 \\
 Numerical Approaches and Optimization in 1-D & 3--5 \\
 Review for Distribution & 6--7 \\
+Random Variable Generation & 8-- \\
 Numerical integration & TBA \\
-Term Exam 1 & L13 \\
+Term Exam 1 & 13 \\
 Jackknife & TBA \\
 Bootstrap & TBA \\
 Cross-validation & TBA \\
@@ -2287,20 +2288,6 @@ Examples are borrowed from the following sources:
 \newcommand{\geom}{\operatorname{Geom}}
 \newcommand{\beta}{\operatorname{Beta}}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(ggplot2)}
-
-\CommentTok{\# Set global theme}
-\FunctionTok{theme\_set}\NormalTok{(}
-  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{theme}\NormalTok{(}
-      \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{)  }\CommentTok{\# center title}
-\NormalTok{    )}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
 One of the fundamental tools required in computational statistics is the
 ability to \emph{simulate random variables} (rvs) from specified
 probability distributions.
@@ -2415,7 +2402,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, colback=white, titlerule=0mm, breakable, rightrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomtitle=1mm, opacityback=0, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, arc=.35mm, toprule=.15mm, leftrule=.75mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, titlerule=0mm, toptitle=1mm, leftrule=.75mm, bottomrule=.15mm, opacitybacktitle=0.6, left=2mm, toprule=.15mm, coltitle=black, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, opacityback=0]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2461,7 +2448,6 @@ density \(f_X(x)=3x^2,\quad x\in(0,1)\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(ggplot2)}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
 \NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{1000}
 \NormalTok{uVec }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(N)}
@@ -2476,23 +2462,11 @@ density \(f_X(x)=3x^2,\quad x\in(0,1)\).
   \FunctionTok{stat\_function}\NormalTok{(}\AttributeTok{fun =} \ControlFlowTok{function}\NormalTok{(x) }\DecValTok{3}\SpecialCharTok{*}\NormalTok{x}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{,}
                 \AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \FunctionTok{expression}\NormalTok{(}\FunctionTok{f}\NormalTok{(x) }\SpecialCharTok{==} \DecValTok{3}\SpecialCharTok{*}\NormalTok{x}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{),}
-       \AttributeTok{y =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{x =} \StringTok{"x"}\NormalTok{)}
+       \AttributeTok{y =} \StringTok{"Density"}\NormalTok{, }\AttributeTok{x =} \StringTok{"x"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme\_minimal}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-i Please use `linewidth` instead.
-\end{verbatim}
-
-\begin{verbatim}
-Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-i Please use `after_stat(density)` instead.
-\end{verbatim}
-
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/example2-1.pdf}}
-
-::: \{.callout-example, title = ``Exponential''\}
 
 Suppose \(X\sim \exp(\lambda)\) where \(\lambda\) is the rate parameter.
 Then \(F_X(x) = 1 - e^{-\lambda x}\), so the inverse function is
@@ -2529,14 +2503,7 @@ them, i.e., \(x= -\frac{1}{\lambda}\log(u)\) or
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-Warning: Multiple drawing groups in `geom_function()`
-i Did you use the correct group, colour, or fill aesthetics?
-\end{verbatim}
-
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/example-exponential-1.pdf}}
-
-:::
 
 \subsection{Discrete case}\label{discrete-case}
 
@@ -2554,7 +2521,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, colback=white, titlerule=0mm, breakable, rightrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomtitle=1mm, opacityback=0, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, arc=.35mm, toprule=.15mm, leftrule=.75mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, titlerule=0mm, toptitle=1mm, leftrule=.75mm, bottomrule=.15mm, opacitybacktitle=0.6, left=2mm, toprule=.15mm, coltitle=black, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, opacityback=0]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2818,40 +2785,32 @@ Many types of transformations other than the probability inverse
 transformation can be applied to simulate random variables. Some
 examples are
 
-\begin{enumerate}
-  \item If $Z \sim N(0,1)$, then $V = Z^2 \sim \chi^2(1)$.
-  
-  \item If $U \sim \chi^2(m)$ and $V \sim \chi^2(n)$ are independent, then 
-  \[
+1). If \(Z \sim N(0,1)\), then \(V = Z^2 \sim \chi^2(1)\).
+
+2). If \(U \sim \chi^2(m)\) and \(V \sim \chi^2(n)\) are independent,
+then \[
   F = \frac{U/m}{V/n}
-  \]
-  has the $F$ distribution with $(m,n)$ degrees of freedom.
-  
-  \item If $Z \sim N(0,1)$ and $V \sim \chi^2(n)$ are independent, then 
-  \[
+  \] has the \(F\) distribution with \((m,n)\) degrees of freedom.
+
+3). If \(Z \sim N(0,1)\) and \(V \sim \chi^2(n)\) are independent, then
+\[
   T = \frac{Z}{\sqrt{V/n}}
-  \]
-  has the Student $t$ distribution with $n$ degrees of freedom.
-  
-  \item If $U,V \sim \text{Unif}(0,1)$ are independent, then
-  \[
+  \] has the Student \(t\) distribution with \(n\) degrees of freedom.
+
+4). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
   Z_1 = \sqrt{-2 \log U}\, \cos(2\pi V), 
   \qquad
   Z_2 = \sqrt{-2 \log U}\, \sin(2\pi V)
-  \]
-  are independent standard normal variables \cite[p.~86]{ref255}.
-  
-  \item If $U \sim \text{Gamma}(r,\lambda)$ and $V \sim \text{Gamma}(s,\lambda)$ are independent, then 
-  \[
+  \] are independent standard normal variables.
+
+5). If \(U \sim \text{Gamma}(r,\lambda)\) and
+\(V \sim \text{Gamma}(s,\lambda)\) are independent, then \[
   X = \frac{U}{U+V}
-  \]
-  has the $\text{Beta}(r,s)$ distribution.
-  
-  \item If $U,V \sim \text{Unif}(0,1)$ are independent, then
-  \[
+  \] has the \(\text{Beta}(r,s)\) distribution.
+
+6). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
   X = \left\lfloor 1 + \frac{\log(V)}{\log\big(1 - (1-\theta)U\big)} \right\rfloor.
   \]
-\end{enumerate}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

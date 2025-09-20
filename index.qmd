@@ -29,7 +29,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 ## Assignment
 
 -   [x] Assignment 1: Due on September 12, 2025
--   [x] Assignment 2: Due on September 22, 2025
+-   [ ] Assignment 2: Due on September 22, 2025
 -   [ ] Assignment 3: TBA
 
 ## Midterm
@@ -51,8 +51,9 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | Introduction to R Programming                |      1--2       |
 | Numerical Approaches and Optimization in 1-D |      3--5       |
 | Review for Distribution                      |      6--7       |
+| Random Variable Generation                        |       8--       |
 | Numerical integration                        |       TBA       |
-| Term Exam 1                                  |       L13       |
+| Term Exam 1                                  |       13       |
 | Jackknife                                    |       TBA       |
 | Bootstrap                                    |       TBA       |
 | Cross-validation                             |       TBA       |
