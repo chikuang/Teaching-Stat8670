@@ -68,12 +68,12 @@ sample(toupper(letters))
 The first method to simulate rvs is the *inverse transformation method* (ITM).
 
 ::: {.callout-theorem title="Probability Integral Transformation"}
-If $X\sim F_x(X)$ is a continuous rv, then the rv $U = F_x(X) \sim \unif(0,1)$.
+If $X\sim F_X$ is a continuous rv, then the rv $U = F_X(x) \sim \unif(0,1)$.
 :::
 
 ITM of generating rvs applies the
 probability integral transformation. Define the inverse transformation
-$$ F^{−1}_X(u) = \inf\{x : FX (x) = u\},\quad  0 < u < 1.$$
+$$ F^{−1}_X(u) = \inf\{x : F_X(x) = u\},\quad  0 < u < 1.$$
 Then, if $U \sim \unif(0,1)$, the rv $X = F^{−1}_X(U)$ has the distribution $F_X$. This can be shown as, for all $x \in R$
 \begin{align}
 P\left(F_X^{-1}(U) \leq x\right) & =P\left(\inf \left\{t: F_X(t)=U\right\} \leq x\right) \\
@@ -106,7 +106,7 @@ Suppose we want to use the ITM to simulate $N=1000$ rvs from the density $f_X(x)
 
 1. The cdf is $F_X(x)=x^3$, so the inverse function is $F_X^{-1}(u)=u^{1/3}$.
 
-2. Simulate $N=1000$ rvs from $u\sum \unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
+2. Simulate $N=1000$ rvs from $u\sim\unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
 
 ``` {r example2, warning = FALSE, message = FALSE}
 set.seed(777)
@@ -194,7 +194,7 @@ Thus,
 $$
 F_X^{-1}(u) = 
 \begin{cases}
-1, & u > 0.6,
+1, & u > 0.6,\\
 0, & u \leq 0.6.
 \end{cases}
 $$
@@ -465,6 +465,75 @@ abline(0, 1)
 ```
 
 :::
+
+## Sum and Mixture
+
+### Sum/Convolution
+
+Let $X_1, X_2, \ldots, X_n \overset{iid}{\sim}F_X$. Then we may consider the sum of the random variables 
+$S_n:=\sum_{i=1}^n X_i$, with distribution $F_{S_n}$, which can be referred as *convoluton*. We can simulate $S_n$ by simulating $X_1, X_2, \ldots, X_n$ and summing them up. There are several common convolutions we have seen so far
+
+1. Sum of $n$ independent i.i.d.  chi-square with degreee of freedom (df) 1 is chi-square with df $n$. 
+
+2. Sum of $n$ independent i.i.d.  exponential with rate $\lambda$ is gamma with shape $n$ and rate $\lambda$.
+
+3. Sum of $n$ independent i.i.d.  geometric with parametric $p$ is negative binomial with size $n$ and parameter $p$.
+
+::: {.callout-example title="Chi square"}
+In order to simulate $\chi^2$  distribution with df k, we can simulate k independent standard normal rvs and sum their squares. Let's simulate $n$ independent $X\sim \chi^2(5)$.
+
+1. Fill an $n \times k$ matrix with $n k$ realization of the random variables that follow $N(0,1)$.
+
+2. Square each entry in the matrix (1).
+
+3. Compute the row sums of the squared normals. Each row sum is one random observation from the $\chi^2(k)$ distribution.
+
+``` {r chisq}
+set.seed(777)
+k <- 2
+n <- 1000
+X <- matrix(rnorm(n*k), nrow = n, ncol = k)^2
+X_row <- rowSums(X)
+mean(X_row)
+mean(X_row^2)
+```
+:::
+
+### Mixture
+
+A mixture distribution is a probability distribution constructed as a weighted sum of other distributions. If $X$ is a rv with a mixture distribution, then its pdf is given by
+$$
+F_X(x) = \sum_{i=1}^k \alpha_i F_{X_i}(x),
+$$
+where $\alpha_i\ge 0$ and $\sum_i \alpha_i=1$. We can just simply simulate each *component* $X_i$ first, then multiply with their corresponding weights $\alpha_i$.
+
+::: {.callout-example title="Mixture of normal"}
+Suppose $X$ and $Y$ is a mixture of two normal distributions, where $X\sim N(\mu_1,\sigma_1^2)$ with probability $\alpha$ and $Y\sim N(\mu_2,\sigma_2^2)$ with probability $1-\alpha$.
+
+```{r mixture normal}
+n <- 1000
+x1 <- rnorm(n, 0, 1)
+x2 <- rnorm(n, 3, 3)
+s_convolution <- x1 + x2 #the convolution
+
+u <- runif(n)
+k <- as.integer(u > 0.5) #vector of 0’s and 1’s
+m_mixture <- k * x1 + (1-k) * x2 #the mixture
+df <- data.frame(
+  value = c(s_convolution, m_mixture),
+  type = rep(c("convolution", "mixture"), each = n)
+)
+ggplot(df, aes(x = value, fill = type)) +
+  geom_histogram(alpha = 0.6, position = "identity", bins = 40, color = "black") +
+  labs(title = "Histograms of convolution and mixture", x = "Value", y = "Count") + 
+  theme_minimal()
+```
+
+Note: Mixture is *non-normal!* but the convolution is *normal*.
+:::
+
+
+## Simulate Multivaraite RVs
 
 ------------------------------------------------------------------------
 
