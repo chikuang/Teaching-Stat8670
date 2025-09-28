@@ -223,7 +223,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-09-20}
+\date{2025-09-27}
 \begin{document}
 \maketitle
 
@@ -1231,9 +1231,9 @@ f\left(x \mid \mu, \sigma^2\right)=\frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{-\fr
 \] or we may work on the multivariate normal distribution case which is
 a bit more involved.
 
-\(\boldsymbol{X} = (X1,\dots, X_d)\) is said to be a multivariate normal
-distribution if and only if it is a linear comibnation of independent
-and identically distributed standard normals: \[
+\(\boldsymbol{X} = (X_1,\dots, X_d)\) is said to be a multivariate
+normal distribution if and only if it is a linear comibnation of
+independent and identically distributed standard normals: \[
 \boldsymbol{X} = \boldsymbol{CZ} + \mu,\quad \boldsymbol{Z}=(Z_1,\dots,Z_d),\quad Z_i \stackrel{iid}{\sim} N(0,1).
 \]
 
@@ -2287,6 +2287,10 @@ Examples are borrowed from the following sources:
 \newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\geom}{\operatorname{Geom}}
 \newcommand{\beta}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\cov}{\mathbb{C}ov}
 
 One of the fundamental tools required in computational statistics is the
 ability to \emph{simulate random variables} (rvs) from specified
@@ -2383,12 +2387,12 @@ Method}\label{inverse-transformation-method}
 The first method to simulate rvs is the \emph{inverse transformation
 method} (ITM).
 
-If \(X\sim F_x(X)\) is a continuous rv, then the rv
-\(U = F_x(X) \sim \operatorname{Unif}(0,1)\).
+If \(X\sim F_X\) is a continuous rv, then the rv
+\(U = F_X(x) \sim \operatorname{Unif}(0,1)\).
 
 ITM of generating rvs applies the probability integral transformation.
 Define the inverse transformation
-\[ F^{−1}_X(u) = \inf\{x : FX (x) = u\},\quad  0 < u < 1.\] Then, if
+\[ F^{−1}_X(u) = \inf\{x : F_X(x) = u\},\quad  0 < u < 1.\] Then, if
 \(U \sim \operatorname{Unif}(0,1)\), the rv \(X = F^{−1}_X(U)\) has the
 distribution \(F_X\). This can be shown as, for all \(x \in R\)
 \begin{align}
@@ -2402,7 +2406,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, titlerule=0mm, toptitle=1mm, leftrule=.75mm, bottomrule=.15mm, opacitybacktitle=0.6, left=2mm, toprule=.15mm, coltitle=black, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2442,7 +2446,7 @@ density \(f_X(x)=3x^2,\quad x\in(0,1)\).
   The cdf is \(F_X(x)=x^3\), so the inverse function is
   \(F_X^{-1}(u)=u^{1/3}\).
 \item
-  Simulate \(N=1000\) rvs from \(u\sum \operatorname{Unif}(0,1)\) and
+  Simulate \(N=1000\) rvs from \(u\sim\operatorname{Unif}(0,1)\) and
   apply the inverse function to obtain the 1000 \(x\) values.
 \end{enumerate}
 
@@ -2521,7 +2525,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, titlerule=0mm, toptitle=1mm, leftrule=.75mm, bottomrule=.15mm, opacitybacktitle=0.6, left=2mm, toprule=.15mm, coltitle=black, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2551,7 +2555,7 @@ In this example, \(F_X(0) = f_X(0) = 1 - p\) and \(F_X(1) = 1\).
 Thus, \[
 F_X^{-1}(u) = 
 \begin{cases}
-1, & u > 0.6,
+1, & u > 0.6,\\
 0, & u \leq 0.6.
 \end{cases}
 \]
@@ -2626,7 +2630,8 @@ zero. Thus, we can simplify it to
 \CommentTok{\# Plot both histograms side by side}
 \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ value, }\AttributeTok{fill =}\NormalTok{ group)) }\SpecialCharTok{+}
   \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{bins =} \DecValTok{40}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Histograms of k1 and k2"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Value"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{)}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Histograms of k1 and k2"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Value"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_minimal}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2694,13 +2699,13 @@ Then we can simulate \(X\) using the following procedure:
 
 Why it work?Note that in Step 2c, \[
 P(\text{accept} \mid Y) 
-= P\!\left(U < \frac{f(Y)}{c g(Y)} \,\Big|\, Y\right) 
-= \frac{f_X(Y)}{c g_X(Y)}.
+= P\!\left(U < \frac{f(Y)}{k g(Y)} \,\Big|\, Y\right) 
+= \frac{f_X(Y)}{k g_X(Y)}.
 \]
 
 The total probability of acceptance for any iteration is therefore \[
 \sum_y P(\text{accept} \mid y) P(Y = y) 
-= \sum_y \frac{f(y)}{c g(y)} g(y) 
+= \sum_y \frac{f(y)}{k g(y)} g(y) 
 = \frac{1}{k},
 \] and the number of iterations until acceptance has the geometric
 distribution with mean \(k\). That means, in order to sample \(X\), in
@@ -2787,30 +2792,824 @@ examples are
 
 1). If \(Z \sim N(0,1)\), then \(V = Z^2 \sim \chi^2(1)\).
 
-2). If \(U \sim \chi^2(m)\) and \(V \sim \chi^2(n)\) are independent,
+2). If \(Z_1,\ldots,Z_n \sim N(0,1)\) are independent, then \[
+  U = \sum_{i=1}^n Z_i^2 \sim \chi^2(n).
+  \]
+
+3). If \(U \sim \chi^2(m)\) and \(V \sim \chi^2(n)\) are independent,
 then \[
   F = \frac{U/m}{V/n}
   \] has the \(F\) distribution with \((m,n)\) degrees of freedom.
 
-3). If \(Z \sim N(0,1)\) and \(V \sim \chi^2(n)\) are independent, then
+4). If \(Z \sim N(0,1)\) and \(V \sim \chi^2(n)\) are independent, then
 \[
   T = \frac{Z}{\sqrt{V/n}}
   \] has the Student \(t\) distribution with \(n\) degrees of freedom.
 
-4). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
+5). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
   Z_1 = \sqrt{-2 \log U}\, \cos(2\pi V), 
   \qquad
   Z_2 = \sqrt{-2 \log U}\, \sin(2\pi V)
   \] are independent standard normal variables.
 
-5). If \(U \sim \text{Gamma}(r,\lambda)\) and
+6). If \(U \sim \text{Gamma}(r,\lambda)\) and
 \(V \sim \text{Gamma}(s,\lambda)\) are independent, then \[
   X = \frac{U}{U+V}
   \] has the \(\text{Beta}(r,s)\) distribution.
 
-6). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
+7). If \(U,V \sim \text{Unif}(0,1)\) are independent, then \[
   X = \left\lfloor 1 + \frac{\log(V)}{\log\big(1 - (1-\theta)U\big)} \right\rfloor.
-  \]
+  \] has logarithmic distribution with parameter \(\theta\).
+
+Using the distribution theory, we recall the relationship between beta
+and gamma distributions provides another beta generator.
+
+If \(U \sim \mathrm{Gamma}(r,\lambda)\) and
+\(V \sim \mathrm{Gamma}(s,\lambda)\) are independent, then \[
+X=\frac{U}{U+V}
+\] has the \(\mathrm{Beta}(r,s)\) distribution. This transformation
+determines an algorithm for generating random \(\mathrm{Beta}(a,b)\)
+variates.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate a random \(u\) from \(\mathrm{Gamma}(a,1)\).
+\item
+  Generate a random \(v\) from \(\mathrm{Gamma}(b,1)\).
+\item
+  Obtain \(x=\dfrac{u}{u+v}\).
+\end{enumerate}
+
+This method is applied below to generate a random \(\mathrm{Beta}(3,2)\)
+sample.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{a }\OtherTok{\textless{}{-}} \DecValTok{3}
+\NormalTok{b }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{u }\OtherTok{\textless{}{-}} \FunctionTok{rgamma}\NormalTok{(n, }\AttributeTok{shape =}\NormalTok{ a, }\AttributeTok{rate =} \DecValTok{1}\NormalTok{)}
+\NormalTok{v }\OtherTok{\textless{}{-}} \FunctionTok{rgamma}\NormalTok{(n, }\AttributeTok{shape =}\NormalTok{ b, }\AttributeTok{rate =} \DecValTok{1}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}}\NormalTok{ u }\SpecialCharTok{/}\NormalTok{ (u }\SpecialCharTok{+}\NormalTok{ v)}
+\end{Highlighting}
+\end{Shaded}
+
+The sample data can be compared with the Beta\((3,2)\) distribution
+using a quantile--quantile (QQ) plot. If the sampled distribution is
+Beta\((3,2)\), the QQ plot should be nearly linear.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{q }\OtherTok{\textless{}{-}} \FunctionTok{qbeta}\NormalTok{(}\FunctionTok{ppoints}\NormalTok{(n), a, b)}
+\FunctionTok{qqplot}\NormalTok{(q, x, }\AttributeTok{cex =} \FloatTok{0.25}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Beta(3, 2)"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Sample"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/unnamed-chunk-2-1.pdf}}
+
+\section{Sum and Mixture}\label{sum-and-mixture}
+
+\subsection{Sum/Convolution}\label{sumconvolution}
+
+Let \(X_1, X_2, \ldots, X_n \overset{iid}{\sim}F_X\). Then we may
+consider the sum of the random variables \(S_n:=\sum_{i=1}^n X_i\), with
+distribution \(F_{S_n}\), which can be referred as \emph{convoluton}. We
+can simulate \(S_n\) by simulating \(X_1, X_2, \ldots, X_n\) and summing
+them up. There are several common convolutions we have seen so far
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Sum of \(n\) independent i.i.d. chi-square with degreee of freedom
+  (df) 1 is chi-square with df \(n\).
+\item
+  Sum of \(n\) independent i.i.d. exponential with rate \(\lambda\) is
+  gamma with shape \(n\) and rate \(\lambda\).
+\item
+  Sum of \(n\) independent i.i.d. geometric with parametric \(p\) is
+  negative binomial with size \(n\) and parameter \(p\).
+\end{enumerate}
+
+In order to simulate \(\chi^2\) distribution with df k, we can simulate
+k independent standard normal rvs and sum their squares. Let's simulate
+\(n\) independent \(S \sim \chi^2(5)\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Fill an \(n \times k\) matrix with \(n k\) realization of the random
+  variables that follow \(N(0,1)\).
+\item
+  Square each entry in the matrix (1).
+\item
+  Compute the row sums of the squared normals. Each row sum is one
+  random observation from the \(\chi^2(k)\) distribution.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{k }\OtherTok{\textless{}{-}} \DecValTok{5}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n}\SpecialCharTok{*}\NormalTok{k), }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ k)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{X\_row }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(X)}
+\FunctionTok{mean}\NormalTok{(X\_row)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 5.065355
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(X\_row}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 36.40181
+\end{verbatim}
+
+\subsection{Mixture}\label{mixture}
+
+A mixture distribution is a probability distribution constructed as a
+weighted sum of other distributions. If \(X\) is a rv with a mixture
+distribution, then its pdf is given by \[
+F_X(x) = \sum_{i=1}^k \alpha_i F_{X_i}(x),
+\] where \(\alpha_i\ge 0\) and \(\sum_i \alpha_i=1\). We can just simply
+simulate each \emph{component} \(X_i\) first, then multiply with their
+corresponding weights \(\alpha_i\).
+
+Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
+\(X\sim N(\mu_1,\sigma_1^2)\) with probability \(\alpha\) and
+\(Y\sim N(\mu_2,\sigma_2^2)\) with probability \(1-\alpha\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{x1 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{x2 }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\DecValTok{3}\NormalTok{, }\DecValTok{3}\NormalTok{)}
+\NormalTok{s\_convolution }\OtherTok{\textless{}{-}}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ x2 }\CommentTok{\#the convolution}
+
+\NormalTok{u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n)}
+\NormalTok{k }\OtherTok{\textless{}{-}} \FunctionTok{as.integer}\NormalTok{(u }\SpecialCharTok{\textgreater{}} \FloatTok{0.5}\NormalTok{) }\CommentTok{\#vector of 0’s and 1’s}
+
+\DocumentationTok{\#\# pay attention to it}
+\NormalTok{m\_mixture }\OtherTok{\textless{}{-}}\NormalTok{ k }\SpecialCharTok{*}\NormalTok{ x1 }\SpecialCharTok{+}\NormalTok{ (}\DecValTok{1}\SpecialCharTok{{-}}\NormalTok{k) }\SpecialCharTok{*}\NormalTok{ x2 }\CommentTok{\#the mixture}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{value =} \FunctionTok{c}\NormalTok{(s\_convolution, m\_mixture),}
+  \AttributeTok{type =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"convolution"}\NormalTok{, }\StringTok{"mixture"}\NormalTok{), }\AttributeTok{each =}\NormalTok{ n)}
+\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ value, }\AttributeTok{fill =}\NormalTok{ type)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{, }\AttributeTok{position =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{bins =} \DecValTok{40}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Histograms of convolution and mixture"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Value"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
+
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+
+Pay attention how a mixture is simulated. In particular, we first
+simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
+select from which distribution/component we want to sample. It is
+\textbf{not an (weighted) addition} as in the convolution.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+
+Convolution is the sum of two independent rvs, while mixture is a
+weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
+convolution is \emph{normal}.
+
+\end{tcolorbox}
+
+\section{Simulate Multivaraite RVs}\label{simulate-multivaraite-rvs}
+
+This section presents generators for the multivariate normal
+distribution, multivariate normal mixtures, the Wishart distribution,
+and the uniform distribution on the sphere in \(\mathbb{R}^d\).
+
+\subsection{Multivariate normal
+distribution}\label{multivariate-normal-distribution}
+
+Recall that, from Definition 1 in Chapter 2, a \(d\)-dimensional random
+vector \(X\) is a multivariate normal distribution with mean vector
+\(\mu\) and covariance matrix \(\Sigma\), denoted by
+\(X \sim N_d(\mu, \Sigma)\), if every linear combination of its
+components has a univariate normal distribution. That is, for every
+nonzero vector \(a \in \mathbb{R}^d\), the rv \(a^T X\) has a univariate
+normal distribution.
+
+To write this in an explicit form, we have, \(X = (X_1,\dots,X_N)\)
+follow a multivariate normal (MVN) distribution with mean vector
+\(\mu = (\mu_1,\dots,\mu_N)\) and covariance matrix
+\(\Sigma = (\sigma_{ij})\), if its joint density function is given by \[
+f_X(x) = \frac{1}{(2\pi)^{p/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)\right), \quad x \in \mathbb{R}^p.
+\]
+
+More explicitly, we can write this as the
+\[\mu=(\mu_1,\dots,\mu_p) = \begin{pmatrix}\mu_1\\
+\vdots\\
+\mu_p\end{pmatrix}\in \mathbb{R}^p,\] and
+\[\Sigma=(\Sigma_{ij}) = (\mathbb{C}ov(X_i,X_j))= \left[\begin{array}{cccc}
+\sigma_{11} & \sigma_{12} & \ldots & \sigma_{1 d} \\
+\sigma_{21} & \sigma_{22} & \ldots & \sigma_{2 d} \\
+\vdots & \vdots & & \vdots \\
+\sigma_{d 1} & \sigma_{d 2} & \ldots & \sigma_{d d}
+\end{array}\right] \in \mathbb{R}^{d\times d}.
+\]
+
+A random vector \(X\sim N_d(\mu,\Sigma)\) can be simulated by the
+following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Simulate \(Z = (Z_1,\ldots,Z_d)^T\) where
+  \(Z_i \overset{iid}{\sim}N(0,1)\).
+\item
+  Find a vector \(\mu\) and a matrix \(A\) and such that
+  \(\Sigma = AA^T\). The decomposition can be Cholesky decomposition,
+  eigendecomposition, or singular value decomposition, etc.
+\end{enumerate}
+
+In practice, we \emph{do not do this one at a time}, we want to simulate
+\(n\) sample in as few steps as possible. The following procedure is
+more efficient. Typically, one applies the transformation to a data
+matrix and transforms the entire sample. Suppose that
+\(Z = (Z_ij ) \in \mathbb{R}^{n\times d}\), where
+\(Z_{ij}\overset{iid}{\sim}N(0,1)\). Then the rows of Z are \(n\) random
+observations from the \(d\)-dimensional standard MVN distribution. The
+required transformation applied to the data matrix is
+\[X = ZQ + J \mu^\top,\] where \(Q^\top Q=\Sigma\), and \(J\) is a
+column vector of \(n\) ones. The rows of \(X\) are \(n\) random
+observations from the \(d\)-dimensional MVN distribution with mean
+vector \(\mu\) and covariance matrix \(\Sigma\).
+
+Method for generating multivariate \$n \$ normal samples from the
+\(N_d(\mu,\Sigma)\) distribution.
+
+Step 1. Simulate \(Z = (Z_{ij}) \in \mathbb{R}^{n\times d}\), where
+\(Z_{ij} \overset{iid}{\sim}N(0,1)\).
+
+Step 2. Compute the decomposition \(\Sigma = Q^\top Q\).
+
+Step 3. Compute \(X = ZQ + J\mu^\top\), where \(J\) is a column vector
+of \(n\) ones.
+
+Step 4. Return \(X\in \mathbb{R}^{ n\times d}\), in which each of the
+\(n\) rows of \(X\) is a random observation from the \(N_d(\mu,\Sigma)\)
+distribution.
+
+\subsubsection{A few things to be
+considered}\label{a-few-things-to-be-considered}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Computation of \(J \mu^\top\)
+\end{enumerate}
+
+Recall that \(J\) is a vector of 1's (i.e.,
+\(J=(1,\dots,1)\in\mathbb{R}^d\) and \(\mu^\top\) is the transpose of
+\(\mu\). So, \(J \mu^\top\) is a matrix with each row being \(\mu\). In
+R, we can use \texttt{matrix(mu,\ n,\ d,\ byrow\ =\ TRUE)} to create
+this matrix. Also, for any \(i\) and \(j\), \(\mu_i=\mu_j=c\), where c
+is a constant, then we can write it as \(c I_{n\times d}\), where
+\(I_{n\times d}\) is a matrix of 1's with dimension \(n\times d\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n}\SpecialCharTok{*}\NormalTok{d), }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ d)}
+\NormalTok{X }\OtherTok{\textless{}{-}}\NormalTok{ Z }\SpecialCharTok{\%*\%}\NormalTok{ Q }\SpecialCharTok{+} \FunctionTok{matrix}\NormalTok{(mu, n, d, }\AttributeTok{byrow =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Decomposition of \(\Sigma\)
+\end{enumerate}
+
+There are many different ways to decompose \(\Sigma\). Recall that
+\(\Sigma\) is a symmetric positive definite matrix, so we can use
+Cholesky decomposition, eigendecomposition, or singular value
+decomposition (SVD). In R, we can use \texttt{chol()}, \texttt{eigen()},
+or \texttt{svd()} functions to compute the decomposition.
+
+\begin{itemize}
+\item
+  \textbf{Choleski decomposition}: Choleski of a real symmetric
+  positive-definite matrix is \(X = Q^\top Q\), where \(Q\) is an upper
+  triangular matrix.
+\item
+  \textbf{Spectral decomposition}: The square root of the covariance is
+  \(Σ^{1/2} = P^{1/2} \Lambda P^{−1}\), where \(\Lambda\) is the
+  diagonal matrix with the eigenvalues of \(\Sigma\) along the diagonal
+  and \(P\) is the matrix whose columns are the eigenvectors of
+  \(\Sigma\) corresponding to the eigenvalues in \(\Lambda\). This
+  method can also be called the eigen-decomposition method. In the
+  eigen-decomposition we have \(P^{-1}= P^\top\) and therefore
+  \(Σ^{1/2} = P \Lambda^{1/2}P^\top\) . The matrix \(Q = Σ^{1/2}\) is a
+  factorization of \(\Sigma\) such that \(Q^\top Q = \Sigma\).
+\item
+  \textbf{Singular Value Decomposition}: The singular value
+  decomposition (svd) generalizes the idea of eigenvectors to
+  rectangular matrices. The svd of a matrix \(X\) is \(X = U DV^\top\) ,
+  where D is a vector containing the singular values of \(X\), \(U\) is
+  a matrix whose columns contain the left singular vectors of \(X\), and
+  \(V\) is a matrix whose columns contain the right singular vectors of
+  \(X\). The matrix \(X\) in this case is the population covariance
+  matrix \(\Sigma\), and \(UV\top = I\). The svd of a symmetric positive
+  definite matrix \(\Sigma\) gives \(U = V = P\) and
+  \(Σ^{1/2} = U D^{1/2}V^\top\) . Thus the svd method for this
+  application is equivalent to the spectral decomposition method, but is
+  \textbf{less efficient} because the svd method does not take advantage
+  of the fact that the matrix \(\Sigma\) is square symmetric.
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+
+
+\NormalTok{n  }\OtherTok{\textless{}{-}} \DecValTok{100}     \CommentTok{\# sample size per call}
+\NormalTok{d  }\OtherTok{\textless{}{-}} \DecValTok{30}      \CommentTok{\# dimension}
+\NormalTok{N  }\OtherTok{\textless{}{-}} \DecValTok{1000}    \CommentTok{\# number of distinct Sigmas to cycle through in Scenario A}
+\NormalTok{reps\_A }\OtherTok{\textless{}{-}} \DecValTok{200} \CommentTok{\# microbenchmark repetitions for Scenario A}
+\NormalTok{reps\_B }\OtherTok{\textless{}{-}} \DecValTok{500} \CommentTok{\# microbenchmark repetitions for Scenario B}
+\NormalTok{mu }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(d)}
+
+\DocumentationTok{\#\# ====== MVN generators ======}
+\NormalTok{rmvn\_eigen }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, mu, Sigma) \{}
+\NormalTok{  ev }\OtherTok{\textless{}{-}} \FunctionTok{eigen}\NormalTok{(Sigma, }\AttributeTok{symmetric =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  A  }\OtherTok{\textless{}{-}}\NormalTok{ ev}\SpecialCharTok{$}\NormalTok{vectors }\SpecialCharTok{\%*\%}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{pmax}\NormalTok{(ev}\SpecialCharTok{$}\NormalTok{values, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{*} \FunctionTok{t}\NormalTok{(ev}\SpecialCharTok{$}\NormalTok{vectors))}
+\NormalTok{  Z  }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+  \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ A, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{rmvn\_svd }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, mu, Sigma) \{}
+\NormalTok{  sv }\OtherTok{\textless{}{-}} \FunctionTok{svd}\NormalTok{(Sigma)}
+\NormalTok{  A  }\OtherTok{\textless{}{-}}\NormalTok{ sv}\SpecialCharTok{$}\NormalTok{u }\SpecialCharTok{\%*\%}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{pmax}\NormalTok{(sv}\SpecialCharTok{$}\NormalTok{d, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{*} \FunctionTok{t}\NormalTok{(sv}\SpecialCharTok{$}\NormalTok{v))}
+\NormalTok{  Z  }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+  \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ A, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{rmvn\_chol }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, mu, Sigma) \{}
+\NormalTok{  R  }\OtherTok{\textless{}{-}} \FunctionTok{chol}\NormalTok{(Sigma)}
+\NormalTok{  Z  }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+  \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ R, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{\}}
+
+\DocumentationTok{\#\# ====== Utilities ======}
+\NormalTok{rand\_cov }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(d) \{}
+\NormalTok{  A }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(d}\SpecialCharTok{*}\NormalTok{d), d, d)}
+\NormalTok{  S }\OtherTok{\textless{}{-}} \FunctionTok{crossprod}\NormalTok{(A) }\SpecialCharTok{/}\NormalTok{ d}
+  \FunctionTok{diag}\NormalTok{(S) }\OtherTok{\textless{}{-}} \FunctionTok{diag}\NormalTok{(S) }\SpecialCharTok{+} \FloatTok{1e{-}6}
+\NormalTok{  S}
+\NormalTok{\}}
+
+\NormalTok{drop\_outliers }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(df) \{}
+\NormalTok{  df }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{group\_by}\NormalTok{(expr) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}
+      \AttributeTok{q1 =} \FunctionTok{quantile}\NormalTok{(time, }\FloatTok{0.25}\NormalTok{),}
+      \AttributeTok{q3 =} \FunctionTok{quantile}\NormalTok{(time, }\FloatTok{0.75}\NormalTok{),}
+      \AttributeTok{iqr =}\NormalTok{ q3 }\SpecialCharTok{{-}}\NormalTok{ q1,}
+      \AttributeTok{lower =}\NormalTok{ q1 }\SpecialCharTok{{-}} \FloatTok{1.5} \SpecialCharTok{*}\NormalTok{ iqr,}
+      \AttributeTok{upper =}\NormalTok{ q3 }\SpecialCharTok{+} \FloatTok{1.5} \SpecialCharTok{*}\NormalTok{ iqr}
+\NormalTok{    ) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{filter}\NormalTok{(time }\SpecialCharTok{\textgreater{}=}\NormalTok{ lower }\SpecialCharTok{\&}\NormalTok{ time }\SpecialCharTok{\textless{}=}\NormalTok{ upper) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{ungroup}\NormalTok{()}
+\NormalTok{\}}
+
+\DocumentationTok{\#\# Precompute N random SPD matrices (same pool for all methods)}
+\NormalTok{Sigma\_list }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(N, }\FunctionTok{rand\_cov}\NormalTok{(d), }\AttributeTok{simplify =} \ConstantTok{FALSE}\NormalTok{)}
+
+\DocumentationTok{\#\# ====== Scenario A: varying Sigma each call (factorize every time) ======}
+\NormalTok{i }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{next\_Sigma }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{() \{ i }\OtherTok{\textless{}\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (i }\SpecialCharTok{==}\NormalTok{ N) }\DecValTok{1} \ControlFlowTok{else}\NormalTok{ i }\SpecialCharTok{+} \DecValTok{1}\NormalTok{; Sigma\_list[[i]] \}}
+
+\NormalTok{bench\_A }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}
+  \AttributeTok{rmvn\_eigen       =} \FunctionTok{rmvn\_eigen}\NormalTok{(n, mu, }\FunctionTok{next\_Sigma}\NormalTok{()),}
+  \AttributeTok{rmvn\_svd         =} \FunctionTok{rmvn\_svd}\NormalTok{(n,   mu, }\FunctionTok{next\_Sigma}\NormalTok{()),}
+  \AttributeTok{rmvn\_chol        =} \FunctionTok{rmvn\_chol}\NormalTok{(n,  mu, }\FunctionTok{next\_Sigma}\NormalTok{()),}
+  \AttributeTok{MASS\_mvrnorm     =}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{mvrnorm}\NormalTok{(n, mu, }\FunctionTok{next\_Sigma}\NormalTok{()),}
+  \AttributeTok{mvtnorm\_rmvnorm  =}\NormalTok{ mvtnorm}\SpecialCharTok{::}\FunctionTok{rmvnorm}\NormalTok{(n, }\AttributeTok{mean =}\NormalTok{ mu, }\AttributeTok{sigma =} \FunctionTok{next\_Sigma}\NormalTok{()),}
+  \AttributeTok{times =}\NormalTok{ reps\_A}
+\NormalTok{)}
+
+\NormalTok{sum\_A }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(bench\_A) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(expr) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{median\_ms =} \FunctionTok{median}\NormalTok{(time)}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}
+            \AttributeTok{iqr\_ms    =} \FunctionTok{IQR}\NormalTok{(time)}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}
+            \AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(median\_ms) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{scenario =} \StringTok{"A: varying Σ"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(sum\_A)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 5 x 4
+  expr            median_ms  iqr_ms scenario    
+  <fct>               <dbl>   <dbl> <chr>       
+1 rmvn_chol           0.129 0.00861 A: varying Σ
+2 MASS_mvrnorm        0.196 0.0106  A: varying Σ
+3 rmvn_eigen          0.201 0.0123  A: varying Σ
+4 rmvn_svd            0.246 0.0181  A: varying Σ
+5 mvtnorm_rmvnorm     0.266 0.0244  A: varying Σ
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pA }\OtherTok{\textless{}{-}} \FunctionTok{drop\_outliers}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(bench\_A)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{ms =}\NormalTok{ time}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(expr, ms, }\AttributeTok{FUN =}\NormalTok{ median), }\AttributeTok{y =}\NormalTok{ ms)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{stat\_summary}\NormalTok{(}\AttributeTok{fun =}\NormalTok{ median, }\AttributeTok{geom =} \StringTok{"point"}\NormalTok{, }\AttributeTok{shape =} \DecValTok{21}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{stroke =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"MVN generators — Scenario A (varying Σ, outliers removed)"}\NormalTok{,}
+       \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{y =} \StringTok{"Time (ms) per call)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(pA)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/MVM-performance-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# ====== Scenario B: fixed Sigma, reuse factorization when possible ======}
+\NormalTok{Sigma0 }\OtherTok{\textless{}{-}}\NormalTok{ Sigma\_list[[}\DecValTok{1}\NormalTok{]]}
+
+\NormalTok{rmvn\_chol\_fixed }\OtherTok{\textless{}{-}} \FunctionTok{local}\NormalTok{(\{}
+\NormalTok{  R }\OtherTok{\textless{}{-}} \FunctionTok{chol}\NormalTok{(Sigma0)}
+  \ControlFlowTok{function}\NormalTok{(n, mu) \{}
+\NormalTok{    Z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+    \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ R, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\})}
+
+\NormalTok{rmvn\_eigen\_fixed }\OtherTok{\textless{}{-}} \FunctionTok{local}\NormalTok{(\{}
+\NormalTok{  ev }\OtherTok{\textless{}{-}} \FunctionTok{eigen}\NormalTok{(Sigma0, }\AttributeTok{symmetric =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  A  }\OtherTok{\textless{}{-}}\NormalTok{ ev}\SpecialCharTok{$}\NormalTok{vectors }\SpecialCharTok{\%*\%}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{pmax}\NormalTok{(ev}\SpecialCharTok{$}\NormalTok{values, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{*} \FunctionTok{t}\NormalTok{(ev}\SpecialCharTok{$}\NormalTok{vectors))}
+  \ControlFlowTok{function}\NormalTok{(n, mu) \{}
+\NormalTok{    Z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+    \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ A, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\})}
+
+\NormalTok{rmvn\_svd\_fixed }\OtherTok{\textless{}{-}} \FunctionTok{local}\NormalTok{(\{}
+\NormalTok{  sv }\OtherTok{\textless{}{-}} \FunctionTok{svd}\NormalTok{(Sigma0)}
+\NormalTok{  A  }\OtherTok{\textless{}{-}}\NormalTok{ sv}\SpecialCharTok{$}\NormalTok{u }\SpecialCharTok{\%*\%}\NormalTok{ (}\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{pmax}\NormalTok{(sv}\SpecialCharTok{$}\NormalTok{d, }\DecValTok{0}\NormalTok{)) }\SpecialCharTok{*} \FunctionTok{t}\NormalTok{(sv}\SpecialCharTok{$}\NormalTok{v))}
+  \ControlFlowTok{function}\NormalTok{(n, mu) \{}
+\NormalTok{    Z }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*} \FunctionTok{length}\NormalTok{(mu)), n)}
+    \FunctionTok{sweep}\NormalTok{(Z }\SpecialCharTok{\%*\%}\NormalTok{ A, }\DecValTok{2}\NormalTok{, mu, }\StringTok{\textasciigrave{}}\AttributeTok{+}\StringTok{\textasciigrave{}}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\})}
+
+\NormalTok{bench\_B }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}
+  \AttributeTok{rmvn\_chol\_fixed   =} \FunctionTok{rmvn\_chol\_fixed}\NormalTok{(n, mu),}
+  \AttributeTok{rmvn\_eigen\_fixed  =} \FunctionTok{rmvn\_eigen\_fixed}\NormalTok{(n, mu),}
+  \AttributeTok{rmvn\_svd\_fixed    =} \FunctionTok{rmvn\_svd\_fixed}\NormalTok{(n, mu),}
+  \AttributeTok{MASS\_mvrnorm      =}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{mvrnorm}\NormalTok{(n, mu, Sigma0),                   }\CommentTok{\# factorizes internally}
+  \AttributeTok{mvtnorm\_rmvnorm   =}\NormalTok{ mvtnorm}\SpecialCharTok{::}\FunctionTok{rmvnorm}\NormalTok{(n, }\AttributeTok{mean =}\NormalTok{ mu, }\AttributeTok{sigma =}\NormalTok{ Sigma0), }\CommentTok{\# Cholesky internally}
+  \AttributeTok{times =}\NormalTok{ reps\_B}
+\NormalTok{)}
+
+\NormalTok{sum\_B }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(bench\_B) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(expr) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{median\_ms =} \FunctionTok{median}\NormalTok{(time)}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}
+            \AttributeTok{iqr\_ms    =} \FunctionTok{IQR}\NormalTok{(time)}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{,}
+            \AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(median\_ms) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{scenario =} \StringTok{"B: fixed Σ"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(sum\_B)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 5 x 4
+  expr             median_ms  iqr_ms scenario  
+  <fct>                <dbl>   <dbl> <chr>     
+1 rmvn_chol_fixed      0.119 0.00833 B: fixed Σ
+2 rmvn_eigen_fixed     0.119 0.00857 B: fixed Σ
+3 rmvn_svd_fixed       0.119 0.00805 B: fixed Σ
+4 MASS_mvrnorm         0.185 0.0132  B: fixed Σ
+5 mvtnorm_rmvnorm      0.251 0.0194  B: fixed Σ
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pB }\OtherTok{\textless{}{-}} \FunctionTok{drop\_outliers}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(bench\_B)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{ms =}\NormalTok{ time}\SpecialCharTok{/}\FloatTok{1e6}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(expr, ms, }\AttributeTok{FUN =}\NormalTok{ median), }\AttributeTok{y =}\NormalTok{ ms)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{stat\_summary}\NormalTok{(}\AttributeTok{fun =}\NormalTok{ median, }\AttributeTok{geom =} \StringTok{"point"}\NormalTok{, }\AttributeTok{shape =} \DecValTok{21}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{stroke =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"MVN generators — Scenario B (fixed Σ; outliers removed)"}\NormalTok{,}
+       \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{y =} \StringTok{"Time (ms) per call)"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(pB)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/MVM-performance-2.pdf}}
+
+\end{tcolorbox}
+
+\subsection{Mixture of Multivariate
+Normal}\label{mixture-of-multivariate-normal}
+
+A mixture of multivariate normal distributions is a convex combination
+of multivariate normal distributions. That is, the density function of a
+mixture of \(k\) multivariate normal distributions is given by \[
+\alpha N_p(\mu_1,\Sigma_1) + (1-\alpha) N_p(\mu_2,\Sigma_2), \quad 0 < \alpha < 1.
+\] Similar to the univariate case, different choice of \(\alpha\) will
+lead to different degree of departure from the normal.
+
+Given a \(\alpha\), to simulate a random sample from
+\(\alpha N_d(\mu_1, \Sigma_1) + (1 − p) N_d(\mu_2, \Sigma_2)\)
+
+There are two ways.
+
+Way 1:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate \(U \sim unif(0,1) \in \mathbb{R}^n\).
+\item
+  (Component-wise) If \(U_i \le \alpha\), generate X from
+  \(X_i\sim N_d(\mu_1, \Sigma_1)\), o.w. generate
+  \(X_i from \sim N_d(\mu_2, \Sigma_2)\).
+\end{enumerate}
+
+Equivalent:
+
+Way 2:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate \(N \sim ∼ \operatorname{Bern}(\alpha)\).
+\item
+  (Component-wise) If \(N_i = 1\) generate \(X\) from
+  \(X_i \sim N_d(\mu_1, \Sigma_1)\), o.w. generate \(X\) from
+  \(N_d(\mu_2, \Sigma_2)\).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{loc.mix}\FloatTok{.0} \OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, alpha, mu1, mu2, Sigma) \{}
+  \CommentTok{\# generate sample from BVN location mixture}
+\NormalTok{  X }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\DecValTok{0}\NormalTok{, n, }\DecValTok{2}\NormalTok{)}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
+\NormalTok{    k }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =}\NormalTok{ alpha)}
+    \ControlFlowTok{if}\NormalTok{ (k) \{}
+\NormalTok{      X[i, ] }\OtherTok{\textless{}{-}} \FunctionTok{mvrnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{mu =}\NormalTok{ mu1, Sigma)}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      X[i, ] }\OtherTok{\textless{}{-}} \FunctionTok{mvrnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{mu =}\NormalTok{ mu2, Sigma)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  \FunctionTok{return}\NormalTok{(X)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{loc.mix }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, alpha, mu1, mu2, Sigma) \{}
+  \CommentTok{\# generate sample from BVN location mixture}
+\NormalTok{  n1 }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(}\DecValTok{1}\NormalTok{, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{prob =}\NormalTok{ alpha)}
+\NormalTok{  n2 }\OtherTok{\textless{}{-}}\NormalTok{ n }\SpecialCharTok{{-}}\NormalTok{ n1}
+\NormalTok{  x1 }\OtherTok{\textless{}{-}} \FunctionTok{mvrnorm}\NormalTok{(n1, }\AttributeTok{mu =}\NormalTok{ mu1, Sigma)}
+\NormalTok{  x2 }\OtherTok{\textless{}{-}} \FunctionTok{mvrnorm}\NormalTok{(n2, }\AttributeTok{mu =}\NormalTok{ mu2, Sigma)}
+\NormalTok{  X }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(x1, x2) }\CommentTok{\# combine the samples}
+  \FunctionTok{return}\NormalTok{(X[}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n), ]) }\CommentTok{\# mix them}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+
+One interesting example is when
+\(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
+0.7887\), provides an example of a skewed distribution with normal
+kurtosis (level of the peak).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+
+
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{comp1 }\OtherTok{\textless{}{-}}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{mvrnorm}\NormalTok{(n, }\AttributeTok{mu =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{), }\AttributeTok{Sigma =} \FunctionTok{diag}\NormalTok{(}\DecValTok{2}\NormalTok{))}
+\NormalTok{comp2 }\OtherTok{\textless{}{-}}\NormalTok{ MASS}\SpecialCharTok{::}\FunctionTok{mvrnorm}\NormalTok{(n, }\AttributeTok{mu =} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{Sigma =} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\FloatTok{0.5}\NormalTok{, }\DecValTok{1}\NormalTok{), }\DecValTok{2}\NormalTok{))}
+
+\CommentTok{\# Proper mixture membership per observation}
+\NormalTok{alpha }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}} \DecValTok{1}\SpecialCharTok{/}\DecValTok{2}\SpecialCharTok{*}\NormalTok{(}\DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{3}\NormalTok{)}\SpecialCharTok{/}\DecValTok{3}\NormalTok{ )   }\CommentTok{\# P(Comp1)}
+\NormalTok{memb }\OtherTok{\textless{}{-}} \FunctionTok{rbinom}\NormalTok{(n, }\DecValTok{1}\NormalTok{, alpha)         }\CommentTok{\# 1 = Comp1, 0 = Comp2}
+
+\CommentTok{\# Build the mixture matrix row{-}wise (avoid ifelse on matrices)}
+\NormalTok{mix }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\ConstantTok{NA\_real\_}\NormalTok{, }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\NormalTok{id1 }\OtherTok{\textless{}{-}}\NormalTok{ memb }\SpecialCharTok{==} \DecValTok{1}
+\NormalTok{id2 }\OtherTok{\textless{}{-}} \SpecialCharTok{!}\NormalTok{id1}
+\NormalTok{mix[id1, ] }\OtherTok{\textless{}{-}}\NormalTok{ comp1[}\FunctionTok{sample}\NormalTok{(n, }\FunctionTok{sum}\NormalTok{(id1), }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{mix[id2, ] }\OtherTok{\textless{}{-}}\NormalTok{ comp2[}\FunctionTok{sample}\NormalTok{(n, }\FunctionTok{sum}\NormalTok{(id2), }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{), ]}
+
+\CommentTok{\# Tidy data frames with labels}
+\NormalTok{df1 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ comp1[,}\DecValTok{1}\NormalTok{], }\AttributeTok{y =}\NormalTok{ comp1[,}\DecValTok{2}\NormalTok{], }\AttributeTok{group =} \StringTok{"Comp1"}\NormalTok{)}
+\NormalTok{df2 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ comp2[,}\DecValTok{1}\NormalTok{], }\AttributeTok{y =}\NormalTok{ comp2[,}\DecValTok{2}\NormalTok{], }\AttributeTok{group =} \StringTok{"Comp2"}\NormalTok{)}
+\NormalTok{dfm }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =}\NormalTok{ mix[,}\DecValTok{1}\NormalTok{],  }\AttributeTok{y =}\NormalTok{ mix[,}\DecValTok{2}\NormalTok{],  }\AttributeTok{group =} \StringTok{"Mixture"}\NormalTok{)}
+\NormalTok{df\_all }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(df1, df2, dfm)}
+
+\CommentTok{\# Option A: single panel, colored by group}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df\_all, }\FunctionTok{aes}\NormalTok{(x, y, }\AttributeTok{color =}\NormalTok{ group)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.35}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{stat\_ellipse}\NormalTok{(}\AttributeTok{level =} \FloatTok{0.95}\NormalTok{, }\AttributeTok{linewidth =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_equal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Two Gaussian Components and Their Mixture"}\NormalTok{)}
+\NormalTok{p1 }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/MVN-efficient-1.pdf}}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+
+It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
+display only the histograms of the marginal distributions. All of the
+one-dimensional marginal distributions are univariate normal location
+mixtures.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(MASS)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+
+\CommentTok{\# {-}{-}{-}{-} generate x exactly like your call {-}{-}{-}{-}}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{loc.mix}\NormalTok{(}\DecValTok{1000}\NormalTok{, .}\DecValTok{5}\NormalTok{, }\FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{4}\NormalTok{), }\DecValTok{2}\SpecialCharTok{:}\DecValTok{5}\NormalTok{, }\AttributeTok{Sigma =} \FunctionTok{diag}\NormalTok{(}\DecValTok{4}\NormalTok{))}
+\FunctionTok{colnames}\NormalTok{(x) }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"X"}\NormalTok{, }\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# {-}{-}{-}{-} ggplot histograms {-}{-}{-}{-}}
+\NormalTok{r }\OtherTok{\textless{}{-}} \FunctionTok{range}\NormalTok{(x) }\SpecialCharTok{*} \FloatTok{1.2}  \CommentTok{\# global x{-}limits like your base R code}
+\NormalTok{df\_long }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(x) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), }\AttributeTok{names\_to =} \StringTok{"Variable"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"Value"}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(df\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Value)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ ..density..),}
+                 \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+                 \AttributeTok{fill =} \StringTok{"red"}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ Variable, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_cartesian}\NormalTok{(}\AttributeTok{xlim =}\NormalTok{ r, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Histograms of a 4D Gaussian Location Mixture"}\NormalTok{,}
+    \AttributeTok{subtitle =} \FunctionTok{expression}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"p = 0.5,  "}\NormalTok{, mu[}\DecValTok{1}\NormalTok{], }\StringTok{" = (0,0,0,0),  "}\NormalTok{,}
+\NormalTok{                                mu[}\DecValTok{2}\NormalTok{], }\StringTok{" = (2,3,4,5),  "}\NormalTok{,}
+\NormalTok{                                Sigma, }\StringTok{" = I"}\NormalTok{)),}
+    \AttributeTok{x =} \StringTok{"Value"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Density"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/MVN-HD-1.pdf}}
+
+\end{tcolorbox}
+
+\subsection{Uniform Distribution on a
+Sphere}\label{uniform-distribution-on-a-sphere}
+
+The uniform distribution on the surface of a \(d\)-sphere in
+\(\mathbb{R}^d\) is the distribution that assigns equal probability to
+equal areas on the surface of the sphere.
+
+The d-sphere is the set of all points \(x \in R^d\) such that
+\(\| x \| = \sqrt{x^\top x) = 1\). Random vectors uniformly distributed
+on the \(d\)-sphere have equally likely directions. A method of
+generating this distribution uses a property of the
+
+multivariate normal distribution (see {[}97, 160{]}). If X1, . . . , Xd
+are iid N (0, 1), then U = (U1, . . . , Ud) is uniformly distributed on
+the unit sphere in Rd, where
+
+\[
+U_j=\frac{X_j}{\left(X_1^2+\cdots+X_d^2\right)^{1 / 2}}, \quad j=1, \ldots, d \tag{*}
+\]
+
+Algorithm to generate uniform variates on the \(d\)-Sphere
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For each variate \(u_i,~ i = 1,\dots , n\) repeat
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\item
+  Generate a random sample \(x_{i_1}, \dots , x_{i_d}\) from
+  \(N (0, 1)\).
+\item
+  Compute the Euclidean norm
+  \(\|x_i\| = (x^2_{i1} + \cdots + x^2_{id})^{1/2}\).
+\item
+  Set \(u_{ij} = x_{ij} / \|xi\|, j = 1, \dots , d\).
+\item
+  Deliver \(u_i = (u_{i1}, \dots , u_{id})\).
+\end{enumerate}
+
+To implement these steps efficiently in \textbf{R} for a sample size n,
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate nd univariate normals in \(n \times d\) matrix \(M\). The
+  \(i\)th row of M corresponds to the ith random vector \(u_i\).
+\item
+  Compute the denominator of (*) for each row, storing the \(n\) norms
+  in vector \(L\).
+\item
+  Divide each number M{[}i,j{]} by the norm L{[}i{]}, to get the matrix
+  U, where \(U[i,] = u_i = (u_{i1}, \dots, u_{id})\).
+\item
+  Deliver matrix \(U\) containing \(n\) random observations in rows.
+\end{enumerate}
+
+This example provides a function to generate random variates uniformly
+distributed on the unit \(d\)-sphere.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{runif.sphere }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, d) \{}
+  \CommentTok{\# return a random sample uniformly distributed}
+  \CommentTok{\# on the unit sphere in R \^{}d}
+\NormalTok{  M }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{rnorm}\NormalTok{(n }\SpecialCharTok{*}\NormalTok{ d), }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ d)}
+\NormalTok{  L }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(M,}
+    \AttributeTok{MARGIN =} \DecValTok{1}\NormalTok{,}
+    \AttributeTok{FUN =} \ControlFlowTok{function}\NormalTok{(x) \{}
+      \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{sum}\NormalTok{(x }\SpecialCharTok{*}\NormalTok{ x))}
+\NormalTok{    \}}
+\NormalTok{  )}
+\NormalTok{  D }\OtherTok{\textless{}{-}} \FunctionTok{diag}\NormalTok{(}\DecValTok{1} \SpecialCharTok{/}\NormalTok{ L)}
+\NormalTok{  U }\OtherTok{\textless{}{-}}\NormalTok{ D }\SpecialCharTok{\%*\%}\NormalTok{ M}
+\NormalTok{  U}
+\NormalTok{\}}
+
+\CommentTok{\#generate a sample in d=2 and plot}
+\NormalTok{X\_d2 }\OtherTok{\textless{}{-}} \FunctionTok{runif.sphere}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x1 =}\NormalTok{ X\_d2[,}\DecValTok{1}\NormalTok{], }\AttributeTok{x2 =}\NormalTok{ X\_d2[,}\DecValTok{2}\NormalTok{])}
+
+\FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x1, }\AttributeTok{y =}\NormalTok{ x2)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"steelblue"}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_equal}\NormalTok{() }\SpecialCharTok{+}                     
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \FunctionTok{expression}\NormalTok{(x[}\DecValTok{1}\NormalTok{]),}
+    \AttributeTok{y =} \FunctionTok{expression}\NormalTok{(x[}\DecValTok{2}\NormalTok{]),}
+    \AttributeTok{title =} \StringTok{"Uniform Random Points on the Unit Circle"}
+\NormalTok{  ) }\SpecialCharTok{+}
+\NormalTok{  ggforce}\SpecialCharTok{::}\FunctionTok{geom\_circle}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{y0 =} \DecValTok{0}\NormalTok{, }\AttributeTok{r =} \DecValTok{1}\NormalTok{), }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{,}
+              \AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in ggforce::geom_circle(aes(x0 = 0, y0 = 0, r = 1), inherit.aes = FALSE, : All aesthetics have length 1, but the data has 200 rows.
+i Please consider using `annotate()` or provide this layer with data containing
+  a single row.
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/sphere-1.pdf}}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

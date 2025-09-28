@@ -51,9 +51,9 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | Introduction to R Programming                |      1--2       |
 | Numerical Approaches and Optimization in 1-D |      3--5       |
 | Review for Distribution                      |      6--7       |
-| Random Variable Generation                        |       8--       |
+| Random Variable Generation                   |       8--       |
 | Numerical integration                        |       TBA       |
-| Term Exam 1                                  |       13       |
+| Term Exam 1                                  |       13        |
 | Jackknife                                    |       TBA       |
 | Bootstrap                                    |       TBA       |
 | Cross-validation                             |       TBA       |

@@ -5,24 +5,19 @@
 
 ## Motivation and usage
 
-Integration is a fundamental concept in statistics, for instance, when calculating the variance, we have
-$$
-  \E X = \int_{x\in\X} x dF_X(x),\quad \E_{x\in\X} g(X) = \int g(x) dF_X(x).
-$$
-If density exists, we have
-$$
-\E X = \int_{x\in\X} x f_X(x) dx,\quad \E g(X) = \int_{x\in\X} g(x) f_X(x) dx.
-$$
-Other than calculating for the moments, integration also plays a big parts in other parts in the field of statistics and data science.
+Integration is a fundamental concept in statistics, for instance, when calculating the variance, we have $$
+  \mathbb EX = \int_{x\in\mathcal X} x dF_X(x),\quad \mathbb E_{x\in\mathcal X} g(X) = \int g(x) dF_X(x).
+$$ If density exists, we have $$
+\mathbb EX = \int_{x\in\mathcal X} x f_X(x) dx,\quad \mathbb Eg(X) = \int_{x\in\mathcal X} g(x) f_X(x) dx.
+$$ Other than calculating for the moments, integration also plays a big parts in other parts in the field of statistics and data science.
 
-* Marginal likelihood and Bayesian statistics:
+-   Marginal likelihood and Bayesian statistics:
 
 $$
   p(x) = \int_{\theta\in\Theta}     p(x|\theta)p(\theta)\,d\theta,
-$$
-where the integration is over the nuisance/latent parameter $\theta\in\Theta$.
+$$ where the integration is over the nuisance/latent parameter $\theta\in\Theta$.
 
-* Bayesian Statistics
+-   Bayesian Statistics
 
 The Bayes’ theorem involves integration in both the denominator and posterior expectations:
 
@@ -30,44 +25,38 @@ $$
 p(\theta|x) = \frac{p(x|\theta)p(\theta)}{\int p(x|\theta)p(\theta)\,d\theta}
 $$
 
+-   Functional observations
 
-* Functional observations
-
-When you want to calculate the inner product of the two observations $x,y\in L^2(\X)$, you need to calculate the integral
+When you want to calculate the inner product of the two observations $x,y\in L^2(\mathcal X)$, you need to calculate the integral
 
 $$
 \langle f,g \rangle = \int f(t)g(t)\,dt.
 $$
 
-* Machine Learning
+-   Machine Learning
 
 In machine learning, you often need to compute integrals in many tasks, including calculating the *risks* and *loss*.
 
 For example, in *supervised learning*, we have
 
-$$R(\theta) := \E{(X,Y) \sim P}[L(f_\theta(X), Y)],
-$$
-where $L(\cdot,\cdot)$ is a loss function (e.g., squared error, cross-entropy).
+$$R(\theta) := \mathbb E{(X,Y) \sim P}[L(f_\theta(X), Y)],
+$$ where $L(\cdot,\cdot)$ is a loss function (e.g., squared error, cross-entropy).
 
 In variational inference (VI) solves this by approximating the true posterior $p(\theta|x)$ with a simpler distribution $q_\phi(\theta)$. We then maximize the *Evidence Lower Bound* (ELBO):
 
 $$
 \log p(x) \geq \mathbb{E}{q\phi(\theta)}\big[\log p(x|\theta)\big] - \text{KL}(q_\phi(\theta)\,\|\,p(\theta)).
-$$
-In this formula, we have two integrals to solve:
+$$ In this formula, we have two integrals to solve:
 
-  * The 1st term is an integral:
+-   The 1st term is an integral:
 
-$$\int q_\phi(\theta)\,\log p(x|\theta)\, d\theta,$$
-which is often approximated by Monte Carlo sampling.
+$$\int q_\phi(\theta)\,\log p(x|\theta)\, d\theta,$$ which is often approximated by Monte Carlo sampling.
 
-  * The 2nd term, the KL divergence, is another integral:
+-   The 2nd term, the KL divergence, is another integral:
 
 $$\text{KL}(q \| p) = \int q_\phi(\theta) \log \frac{q_\phi(\theta)}{p(\theta)} \, d\theta.$$
 
 ## 
-
-
 
 ## Multivariate Case
 

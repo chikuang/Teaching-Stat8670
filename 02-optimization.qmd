@@ -80,7 +80,7 @@ f\left(x \mid \mu, \sigma^2\right)=\frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{-\fr
 $$ or we may work on the multivariate normal distribution case which is a bit more involved.
 
 ::: {.callout-definition title="Multivariate normal distribution"}
-$\boldsymbol{X} = (X1,\dots, X_d)$ is said to be a multivariate normal distribution if and only if it is a linear comibnation of independent and identically distributed standard normals: $$
+$\boldsymbol{X} = (X_1,\dots, X_d)$ is said to be a multivariate normal distribution if and only if it is a linear comibnation of independent and identically distributed standard normals: $$
 \boldsymbol{X} = \boldsymbol{CZ} + \mu,\quad \boldsymbol{Z}=(Z_1,\dots,Z_d),\quad Z_i \stackrel{iid}{\sim} N(0,1).
 $$
 :::
