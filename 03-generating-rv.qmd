@@ -410,7 +410,7 @@ abline(0, 1)
 
 ### Sum/Convolution
 
-Let $X_1, X_2, \ldots, X_n \iid F_X$. Then we may consider the sum of the random variables $S_n:=\sum_{i=1}^n X_i$, with distribution $F_{S_n}$, which can be referred as *convoluton*. We can simulate $S_n$ by simulating $X_1, X_2, \ldots, X_n$ and summing them up. There are several common convolutions we have seen so far
+Let $X_1, X_2, \ldots, X_n \overset{iid}{\sim}F_X$. Then we may consider the sum of the random variables $S_n:=\sum_{i=1}^n X_i$, with distribution $F_{S_n}$, which can be referred as *convoluton*. We can simulate $S_n$ by simulating $X_1, X_2, \ldots, X_n$ and summing them up. There are several common convolutions we have seen so far
 
 1.  Sum of $n$ independent i.i.d. chi-square with degreee of freedom (df) 1 is chi-square with df $n$.
 
@@ -470,101 +470,78 @@ ggplot(df, aes(x = value, fill = type)) +
 :::
 
 ::: {.callout-note title="Simulate for mixture"}
-Pay attention how a mixture is simulated. In particular, we first simulate a vector $U\sim\unif(0,1)$, then use it to select from which distribution/component we want to sample. It is **not an (weighted) addition** as in the convolution.
+Pay attention how a mixture is simulated. In particular, we first simulate a vector $U\sim\operatorname{Unif}(0,1)$, then use it to select from which distribution/component we want to sample. It is **not an (weighted) addition** as in the convolution.
 :::
 
-
 ::: {.callout-note title="Difference between convolution and mixture"}
- Convolution is the sum of two independent rvs, while mixture is a weighted average of two rvs.
-Note: Mixture is *non-normal!* but the convolution is *normal*.
+Convolution is the sum of two independent rvs, while mixture is a weighted average of two rvs. Note: Mixture is *non-normal!* but the convolution is *normal*.
 :::
 
 ## Simulate Multivaraite RVs
 
-This section presents generators for the multivariate normal distribution, multivariate normal mixtures, the Wishart distribution, and the uniform distribution on the sphere in $\R^d$.
-
+This section presents generators for the multivariate normal distribution, multivariate normal mixtures, the Wishart distribution, and the uniform distribution on the sphere in $\mathbb{R}^d$.
 
 ### Multivariate normal distribution
 
-Recall that, from Definition 1 in Chapter 2, a $d$-dimensional random vector $X$ is a multivariate normal distribution with mean vector $\mu$ and covariance matrix $\Sigma$, denoted by $X \sim N_d(\mu, \Sigma)$, if every linear combination of its components has a univariate normal distribution. That is, for every nonzero vector $a \in \R^d$, the rv $a^T X$ has a univariate normal distribution.
+Recall that, from Definition 1 in Chapter 2, a $d$-dimensional random vector $X$ is a multivariate normal distribution with mean vector $\mu$ and covariance matrix $\Sigma$, denoted by $X \sim N_d(\mu, \Sigma)$, if every linear combination of its components has a univariate normal distribution. That is, for every nonzero vector $a \in \mathbb{R}^d$, the rv $a^T X$ has a univariate normal distribution.
 
 To write this in an explicit form, we have, $X = (X_1,\dots,X_N)$ follow a multivariate normal (MVN) distribution with mean vector $\mu = (\mu_1,\dots,\mu_N)$ and covariance matrix $\Sigma = (\sigma_{ij})$, if its joint density function is given by $$
-f_X(x) = \frac{1}{(2\pi)^{p/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)\right), \quad x \in \R^p.
+f_X(x) = \frac{1}{(2\pi)^{p/2} |\Sigma|^{1/2}} \exp\left(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)\right), \quad x \in \mathbb{R}^p.
 $$
 
-More explicitly, we can write this as the
-$$\mu=(\mu_1,\dots,\mu_p) = \begin{pmatrix}\mu_1\\
+More explicitly, we can write this as the $$\mu=(\mu_1,\dots,\mu_p) = \begin{pmatrix}\mu_1\\
 \vdots\\
-\mu_p\end{pmatrix}\in \R^p,$$
-and 
-$$\Sigma=(\Sigma_{ij}) = (\cov(X_i,X_j))= \left[\begin{array}{cccc}
+\mu_p\end{pmatrix}\in \mathbb{R}^p,$$ and $$\Sigma=(\Sigma_{ij}) = (\mathbb{C}ov(X_i,X_j))= \left[\begin{array}{cccc}
 \sigma_{11} & \sigma_{12} & \ldots & \sigma_{1 d} \\
 \sigma_{21} & \sigma_{22} & \ldots & \sigma_{2 d} \\
 \vdots & \vdots & & \vdots \\
 \sigma_{d 1} & \sigma_{d 2} & \ldots & \sigma_{d d}
-\end{array}\right] \in \R^{d\times d}.
+\end{array}\right] \in \mathbb{R}^{d\times d}.
 $$
 
 A random vector $X\sim N_d(\mu,\Sigma)$ can be simulated by the following steps:
 
-1. Simulate $Z = (Z_1,\ldots,Z_d)^T$ where $Z_i \iid N(0,1)$.
+1.  Simulate $Z = (Z_1,\ldots,Z_d)^T$ where $Z_i \overset{iid}{\sim}N(0,1)$.
 
-2. Find a vector $\mu$ and a matrix $A$ and  such that $\Sigma = AA^T$. The  decomposition can be Cholesky decomposition, eigendecomposition, or singular value decomposition, etc.
+2.  Find a vector $\mu$ and a matrix $A$ and such that $\Sigma = AA^T$. The decomposition can be Cholesky decomposition, eigendecomposition, or singular value decomposition, etc.
 
-
-In practice, we *do not do this one at a time*, we want to simulate $n$ sample in as few steps as possible. The following procedure is more efficient. Typically, one applies the transformation to a
-data matrix and transforms the entire sample. Suppose that $Z = (Z_ij ) \in \R^{n\times d}$, where $Z_{ij}\iid N(0,1)$. Then the rows of Z are $n$ random observations from the $d$-dimensional standard MVN distribution. The required
-transformation applied to the data matrix is
-$$X = ZQ + J \mu^\top,$$
-where $Q^\top Q=\Sigma$, and $J$ is a column vector of $n$ ones. The rows of $X$ are $n$ random
-observations from the $d$-dimensional MVN distribution with mean vector $\mu$
-and covariance matrix $\Sigma$.
-
-
+In practice, we *do not do this one at a time*, we want to simulate $n$ sample in as few steps as possible. The following procedure is more efficient. Typically, one applies the transformation to a data matrix and transforms the entire sample. Suppose that $Z = (Z_ij ) \in \mathbb{R}^{n\times d}$, where $Z_{ij}\overset{iid}{\sim}N(0,1)$. Then the rows of Z are $n$ random observations from the $d$-dimensional standard MVN distribution. The required transformation applied to the data matrix is $$X = ZQ + J \mu^\top,$$ where $Q^\top Q=\Sigma$, and $J$ is a column vector of $n$ ones. The rows of $X$ are $n$ random observations from the $d$-dimensional MVN distribution with mean vector $\mu$ and covariance matrix $\Sigma$.
 
 ::: {.callout-algorithm title="Simulate Multivariate Normal"}
-Method for generating multivariate $n $ normal samples from the $N_d(\mu,\Sigma)$ distribution.
+Method for generating multivariate \$n \$ normal samples from the $N_d(\mu,\Sigma)$ distribution.
 
-Step 1. Simulate $Z = (Z_{ij}) \in \R^{n\times d}$, where $Z_{ij} \iid N(0,1)$.
+Step 1. Simulate $Z = (Z_{ij}) \in \mathbb{R}^{n\times d}$, where $Z_{ij} \overset{iid}{\sim}N(0,1)$.
 
 Step 2. Compute the decomposition $\Sigma = Q^\top Q$.
 
 Step 3. Compute $X = ZQ + J\mu^\top$, where $J$ is a column vector of $n$ ones.
 
-Step 4. Return $X\in \R^{ n\times d}$, in which each of the $n$ rows of $X$ is a random observation from the $N_d(\mu,\Sigma)$ distribution.
+Step 4. Return $X\in \mathbb{R}^{ n\times d}$, in which each of the $n$ rows of $X$ is a random observation from the $N_d(\mu,\Sigma)$ distribution.
 :::
 
 #### A few things to be considered
 
-1. Computation of $J \mu^\top$
+1.  Computation of $J \mu^\top$
 
-Recall that $J$ is a vector of 1's (i.e., $J=(1,\dots,1)\in\R^d$ and $\mu^\top$ is the transpose of $\mu$. So, $J \mu^\top$ is a matrix with each row being $\mu$. In R, we can use `matrix(mu, n, d, byrow = TRUE)` to create this matrix. Also, for any $i$ and $j$, $\mu_i=\mu_j=c$, where c is a constant, then we can write it as $c I_{n\times d}$, where $I_{n\times d}$ is a matrix of 1's with dimension $n\times d$.
+Recall that $J$ is a vector of 1's (i.e., $J=(1,\dots,1)\in\mathbb{R}^d$ and $\mu^\top$ is the transpose of $\mu$. So, $J \mu^\top$ is a matrix with each row being $\mu$. In R, we can use `matrix(mu, n, d, byrow = TRUE)` to create this matrix. Also, for any $i$ and $j$, $\mu_i=\mu_j=c$, where c is a constant, then we can write it as $c I_{n\times d}$, where $I_{n\times d}$ is a matrix of 1's with dimension $n\times d$.
 
 ``` r
 Z <- matrix(rnorm(n*d), nrow = n, ncol = d)
 X <- Z %*% Q + matrix(mu, n, d, byrow = TRUE)
 ```
 
-2. Decomposition of $\Sigma$
+2.  Decomposition of $\Sigma$
 
 There are many different ways to decompose $\Sigma$. Recall that $\Sigma$ is a symmetric positive definite matrix, so we can use Cholesky decomposition, eigendecomposition, or singular value decomposition (SVD). In R, we can use `chol()`, `eigen()`, or `svd()` functions to compute the decomposition.
 
-* **Choleski decomposition**: Choleski of a real symmetric positive-definite matrix is $X = Q^\top Q$, where $Q$ is an upper triangular matrix.
+-   **Choleski decomposition**: Choleski of a real symmetric positive-definite matrix is $X = Q^\top Q$, where $Q$ is an upper triangular matrix.
 
-* **Spectral decomposition**: 
-The square root of the covariance is $Σ^{1/2} = P^{1/2} \Lambda P^{−1}$, where $\Lambda$ is the diagonal matrix with the eigenvalues of $\Sigma$ along the diagonal and $P$ is the matrix
-whose columns are the eigenvectors of $\Sigma$ corresponding to the eigenvalues in $\Lambda$. This method can also be called the eigen-decomposition method. In the
-eigen-decomposition we have $P^{-1}= P^\top$ and therefore $Σ^{1/2} = P \Lambda^{1/2}P^\top$ . The
-matrix $Q = Σ^{1/2}$ is a factorization of $\Sigma$ such that $Q^\top Q = \Sigma$.
+-   **Spectral decomposition**: The square root of the covariance is $Σ^{1/2} = P^{1/2} \Lambda P^{−1}$, where $\Lambda$ is the diagonal matrix with the eigenvalues of $\Sigma$ along the diagonal and $P$ is the matrix whose columns are the eigenvectors of $\Sigma$ corresponding to the eigenvalues in $\Lambda$. This method can also be called the eigen-decomposition method. In the eigen-decomposition we have $P^{-1}= P^\top$ and therefore $Σ^{1/2} = P \Lambda^{1/2}P^\top$ . The matrix $Q = Σ^{1/2}$ is a factorization of $\Sigma$ such that $Q^\top Q = \Sigma$.
 
-* **Singular Value Decomposition**: The singular value decomposition (svd) generalizes the idea of eigenvectors
-to rectangular matrices. The svd of a matrix $X$ is $X = U DV^\top$ , where D is a vector containing the singular values of $X$, $U$ is a matrix whose columns contain the left singular vectors of $X$, and $V$ is a matrix whose columns contain the right singular vectors of $X$. The matrix $X$ in this case is the population covariance matrix $\Sigma$, and $UV\top = I$. The svd of a symmetric positive definite matrix $\Sigma$ gives $U = V = P$ and $Σ^{1/2} = U D^{1/2}V^\top$ . Thus the svd method
-for this application is equivalent to the spectral decomposition method, but is **less efficient** because the svd method does not take advantage of the fact that the matrix $\Sigma$ is square symmetric.
-
+-   **Singular Value Decomposition**: The singular value decomposition (svd) generalizes the idea of eigenvectors to rectangular matrices. The svd of a matrix $X$ is $X = U DV^\top$ , where D is a vector containing the singular values of $X$, $U$ is a matrix whose columns contain the left singular vectors of $X$, and $V$ is a matrix whose columns contain the right singular vectors of $X$. The matrix $X$ in this case is the population covariance matrix $\Sigma$, and $UV\top = I$. The svd of a symmetric positive definite matrix $\Sigma$ gives $U = V = P$ and $Σ^{1/2} = U D^{1/2}V^\top$ . Thus the svd method for this application is equivalent to the spectral decomposition method, but is **less efficient** because the svd method does not take advantage of the fact that the matrix $\Sigma$ is square symmetric.
 
 ::: {.callout-note title="Performance Comparison"}
-
-``` {r MVM-performance, message=FALSE,warning=FALSE}
+```{r MVM-performance, message=FALSE,warning=FALSE}
 set.seed(777)
 
 
@@ -716,42 +693,36 @@ pB <- drop_outliers(as.data.frame(bench_B)) %>%
 
 print(pB)
 ```
-
 :::
-
 
 ### Mixture of Multivariate Normal
 
-A mixture of multivariate normal distributions is a convex combination of multivariate normal distributions. That is, the density function of a mixture of $k$ multivariate normal distributions is given by 
-$$
+A mixture of multivariate normal distributions is a convex combination of multivariate normal distributions. That is, the density function of a mixture of $k$ multivariate normal distributions is given by $$
 \alpha N_p(\mu_1,\Sigma_1) + (1-\alpha) N_p(\mu_2,\Sigma_2), \quad 0 < \alpha < 1.
-$$
-Similar to the univariate case, different choice of $\alpha$ will lead to different degree of departure from the normal.
+$$ Similar to the univariate case, different choice of $\alpha$ will lead to different degree of departure from the normal.
 
 ::: {.callout-algorithm title="Mixture of multivariate normal"}
-
 Given a $\alpha$, to simulate a random sample from $\alpha N_d(\mu_1, \Sigma_1) + (1 − p) N_d(\mu_2, \Sigma_2)$
 
 There are two ways.
 
 Way 1:
 
-1. Generate $U \sim unif(0,1) \in \R^n$.
+1.  Generate $U \sim unif(0,1) \in \mathbb{R}^n$.
 
-2. (Component-wise) If $U_i \le \alpha$, generate X from $X_i\sim N_d(\mu_1, \Sigma_1)$, o.w. generate $X_i from \sim N_d(\mu_2, \Sigma_2)$.
+2.  (Component-wise) If $U_i \le \alpha$, generate X from $X_i\sim N_d(\mu_1, \Sigma_1)$, o.w. generate $X_i from \sim N_d(\mu_2, \Sigma_2)$.
 
-Equivalent: 
+Equivalent:
 
 Way 2:
 
-1. Generate $N \sim ∼ \bern(\alpha)$.
+1.  Generate $N \sim ∼ \operatorname{Bern}(\alpha)$.
 
-2. (Component-wise) If $N_i = 1$ generate $X$ from $X_i \sim N_d(\mu_1, \Sigma_1)$, o.w. generate $X$ from $N_d(\mu_2, \Sigma_2)$.
+2.  (Component-wise) If $N_i = 1$ generate $X$ from $X_i \sim N_d(\mu_1, \Sigma_1)$, o.w. generate $X$ from $N_d(\mu_2, \Sigma_2)$.
 :::
 
 ::: {.callout-example title="Mixture of multivariate normal"}
-
-``` {r MVN}
+```{r MVN}
 set.seed(777)
 loc.mix.0 <- function(n, alpha, mu1, mu2, Sigma) {
   # generate sample from BVN location mixture
@@ -768,7 +739,7 @@ loc.mix.0 <- function(n, alpha, mu1, mu2, Sigma) {
 }
 ```
 
-``` {r MVN-noloop}
+```{r MVN-noloop}
 loc.mix <- function(n, alpha, mu1, mu2, Sigma) {
   # generate sample from BVN location mixture
   n1 <- rbinom(1, size = n, prob = alpha)
@@ -781,14 +752,11 @@ loc.mix <- function(n, alpha, mu1, mu2, Sigma) {
 ```
 :::
 
-
 ::: {.callout-note title="Mixture of multivariate normal"}
-
-
-One interesting example is when  $\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
+One interesting example is when $\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
 0.7887$, provides an example of a skewed distribution with normal kurtosis (level of the peak).
 
-``` {r MVN-efficient}
+```{r MVN-efficient}
 set.seed(777)
 
 
@@ -824,13 +792,10 @@ p1
 ```
 :::
 
-
-
 ::: {.callout-note title="Higher dimensional case"}
-
 It is difficult to visualize data in $R^d$, for $d\ge 4$, so we display only the histograms of the marginal distributions. All of the one-dimensional marginal distributions are univariate normal location mixtures.
 
-``` {r MVN-HD}
+```{r MVN-HD}
 set.seed(777)
 library(MASS)
 library(ggplot2)
@@ -864,26 +829,23 @@ ggplot(df_long, aes(x = Value)) +
 
 ### Uniform Distribution on a Sphere
 
-The uniform distribution on the surface of a $d$-sphere in $\R^d$ is the distribution that assigns equal probability to equal areas on the surface of the sphere.
+The uniform distribution on the surface of a $d$-sphere in $\mathbb{R}^d$ is the distribution that assigns equal probability to equal areas on the surface of the sphere.
 
+The d-sphere is the set of all points $x \in R^d$ such that $\| x \| = \sqrt{x^\top x) = 1$. Random vectors uniformly distributed on the $d$-sphere have equally likely directions. A method of generating this distribution uses a property of the
 
-The d-sphere is the set of all points $x \in R^d$ such that $\| x \| = \sqrt{x^\top x) = 1$.
-Random vectors uniformly distributed on the $d$-sphere have equally likely
-directions. A method of generating this distribution uses a property of the
-
-multivariate normal distribution (see [97, 160]). If X1, . . . , Xd are iid N (0, 1),
-then U = (U1, . . . , Ud) is uniformly distributed on the unit sphere in Rd, where
+multivariate normal distribution (see \[97, 160\]). If X1, . . . , Xd are iid N (0, 1), then U = (U1, . . . , Ud) is uniformly distributed on the unit sphere in Rd, where
 
 $$
 U_j=\frac{X_j}{\left(X_1^2+\cdots+X_d^2\right)^{1 / 2}}, \quad j=1, \ldots, d \tag{*}
 $$
 
-
 Algorithm to generate uniform variates on the $d$-Sphere
 
-1. For each variate $u_i,~ i = 1,\dots , n$ repeat
+1.  For each variate $u_i,~ i = 1,\dots , n$ repeat
 
-(a) Generate a random sample $x_{i_1}, \dots , x_{i_d}$ from  $N (0, 1)$.
+<!-- -->
+
+(a) Generate a random sample $x_{i_1}, \dots , x_{i_d}$ from $N (0, 1)$.
 
 (b) Compute the Euclidean norm $\|x_i\| = (x^2_{i1} + \cdots + x^2_{id})^{1/2}$.
 
@@ -893,19 +855,18 @@ Algorithm to generate uniform variates on the $d$-Sphere
 
 To implement these steps efficiently in **R** for a sample size n,
 
-1. Generate nd univariate normals in $n \times d$ matrix $M$. The $i$th row of M corresponds to the ith random vector $u_i$.
+1.  Generate nd univariate normals in $n \times d$ matrix $M$. The $i$th row of M corresponds to the ith random vector $u_i$.
 
-2. Compute the denominator of (*) for each row, storing the $n$ norms in
-vector $L$.
+2.  Compute the denominator of (\*) for each row, storing the $n$ norms in vector $L$.
 
-3. Divide each number M[i,j] by the norm L[i], to get the matrix U, where $U[i,] = u_i = (u_{i1}, \dots, u_{id})$.
+3.  Divide each number M\[i,j\] by the norm L\[i\], to get the matrix U, where $U[i,] = u_i = (u_{i1}, \dots, u_{id})$.
 
-4. Deliver matrix $U$ containing $n$ random observations in rows.
+4.  Deliver matrix $U$ containing $n$ random observations in rows.
 
 ::: {.callout-example title="Uniform distribution on a sphere"}
 This example provides a function to generate random variates uniformly distributed on the unit $d$-sphere.
 
-``` {r sphere}
+```{r sphere}
 runif.sphere <- function(n, d) {
   # return a random sample uniformly distributed
   # on the unit sphere in R ^d
@@ -944,4 +905,4 @@ ggplot(df, aes(x = x1, y = x2)) +
 
 Reference used:
 
--   Reference book \[2\]
+-   Rizzo, M.L. (2007) [*Statistical Computing with R*](https://a-roshani.ir/files/SC/%5B4%5D%20%5BMaria%20L.%20Rizzo%5D%5B2019%5D%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf). CRC Press, Roca Baton.

@@ -1,0 +1,11 @@
+# Monte Carlo Simulation and Variance Reduction
+
+Monte Carlo (MC) integration is a simulation-based method for *approximating integrals* using random sampling.
+
+In numerical integration, methods such as the trapezoidal rule use a *deterministic approach*. MC integration, on the other hand, employs a *non-deterministic* approach: each realization provides a different outcome.
+
+------------------------------------------------------------------------
+
+Reference used:
+
++ Rizzo, M.L. (2007) Statistical Computing with R. CRC Press, Roca Baton.

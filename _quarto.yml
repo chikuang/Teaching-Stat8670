@@ -12,6 +12,7 @@ book:
     - 03-generating-rv.qmd
     - 04-integration.qmd
     - 05-resample.qmd
+    - 06-monte-carlo.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
