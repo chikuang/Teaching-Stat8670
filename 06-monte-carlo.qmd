@@ -1,11 +1,29 @@
 # Monte Carlo Simulation and Variance Reduction
 
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\E}{\mathbb{E}}
+
 Monte Carlo (MC) integration is a simulation-based method for *approximating integrals* using random sampling.
 
 In numerical integration, methods such as the trapezoidal rule use a *deterministic approach*. MC integration, on the other hand, employs a *non-deterministic* approach: each realization provides a different outcome.
+
+## Basic Monte Carlo Integration
+
+To approximate the integral of a function $f(x)$ over the interval $[a, b]$, we can use the following formula:
+
+Consider the problem of estimating $\theta = \int_0^1 g(x)dx$. If $X_1,\dots , X_m\sim\unif(0,1)$, then the MC estimator is given by:
+
+$$\hat{\theta}=\bar{g}_m(X)=\frac{1}{m}\sum_{i=1}^m g(X_i)$$ 
+converges to $\E[g(X)]$ as $m\to\infty$ with probability 1, by *Strong law of Large Number* (SLLN).  The simple MC estimator is unbiased, i.e., $\bar{g}_m(X)$.
+
+::: {.callout-example title="A"}
+kdfsf;s
+:::
+
+
 
 ------------------------------------------------------------------------
 
 Reference used:
 
-+ Rizzo, M.L. (2007) Statistical Computing with R. CRC Press, Roca Baton.
+-   Rizzo, M.L. (2007) Statistical Computing with R. CRC Press, Roca Baton.
