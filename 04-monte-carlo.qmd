@@ -2,6 +2,7 @@
 
 \newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
 \newcommand{\geom}{\operatorname{Geom}}
 \newcommand{\beta}{\operatorname{Beta}}
 \newcommand{\bern}{\operatorname{Bern}}
@@ -84,7 +85,7 @@ m <- 1E3
 x <- runif(m, min = 2, max = 4)
 
 # simulated estimator
-theta_hat <- mean(exp(-x)) * (4 - 2)
+theta_hat <- exp(-x) |> mean() * (4 - 2)
 
 # theoretical value
 theta_true <- exp(-2) - exp(-4)
@@ -131,7 +132,126 @@ Thus, $\theta = \E_Y[x\exp(-(xY)^2/2)]$, where the rv $Y\sim \unif(0,1)$. Genera
 $$\hat{\theta}=\overline{g_m(u)}=\frac{1}{m} \sum_{i=1}^m x e^{-\left(u_i x\right)^2 / 2}.
 $$
 
+The sample mean $\hat{\theta}$ converges to $\E \hat{\theta} = \theta$ as $m\to \infty$. If $x > 0$, the estimate
+of $\Phi(x) = 1/2 + \hat{\theta}/\sqrt{2\pi}$. If $x < 0$ compute $\Phi(x) = 1 − \Phi(−x)$.
+
+``` {r MC-normal-cdf}
+x <- seq(.1, 2.5, length = 10)
+m <- 10000
+u <- runif(m)
+cdf <- numeric(length(x))
+for (i in 1:length(x)) {
+  g <- x[i] * exp(-(u * x[i])^2 / 2)
+  cdf[i] <- mean(g) / sqrt(2 * pi) + 0.5
+}
+Phi <- pnorm(x)
+print(round(rbind(x, cdf, Phi), 3))
+```
+
+Notice that it would have been simpler to generate random Uniform(0, x)
+random variables and skip the transformation. In
+fact, the integrand of the previous example is itself a density function, and we can generate random variables from this density. This provides a more direct approach to estimating the integral.
+
 :::
+
+::: {.callout-example title="MC integration with indicator function"}
+
+Let $I(\cdot)$ be the indicator function, and $Z\sim N(0,1)$. Then for any constant $x$ we have $\E[I(Z ≤ x)] = P (Z ≤ x) =\Phi(x)$, the standard normal cdf evaluated at $x$.
+
+Generate a random sample $z_1, \dots , z_m\sim N(0,1)$. Then the theoretical mean and sample mean are 
+$$\hat{\theta} = \frac{1}{m} \sum_{i=1}^m I(z_i \le x),$$
+and 
+$$\E[\hat{\theta}] = P(Z \le x) = \Phi(x).$$
+
+``` {r MC-normal-cdf2}
+set.seed(777)
+x <- seq(0.1, 2.5, length = 10)
+m <- 1E4
+z <- rnorm(m)
+dim(x) <- length(x)
+p <- apply(x, MARGIN = 1,
+  FUN = function(x, z) {mean(z < x)}, z = z)
+Phi <- pnorm(x)
+
+rbind(x, p, Phi) |> round(3)
+```
+
+
+In this example, compared with the previous example, it appears that
+we have better agreement with `pnorm()` in the upper tail, but worse agreement
+near the center.
+
+:::
+
+::: {.callout-note}
+Summarizing, if $f (x)$ is a probability density function supported on a set
+A, (that is, $f (x) \ge 0$ for all $x\in\R$ and $\int_A f (x) = 1$), to estimate the integral
+$$\theta = \int_A g(x)f (x)dx,$$
+generate a random sample $x_1,\dots,x_m$ from the distribution $f (x)$, and compute the sample mean
+$$\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).$$ Then  $\hat{\theta}\overset{p}{\to}\theta$ 
+:::
+
+
+The standard error of $\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)$.
+
+Recall that, $\var{\hat{\theta}}=\sigma^2/m$ where $\sigma^2 = \var{g(X)}$. When the distribution of $X$ is unknown, we substitute for $F_X$ the empirical distribution $F_m$ of the
+sample $x_1, \dots , x_m$. The variance of $\hat{\theta}$ can be estimated by
+$$
+\frac{\hat{\sigma}}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
+$$
+
+Note that
+$$\frac{1}{m}\sum_{i=1}^m[g(x_i)-\bar{g}(x_i)],$$
+is the *plug-in estimate* of $\var\{g(X)\}$. That is, it is the variance of $U$ , where
+$U$ is uniformly distributed on the set of replicates $\{g(xi)\}$. The corresponding estimated standard error of $\hat{\theta}$ is 
+$$
+\widehat{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}} = \frac{1}{m}\left\{\sum_{i=1}^m [ g(x_i)- \bar{g}(x)]^2\right\}.
+$$
+The CLT implies 
+$$
+\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\operatorname{Var} \hat{\theta}}} \overset{D}{\to} N(0,1),
+$$
+as $m\to\infty$.Hence, if $m$ is sufficiently large, $\hat{\theta}$
+is approximately normal with mean $\theta$. The large-sample, approximately normal distribution of $\hat{\theta}$ can be applied to put confidence limits or error bounds
+on the MC estimate of the integral, and check for convergence
+
+::: {.callout-example title = "Error bound of MC integration"}
+
+Compute the 95% confidence interval for $\Phi(2)$ and $\Phi(2.5)$.
+
+``` {r error-bound}
+set.seed(777)
+x <- 2
+m <- 10000
+z <- rnorm(m)
+g <- (z < x) #the indicator function
+v <- mean((g - mean(g))^2) / m
+cdf <- mean(g)
+c(cdf, v)
+c(cdf - 1.96 * sqrt(v), cdf + 1.96 * sqrt(v))
+```
+
+The interpretation is:
+
+
+the probability $P (I(Z < x) = 1)$ is $\Phi(2)\approx 0.977$. Here $g(X)$ has the distribution of the sample proportion of 1’s in $m = 10000$ Bernoulli trials with
+$p\approx 0.977$, and the variance of $g(X)$ is therefore $(0.977)(1 − 0.977)/10000 =2.223e-06$. The MC estimate $2.228e-06$ of variance is quite close to this value.
+
+Q: What about $\Phi(2.5)$?
+:::
+
+## Variance and Efficiency
+
+
+### Efficiency
+Suppose we have two (unbiased) estimators $\hat{\theta}_1$ and $\hat{\theta}_2$ for θ. We say $\hat{\theta}_1$ is *statistically* more efficient than $\hat{\theta}_2$ if
+$$\var(\hat{\theta}_1) < \var(\hat{\theta}_2).$$
+What is the variance of $hat{\theta}_i$ is unknown or hard to be calculated?
+
+can substitute it by sample estimate of the variance for each estimator.
+
+Note, the variance can *always be reduced by increasing the number of
+replicates*, so computational efficiency is also relevant.
 
 ------------------------------------------------------------------------
 
