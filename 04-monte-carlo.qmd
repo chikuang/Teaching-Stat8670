@@ -21,9 +21,66 @@ theme_set(
 )
 ```
 
+
 Monte Carlo (MC) integration is a simulation-based method for *approximating integrals* using random sampling.
 
 In numerical integration, methods such as the trapezoidal rule use a *deterministic approach*. MC integration, on the other hand, employs a *non-deterministic* approach: each realization provides a different outcome.
+
+## What is Monte Carlo Simulation?
+
+###  History
+
+Monte Carlo (MC) is a casino in Monaco, famous for its gambling and games of chance. The term "Monte Carlo" was coined by physicists Stanislaw Ulam in the 1940s while working on nuclear weapon projects at Los Almos. 
+
+
+![Monte Carlo Casino, Picture borrowed from Wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Table_de_Roulette%2C_Casino_de_Monte_Carlo_%28Carte_Postale_Ancienne%29.jpg/640px-Table_de_Roulette%2C_Casino_de_Monte_Carlo_%28Carte_Postale_Ancienne%29.jpg
+ "Monte Carlo Casino, Picture borrowed from Wikipedia")
+
+
+
+Monte Carlo methods are mainly used in three distinct problem classes:
+
+1. optimization
+
+2. numerical integration 
+
+3. generating draws from a probability distribution. 
+
+They can also be used to model phenomena with significant uncertainty in inputs, such as calculating the risk of a nuclear power plant failure. Monte Carlo methods are often implemented using computer simulations, and they can provide approximate solutions to problems that are otherwise intractable or too complex to analyze mathematically. 
+
+
+### Key Steps of MC methods
+
+::: {.callout-algorithm title="Monte Carlo Pattern"}
+
+Monte Carlo methods vary, but tend to follow a particular pattern:    
+    
+1. Define a domain of possible inputs.
+
+2. Generate inputs randomly from a probability distribution over the domain.
+
+3. Perform a deterministic computation of the outputs.
+
+4. Aggregate the results.
+:::
+
+::: {.callout-example title="Calculating the quadrant"}
+
+
+For example, consider a quadrant (circular sector) inscribed in a unit square. Given that the ratio of their areas is $\pi/4$4⁠, the value o f$\piπ can be approximated using the Monte Carlo method:
+
+1. Draw a square, then inscribe a quadrant within it.
+
+2. Uniformly scatter a given number of points over the square.
+
+3. Count the number of points inside the quadrant, i.e. having a distance from the origin of less than 1.
+
+4. The ratio of the inside-count and the total-sample-count is an estimate of the ratio of the two areas, ⁠π/4⁠. Multiply the result by 4 to estimate π.
+
+![Picture borrowed from Wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Pi_monte_carlo_all.gif/660px-Pi_monte_carlo_all.gif "borrowed from Wikipedia")
+
+
+:::
 
 ## Basic Monte Carlo Integration
 
@@ -258,3 +315,6 @@ replicates*, so computational efficiency is also relevant.
 Reference used:
 
 - Chapter 6 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
+
+- Monte Carlo Method page on Wikiepdia, 
+[Link](https://en.wikipedia.org/wiki/Monte_Carlo_method).
