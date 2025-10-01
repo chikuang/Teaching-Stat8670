@@ -10,9 +10,9 @@ book:
     - 01-intro.qmd
     - 02-optimization.qmd
     - 03-generating-rv.qmd
-    - 04-integration.qmd
-    - 05-resample.qmd
-    - 06-monte-carlo.qmd
+    - 04-monte-carlo.qmd
+    - 05-integration.qmd
+    - 06-resample.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
