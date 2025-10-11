@@ -7,15 +7,13 @@
 
 ### Discrete uniform distributions
 
-if the variable can take on finite, countable values with equal probability, it is said to be discrete uniform. The probability mass function of a discrete uniform. random variable $X$ is given by
-$$
+if the variable can take on finite, countable values with equal probability, it is said to be discrete uniform. The probability mass function of a discrete uniform. random variable $X$ is given by $$
 f(x) = \frac{1}{x_n-x_1+1},\quad \text{for}\quad x=x_1,\dots,x_n.
 $$
 
-::: {.callout-theorem}
-The mean and variance of the discrete uniform distribution are
-$$
-\E X = \frac{x_1+x_n}{2},\quad \text{and}\quad \var(X) = \frac{(x_n-x_1+1)^2 -1}{12}.$$
+::: callout-theorem
+The mean and variance of the discrete uniform distribution are $$
+\mathbb{E}X = \frac{x_1+x_n}{2},\quad \text{and}\quad \mathbb{V}ar(X) = \frac{(x_n-x_1+1)^2 -1}{12}.$$
 :::
 
 #### Implementation in R
@@ -44,10 +42,9 @@ var(A)
 
 ### Bernoulli Distribution
 
-There are only 2 possible outcomes in an experiment: *True* and *False*, with probabiltiy $\theta$ and $1-\theta$, respectively, the random variable $X$ follows a Bernoulli distribution, denoted by $X\sim \text{Bern}(\theta)$. The probabiltiy distribution has probablity mass function as
-$$f(x) = \theta^x (1-\theta)^{1-x},\quad x=0,1.$$
+There are only 2 possible outcomes in an experiment: *True* and *False*, with probabiltiy $\theta$ and $1-\theta$, respectively, the random variable $X$ follows a Bernoulli distribution, denoted by $X\sim \text{Bern}(\theta)$. The probabiltiy distribution has probablity mass function as $$f(x) = \theta^x (1-\theta)^{1-x},\quad x=0,1.$$
 
-Note that Bernoulli distribution is a special case of the Binomial  distribution with $n=1$.
+Note that Bernoulli distribution is a special case of the Binomial distribution with $n=1$.
 
 #### Implementation in R
 
@@ -57,15 +54,13 @@ rbinom(10, 1, 0.7) # 0.7 is the probability of success
 
 ### Binomial Distribution
 
-Bernoulli trials (experiment where a Bernoulli Distribution applies) are not very realistic in real-life scenario. In statistics, repeated experiments are important. When the experiments is repeated, $\theta$ is the same for each of the trials, and the trials are independent, and they are only two mutually excludes outcomes (T, and F), we can model this using the *Binomial Distribution*. If $X$ follows the Binomial Distribution, it has a probablitliy mass function as
-$$b(x ; n, \theta)=\binom{n}{x} \theta^x(1-\theta)^{n-x}, x=0,1,2,3, \ldots, n.$$
+Bernoulli trials (experiment where a Bernoulli Distribution applies) are not very realistic in real-life scenario. In statistics, repeated experiments are important. When the experiments is repeated, $\theta$ is the same for each of the trials, and the trials are independent, and they are only two mutually excludes outcomes (T, and F), we can model this using the *Binomial Distribution*. If $X$ follows the Binomial Distribution, it has a probablitliy mass function as $$b(x ; n, \theta)=\binom{n}{x} \theta^x(1-\theta)^{n-x}, x=0,1,2,3, \ldots, n.$$
 
 The Binomial Distribution is useful to predict the number of heads in $n$ coin tosses, the number of people infected with a disease in a certain population of known size, etc. The parameters $n$ and $\theta$ must be given.
 
-::: {.callout-theorem}
-The mean and variance of the Binomial Distribution 
-$$
-\E X = n\theta,\quad \text{and}\quad \var(X) = n\theta(1-\theta).$$
+::: callout-theorem
+The mean and variance of the Binomial Distribution $$
+\mathbb{E}X = n\theta,\quad \text{and}\quad \mathbb{V}ar(X) = n\theta(1-\theta).$$
 :::
 
 #### Implementation in R
@@ -78,10 +73,7 @@ mean(X > 1)
 
 ### Geometric Distribution
 
-If we are interested in the number of trials until the first success, then this is 
-modeled by the geometric distribution. A random variable $X$ follows a geometric 
-distribution if and only if its probability distribution is given by:
-$$
+If we are interested in the number of trials until the first success, then this is modeled by the geometric distribution. A random variable $X$ follows a geometric distribution if and only if its probability distribution is given by: $$
 g(x;\theta) = \theta (1 - \theta)^{\,x-1}, \quad x = 1,2,3,\ldots
 $$
 
@@ -132,15 +124,14 @@ Consider a set of N elements, of which M are successes. We are interested in obt
 
 $$h(x,n,M,N) = \frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}, \quad x = 0,1,2,\ldots,n$$
 
-::: {.callout-theorem}
-The mean and the variance are
-$$\E X = \frac{nM}{N}, \qquad
-\var(X) = \frac{nM(N-M)(N-n)}{N^2(N-1)}.$$
+::: callout-theorem
+The mean and the variance are $$\mathbb{E}X = \frac{nM}{N}, \qquad
+\mathbb{V}ar(X) = \frac{nM(N-M)(N-n)}{N^2(N-1)}.$$
 :::
 
 #### Implementation in R
 
-``` {r }
+```{r }
 # Define population: 12 ones and 13 zeros
 x <- c(1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
@@ -197,21 +188,21 @@ mean(X)
 var(X)
 ```
 
-::: {.callout-theorem}
+::: callout-theorem
 The mean and variance of the Poisson distribution are
 
-$$\E X = \lambda, \qquad \var(X) = \lambda$$
+$$\mathbb{E}X = \lambda, \qquad \mathbb{V}ar(X) = \lambda$$
 :::
 
 The Poisson distribution is derived as the limiting case of the Binomial (with the above mentioned restrictions) BUT there are many more applications. It models:
 
-1.	Number of successes to occur in a given time period
+1.  Number of successes to occur in a given time period
 
-2.	Number of telephone calls received in a given time
+2.  Number of telephone calls received in a given time
 
-3.	Number of misprints on a page
+3.  Number of misprints on a page
 
-4.	Number of customers entering a bank during various intervals of time
+4.  Number of customers entering a bank during various intervals of time
 
 ⸻
 
@@ -221,8 +212,7 @@ We are now moving onto the *continuous distributions* that play an important rol
 
 ### Uniform Distribution
 
-Similar to the discrete uniform distribution except all values within an interval have equal probability. The parameters of the Uniform Density are \alpha and \beta (\alpha < \beta). The random variable X has the Uniform Distribution if it is continuous and its probability density function is given by
-$$
+Similar to the discrete uniform distribution except all values within an interval have equal probability. The parameters of the Uniform Density are \alpha and \beta (\alpha \< \beta). The random variable X has the Uniform Distribution if it is continuous and its probability density function is given by $$
 f_X(x) =
 \begin{cases}
 \dfrac{1}{\beta - \alpha}, & \alpha < x < \beta, \\[1ex]
@@ -230,14 +220,12 @@ f_X(x) =
 \end{cases}
 $$
 
-::: {.callout-theorem}
- The mean and variance of the Uniform Distribution are
-$$\E X = \frac{\alpha + \beta}{2},
+::: callout-theorem
+The mean and variance of the Uniform Distribution are $$\mathbb{E}X = \frac{\alpha + \beta}{2},
 \qquad
-\var(X) = \frac{(\beta - \alpha)^2}{12}.
+\mathbb{V}ar(X) = \frac{(\beta - \alpha)^2}{12}.
 $$
 :::
-
 
 #### Implementation in R
 
@@ -249,37 +237,29 @@ hist(X)
 mean(X);  var(X)
 ```
 
-
 ### Gamma Distribution
 
-The Gamma function is defined as
-$$\Gamma(\alpha) = \int_{0}^{\infty} y^{\alpha - 1} e^{-y} \, dy.$$
+The Gamma function is defined as $$\Gamma(\alpha) = \int_{0}^{\infty} y^{\alpha - 1} e^{-y} \, dy.$$
 
-::: {.callout-theorem}
-For $\alpha > 0$,
-$$
+::: callout-theorem
+For $\alpha > 0$, $$
 \Gamma(\alpha) = (\alpha - 1)\Gamma(\alpha - 1).$$
 :::
 
-::: {.callout-theorem}
-For any positive integer $\alpha > 0$,
-$$\Gamma(\alpha) = (\alpha - 1)!$$
+::: callout-theorem
+For any positive integer $\alpha > 0$, $$\Gamma(\alpha) = (\alpha - 1)!$$
 :::
 
-A continuous random variable follows a Gamma Distribution if and only if its probability density function is of the form
-$$f_X(x) =
+A continuous random variable follows a Gamma Distribution if and only if its probability density function is of the form $$f_X(x) =
 \begin{cases}
 \dfrac{1}{\beta^{\alpha}\Gamma(\alpha)} x^{\alpha - 1} e^{-x/\beta}, & x > 0, \\[2ex]
 0, & \text{otherwise},
-\end{cases}$$
-where $\alpha, \beta$ are positive. The parameters $\alpha$ and $\beta$ determine the shape of the distribution.
-$\alpha$ is called the shape parameter and $\beta$ is called the scale parameter.
+\end{cases}$$ where $\alpha, \beta$ are positive. The parameters $\alpha$ and $\beta$ determine the shape of the distribution. $\alpha$ is called the shape parameter and $\beta$ is called the scale parameter.
 
-::: {.callout-theorem}
-Theorem: The mean and variance of the Gamma Distribution are
-$$\E X = \alpha \beta,
+::: callout-theorem
+Theorem: The mean and variance of the Gamma Distribution are $$\mathbb{E}X = \alpha \beta,
 \qquad
-\var(X) = \alpha \beta^2$$
+\mathbb{V}ar(X) = \alpha \beta^2$$
 :::
 
 #### Implementation in R
@@ -290,16 +270,13 @@ rgamma(n = 10, shape = 10, scale = 3)
 
 ### Exponential Distribution
 
-A special case of the Gamma Distribution arises when $\alpha = 1$. To differentiate it from the Gamma distribution, we also let $\beta = \theta$. A continuous random variable follows an Exponential Distribution if and only if its probability density function is of the form:
-$$f_X(x) =
+A special case of the Gamma Distribution arises when $\alpha = 1$. To differentiate it from the Gamma distribution, we also let $\beta = \theta$. A continuous random variable follows an Exponential Distribution if and only if its probability density function is of the form: $$f_X(x) =
 \begin{cases}
 \dfrac{1}{\theta} e^{-x/\theta}, & x > 0, \\[2ex]
 0, & \text{otherwise}.
 \end{cases}$$
 
-
-Exponential Distributions have many applications. One of them is a waiting time until the first success of a Poisson process. In this situation, it is often better to model the phenomenon in terms of a rate parameter (i.e. 4 calls per week). Thus, the distribution of waiting times becomes:
-$$
+Exponential Distributions have many applications. One of them is a waiting time until the first success of a Poisson process. In this situation, it is often better to model the phenomenon in terms of a rate parameter (i.e. 4 calls per week). Thus, the distribution of waiting times becomes: $$
 f_Y(y) =
 \begin{cases}
 \lambda e^{-\lambda y}, & y > 0, \\[2ex]
@@ -308,16 +285,14 @@ f_Y(y) =
 
 #### Memoryless Property
 
-This is also called the *Markov Property.* The distribution of waiting time does not depend on how long you have already waited. In other words:
-$$
+This is also called the *Markov Property.* The distribution of waiting time does not depend on how long you have already waited. In other words: $$
 P(X > s + t \mid X > t) = P(X > s).
 $$
 
-::: {.callout-theorem}
-The mean and variance of the exponential distribution are
-$$\E X = \theta,
+::: callout-theorem
+The mean and variance of the exponential distribution are $$\mathbb{E}X = \theta,
 \qquad
-\var(X) = \theta^2.$$
+\mathbb{V}ar(X) = \theta^2.$$
 :::
 
 #### Implementation in R
@@ -329,27 +304,23 @@ hist(X)
 mean(X); var(X)
 ```
 
-
-
 ### Chi-Square Distribution
 
 There is another special form of the gamma distribution when $\alpha =\nu/2$ and $\beta = 2.
 \nu$ is pronounced “nu” and is called the degrees of freedom.
 
-A continuous random variable follows a Chi-Square Distribution if and only if its probability density is given by
-$$f_X(x) =
+A continuous random variable follows a Chi-Square Distribution if and only if its probability density is given by $$f_X(x) =
 \begin{cases}
 \dfrac{1}{2^{\nu/2}\Gamma\!\left(\tfrac{\nu}{2}\right)} x^{\tfrac{\nu}{2} - 1} e^{-x/2}, & x > 0, \\[2ex]
 0, & \text{otherwise}.
 \end{cases}$$
 
-
-::: {.callout-theorem}
+::: callout-theorem
 The mean and variance of the Chi-Square Distribution are
 
-$$\E X = \nu,
+$$\mathbb{E}X = \nu,
 \qquad
-\var(X) = 2\nu.$$
+\mathbb{V}ar(X) = 2\nu.$$
 :::
 
 ```{r chisq}
@@ -363,33 +334,25 @@ mean(X);  var(X)
 
 This is **Not** a special case of the Gamma distribution
 
-The Beta function is defined as 
-$$
+The Beta function is defined as $$
 B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}
 = \int_0^1 x^{\alpha - 1} (1-x)^{\beta - 1} \, dx.$$
 
-Like any probability density, the area underneath it must be equal to 1.
-So, we can rearrange the above definition and write:
-$$1 = \int_0^1 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+Like any probability density, the area underneath it must be equal to 1. So, we can rearrange the above definition and write: $$1 = \int_0^1 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
 x^{\alpha-1} (1-x)^{\beta-1} \, dx.$$
 
-
-A continuous random variable follows a Beta Distribution if and only if its probability density function is given by
-$$
+A continuous random variable follows a Beta Distribution if and only if its probability density function is given by $$
 f_X(x) =
 \begin{cases}
 \dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
 x^{\alpha-1}(1-x)^{\beta-1}, & 0 < x < 1, \\[2ex]
 0, & \text{otherwise},
-\end{cases}$$
-where $\alpha > 0$, $\beta > 0$.
+\end{cases}$$ where $\alpha > 0$, $\beta > 0$.
 
-
-::: {.callout-theorem}
-The mean and variance of the Beta Distribution are
-$$\E X = \frac{\alpha}{\alpha + \beta},
+::: callout-theorem
+The mean and variance of the Beta Distribution are $$\mathbb{E}X = \frac{\alpha}{\alpha + \beta},
 \qquad
-\var(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}.
+\mathbb{V}ar(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}.
 $$
 
 #### Implementation in R
@@ -421,18 +384,13 @@ ggplot(df, aes(x = x, y = density, color = dist)) +
 
 Q: What do you noitce about $B(1,1)$? What distribution is this?
 
-The Beta distribution is related to the Binomial distribution when computing maximum likelihood estimators !(We will make use of this property later when we do Bayesian analysis.)
-$$\text{Beta}_{pdf}(p, n, k) = (n+1)\binom{n}{k} p^k (1-p)^{n-k},$$
-where
-$p^\prime = \text{Binomial}_{pmf}(k,n,p), \quad k = \text{mode}(\text{Binomial}(n,p)).$
+The Beta distribution is related to the Binomial distribution when computing maximum likelihood estimators !(We will make use of this property later when we do Bayesian analysis.) $$\text{Beta}_{pdf}(p, n, k) = (n+1)\binom{n}{k} p^k (1-p)^{n-k},$$ where $p^\prime = \text{Binomial}_{pmf}(k,n,p), \quad k = \text{mode}(\text{Binomial}(n,p)).$
 
-To relate the binomial distribution to the scale and shape parameters of the beta distribution:
-$\alpha = k + 1, \quad \beta = n - \alpha + 2$.
+To relate the binomial distribution to the scale and shape parameters of the beta distribution: $\alpha = k + 1, \quad \beta = n - \alpha + 2$.
 
 #### Implementation in R
 
-Suppose we flip a coin 20 times and find that we have 8 heads. Thus, our MLE is $8/20 = 0.4$.
-We can visualize the likelihood function for this scenario:
+Suppose we flip a coin 20 times and find that we have 8 heads. Thus, our MLE is $8/20 = 0.4$. We can visualize the likelihood function for this scenario:
 
 ```{r beta-binomial}
 # Likelihood plot using Binomial likelihood
@@ -507,8 +465,7 @@ overlay.likeli(8, 20)
 
 ### Gaussian Distribution
 
-This is probably the most famous statistical distribution. It is defined by its mean ($\mu$) and variance ($\sigma^2$). It is also known as the Normal Distribution.
-A continuous random variable follows a Normal Distribution if and only if its probability density function is given by
+This is probably the most famous statistical distribution. It is defined by its mean ($\mu$) and variance ($\sigma^2$). It is also known as the Normal Distribution. A continuous random variable follows a Normal Distribution if and only if its probability density function is given by
 
 $$
 f_X(x) =
@@ -518,9 +475,9 @@ f_X(x) =
 \end{cases}
 $$
 
-Note: The Standard Normal Distribution has density with $\E X = 0$ and $\var(X) = 1$.
+Note: The Standard Normal Distribution has density with $\mathbb{E}X = 0$ and $\mathbb{V}ar(X) = 1$.
 
-``` {r normal}
+```{r normal}
 X <- rnorm(1000, 0, 1)
 qqnorm(X)
 
@@ -530,18 +487,15 @@ mean(-2 < X & X < 2)  # ~ 95%
 mean(-3 < X & X < 3)  # ~ 99.7%
 ```
 
-
 ### T-Distribution
 
-Another special distribution in statistical inference is the *Student’s t-Distribution*.
-$$f_X(x) =
+Another special distribution in statistical inference is the *Student’s t-Distribution*. $$f_X(x) =
 \begin{cases}
 \dfrac{\Gamma\!\left(\tfrac{\nu+1}{2}\right)}
 {\sqrt{\nu \pi}\,\Gamma\!\left(\tfrac{\nu}{2}\right)}
 \left(1 + \dfrac{x^2}{\nu}\right)^{-\tfrac{\nu+1}{2}}, & -\infty < x < \infty, \\[2ex]
 0, & \text{otherwise},
-\end{cases}$$
-where $\nu$ is the degrees of freedom. As $\nu \to \infty$, the pdf converges to the normal distribution.
+\end{cases}$$ where $\nu$ is the degrees of freedom. As $\nu \to \infty$, the pdf converges to the normal distribution.
 
 ### Implementation in R
 
@@ -559,12 +513,9 @@ my_df / (my_df - 2)   # Theoretical variance for df > 2
 
 For continuous random variables, a simple method for finding the probability density of a function of random variables is to find the distribution function and then differentiate to find the pdf.
 
-To find an expression for the distribution function, let $Y = u(x_1, x_2, \ldots, x_n)$, where $u$ is a function. Then,
-$$F(Y) = P(Y \leq y) = P(u(x_1, x_2, \ldots, x_n) \leq y).$$
-Then,
-$$f(y) = \frac{dF(Y)}{dy}.$$
+To find an expression for the distribution function, let $Y = u(x_1, x_2, \ldots, x_n)$, where $u$ is a function. Then, $$F(Y) = P(Y \leq y) = P(u(x_1, x_2, \ldots, x_n) \leq y).$$ Then, $$f(y) = \frac{dF(Y)}{dy}.$$
 
-Example: 
+Example:
 
 ```{r}
 # Create sequence from 0 to 1
@@ -601,8 +552,7 @@ qqplot(U, X.sample)
 cor(qqplot(U, X.sample)$x, qqplot(U, X.sample)$y)
 ```
 
-
 ------------------------------------------------------------------------
 
 Special thanks to Dr. [Brian Pidgeon](https://cas.gsu.edu/profile/brian-pidgeon/) who kindly share the notes.
-
+:::

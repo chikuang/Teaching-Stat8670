@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.9.20)  27 SEP 2025 23:02
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.10.9)  11 OCT 2025 17:58
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -156,7 +156,7 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: luatex.def on input line 274.
 (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/graphics-def/luatex.def
-File: luatex.def 2024/04/13 v1.2e Graphics/color driver for luatex
+File: luatex.def 2025/09/29 v1.2f Graphics/color driver for luatex
 ) (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
 Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
@@ -261,9 +261,9 @@ Package: xparse 2024-08-16 L3 Experimental document command parser
 ) (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
 Package: l3keys2e 2024-08-16 LaTeX2e option processing using LaTeX3 keys
 ) (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.sty
-Package: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
-Lua module: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec-luatex.sty
-Package: fontspec-luatex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
+Package: fontspec 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTeX
+Lua module: fontspec 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTeX (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec-luatex.sty
+Package: fontspec-luatex 2025/09/29 v2.9g Font selection for XeLaTeX and LuaLaTeX
 \l__fontspec_script_int=\count296
 \l__fontspec_language_int=\count297
 \l__fontspec_strnum_int=\count298
@@ -415,7 +415,7 @@ LaTeX Encoding Info:    Redeclaring text symbol \textdiv (encoding TS1) on input
 )) (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/lualatex/lualatex-math/lualatex-math.sty
 Package: lualatex-math 2022/01/01 v1.12 Patches for mathematics typesetting with LuaLaTeX
 (/Users/chikuang/Library/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
 \etb@tempcnta=\count307
 )
 Lua module: lualatex-math 2013/08/03 v1.3 Patches for mathematics typesetting with LuaLaTeX)
@@ -1466,12 +1466,12 @@ l.2289 \newcommand{\beta}{\operatorname{Beta}}
                                             
 
 Here is how much of LuaTeX's memory you used:
- 41915 strings out of 476291
+ 41924 strings out of 476291
  100000,1648299 words of node,token memory allocated
  1397 words of node memory still in use:
    17 hlist, 4 vlist, 3 rule, 5 disc, 2 local_par, 1 dir, 21 glue, 8 kern, 6 penalty, 34 glyph, 55 attribute, 68 glue_spec, 55 attribute_list, 5 write, 1 pdf_dest, 4 pdf_colorstack nodes
    avail lists: 1:1,2:1552,3:786,4:816,5:324,6:51,7:5041,8:102,9:339,10:16,11:408,12:1
- 63221 multiletter control sequences out of 65536+600000
- 78 fonts using 24747323 bytes
+ 63230 multiletter control sequences out of 65536+600000
+ 78 fonts using 24747223 bytes
  108i,12n,114p,11226b,1126s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

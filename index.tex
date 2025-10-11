@@ -223,7 +223,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-09-27}
+\date{2025-10-11}
 \begin{document}
 \maketitle
 
@@ -317,7 +317,7 @@ University.
 
 \begin{itemize}
 \tightlist
-\item[$\square$]
+\item[$\boxtimes$]
   Midterm 1 on October 8, 2025
 \item[$\square$]
   Midterm 2 on November 12, 2025
@@ -355,8 +355,8 @@ Topic & Lecture Covered \\
 Introduction to R Programming & 1--2 \\
 Numerical Approaches and Optimization in 1-D & 3--5 \\
 Review for Distribution & 6--7 \\
-Random Variable Generation & 8-- \\
-Numerical integration & TBA \\
+Random Variable Generation & 8--10 \\
+Monte Carlo and Integration & 11-- \\
 Term Exam 1 & 13 \\
 Jackknife & TBA \\
 Bootstrap & TBA \\
@@ -2406,7 +2406,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2525,7 +2525,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2973,7 +2973,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -2982,7 +2982,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3138,7 +3138,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3409,7 +3409,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3457,7 +3457,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, opacitybacktitle=0.6, rightrule=.15mm, breakable, bottomrule=.15mm, coltitle=black, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, colback=white, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3618,7 +3618,735 @@ Reference used:
 \begin{itemize}
 \tightlist
 \item
-  Reference book {[}2{]}
+  Rizzo, M.L. (2007)
+  \href{https://a-roshani.ir/files/SC/\%5B4\%5D\%20\%5BMaria\%20L.\%20Rizzo\%5D\%5B2019\%5D\%20Statistical\%20Computing\%20\%20with\%20R,\%20Second\%20Edition.pdf}{\emph{Statistical
+  Computing with R}}. CRC Press, Roca Baton.
+\end{itemize}
+
+\bookmarksetup{startatroot}
+
+\chapter{Monte Carlo Simulation and Variance
+Reduction}\label{monte-carlo-simulation-and-variance-reduction}
+
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\beta}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\eff}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
+
+Monte Carlo (MC) integration is a simulation-based method for
+\emph{approximating integrals} using random sampling.
+
+In numerical integration, methods such as the trapezoidal rule use a
+\emph{deterministic approach}. MC integration, on the other hand,
+employs a \emph{non-deterministic} approach: each realization provides a
+different outcome.
+
+\section{What is Monte Carlo
+Simulation?}\label{what-is-monte-carlo-simulation}
+
+\subsection{History}\label{history}
+
+Monte Carlo (MC) is a casino in Monaco, famous for its gambling and
+games of chance. The term ``Monte Carlo'' was coined by physicists
+Stanislaw Ulam in the 1940s while working on nuclear weapon projects at
+Los Almos.
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{index_files/mediabag/640px-Table_de_Roule.jpg}}
+
+}
+
+\caption{Monte Carlo Casino, Picture borrowed from Wikipedia}
+
+\end{figure}%
+
+Monte Carlo methods are mainly used in three distinct problem classes:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  optimization
+\item
+  numerical integration
+\item
+  generating draws from a probability distribution.
+\end{enumerate}
+
+They can also be used to model phenomena with significant uncertainty in
+inputs, such as calculating the risk of a nuclear power plant failure.
+Monte Carlo methods are often implemented using computer simulations,
+and they can provide approximate solutions to problems that are
+otherwise intractable or too complex to analyze mathematically.
+
+\subsection{Key Steps of MC methods}\label{key-steps-of-mc-methods}
+
+Monte Carlo methods vary, but tend to follow a particular pattern:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Define a domain of possible inputs.
+\item
+  Generate inputs randomly from a probability distribution over the
+  domain.
+\item
+  Perform a deterministic computation of the outputs.
+\item
+  Aggregate the results.
+\end{enumerate}
+
+For example, consider a quadrant (circular sector) inscribed in a unit
+square. Given that the ratio of their areas is
+\$\pi/4\(4⁠, the value o f\)\piπ can be approximated using the Monte
+Carlo method:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Draw a square, then inscribe a quadrant within it.
+\item
+  Uniformly scatter a given number of points over the square.
+\item
+  Count the number of points inside the quadrant, i.e.~having a distance
+  from the origin of less than 1.
+\item
+  The ratio of the inside-count and the total-sample-count is an
+  estimate of the ratio of the two areas, ⁠π/4⁠. Multiply the result by 4
+  to estimate π.
+\end{enumerate}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{index_files/mediabag/660px-Pi_monte_carlo.gif}}
+
+}
+
+\caption{Picture borrowed from Wikipedia}
+
+\end{figure}%
+
+\section{Basic Monte Carlo
+Integration}\label{basic-monte-carlo-integration}
+
+To approximate the integral of a function \(f(x)\) over the interval
+\([a, b]\), we can use the following formula:
+
+Consider the problem of estimating \(\theta = \int_0^1 g(x)dx\). If
+\(X_1,\dots , X_m\sim\operatorname{Unif}(0,1)\), then the MC estimator
+is given by:
+
+\[\hat{\theta}=\bar{g}_m(X)=\frac{1}{m}\sum_{i=1}^m g(X_i)\] converges
+to \(\mathbb{E}[g(X)]\) as \(m\to\infty\) with probability 1, by
+\emph{Strong law of Large Number} (SLLN). The simple MC estimator is
+unbiased, i.e., \(\bar{g}_m(X)\).
+
+Compute a MC estimate \[
+\theta = \int_0^1 \exp(-x)dx,
+\] and compare the estimate with the theoretical value
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FloatTok{1E3}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n)}
+\CommentTok{\# simulated estimator}
+\NormalTok{theta\_hat }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{x) }\SpecialCharTok{|\textgreater{}} \FunctionTok{mean}\NormalTok{()}
+
+\CommentTok{\# theoretical value}
+\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# put them in a tibble}
+\NormalTok{(results }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{Method =} \FunctionTok{c}\NormalTok{(}\StringTok{"Simulated"}\NormalTok{, }\StringTok{"Theoretical"}\NormalTok{),}
+  \AttributeTok{Value  =} \FunctionTok{c}\NormalTok{(theta\_hat, theta\_true)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 2 x 2
+  Method      Value
+  <chr>       <dbl>
+1 Simulated   0.641
+2 Theoretical 0.632
+\end{verbatim}
+
+To simulate \(\int_a^b g(t)dt\), use change of variable so the limit
+becomes from \(0\) to \(1\). This can be done through a \emph{linear
+transformation} of the variable \(t\): \(y:=\frac{t-a}{b-a}\). Then,
+\(t=a+(b-a)y\) and \(dt=(b-a)dy\). Thus, we have \[
+\int_a^b g(t)dt = (b-a)\int_0^1 g(a+(b-a)y)dy.
+\] Alternatively, instead of using \(\operatorname{Unif}(0,1)\), we can
+replace it with other densities with supports between \(a\) and \(b\).
+One instance is, \[
+\int_a^b g(t)dt = \int_a^b \frac{g(t)}{f}f dt = (b-a) \int_a^b  \frac{g(t)}{b-a} dt.
+\] This is a \(b-a\) times the expectation of \(g(X)\) where
+\(X\sim \operatorname{Unif}(a,b)\). Therefore, this integral can be
+estimated by averaging through the function \(g(\cdot)\) over the
+interval from \(a\) to \(b\) multiply by \(b-a\).
+
+Compute a MC estimate of \[
+\theta = \int_2^4 \exp(-x)dx,
+\] and compare the estimate with the exact value of the integral.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tibble)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{m }\OtherTok{\textless{}{-}} \FloatTok{1E3}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(m, }\AttributeTok{min =} \DecValTok{2}\NormalTok{, }\AttributeTok{max =} \DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# simulated estimator}
+\NormalTok{theta\_hat }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{x) }\SpecialCharTok{|\textgreater{}} \FunctionTok{mean}\NormalTok{() }\SpecialCharTok{*}\NormalTok{ (}\DecValTok{4} \SpecialCharTok{{-}} \DecValTok{2}\NormalTok{)}
+
+\CommentTok{\# theoretical value}
+\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{)}
+
+\CommentTok{\# put into tibble}
+\NormalTok{(results }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{Method =} \FunctionTok{c}\NormalTok{(}\StringTok{"Simulated"}\NormalTok{, }\StringTok{"Theoretical"}\NormalTok{),}
+  \AttributeTok{Value  =} \FunctionTok{c}\NormalTok{(theta\_hat, theta\_true)}
+\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 2 x 2
+  Method      Value
+  <chr>       <dbl>
+1 Simulated   0.120
+2 Theoretical 0.117
+\end{verbatim}
+
+To summarize, the simple Monte Carlo estimator of the integral
+\(\theta = \int_a^b g(x)dx\) is computed as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate
+  \(X_1, \dots , X_m\overset{iid}{\sim}\operatorname{Unif}(a,b)\),
+\item
+  Compute \(\bar{g}(X) = \frac{1}{m} g(X_i)\).
+\item
+  \(\hat{\theta} = (b − a)\bar{g}(X)\).
+\end{enumerate}
+
+Compute a MC estimate of a standard normal cdf
+
+\[
+\Phi(x)=\int_{-\infty}^x \frac{1}{\sqrt{2 \pi}} e^{-t^2 / 2} d t
+\]
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Note, we cannot apply the algorithm above directly because the limits
+  of integration cover an \emph{unbounded interval}. However, we can
+  break this problem into two cases: (i) \(x \ge 0\) and (ii) \(x < 0\),
+  and use the \emph{symmetry} of the normal density to handle the second
+  case. Then the problem is to estimate
+  \(\theta =\int_0^x \theta = \int_0^x \exp(−t^2/2) dt\) for \(x > 0\).
+  This can be done by generating random \(\operatorname{Unif}(0,x)\)
+  numbers, but it would mean changing the parameters of the uniform
+  distribution for each different value of the cdf required. Suppose
+  that we prefer an algorithm that always samples from
+  \(\operatorname{Unif}(0,1)\). This can be accomplished by a change of
+  variables. Making the substitution \(y = t/x\), we have \(dt = x dy\)
+  and
+\end{enumerate}
+
+\[
+\theta=\int_0^1 x e^{-(x y)^2 / 2} d y
+\] Thus, \(\theta = \mathbb{E}_Y[x\exp(-(xY)^2/2)]\), where the rv
+\(Y\sim \operatorname{Unif}(0,1)\). Generate iid
+\(\operatorname{Unif}(0,1)\) random numbers \(u_1,\dots,u_m\), and
+compute
+\[\hat{\theta}=\overline{g_m(u)}=\frac{1}{m} \sum_{i=1}^m x e^{-\left(u_i x\right)^2 / 2}.
+\]
+
+The sample mean \(\hat{\theta}\) converges to
+\(\mathbb{E}\hat{\theta} = \theta\) as \(m\to \infty\). If \(x > 0\),
+the estimate of \(\Phi(x) = 1/2 + \hat{\theta}/\sqrt{2\pi}\). If
+\(x < 0\) compute \(\Phi(x) = 1 − \Phi(−x)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(.}\DecValTok{1}\NormalTok{, }\FloatTok{2.5}\NormalTok{, }\AttributeTok{length =} \DecValTok{10}\NormalTok{)}
+\NormalTok{m }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(m)}
+\NormalTok{cdf }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(}\FunctionTok{length}\NormalTok{(x))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(x)) \{}
+\NormalTok{  g }\OtherTok{\textless{}{-}}\NormalTok{ x[i] }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(u }\SpecialCharTok{*}\NormalTok{ x[i])}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+\NormalTok{  cdf[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(g) }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi) }\SpecialCharTok{+} \FloatTok{0.5}
+\NormalTok{\}}
+\NormalTok{Phi }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(x)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{round}\NormalTok{(}\FunctionTok{rbind}\NormalTok{(x, cdf, Phi), }\DecValTok{3}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9] [,10]
+x   0.10 0.367 0.633 0.900 1.167 1.433 1.700 1.967 2.233 2.500
+cdf 0.54 0.643 0.737 0.816 0.878 0.924 0.956 0.976 0.987 0.994
+Phi 0.54 0.643 0.737 0.816 0.878 0.924 0.955 0.975 0.987 0.994
+\end{verbatim}
+
+Notice that it would have been simpler to generate random Uniform(0, x)
+random variables and skip the transformation. In fact, the integrand of
+the previous example is itself a density function, and we can generate
+random variables from this density. This provides a more direct approach
+to estimating the integral.
+
+Let \(I(\cdot)\) be the indicator function, and \(Z\sim N(0,1)\). Then
+for any constant \(x\) we have
+\(\mathbb{E}[I(Z ≤ x)] = P (Z ≤ x) =\Phi(x)\), the standard normal cdf
+evaluated at \(x\).
+
+Generate a random sample \(z_1, \dots , z_m\sim N(0,1)\). Then the
+theoretical mean and sample mean are
+\[\hat{\theta} = \frac{1}{m} \sum_{i=1}^m I(z_i \le x),\] and
+\[\mathbb{E}[\hat{\theta}] = P(Z \le x) = \Phi(x).\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{2.5}\NormalTok{, }\AttributeTok{length =} \DecValTok{10}\NormalTok{)}
+\NormalTok{m }\OtherTok{\textless{}{-}} \FloatTok{1E4}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(m)}
+\FunctionTok{dim}\NormalTok{(x) }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(x)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(x, }\AttributeTok{MARGIN =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{FUN =} \ControlFlowTok{function}\NormalTok{(x, z) \{}\FunctionTok{mean}\NormalTok{(z }\SpecialCharTok{\textless{}}\NormalTok{ x)\}, }\AttributeTok{z =}\NormalTok{ z)}
+\NormalTok{Phi }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(x)}
+
+\FunctionTok{rbind}\NormalTok{(x, p, Phi) }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9] [,10]
+x   0.100 0.367 0.633 0.900 1.167 1.433 1.700 1.967 2.233 2.500
+p   0.544 0.645 0.740 0.818 0.881 0.926 0.957 0.976 0.986 0.993
+Phi 0.540 0.643 0.737 0.816 0.878 0.924 0.955 0.975 0.987 0.994
+\end{verbatim}
+
+In this example, compared with the previous example, it appears that we
+have better agreement with \texttt{pnorm()} in the upper tail, but worse
+agreement near the center.
+
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+
+Summarizing, if \(f (x)\) is a probability density function supported on
+a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
+\(\int_A f (x) = 1\)), to estimate the integral
+\[\theta = \int_A g(x)f (x)dx,\] generate a random sample
+\(x_1,\dots,x_m\) from the distribution \(f (x)\), and compute the
+sample mean \[\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).\] Then
+\(\hat{\theta}\overset{p}{\to}\theta\)
+
+\end{tcolorbox}
+
+The standard error of \(\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)\).
+
+Recall that, \(\mathbb{V}ar{\hat{\theta}}=\sigma^2/m\) where
+\(\sigma^2 = \mathbb{V}ar{g(X)}\). When the distribution of \(X\) is
+unknown, we substitute for \(F_X\) the empirical distribution \(F_m\) of
+the sample \(x_1, \dots , x_m\). The variance of \(\hat{\theta}\) can be
+estimated by \[
+\frac{\hat{\sigma}}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
+\]
+
+Note that \[\frac{1}{m}\sum_{i=1}^m[g(x_i)-\bar{g}(x_i)],\] is the
+\emph{plug-in estimate} of \(\mathbb{V}ar\{g(X)\}\). That is, it is the
+variance of \(U\) , where \(U\) is uniformly distributed on the set of
+replicates \(\{g(x_i)\}\). The corresponding estimated standard error of
+\(\hat{\theta}\) is \[
+\widehat{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}} = \frac{1}{m}\left\{\sum_{i=1}^m [ g(x_i)- \bar{g}(x)]^2\right\}.
+\] The CLT implies \[
+\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\mathbb{V}ar\hat{\theta}}} \overset{D}{\to} N(0,1),
+\] as \(m\to\infty\).Hence, if \(m\) is sufficiently large,
+\(\hat{\theta}\) is approximately normal with mean \(\theta\). The
+large-sample, approximately normal distribution of \(\hat{\theta}\) can
+be applied to put confidence limits or error bounds on the MC estimate
+of the integral, and check for convergence
+
+Compute the 95\% confidence interval for \(\Phi(2)\) and \(\Phi(2.5)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{m }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{z }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(m)}
+\NormalTok{g }\OtherTok{\textless{}{-}}\NormalTok{ (z }\SpecialCharTok{\textless{}}\NormalTok{ x) }\CommentTok{\#the indicator function}
+\NormalTok{v }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{((g }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(g))}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ m}
+\NormalTok{cdf }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(g)}
+\FunctionTok{c}\NormalTok{(cdf, v)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 9.771000e-01 2.237559e-06
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{c}\NormalTok{(cdf }\SpecialCharTok{{-}} \FloatTok{1.96} \SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{(v), cdf }\SpecialCharTok{+} \FloatTok{1.96} \SpecialCharTok{*} \FunctionTok{sqrt}\NormalTok{(v))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.9741681 0.9800319
+\end{verbatim}
+
+The interpretation is:
+
+the probability \(P (I(Z < x) = 1)\) is \(\Phi(2)\approx 0.977\). Here
+\(g(X)\) has the distribution of the sample proportion of 1's in
+\(m = 10000\) Bernoulli trials with \(p\approx 0.977\), and the variance
+of \(g(X)\) is therefore \((0.977)(1 − 0.977)/10000 =2.223e-06\). The MC
+estimate \(2.228e-06\) of variance is quite close to this value.
+
+Q: What about \(\Phi(2.5)\)?
+
+\section{Variance and Efficiency}\label{variance-and-efficiency}
+
+We have seen that a MC approach to estimating the integral
+\(\int_a^b g(x)dx\) is to represent the integral as the expected value
+of a function of a uniform random variable. That is, suppose
+\(X\sim \operatorname{Unif}(0,1)\), then \(f(x) = (b-a)^{-1}\) for
+\(x\in[a,b]\) and 0 otherwise, and \[
+\begin{aligned}
+\theta & =\int_a^b g(x) d x \\
+& =(b-a) \int_a^b g(x) \frac{1}{b-a} d x=(b-a) E[g(X)]
+\end{aligned}
+\]
+
+Recall that the sample-mean MC estimator of the integral \(\theta\) is
+computed as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate
+  \(X_1, \dots , X_m\overset{iid}{\sim}\operatorname{Unif}(a,b)\),
+\item
+  Compute \(\bar{g}(X) = g(X_i)/m\)
+\item
+  \(\hat{\theta} = (b − a)\bar{g}(X)\).
+\end{enumerate}
+
+The sample mean \(\bar{g}(X)\) has expected value \(g(X)=\theta/(b-a)\)
+and variance \(\mathbb{V}ar\{\bar{g}(X)\}=\mathbb{V}ar\{g(X)\}/m\). By
+CLT, \(\bar{g}(X)\) is approximately normal for large \(m\). Therefore,
+the variance of the MC estimator \(\hat{\theta}\) is approximately
+normal with mean \(\theta\) and variance \(\mathbb{V}ar\{g(X)\}/m\).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+The \textbf{``hit-or-miss''} approach to MC integration also uses a
+\emph{sample mean} to estimate the integral, but the sample mean is
+taken over a \emph{different sample} and therefore this estimator has a
+different variance than the one we have above.
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{index_files/mediabag/hZ7K41Jugx8AAAAASUVO.png}}
+
+}
+
+\caption{Hit-or-Miss MC, image borrowed from UBC}
+
+\end{figure}%
+
+Suppose \(f(x)\) is the density of a random variable \(X\).\\
+The ``hit-or-miss'' approach to estimating \[
+F(x) = \int_{-\infty}^x f(t)\,dt
+\]
+
+is as follows:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Generate a random sample \(X_1,\dots,X_m \sim F_X(x)\).
+\item
+  For each observation \(X_i\), compute \[
+  g(X_i) = I(X_i \leq x) =
+  \begin{cases}
+  1, & X_i \leq x, \\
+  0, & X_i > x.
+  \end{cases}
+  \]
+\item
+  Compute \[
+  \hat{F}(x) = \frac{1}{m} \sum_{i=1}^m I(X_i \leq x).
+  \]
+\end{enumerate}
+
+Note that the random variable \(Y = g(X) \sim \text{Bern}(1, p)\), where
+the success probability is\\
+\[
+p := P(X \leq x) = F(x).
+\]
+
+The transformed sample \(Y_1, \ldots, Y_m\) are the outcomes of \$ m\$
+independent, identically distributed Bernoulli trials.
+
+The estimator \(\hat{F}(x)\) is the sample proportion \[
+\hat{p} = \frac{y}{m},
+\]
+
+where \(y\) is the total number of successes observed in \(m\) trials.
+Hence,
+
+\[
+\mathbb{E}[\hat{F}(x)] = p = F(x), \qquad 
+\mathrm{Var}(\hat{F}(x)) = \frac{p(1-p)}{m} = \frac{F(x)\big(1-F(x)\big)}{m}.
+\]
+
+The variance of \(\hat{F}(x)\) can be estimated by \[
+\frac{\hat{p}(1-\hat{p})}{m} = \frac{\hat{F}(x)\big(1-\hat{F}(x)\big)}{m}.
+\]
+
+The maximum variance occurs when \(F(x) = \tfrac{1}{2}\), so a
+conservative estimate of the variance of \(\hat{F}(x)\) is \[
+\frac{1}{4m}.
+\]
+
+\subsection{Efficiency}\label{efficiency}
+
+Suppose we have two (unbiased) estimators \(\hat{\theta}_1\) and
+\(\hat{\theta}_2\) for θ. We say \(\hat{\theta}_1\) is
+\emph{statistically} more efficient than \(\hat{\theta}_2\) if
+\[\mathbb{V}ar(\hat{\theta}_1) < \mathbb{V}ar(\hat{\theta}_2).\] What is
+the variance of \(\hat{\theta}_i\) is unknown or hard to be calculated?
+
+can substitute it by sample estimate of the variance for each estimator.
+
+Note, the variance can \emph{always be reduced by increasing the number
+of replicates}, so computational efficiency is also relevant.
+
+\section{Variance Reduction}\label{variance-reduction}
+
+We have seen that MC integration may be used to estimate
+\(\theta:=\mathbb{E}[g(X)]\). However, how to have the \emph{efficient
+estimator } for \(\theta\), and if we have a several ways
+\$\hat{\theta}\_1,\dots,\hat{\theta}\_k \$to estimate \(\theta\), which
+one is \emph{better}, or, more efficient? Here, we try to introduce some
+variance reduction techniques.
+
+Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
+\(\theta\) where
+\(\mathbb{V}ar(\hat{\theta}_1) > \mathbb{V}ar(\hat{\theta}_2)\). The
+\emph{relative efficiency gain } of \(\hat{\theta_2}\) instead of using
+\(\hat{\theta_1}\) is defined as \[
+\operatorname{Eff}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\mathbb{V}ar(\hat{\theta}_1)- \mathbb{V}ar(\hat{\theta}_2)}{\mathbb{V}ar(\hat{\theta}_1)}.
+\]
+
+Let \(X\) be a random object and let \(g(\cdot)\) be a (possibly
+vector--valued) statistic of a \emph{sample} from the distribution of
+\(X\). For \(j=1,\ldots,m\), draw an i.i.d. replicate sample \$
+X\textsuperscript{\{(j)\}=\{X}\{(j)\}\_1,\ldots,X\^{}\{(j)\}\_n\} \$ and
+compute \[
+Y_j = g\!\big(X^{(j)}\big).
+\tag{6.5}
+\] Then \(Y_1,\ldots,Y_m\) are i.i.d. with common mean \[
+\theta \;=\; \mathbb{E}\big[g(X)\big] \;=\; \mathbb{E}[Y].
+\]
+
+The MC estimator of \(\theta\) is the sample mean \[
+\hat{\theta}\;=\; \bar Y \;=\; \frac{1}{m}\sum_{j=1}^m Y_j.
+\] By linearity of expectation, \[
+\mathbb{E}[\hat{\theta}] \;=\; \theta,
+\] so \(\hat{\theta}\) is unbiased. Its variance is \[
+\mathbb{V}ar(\hat{\theta})
+  \;=\; \mathbb{V}ar(\bar Y)
+  \;=\; \frac{\mathbb{V}ar\{g(X)\}}{m}.
+\]
+
+Hence the standard error decays as \(m^{-1/2}\). To reduce the standard
+error from \(0.01\) to \(0.0001\), one would need about \(10000\) times
+as many replicates. More generally, if \(\mathbb{V}ar\{g(X)\}=\sigma^2\)
+and we target standard error at most \(\varepsilon\), then \[
+m \;\ge\; \frac{\sigma^2}{\varepsilon^2}
+\] replicates suffice (ignoring finite--\(m\) effects).
+
+The remainder of this note gives a minimal simulation illustrating the
+\(1/\sqrt{m}\) behavior and provides a template for later
+variance--reduction sections (e.g., control variates, antithetic
+sampling, importance sampling).
+
+\section{A minimal R simulation}\label{a-minimal-r-simulation}
+
+We will estimate \(\theta=\mathbb{E}[g(X)]\) with
+\(X\sim\mathcal N(0,1)\) and \(g(x)=x^2\). Here, \(\theta=1\) and
+\(\mathbb{V}ar(g(X))=\mathbb{V}ar(X^2)=2\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) x}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{sigma2\_true }\OtherTok{\textless{}{-}} \DecValTok{2}
+
+\NormalTok{mc\_once }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(m) \{}
+  \CommentTok{\# one replicate of the MC mean based on m i.i.d. Y\_j = g(X\^{}\{(j)\}\_1)}
+  \CommentTok{\# (for simplicity, treat each "replicate sample" as size n=1)}
+\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(m)}
+  \FunctionTok{mean}\NormalTok{(}\FunctionTok{g}\NormalTok{(x))}
+\NormalTok{\}}
+
+\NormalTok{Mgrid }\OtherTok{\textless{}{-}} \FunctionTok{as.integer}\NormalTok{(}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{9}\NormalTok{)) }\CommentTok{\# m from 10 to 1e5 on a log grid}
+\NormalTok{R }\OtherTok{\textless{}{-}} \DecValTok{200}                                         \CommentTok{\# repetitions to estimate Monte Carlo variance}
+
+\NormalTok{mc\_means }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(Mgrid, }\ControlFlowTok{function}\NormalTok{(m) }\FunctionTok{replicate}\NormalTok{(R, }\FunctionTok{mc\_once}\NormalTok{(m)))}
+\NormalTok{est\_var }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(mc\_means, }\DecValTok{2}\NormalTok{, var)                }\CommentTok{\# empirical Var(\textbackslash{}hat theta)}
+\NormalTok{theo\_var }\OtherTok{\textless{}{-}}\NormalTok{ sigma2\_true }\SpecialCharTok{/}\NormalTok{ Mgrid                   }\CommentTok{\# Var(g(X))/m}
+
+\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{m =}\NormalTok{ Mgrid, }\AttributeTok{empirical\_var =}\NormalTok{ est\_var, }\AttributeTok{theory\_var =}\NormalTok{ theo\_var)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       m empirical_var   theory_var
+1     10  2.098209e-01 2.000000e-01
+2     31  5.724218e-02 6.451613e-02
+3    100  1.871232e-02 2.000000e-02
+4    316  6.104544e-03 6.329114e-03
+5   1000  2.074915e-03 2.000000e-03
+6   3162  5.839596e-04 6.325111e-04
+7  10000  1.727469e-04 2.000000e-04
+8  31622  6.476536e-05 6.324711e-05
+9 100000  2.415821e-05 2.000000e-05
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(Mgrid, est\_var, }\AttributeTok{log =} \StringTok{"xy"}\NormalTok{, }\AttributeTok{type =} \StringTok{"b"}\NormalTok{,}
+     \AttributeTok{xlab =} \StringTok{"m (number of replicates, log scale)"}\NormalTok{,}
+     \AttributeTok{ylab =} \StringTok{"Var(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{u005Chat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{u03B8\}) (log scale)"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(Mgrid, theo\_var, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}
+       \AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Empirical"}\NormalTok{, }\StringTok{"Theory: Var(g(X))/m"}\NormalTok{),}
+       \AttributeTok{lwd =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{pch =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\ConstantTok{NA}\NormalTok{), }\AttributeTok{bty =} \StringTok{"n"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{04-monte-carlo_files/figure-pdf/unnamed-chunk-2-1.pdf}}
+
+}
+
+\caption{Empirical vs.~theoretical Var(\hat{\theta}) for g(X)=X\^{}2
+with X\textasciitilde N(0,1).}
+
+\end{figure}%
+
+\section{Rule-of-thumb for target standard
+error}\label{rule-of-thumb-for-target-standard-error}
+
+Given a target standard error \(\varepsilon\), we can solve
+\$\sqrt{\sigma^2/m} \le \varepsilon \$ for \(m\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{epsilon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.01}\NormalTok{, }\FloatTok{0.005}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
+\NormalTok{required\_m }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(sigma2\_true }\SpecialCharTok{/}\NormalTok{ (epsilon}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{se\_target =}\NormalTok{ epsilon, }\AttributeTok{m\_needed =}\NormalTok{ required\_m)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  se_target m_needed
+1     0.100    2e+02
+2     0.050    8e+02
+3     0.010    2e+04
+4     0.005    8e+04
+5     0.001    2e+06
+\end{verbatim}
+
+\begin{quote}
+\textbf{Remark.} Increasing \(m\) always reduces variance but can be
+costly. Variance--reduction techniques seek lower variance at the
+\emph{same} \(m\) (or similar compute), rather than increasing \(m\)
+alone.
+\end{quote}
+
+\section{Antithetic Variables}\label{antithetic-variables}
+
+Antithetic variables are a variance reduction technique used in MC
+simulation to improve the efficiency of estimators. The basic idea is to
+use pairs of negatively correlated random variables to reduce the
+variance of the estimator. Recall that the variance of two variables are
+\[
+\mathbb{V}ar(X+Y) = \mathbb{V}ar(X) + \mathbb{V}ar(Y) + 2\mathbb{C}ov(X,Y),
+\] where
+\(\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}X \mathbb{E}Y\). The
+covariance can be written as
+\(\mathbb{C}ov(X,Y) = rho_{YX} \sigma_X \sigma_Y\), where \(\rho_{YX}\)
+is the correlation coefficient between \(X\) and \(Y\). If \(X\) and
+\(Y\) are negatively correlated, i.e., \(\rho_{YX} < 0\), then
+\(\mathbb{C}ov(X,Y) < 0\), which can lead to a reduction in the variance
+of the sum \(X + Y\).
+
+Random Variables \(X\) and \(Y\) on the same probability space are said
+to be \emph{antithetic} if they are negatively correlated, i.e.,
+\(\mathbb{C}ov(X,Y) < 0\).
+
+Now, consier two random variable \(U_1\) and \(U_2\) that follows the
+same distribution. Then, if we take the average of the two random
+variables, we have \[
+\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left(\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right),
+\] which will be smaller than when the two variables are independent (in
+that case, the last term is 0). Hence, the idea here it to consider the
+case where the RVs are \textbf{negatively correlated.}
+
+Suppose that \(X_1, \dots , X_n\) are simulated via the ITM. For each of
+the m replicates we have generated \(U_j \sim\operatorname{Unif}(0,1)\),
+and the corresponding \(X^{(j)} = F^{−1}_X(U_j), j = 1, \dots, n\). From
+before, we know that if \(U\sim\operatorname{Unif}(0,1)\), then
+\(1 − U\) has the same distribution as \(U\), but \(U\) and \(1 − U\)
+are negatively correlated. Then
+
+\[ Y_j = g(F^{−1}_X(U^{(j)}_1 ), \dots , F^{−1}_X(U_n^{(j)})),\] and
+
+\[ Y_j^\prime = g(F^{−1}_X(1-U^{(j)}_1 ), . . . , F^{−1}_X(1-U_n^{(j)}))\]
+have the same distribution. So the question now if, when will
+\(Y_j^{\prime}\) and \(Y_j\) be negatively correlated?
+
+We will see that if \(g(\cdot)\) is monotone, then \(Y_j\) and
+\(Y_j^{\prime}\) are negatively correlated.
+
+Define \((x_1, . . . , x_n) \le (y_1, \dots , y_n)\) if
+\(x_j ≤ y_j, j = 1, \dots, n\). An \(n\)-variate function
+\(g := g(X_1, \dots, X_n)\) is increasing if it is increasing in its
+coordinates. That is, \(g\) is increasing if
+\(g(x_1,\dots, x_n) \le g(y_1, \dots, y_n)\) whenever
+\((x_1, \dots , x_n) \le (y_1, . . . , y_n)\). Similarly \(g\) is
+decreasing if it is decreasing in its coordinates. Then \(g\) is
+monotone if it is increasing or decreasing.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Reference used:
+
+\begin{itemize}
+\item
+  Chapter 6 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
+  CRC Press, Roca Baton.
+\item
+  Monte Carlo Method page on Wikiepdia,
+  \href{https://en.wikipedia.org/wiki/Monte_Carlo_method}{Link}.
 \end{itemize}
 
 \bookmarksetup{startatroot}
@@ -4016,7 +4744,7 @@ f(x) = \frac{1}{x_n-x_1+1},\quad \text{for}\quad x=x_1,\dots,x_n.
 \]
 
 The mean and variance of the discrete uniform distribution are \[
-\mathbb EX = \frac{x_1+x_n}{2},\quad \text{and}\quad \mathbb{V}ar(X) = \frac{(x_n-x_1+1)^2 -1}{12}.\]
+\mathbb{E}X = \frac{x_1+x_n}{2},\quad \text{and}\quad \mathbb{V}ar(X) = \frac{(x_n-x_1+1)^2 -1}{12}.\]
 
 \subsubsection{Implementation in R}\label{implementation-in-r}
 
@@ -4117,7 +4845,7 @@ certain population of known size, etc. The parameters \(n\) and
 \(\theta\) must be given.
 
 The mean and variance of the Binomial Distribution \[
-\mathbb EX = n\theta,\quad \text{and}\quad \mathbb{V}ar(X) = n\theta(1-\theta).\]
+\mathbb{E}X = n\theta,\quad \text{and}\quad \mathbb{V}ar(X) = n\theta(1-\theta).\]
 
 \subsubsection{Implementation in R}\label{implementation-in-r-2}
 
@@ -4231,7 +4959,7 @@ modeled by the Hypergeometric Distribution, which has pdf:
 
 \[h(x,n,M,N) = \frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}, \quad x = 0,1,2,\ldots,n\]
 
-The mean and the variance are \[\mathbb EX = \frac{nM}{N}, \qquad
+The mean and the variance are \[\mathbb{E}X = \frac{nM}{N}, \qquad
 \mathbb{V}ar(X) = \frac{nM(N-M)(N-n)}{N^2(N-1)}.\]
 
 \subsubsection{Implementation in R}\label{implementation-in-r-3}
@@ -4390,7 +5118,7 @@ probability distribution is given by:
 
 The mean and variance of the Poisson distribution are
 
-\[\mathbb EX = \lambda, \qquad \mathbb{V}ar(X) = \lambda\]
+\[\mathbb{E}X = \lambda, \qquad \mathbb{V}ar(X) = \lambda\]
 
 The Poisson distribution is derived as the limiting case of the Binomial
 (with the above mentioned restrictions) BUT there are many more
@@ -4430,7 +5158,7 @@ f_X(x) =
 \]
 
 The mean and variance of the Uniform Distribution are
-\[\mathbb EX = \frac{\alpha + \operatorname{Beta}}{2},
+\[\mathbb{E}X = \frac{\alpha + \operatorname{Beta}}{2},
 \qquad
 \mathbb{V}ar(X) = \frac{(\operatorname{Beta}- \alpha)^2}{12}.
 \]
@@ -4484,7 +5212,7 @@ the distribution. \(\alpha\) is called the shape parameter and
 \(\operatorname{Beta}\) is called the scale parameter.
 
 Theorem: The mean and variance of the Gamma Distribution are
-\[\mathbb EX = \alpha \operatorname{Beta},
+\[\mathbb{E}X = \alpha \operatorname{Beta},
 \qquad
 \mathbb{V}ar(X) = \alpha \operatorname{Beta}^2\]
 
@@ -4528,7 +5256,7 @@ P(X > s + t \mid X > t) = P(X > s).
 \]
 
 The mean and variance of the exponential distribution are
-\[\mathbb EX = \theta,
+\[\mathbb{E}X = \theta,
 \qquad
 \mathbb{V}ar(X) = \theta^2.\]
 
@@ -4573,7 +5301,7 @@ only if its probability density is given by \[f_X(x) =
 
 The mean and variance of the Chi-Square Distribution are
 
-\[\mathbb EX = \nu,
+\[\mathbb{E}X = \nu,
 \qquad
 \mathbb{V}ar(X) = 2\nu.\]
 
@@ -4624,7 +5352,7 @@ x^{\alpha-1}(1-x)^{\operatorname{Beta}-1}, & 0 < x < 1, \\[2ex]
 \end{cases}\] where \(\alpha > 0\), \(\operatorname{Beta}> 0\).
 
 The mean and variance of the Beta Distribution are
-\[\mathbb EX = \frac{\alpha}{\alpha + \operatorname{Beta}},
+\[\mathbb{E}X = \frac{\alpha}{\alpha + \operatorname{Beta}},
 \qquad
 \mathbb{V}ar(X) = \frac{\alpha \operatorname{Beta}}{(\alpha + \operatorname{Beta})^2 (\alpha + \operatorname{Beta}+ 1)}.
 \]
@@ -4795,7 +5523,7 @@ f_X(x) =
 \]
 
 Note: The Standard Normal Distribution has density with
-\(\mathbb EX = 0\) and \(\mathbb{V}ar(X) = 1\).
+\(\mathbb{E}X = 0\) and \(\mathbb{V}ar(X) = 1\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4962,6 +5690,23 @@ Example:
 Special thanks to
 Dr.~\href{https://cas.gsu.edu/profile/brian-pidgeon/}{Brian Pidgeon} who
 kindly share the notes.
+
+\chapter{Appendix: R Package}\label{appendix-r-package}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Resources
+
+\begin{itemize}
+\item
+  \href{https://cran.r-project.org/web/packages/distributions/index.html}{CRAN
+  page}
+\item
+  Wickham, H. and Bryan, J. \href{https://r-pkgs.org/}{R Package}.
+\end{itemize}
 
 
 

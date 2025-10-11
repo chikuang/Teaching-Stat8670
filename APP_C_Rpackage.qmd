@@ -1,0 +1,12 @@
+# Appendix: R Package
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
+
+------------------------------------------------------------
+
+Resources
+
+- [CRAN page](https://cran.r-project.org/web/packages/distributions/index.html)
+
+- Wickham, H. and Bryan, J. [R Package](https://r-pkgs.org/).

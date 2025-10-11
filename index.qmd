@@ -34,7 +34,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Midterm
 
--   [ ] Midterm 1 on October 8, 2025
+-   [x] Midterm 1 on October 8, 2025
 -   [ ] Midterm 2 on November 12, 2025
 
 ## Final Project

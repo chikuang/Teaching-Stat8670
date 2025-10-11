@@ -19,6 +19,7 @@ book:
       chapters:
         - App_A-intro-R.qmd
         - App_B-distribution.qmd
+        - App_C_Rpackage.qmd
   navbar:
     right:
       - icon: github
