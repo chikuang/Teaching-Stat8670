@@ -483,6 +483,21 @@ are **negatively correlated**.
 
 Control variates is another variance reduction technique used in MC simulation to improve the efficiency of estimators. The basic idea is to use a known variable that is correlated with the variable of interest to reduce the variance of the estimator.
 
+Suppose there exists a function $f(\cdot)$ such that $\mu=\E[f(X)]$ is known, and $f(X)$ is correlated with $g(X)$. Then, we have, for a constant $c\in\R$, $\htt_c = g(X) + c(f(X) - \mu)$ is also an unbiased estimator of $\theta$. The variance of $\htt_c$ is 
+$$
+\var(\htt_c) = \var\{g(X)\} + c^2\var\{f(X)\} + 2c\cov\{g(X), f(X)\}.
+$$
+This is a quadratic function in $c$, and it is minimized at
+$$
+c^*=-\frac{\cov\{g(X), f(X))\}}{\var\{f(X)\}}.
+$$
+By plugging in this optimizer $c=c^\ast$, the resulting variance is 
+$$
+\var(\htt_{c^\ast}) = \var\{g(X)\} - \frac{[\cov\{g(X), f(X)\}]^2}{\var\{f(X)\}}.
+$$
+This RV $f(X)$ is called a *control variate* for the estimator of $g(X)$.
+
+
 ------------------------------------------------------------------------
 
 Reference used:
