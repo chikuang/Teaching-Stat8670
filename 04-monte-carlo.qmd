@@ -273,19 +273,25 @@ The **“hit-or-miss”** approach to MC integration also uses a *sample mean* t
 
 Suppose $f(x)$ is the density of a random variable $X$. The “hit-or-miss” approach to estimating $F(x) = \int_{-\infty}^x f(t)\,dt$ is as follows:
 
-::: {.callout-algorithm title = "Hit-or-Miss Estimator of CDF"} 1. Generate a random sample $X_1,\dots,X_m \sim F_X(x)$.
+::: {.callout-algorithm title="Hit-or-Miss Estimator of CDF"} 
 
-2.  For each observation $X_i$, compute $$
-    g(X_i) = I(X_i \leq x) =
-    \begin{cases}
-    1, & X_i \leq x, \\
-    0, & X_i > x.
-    \end{cases}
-    $$
+1. Generate a random sample $X_1,\dots,X_m \sim F_X(x)$.
 
-3.  Compute $$
-    \hat{F}(x) = \frac{1}{m} \sum_{i=1}^m I(X_i \leq x).
-    $$ :::
+2.  For each observation $X_i$, compute 
+$$
+g(X_i) = I(X_i \leq x) =
+\begin{cases}
+1, & X_i \leq x, \\
+0, & X_i > x.
+\end{cases}
+$$
+
+3.  Compute 
+$$
+\hat{F}(x) = \frac{1}{m} \sum_{i=1}^m I(X_i \leq x).
+$$ 
+
+:::
 
 Note that the random variable $Y = g(X) \sim \text{Bern}(1, p)$, where the success probability is\
 $$
@@ -329,6 +335,7 @@ We have seen that MC integration may be used to estimate $\theta:=\mathbb{E}[g(X
 Let $\hat{\theta}_1$ and $\hat{\theta}_2$ be two estimators of $\theta$ where $\mathbb{V}ar(\hat{\theta}_1) > \mathbb{V}ar(\hat{\theta}_2)$. The *relative efficiency gain* of $\hat{\theta_2}$ instead of using $\hat{\theta_1}$ is defined as $$
 \operatorname{Eff}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\mathbb{V}ar(\hat{\theta}_1)- \mathbb{V}ar(\hat{\theta}_2)}{\mathbb{V}ar(\hat{\theta}_1)}.
 $$
+
 :::
 
 Let $X$ be a random object and let $g(\cdot)$ be a (possibly vector–valued) statistic of a *sample* from the distribution of $X$. For $j=1,\ldots,m$, draw an i.i.d. replicate sample $X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}$ and compute $$
@@ -537,6 +544,9 @@ There are other variance reduction techniques, including
 
 -   Stratified Importance Sampling
 
+
+Due to the limited amount of time we have, we will not go over those methods here. Interested readers may refer to the references below.
+
 ------------------------------------------------------------------------
 
 Reference used:
@@ -544,3 +554,5 @@ Reference used:
 -   Chapter 6 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
 
 -   Monte Carlo Method page on Wikiepdia, [Link](https://en.wikipedia.org/wiki/Monte_Carlo_method).
+
+- Wasserman, L. (2003). [*All of Statistics: A Concise Course in Statistical Inference*](https://egrcc.github.io/docs/math/all-of-statistics.pdf).
