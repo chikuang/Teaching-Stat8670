@@ -11,6 +11,7 @@
 \newcommand{\cov}{\mathbb{C}ov}
 \newcommand{\eff}{\operatorname{Eff}}
 \newcommand{\htt}{\hat{\theta}}
+\newcommand{\corr}{\mathbb{C}orr}
 
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
 pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble)
@@ -445,6 +446,78 @@ $$ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))$$
 are **negatively correlated**.
 :::
 
+::: {.callout-example title="Antithetic Variables Example"}
+Refer to the example 4, illustrating MC integration applied to estimate the standard normal cdf
+
+$$
+\Phi(x)=\int_{-\infty}^x \frac{1}{\sqrt{2 \pi}} e^{-t^2 / 2} d t
+$$
+
+Repeat the estimation using antithetic variables, and find the approximate reduction in standard error. In this example, after change of variable, the target parameter is $\theta = \E_U[x\exp\{-(xU)^2/2\}]$ where $U\sim\unif(0,1)$.
+
+By restricting the simualtion to the upper tail, the function $g$ is monotone, so the hypothesis of Theorem 2 is satisfied. Now, we generate $u_1,\dots,u_{m/2}\iid \unif(0,1)$, and compute the half of the replicates using
+$$
+Y_j=g^{(j)}(u)=x e^{-\left(u_j x\right)^2 / 2}, \quad j=1, \ldots, m / 2,
+$$
+as before, but also compute 
+$$
+Y_j^{\prime}=x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}, \quad j=1, \ldots, m / 2 .
+$$
+
+Thus, the sample mean is 
+$$
+\begin{aligned}
+\htt=\overline{g_m(u)} & =\frac{1}{m} \sum_{j=1}^{m / 2}\left(x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}\right) \\
+& =\frac{1}{m / 2} \sum_{j=1}^{m / 2}\left(\frac{x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}}{2}\right)\\
+& \to \E[\htt] = \theta, \quad \text{as } m\to\infty.
+\end{aligned}
+$$
+If $x\ge 0$, the estimate is $\Phi(x) = 0.5 + \htt / \sqrt{2\pi}$, where as if $x< 0$, the estimate is $\Phi(x) = 1-\Phi(-x)$.
+
+``` {r example}
+MC.Phi <- function(x, R = 10000, antithetic = TRUE) {
+  u <- runif(R / 2)
+  if (!antithetic) {
+    v <- runif(R / 2)
+  } else {
+    v <- 1 - u
+  }
+  u <- c(u, v)
+  cdf <- numeric(length(x))
+  for (i in 1:length(x)) {
+    g <- x[i] * exp(-(u * x[i])^2 / 2)
+    cdf[i] <- mean(g) / sqrt(2 * pi) + 0.5
+  }
+  cdf
+}
+
+x <- seq(.1, 2.5, length=5)
+Phi <- pnorm(x)
+set.seed(123)
+MC_raw <- MC.Phi(x, anti = FALSE)
+set.seed(123)
+MC_anti <- MC.Phi(x)
+print(round(rbind(x, MC_raw, MC_anti, Phi), 5))
+
+## For variance
+m <- 1000
+MC_raw <- MC_anti <- numeric(m)
+x <- 1.95
+for (i in 1:m) {
+  MC_raw[i] <- MC.Phi(x, R = 1000, anti = FALSE)
+  MC_anti[i] <- MC.Phi(x, R = 1000)
+}
+sd(MC_raw) |> round(6) 
+sd(MC_anti) |> round(6)
+eff <- (var(MC_raw) - var(MC_anti))/var(MC_raw) 
+eff |> round(6)
+```
+
+Conclusion:  The antithetic variable approach achieved approximately `r round(eff, 4)` reduction in
+variance at x = `r x`. 
+
+:::
+
 
 ## Control Variates
 
@@ -462,8 +535,66 @@ By plugging in this optimizer $c=c^\ast$, the resulting variance is
 $$
 \var(\htt_{c^\ast}) = \var\{g(X)\} - \frac{[\cov\{g(X), f(X)\}]^2}{\var\{f(X)\}}.
 $$
-This RV $f(X)$ is called a *control variate* for the estimator of $g(X)$.
+This RV $f(X)$ is called a *control variate* for the estimator of $g(X)$. We can see that the $\var\{g(X)\}$ is reduced by the second term $[\cov\{g(X), f(X)\}]^2/\var\{f(X)\}$, and the percentage of variance reduction is 
+$$
+100 \frac{[\cov(g(X), f(X))]^2}{\var(g(X)) \var(f(X))}=100[\corr(g(X), f(X))]^2 .
+$$
+Thus, if $g(X)$ and $f(X)$ is strongly correlated, the variance will be reduced, and if they are uncorrelated, there is no reduction in variance.
 
+TO estimate $c^*$, we need to estimate $\cov\{g(X),f(X)\}$ and $\var\{f(X)\}$, which may be estimated using MC too, in the preliminary steps.
+
+::: {.callout-example title="Control Variates Example"}
+Use control variate approach to compute 
+$$
+\theta = \E[\exp(U)] =\int_0^1\exp(u)du,\quad \text{where } U\sim\unif(0,1).
+$$
+We can easily find the analytical solution $\theta=\exp(1) - \exp(0) = e - 1 = 1.718282$, but how to use the control variate approach to estimate $\theta$?
+
+We can apply the simple MC approach where the variance is $\var\{g(U)\}/m$, where 
+$$
+\var(g(U))=\var\left(e^U\right)=\E\left[e^{2 U}\right]-\theta^2=\frac{e^2-1}{2}-(e-1)^2 \approx 0.2420
+$$
+
+As for control variate, a natural choice is $U\sim\unif(0,1)$. Then the mean is $\mu=\E[U]=1/2$, variance is $\var(U) = 1/12$ and the covariance is $\cov(e^U, U)= \E[Ue^U]-\E[U]\E[\exp(U)]= 1-(e-1)/2 \approx 0.1409$. Thus, the optimal $c^* = -\cov(e^U,U)/\var(U) =-12+6(e-1)^2 \approx -1.6903$.
+
+Then, the controlled estimator is $\htt_{c^\ast}=\exp(U)-1.6903(U-0.5)$. With $m$ replications, we have 
+$$
+\begin{aligned}
+m\var(\htt_{c^\ast})
+&=\operatorname{Var}\left(e^U\right)-\frac{\left[\operatorname{Cov}\left(e^U, U\right)\right]^2}{\operatorname{Var}(U)} \\ &=\frac{e^2-1}{2}-(e-1)^2-12\left(1-\frac{e-1}{2}\right) \\
+& \doteq 0.2420356-12(0.1408591)^2 \\
+& =0.003940175 .
+\end{aligned}
+$$
+
+Thus, the reduction in variance using the control variate compared with the
+simple Monte Carlo estimate is $$100 \frac{1-0.003940175}{0.2429355} = 98.3781 \%$$.
+
+``` {r example-cv}
+set.seed(777)
+m <- 10000
+a <- - 12 + 6 * (exp(1) - 1)
+U <- runif(m)
+T1_MC <- exp(U) #simple MC
+T2_cv <- exp(U) + a * (U - 1/2) #controlled
+mean(T1_MC) |> round(6)
+mean(T2_cv) |> round(6)
+
+eff <- (var(T1_MC) - var(T2_cv)) / var(T1_MC)
+eff |> round(4)
+```
+This show that the reduction is `r eff |> round(4)`% in variance using the control variate approach, which is the same as our analysis above
+:::
+
+## Other methods
+
+There are other variance reduction techniques, including
+
+* Importance Sampling
+
+* Stratified Sampling
+
+* Stratified Importance Sampling
 
 ------------------------------------------------------------------------
 

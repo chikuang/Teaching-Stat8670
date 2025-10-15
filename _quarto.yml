@@ -11,8 +11,8 @@ book:
     - 02-optimization.qmd
     - 03-generating-rv.qmd
     - 04-monte-carlo.qmd
-    - 05-integration.qmd
-    - 06-resample.qmd
+    - 05-resample.qmd
+    - 06-cv.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
@@ -20,6 +20,7 @@ book:
         - App_A-intro-R.qmd
         - App_B-distribution.qmd
         - App_C_Rpackage.qmd
+        - APP_D_integration.qmd
   navbar:
     right:
       - icon: github

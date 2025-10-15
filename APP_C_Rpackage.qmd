@@ -1,12 +1,29 @@
-# Appendix: R Package
+# Appendix: Project & R Package
 
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\var}{\mathbb{V}ar}
+## Pairs
 
-------------------------------------------------------------
+| Group | Member 1         | Member 2        |
+|--------|--------------------------------|--------------------------------|
+| 1      | Akomanyi-Addo, Allswell       | Sarpong, Felix               |
+| 2      | Zhang, Zilong                  |                    |
+| 3      | Stell, Tommy                  |                    |
+| 4      | Vu, Ha                 |         |      
+
+
+
+## Good readings
+
+Another good [reference]([https://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html]) in writing a Rpackage written by *Fong Chun Chan*.
+
+* An article by Posit (formerly Rstudio) [LINK](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html)
+
+* Another one by the MIT folks [LINK](https://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf)
+
+
+------------------------------------------------------------------------
 
 Resources
 
-- [CRAN page](https://cran.r-project.org/web/packages/distributions/index.html)
+-   [CRAN page](https://cran.r-project.org/web/packages/distributions/index.html)
 
-- Wickham, H. and Bryan, J. [R Package](https://r-pkgs.org/).
+-   Wickham, H. and Bryan, J. [R Package](https://r-pkgs.org/).

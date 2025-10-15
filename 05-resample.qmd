@@ -1,0 +1,40 @@
+# Resampling, Jackknife and Bootstrap
+
+## Introduction
+
+This chapter covers resampling methods including the jackknife and bootstrap techniques.
+
+## Jackknife
+
+The jackknife is a resampling technique used to estimate the bias and variance of a statistic.
+
+Jackknife is like a **leave-one-out cross-validation**. Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
+
+For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\hat{\theta}$ is computed on the full
+
+### When does jackknife not work?
+
+Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
+
+## Bootstrap
+
+The bootstrap is a resampling method that allows estimation of the sampling distribution of almost any statistic using random sampling methods.
+
+## Applications
+
+These methods are widely used in statistical inference and have applications in various fields.
+
+## Bootstrap
+
+The term “bootstrap” can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
+
+To generate a bootstrap random sample by resampling x, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.
+
+1.  For each bootstrap replicate, indexed b = 1, . . . , B:
+    (a) Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.
+    (b) Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
+2.  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).
+
+## Jackknife
+
+------------------------------------------------------------------------
