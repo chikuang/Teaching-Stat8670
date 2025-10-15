@@ -205,16 +205,14 @@ Summarizing, if $f (x)$ is a probability density function supported on a set A, 
 
 The standard error of $\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)$.
 
-Recall that, $\var({\hat{\theta}})=\sigma^2/m$ where $\sigma^2 = \var\{g(X)\}$. When the distribution of $X$ is unknown, we substitute for $F_X$ the empirical distribution $F_m$ of the sample $x_1, \dots , x_m$. The variance of $\hat{\theta}$ can be estimated by $$
+Recall that, $\mathbb{V}ar({\hat{\theta}})=\sigma^2/m$ where $\sigma^2 = \mathbb{V}ar\{g(X)\}$. When the distribution of $X$ is unknown, we substitute for $F_X$ the empirical distribution $F_m$ of the sample $x_1, \dots , x_m$. The variance of $\hat{\theta}$ can be estimated by $$
 \frac{\hat{\sigma}^2}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
 $$
 
 Note that $$\frac{1}{m}\sum_{i=1}^m[g(x_i)-\bar{g}(x_i)]^2,$$ is the *plug-in estimate* of $\mathbb{V}ar\{g(X)\}$. That is, it is the variance of $U$ , where $U$ is uniformly distributed on the set of replicates $\{g(x_i)\}$. The corresponding estimated standard error of $\hat{\theta}$ is $$
 \widehat{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}} = \frac{1}{m}\left\{\sum_{i=1}^m [ g(x_i)- \bar{g}(x)]^2\right\}^{1/2}.
-$$ 
-The CLT implies 
-$$
-\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\var (\hat{\theta})}} \overset{D}{\to} N(0,1),
+$$ The CLT implies $$
+\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\mathbb{V}ar(\hat{\theta})}} \overset{D}{\to} N(0,1),
 $$ as $m\to\infty$. Hence, if $m$ is sufficiently large, $\hat{\theta}$ is approximately normal with mean $\theta$. The large-sample, approximately normal distribution of $\hat{\theta}$ can be applied to put confidence limits or error bounds on the MC estimate of the integral, and check for convergence
 
 ::: {.callout-example title = "Error bound of MC integration"}
@@ -237,8 +235,7 @@ The interpretation is:
 
 the probability $P (I(Z < x) = 1)$ is $\Phi(2)\approx 0.977$. Here $g(X)$ has the distribution of the sample proportion of 1’s in $m = 10000$ Bernoulli trials with $p\approx 0.977$, and the variance of $g(X)$ is therefore $(0.977)(1 − 0.977)/10000 =2.223 \times 10^{-6}$. The MC estimate $2.228\times 10^{-6}$ of variance is quite close to this value.
 
-Q: What about $\Phi(2.5)$? 
-:::
+Q: What about $\Phi(2.5)$? :::
 
 ## Variance and Efficiency
 
@@ -257,19 +254,16 @@ Recall that, from *Algorithm 2*, the sample-mean MC estimator of the integral $\
 
 3.  $\hat{\theta} = (b − a)\bar{g}(X)$.
 
-The sample mean $\bar{g}(X)$ has expected value $g(X)=\theta/(b-a)$ and variance $\mathbb{V}ar\{\bar{g}(X)\}=\mathbb{V}ar\{g(X)\}/m$. By CLT, $\bar{g}(X)$ is approximately normal for large $m$. Therefore, the variance of the MC estimator $\hat{\theta}$ is approximately normal with mean $\theta$ and variance $\mathbb{V}ar\{g(X)\}/m$. 
+The sample mean $\bar{g}(X)$ has expected value $g(X)=\theta/(b-a)$ and variance $\mathbb{V}ar\{\bar{g}(X)\}=\mathbb{V}ar\{g(X)\}/m$. By CLT, $\bar{g}(X)$ is approximately normal for large $m$. Therefore, the variance of the MC estimator $\hat{\theta}$ is approximately normal with mean $\theta$ and variance $\mathbb{V}ar\{g(X)\}/m$.
 
 ::: {.callout-note title="Expectation, Variance and Distribution of theta hat"}
-The expectation and the variance of the MC estimator $\htt$ are given by
-\begin{align*}
-\E[\htt] & = \theta, \\
-\var(\htt) &= (b-a)^2 \var(\overline{g}(X))=\frac{(b-a)^2}{m} \var\{g(X)\} .
-\end{align*}
-Further more, by CLT, for large $m$, $\overline{g}(X)$ is approximately normally distributed, and with the mean and variance given above.
+The expectation and the variance of the MC estimator $\hat{\theta}$ are given by \begin{align*}
+\mathbb{E}[\hat{\theta}] & = \theta, \\
+\mathbb{V}ar(\hat{\theta}) &= (b-a)^2 \mathbb{V}ar(\overline{g}(X))=\frac{(b-a)^2}{m} \mathbb{V}ar\{g(X)\} .
+\end{align*} Further more, by CLT, for large $m$, $\overline{g}(X)$ is approximately normally distributed, and with the mean and variance given above.
 :::
 
-
-### Hit-or-Miss Approach 
+### Hit-or-Miss Approach
 
 The **“hit-or-miss”** approach to MC integration also uses a *sample mean* to estimate the integral, but the sample mean is taken over a *different sample* and **therefore this estimator has a different variance than the one we have above**.
 
@@ -277,8 +271,7 @@ The **“hit-or-miss”** approach to MC integration also uses a *sample mean* t
 
 Suppose $f(x)$ is the density of a random variable $X$. The “hit-or-miss” approach to estimating $F(x) = \int_{-\infty}^x f(t)\,dt$ is as follows:
 
-::: {.callout-algorithm title = "Hit-or-Miss Estimator of CDF"}
-1.  Generate a random sample $X_1,\dots,X_m \sim F_X(x)$.
+::: {.callout-algorithm title = "Hit-or-Miss Estimator of CDF"} 1. Generate a random sample $X_1,\dots,X_m \sim F_X(x)$.
 
 2.  For each observation $X_i$, compute $$
     g(X_i) = I(X_i \leq x) =
@@ -288,11 +281,9 @@ Suppose $f(x)$ is the density of a random variable $X$. The “hit-or-miss” ap
     \end{cases}
     $$
 
-3.  Compute
-    $$
+3.  Compute $$
     \hat{F}(x) = \frac{1}{m} \sum_{i=1}^m I(X_i \leq x).
-    $$
-:::
+    $$ :::
 
 Note that the random variable $Y = g(X) \sim \text{Bern}(1, p)$, where the success probability is\
 $$
@@ -301,8 +292,7 @@ $$
 
 The transformed sample $Y_1, \ldots, Y_m$ are the outcomes of \$ m\$ independent, identically distributed Bernoulli trials.
 
-The estimator $\hat{F}(x)$ is the sample proportion
-$$
+The estimator $\hat{F}(x)$ is the sample proportion $$
 \hat{p} = \frac{y}{m},
 $$
 
@@ -323,7 +313,7 @@ $$
 
 ### Efficiency
 
-Suppose we have two (unbiased) estimators $\hat{\theta}_1$ and $\hat{\theta}_2$ for θ. We say $\hat{\theta}_1$ is *statistically* more efficient than $\hat{\theta}_2$ if $$\var(\hat{\theta}_1) < \var(\hat{\theta}_2).$$ What is the variance of $\hat{\theta}_i$ is unknown or hard to be calculated?
+Suppose we have two (unbiased) estimators $\hat{\theta}_1$ and $\hat{\theta}_2$ for θ. We say $\hat{\theta}_1$ is *statistically* more efficient than $\hat{\theta}_2$ if $$\mathbb{V}ar(\hat{\theta}_1) < \mathbb{V}ar(\hat{\theta}_2).$$ What is the variance of $\hat{\theta}_i$ is unknown or hard to be calculated?
 
 can substitute it by sample estimate of the variance for each estimator.
 
@@ -331,59 +321,42 @@ Note, the variance can *always be reduced by increasing the number of replicates
 
 ## Variance Reduction
 
-We have seen that MC integration may be used to estimate $\theta:=\E[g(X)]$. However, how to have the *efficient estimator * for $\theta$, and if we have a several ways $\hat{\theta}_1,\dots,\hat{\theta}_k$ to estimate $\theta$, which one is *better*, or, more efficient? Here, we try to introduce some variance reduction techniques.
+We have seen that MC integration may be used to estimate $\theta:=\mathbb{E}[g(X)]$. However, how to have the *efficient estimator* for $\theta$, and if we have a several ways $\hat{\theta}_1,\dots,\hat{\theta}_k$ to estimate $\theta$, which one is *better*, or, more efficient? Here, we try to introduce some variance reduction techniques.
 
 ::: {.callout-definition title="Relative Efficency Gain"}
-Let $\hat{\theta}_1$ and $\hat{\theta}_2$ be two estimators of $\theta$ where $\var(\hat{\theta}_1) > \var(\hat{\theta}_2)$. The *relative efficiency gain * of $\hat{\theta_2}$ instead of using $\hat{\theta_1}$ is defined as
-$$
-\eff(\hat{\theta}_1, \hat{\theta}_2) = \frac{\var(\hat{\theta}_1)- \var(\hat{\theta}_2)}{\var(\hat{\theta}_1)}.
+Let $\hat{\theta}_1$ and $\hat{\theta}_2$ be two estimators of $\theta$ where $\mathbb{V}ar(\hat{\theta}_1) > \mathbb{V}ar(\hat{\theta}_2)$. The *relative efficiency gain* of $\hat{\theta_2}$ instead of using $\hat{\theta_1}$ is defined as $$
+\operatorname{Eff}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\mathbb{V}ar(\hat{\theta}_1)- \mathbb{V}ar(\hat{\theta}_2)}{\mathbb{V}ar(\hat{\theta}_1)}.
 $$
 :::
 
-
-Let $X$ be a random object and let $g(\cdot)$ be a (possibly vector–valued) statistic of a *sample* from the distribution of $X$.
-For $j=1,\ldots,m$, draw an i.i.d. replicate sample $X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}$
-and compute
-$$
+Let $X$ be a random object and let $g(\cdot)$ be a (possibly vector–valued) statistic of a *sample* from the distribution of $X$. For $j=1,\ldots,m$, draw an i.i.d. replicate sample $X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}$ and compute $$
 Y_j = g\!\big(X^{(j)}\big).
 \tag{6.5}
-$$
-Then $Y_1,\ldots,Y_m$ are i.i.d. with common mean
-$$
-\theta \;=\; \E\big[g(X)\big] \;=\; \E[Y].
+$$ Then $Y_1,\ldots,Y_m$ are i.i.d. with common mean $$
+\theta \;=\; \mathbb{E}\big[g(X)\big] \;=\; \mathbb{E}[Y].
 $$
 
-The MC estimator of $\theta$ is the sample mean
-$$
-\htt \;=\; \bar Y \;=\; \frac{1}{m}\sum_{j=1}^m Y_j.
-$$
-By linearity of expectation,
-$$
-\E[\htt] \;=\; \theta,
-$$
-so $\htt$ is unbiased. Its variance is
-$$
-\var(\htt)
-  \;=\; \var(\bar Y)
-  \;=\; \frac{\var\{g(X)\}}{m}.
+The MC estimator of $\theta$ is the sample mean $$
+\hat{\theta}\;=\; \bar Y \;=\; \frac{1}{m}\sum_{j=1}^m Y_j.
+$$ By linearity of expectation, $$
+\mathbb{E}[\hat{\theta}] \;=\; \theta,
+$$ so $\hat{\theta}$ is unbiased. Its variance is $$
+\mathbb{V}ar(\hat{\theta})
+  \;=\; \mathbb{V}ar(\bar Y)
+  \;=\; \frac{\mathbb{V}ar\{g(X)\}}{m}.
 $$
 
-Hence the standard error decays as $m^{-1/2}$. To reduce the standard error from $0.01$ to $0.0001$, one would need about $10000$ times as many replicates.
-More generally, if $\var\{g(X)\}=\sigma^2$ and we target standard error at most $\varepsilon$, then
-$$
+Hence the standard error decays as $m^{-1/2}$. To reduce the standard error from $0.01$ to $0.0001$, one would need about $10000$ times as many replicates. More generally, if $\mathbb{V}ar\{g(X)\}=\sigma^2$ and we target standard error at most $\varepsilon$, then $$
 m \;\ge\; \frac{\sigma^2}{\varepsilon^2}
-$$
-replicates suffice (ignoring finite–$m$ effects).
+$$ replicates suffice (ignoring finite–$m$ effects).
 
 The remainder of this note gives a minimal simulation illustrating the $1/\sqrt{m}$ behavior and provides a template for later variance–reduction sections (e.g., control variates, antithetic sampling, importance sampling).
 
-
-## Rule-of-thumb for target standard error
+### Rule-of-thumb for target standard error
 
 Given a target standard error $\varepsilon$, we can solve $\sqrt{\sigma^2/m} \le \varepsilon$ for $m$.
 
 ```{r}
-theta_true <- 1
 sigma2_true <- 2
 epsilon <- c(0.1, 0.05, 0.01, 0.005, 0.001)
 required_m <- ceiling(sigma2_true / (epsilon^2))
@@ -392,58 +365,44 @@ data.frame(se_target = epsilon, m_needed = required_m)
 
 > **Remark.** Increasing $m$ always reduces variance but can be costly. Variance–reduction techniques seek lower variance at the *same* $m$ (or similar compute), rather than increasing $m$ alone.
 
-## Antithetic Variables 
+## Antithetic Variables
 
-Antithetic variables are a variance reduction technique used in MC simulation to improve the efficiency of estimators. The basic idea is to use pairs of negatively correlated random variables to reduce the variance of the estimator. Recall that the variance of two variables are 
-$$
-\var(X+Y) = \var(X) + \var(Y) + 2\cov(X,Y),
-$$
-where $\cov(X,Y) =\E[XY] - \E[X] \E[Y]$. The covariance can be written as $\cov(X,Y) = \rho_{YX} \sigma_X \sigma_Y$, where $\rho_{YX}$ is the correlation coefficient between $X$ and $Y$. If $X$ and $Y$ are negatively correlated, i.e., $\rho_{YX} < 0$, then $\cov(X,Y) < 0$, which can lead to a reduction in the variance of the sum $X + Y$.
-
+Antithetic variables are a variance reduction technique used in MC simulation to improve the efficiency of estimators. The basic idea is to use pairs of negatively correlated random variables to reduce the variance of the estimator. Recall that the variance of two variables are $$
+\mathbb{V}ar(X+Y) = \mathbb{V}ar(X) + \mathbb{V}ar(Y) + 2\mathbb{C}ov(X,Y),
+$$ where $\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}[X] \mathbb{E}[Y]$. The covariance can be written as $\mathbb{C}ov(X,Y) = \rho_{YX} \sigma_X \sigma_Y$, where $\rho_{YX}$ is the correlation coefficient between $X$ and $Y$. If $X$ and $Y$ are negatively correlated, i.e., $\rho_{YX} < 0$, then $\mathbb{C}ov(X,Y) < 0$, which can lead to a reduction in the variance of the sum $X + Y$.
 
 ::: {.callout-definition title="Antithetic Variables"}
-Random Variables $X$ and $Y$ on the same probability space are said to be *antithetic* if they are negatively correlated, i.e., $\cov(X,Y) < 0$.
+Random Variables $X$ and $Y$ on the same probability space are said to be *antithetic* if they are negatively correlated, i.e., $\mathbb{C}ov(X,Y) < 0$.
 :::
 
-Now, consier two random variable $U_1$ and $U_2$ that follows the same distribution. Then, if we take the average of the two random variables, we have
-$$
-\var\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\var(U_1) + \var(U_2) + 2\cov(U_1,U_2)\right\},
-$$
-which will be smaller than when the two variables are independent (in that case, the last term is 0). Hence, the idea here it to consider the case where the RVs are **negatively correlated.**
+Now, consier two random variable $U_1$ and $U_2$ that follows the same distribution. Then, if we take the average of the two random variables, we have $$
+\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right\},
+$$ which will be smaller than when the two variables are independent (in that case, the last term is 0). Hence, the idea here it to consider the case where the RVs are **negatively correlated.**
 
-Suppose that $X_1, \dots , X_n$ are simulated via the ITM. For each of the m replicates we have generated $U_j \sim\unif(0,1)$, and the corresponding  $X^{(j)} = F^{−1}_X(U_j), j = 1, \dots, n$. From before, we know that if $U\sim\unif(0,1)$, then $1 − U$  has the same distribution as $U$, but $U$ and $1 − U$ are negatively correlated. Then
+Suppose that $X_1, \dots , X_n$ are simulated via the ITM. For each of the m replicates we have generated $U_j \sim\operatorname{Unif}(0,1)$, and the corresponding $X^{(j)} = F^{−1}_X(U_j), j = 1, \dots, n$. From before, we know that if $U\sim\operatorname{Unif}(0,1)$, then $1 − U$ has the same distribution as $U$, but $U$ and $1 − U$ are negatively correlated. Then
 
-$$ Y_j = g(F^{−1}_X(U^{(j)}_1 ), \dots , F^{−1}_X(U_n^{(j)})),$$ 
-and 
+$$ Y_j = g(F^{−1}_X(U^{(j)}_1 ), \dots , F^{−1}_X(U_n^{(j)})),$$ and
 
-$$ Y_j^\prime = g(F^{−1}_X(1-U^{(j)}_1 ), . . . , F^{−1}_X(1-U_n^{(j)}))$$
-have the same distribution. So the question now if, when will $Y_j^{\prime}$ and $Y_j$ be negatively correlated?
+$$ Y_j^\prime = g(F^{−1}_X(1-U^{(j)}_1 ), . . . , F^{−1}_X(1-U_n^{(j)}))$$ have the same distribution. So the question now if, when will $Y_j^{\prime}$ and $Y_j$ be negatively correlated?
 
 We will see that if $g(\cdot)$ is monotone, then $Y_j$ and $Y_j^{\prime}$ are negatively correlated.
 
 ::: {.callout-definition title="d-dimensional monotone function"}
-Define $(x_1, . . . , x_n) \le (y_1, \dots , y_n)$ if $x_j ≤ y_j, j = 1, \dots, n$. An $n$-variate
-function $g := g(X_1, \dots, X_n)$ is increasing if it is increasing in its coordinates. That is, $g$ is increasing if $g(x_1,\dots, x_n) \le g(y_1, \dots, y_n)$ whenever
-$(x_1, \dots , x_n) \le (y_1, . . . , y_n)$. Similarly $g$ is decreasing if it is decreasing in its
-coordinates. Then $g$ is monotone if it is increasing or decreasing.
+Define $(x_1, . . . , x_n) \le (y_1, \dots , y_n)$ if $x_j ≤ y_j, j = 1, \dots, n$. An $n$-variate function $g := g(X_1, \dots, X_n)$ is increasing if it is increasing in its coordinates. That is, $g$ is increasing if $g(x_1,\dots, x_n) \le g(y_1, \dots, y_n)$ whenever $(x_1, \dots , x_n) \le (y_1, . . . , y_n)$. Similarly $g$ is decreasing if it is decreasing in its coordinates. Then $g$ is monotone if it is increasing or decreasing.
 :::
 
 ::: {.callout-theorem title="Expectation with the product of Monotone Functions"}
-Let $X$ be a random varaible, and $f$ and $g$ are monotonic increasing functions. Then
-$$
-\E[f(X)g(X)] \ge \E[f(X)]\E[g(X)].
+Let $X$ be a random varaible, and $f$ and $g$ are monotonic increasing functions. Then $$
+\mathbb{E}[f(X)g(X)] \ge \mathbb{E}[f(X)]\mathbb{E}[g(X)].
 $$
 :::
 
 ::: {.callout-theorem title="Negative correaltion for Monotone function"}
-It is actually a corollary of the above theorem. 
+It is actually a corollary of the above theorem.
 
-Let $g := g(X_1, \dots, X_n)$ be monotonic, and $U_1, \dots, U_n \sim \unif(0,1)$ be independent. Then
+Let $g := g(X_1, \dots, X_n)$ be monotonic, and $U_1, \dots, U_n \sim \operatorname{Unif}(0,1)$ be independent. Then
 
-$$ Y_j^\prime = g(F^{−1}_X(1-U_1 ), . . . , F^{−1}_X(1-U_n))$$
-and 
-$$ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))$$
-are **negatively correlated**.
+$$ Y_j^\prime = g(F^{−1}_X(1-U_1 ), . . . , F^{−1}_X(1-U_n))$$ and $$ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))$$ are **negatively correlated**.
 :::
 
 ::: {.callout-example title="Antithetic Variables Example"}
@@ -453,28 +412,23 @@ $$
 \Phi(x)=\int_{-\infty}^x \frac{1}{\sqrt{2 \pi}} e^{-t^2 / 2} d t
 $$
 
-Repeat the estimation using antithetic variables, and find the approximate reduction in standard error. In this example, after change of variable, the target parameter is $\theta = \E_U[x\exp\{-(xU)^2/2\}]$ where $U\sim\unif(0,1)$.
+Repeat the estimation using antithetic variables, and find the approximate reduction in standard error. In this example, after change of variable, the target parameter is $\theta = \mathbb{E}_U[x\exp\{-(xU)^2/2\}]$ where $U\sim\operatorname{Unif}(0,1)$.
 
-By restricting the simualtion to the upper tail, the function $g$ is monotone, so the hypothesis of Theorem 2 is satisfied. Now, we generate $u_1,\dots,u_{m/2}\iid \unif(0,1)$, and compute the half of the replicates using
-$$
+By restricting the simualtion to the upper tail, the function $g$ is monotone, so the hypothesis of Theorem 2 is satisfied. Now, we generate $u_1,\dots,u_{m/2}\overset{iid}{\sim}\operatorname{Unif}(0,1)$, and compute the half of the replicates using $$
 Y_j=g^{(j)}(u)=x e^{-\left(u_j x\right)^2 / 2}, \quad j=1, \ldots, m / 2,
-$$
-as before, but also compute 
-$$
+$$ as before, but also compute $$
 Y_j^{\prime}=x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}, \quad j=1, \ldots, m / 2 .
 $$
 
-Thus, the sample mean is 
-$$
+Thus, the sample mean is $$
 \begin{aligned}
-\htt=\overline{g_m(u)} & =\frac{1}{m} \sum_{j=1}^{m / 2}\left(x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}\right) \\
+\hat{\theta}=\overline{g_m(u)} & =\frac{1}{m} \sum_{j=1}^{m / 2}\left(x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}\right) \\
 & =\frac{1}{m / 2} \sum_{j=1}^{m / 2}\left(\frac{x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}}{2}\right)\\
-& \to \E[\htt] = \theta, \quad \text{as } m\to\infty.
+& \to \mathbb{E}[\hat{\theta}] = \theta, \quad \text{as } m\to\infty.
 \end{aligned}
-$$
-If $x\ge 0$, the estimate is $\Phi(x) = 0.5 + \htt / \sqrt{2\pi}$, where as if $x< 0$, the estimate is $\Phi(x) = 1-\Phi(-x)$.
+$$ If $x\ge 0$, the estimate is $\Phi(x) = 0.5 + \hat{\theta}/ \sqrt{2\pi}$, where as if $x< 0$, the estimate is $\Phi(x) = 1-\Phi(-x)$.
 
-``` {r example}
+```{r example}
 MC.Phi <- function(x, R = 10000, antithetic = TRUE) {
   u <- runif(R / 2)
   if (!antithetic) {
@@ -513,64 +467,48 @@ eff <- (var(MC_raw) - var(MC_anti))/var(MC_raw)
 eff |> round(6)
 ```
 
-Conclusion:  The antithetic variable approach achieved approximately `r round(eff, 4)` reduction in
-variance at x = `r x`. 
-
+Conclusion: The antithetic variable approach achieved approximately `r round(eff, 4)` reduction in variance at x = `r x`.
 :::
-
 
 ## Control Variates
 
 Control variates is another variance reduction technique used in MC simulation to improve the efficiency of estimators. The basic idea is to use a known variable that is correlated with the variable of interest to reduce the variance of the estimator.
 
-Suppose there exists a function $f(\cdot)$ such that $\mu=\E[f(X)]$ is known, and $f(X)$ is correlated with $g(X)$. Then, we have, for a constant $c\in\R$, $\htt_c = g(X) + c\{f(X) - \mu\}$ is also an unbiased estimator of $\theta$. The variance of $\htt_c$ is 
-$$
-\var(\htt_c) = \var\{g(X)\} + c^2\var\{f(X)\} + 2c\cov\{g(X), f(X)\}.
-$$
-This is a quadratic function in $c$, and it is minimized at
-$$
-c^*=-\frac{\cov\{g(X), f(X))\}}{\var\{f(X)\}}.
-$$
-By plugging in this optimizer $c=c^\ast$, the resulting variance is 
-$$
-\var(\htt_{c^\ast}) = \var\{g(X)\} - \frac{[\cov\{g(X), f(X)\}]^2}{\var\{f(X)\}}.
-$$
-This RV $f(X)$ is called a *control variate* for the estimator of $g(X)$. We can see that the $\var\{g(X)\}$ is reduced by the second term $[\cov\{g(X), f(X)\}]^2/\var\{f(X)\}$, and the percentage of variance reduction is 
-$$
-100 \frac{[\cov(g(X), f(X))]^2}{\var(g(X)) \var(f(X))}=100[\corr(g(X), f(X))]^2 .
-$$
-Thus, if $g(X)$ and $f(X)$ is strongly correlated, the variance will be reduced, and if they are uncorrelated, there is no reduction in variance.
+Suppose there exists a function $f(\cdot)$ such that $\mu=\mathbb{E}[f(X)]$ is known, and $f(X)$ is correlated with $g(X)$. Then, we have, for a constant $c\in\mathbb{R}$, $\hat{\theta}_c = g(X) + c\{f(X) - \mu\}$ is also an unbiased estimator of $\theta$. The variance of $\hat{\theta}_c$ is $$
+\mathbb{V}ar(\hat{\theta}_c) = \mathbb{V}ar\{g(X)\} + c^2\mathbb{V}ar\{f(X)\} + 2c\mathbb{C}ov\{g(X), f(X)\}.
+$$ This is a quadratic function in $c$, and it is minimized at $$
+c^*=-\frac{\mathbb{C}ov\{g(X), f(X))\}}{\mathbb{V}ar\{f(X)\}}.
+$$ By plugging in this optimizer $c=c^\ast$, the resulting variance is $$
+\mathbb{V}ar(\hat{\theta}_{c^\ast}) = \mathbb{V}ar\{g(X)\} - \frac{[\mathbb{C}ov\{g(X), f(X)\}]^2}{\mathbb{V}ar\{f(X)\}}.
+$$ This RV $f(X)$ is called a *control variate* for the estimator of $g(X)$. We can see that the $\mathbb{V}ar\{g(X)\}$ is reduced by the second term $[\mathbb{C}ov\{g(X), f(X)\}]^2/\mathbb{V}ar\{f(X)\}$, and the percentage of variance reduction is $$
+100 \frac{[\mathbb{C}ov(g(X), f(X))]^2}{\mathbb{V}ar(g(X)) \mathbb{V}ar(f(X))}=100[\mathbb{C}orr(g(X), f(X))]^2 .
+$$ Thus, if $g(X)$ and $f(X)$ is strongly correlated, the variance will be reduced, and if they are uncorrelated, there is no reduction in variance.
 
-TO estimate $c^*$, we need to estimate $\cov\{g(X),f(X)\}$ and $\var\{f(X)\}$, which may be estimated using MC too, in the preliminary steps.
+TO estimate $c^*$, we need to estimate $\mathbb{C}ov\{g(X),f(X)\}$ and $\mathbb{V}ar\{f(X)\}$, which may be estimated using MC too, in the preliminary steps.
 
 ::: {.callout-example title="Control Variates Example"}
-Use control variate approach to compute 
-$$
-\theta = \E[\exp(U)] =\int_0^1\exp(u)du,\quad \text{where } U\sim\unif(0,1).
-$$
-We can easily find the analytical solution $\theta=\exp(1) - \exp(0) = e - 1 = 1.718282$, but how to use the control variate approach to estimate $\theta$?
+Use control variate approach to compute $$
+\theta = \mathbb{E}[\exp(U)] =\int_0^1\exp(u)du,\quad \text{where } U\sim\operatorname{Unif}(0,1).
+$$ We can easily find the analytical solution $\theta=\exp(1) - \exp(0) = e - 1 = 1.718282$, but how to use the control variate approach to estimate $\theta$?
 
-We can apply the simple MC approach where the variance is $\var\{g(U)\}/m$, where 
-$$
-\var(g(U))=\var\left(e^U\right)=\E\left[e^{2 U}\right]-\theta^2=\frac{e^2-1}{2}-(e-1)^2 \approx 0.2420
+We can apply the simple MC approach where the variance is $\mathbb{V}ar\{g(U)\}/m$, where $$
+\mathbb{V}ar(g(U))=\mathbb{V}ar\left(e^U\right)=\mathbb{E}\left[e^{2 U}\right]-\theta^2=\frac{e^2-1}{2}-(e-1)^2 \approx 0.2420
 $$
 
-As for control variate, a natural choice is $U\sim\unif(0,1)$. Then the mean is $\mu=\E[U]=1/2$, variance is $\var(U) = 1/12$ and the covariance is $\cov(e^U, U)= \E[Ue^U]-\E[U]\E[\exp(U)]= 1-(e-1)/2 \approx 0.1409$. Thus, the optimal $c^* = -\cov(e^U,U)/\var(U) =-12+6(e-1)^2 \approx -1.6903$.
+As for control variate, a natural choice is $U\sim\operatorname{Unif}(0,1)$. Then the mean is $\mu=\mathbb{E}[U]=1/2$, variance is $\mathbb{V}ar(U) = 1/12$ and the covariance is $\mathbb{C}ov(e^U, U)= \mathbb{E}[Ue^U]-\mathbb{E}[U]\mathbb{E}[\exp(U)]= 1-(e-1)/2 \approx 0.1409$. Thus, the optimal $c^* = -\mathbb{C}ov(e^U,U)/\mathbb{V}ar(U) =-12+6(e-1)^2 \approx -1.6903$.
 
-Then, the controlled estimator is $\htt_{c^\ast}=\exp(U)-1.6903(U-0.5)$. With $m$ replications, we have 
-$$
+Then, the controlled estimator is $\hat{\theta}_{c^\ast}=\exp(U)-1.6903(U-0.5)$. With $m$ replications, we have $$
 \begin{aligned}
-m\var(\htt_{c^\ast})
+m\mathbb{V}ar(\hat{\theta}_{c^\ast})
 &=\operatorname{Var}\left(e^U\right)-\frac{\left[\operatorname{Cov}\left(e^U, U\right)\right]^2}{\operatorname{Var}(U)} \\ &=\frac{e^2-1}{2}-(e-1)^2-12\left(1-\frac{e-1}{2}\right) \\
 & \doteq 0.2420356-12(0.1408591)^2 \\
 & =0.003940175 .
 \end{aligned}
 $$
 
-Thus, the reduction in variance using the control variate compared with the
-simple Monte Carlo estimate is $$100 \frac{1-0.003940175}{0.2429355} = 98.3781 \%$$.
+Thus, the reduction in variance using the control variate compared with the simple Monte Carlo estimate is $$100 \frac{1-0.003940175}{0.2429355} = 98.3781 \%$$.
 
-``` {r example-cv}
+```{r example-cv}
 set.seed(777)
 m <- 10000
 a <- - 12 + 6 * (exp(1) - 1)
@@ -583,6 +521,7 @@ mean(T2_cv) |> round(6)
 eff <- (var(T1_MC) - var(T2_cv)) / var(T1_MC)
 eff |> round(4)
 ```
+
 This show that the reduction is `r eff |> round(4)`% in variance using the control variate approach, which is the same as our analysis above
 :::
 
@@ -590,11 +529,11 @@ This show that the reduction is `r eff |> round(4)`% in variance using the contr
 
 There are other variance reduction techniques, including
 
-* Importance Sampling
+-   Importance Sampling
 
-* Stratified Sampling
+-   Stratified Sampling
 
-* Stratified Importance Sampling
+-   Stratified Importance Sampling
 
 ------------------------------------------------------------------------
 
