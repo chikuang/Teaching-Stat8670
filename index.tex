@@ -223,7 +223,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-10-11}
+\date{2025-10-15}
 \begin{document}
 \maketitle
 
@@ -2406,7 +2406,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2525,7 +2525,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2973,7 +2973,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -2982,7 +2982,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3138,7 +3138,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3409,7 +3409,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3457,7 +3457,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3943,7 +3943,7 @@ In this example, compared with the previous example, it appears that we
 have better agreement with \texttt{pnorm()} in the upper tail, but worse
 agreement near the center.
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, left=2mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, rightrule=.15mm, bottomtitle=1mm, toptitle=1mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, titlerule=0mm, arc=.35mm, leftrule=.75mm, toprule=.15mm, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
 
 Summarizing, if \(f (x)\) is a probability density function supported on
 a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
@@ -4141,8 +4141,8 @@ of replicates}, so computational efficiency is also relevant.
 We have seen that MC integration may be used to estimate
 \(\theta:=\mathbb{E}[g(X)]\). However, how to have the \emph{efficient
 estimator } for \(\theta\), and if we have a several ways
-\$\hat{\theta}\_1,\dots,\hat{\theta}\_k \$to estimate \(\theta\), which
-one is \emph{better}, or, more efficient? Here, we try to introduce some
+\(\hat{\theta}_1,\dots,\hat{\theta}_k\)to estimate \(\theta\), which one
+is \emph{better}, or, more efficient? Here, we try to introduce some
 variance reduction techniques.
 
 Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
@@ -4186,72 +4186,6 @@ The remainder of this note gives a minimal simulation illustrating the
 variance--reduction sections (e.g., control variates, antithetic
 sampling, importance sampling).
 
-\section{A minimal R simulation}\label{a-minimal-r-simulation}
-
-We will estimate \(\theta=\mathbb{E}[g(X)]\) with
-\(X\sim\mathcal N(0,1)\) and \(g(x)=x^2\). Here, \(\theta=1\) and
-\(\mathbb{V}ar(g(X))=\mathbb{V}ar(X^2)=2\).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{g }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) x}\SpecialCharTok{\^{}}\DecValTok{2}
-\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \DecValTok{1}
-\NormalTok{sigma2\_true }\OtherTok{\textless{}{-}} \DecValTok{2}
-
-\NormalTok{mc\_once }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(m) \{}
-  \CommentTok{\# one replicate of the MC mean based on m i.i.d. Y\_j = g(X\^{}\{(j)\}\_1)}
-  \CommentTok{\# (for simplicity, treat each "replicate sample" as size n=1)}
-\NormalTok{  x }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(m)}
-  \FunctionTok{mean}\NormalTok{(}\FunctionTok{g}\NormalTok{(x))}
-\NormalTok{\}}
-
-\NormalTok{Mgrid }\OtherTok{\textless{}{-}} \FunctionTok{as.integer}\NormalTok{(}\DecValTok{10}\SpecialCharTok{\^{}}\FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{5}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{9}\NormalTok{)) }\CommentTok{\# m from 10 to 1e5 on a log grid}
-\NormalTok{R }\OtherTok{\textless{}{-}} \DecValTok{200}                                         \CommentTok{\# repetitions to estimate Monte Carlo variance}
-
-\NormalTok{mc\_means }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(Mgrid, }\ControlFlowTok{function}\NormalTok{(m) }\FunctionTok{replicate}\NormalTok{(R, }\FunctionTok{mc\_once}\NormalTok{(m)))}
-\NormalTok{est\_var }\OtherTok{\textless{}{-}} \FunctionTok{apply}\NormalTok{(mc\_means, }\DecValTok{2}\NormalTok{, var)                }\CommentTok{\# empirical Var(\textbackslash{}hat theta)}
-\NormalTok{theo\_var }\OtherTok{\textless{}{-}}\NormalTok{ sigma2\_true }\SpecialCharTok{/}\NormalTok{ Mgrid                   }\CommentTok{\# Var(g(X))/m}
-
-\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{m =}\NormalTok{ Mgrid, }\AttributeTok{empirical\_var =}\NormalTok{ est\_var, }\AttributeTok{theory\_var =}\NormalTok{ theo\_var)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-       m empirical_var   theory_var
-1     10  2.098209e-01 2.000000e-01
-2     31  5.724218e-02 6.451613e-02
-3    100  1.871232e-02 2.000000e-02
-4    316  6.104544e-03 6.329114e-03
-5   1000  2.074915e-03 2.000000e-03
-6   3162  5.839596e-04 6.325111e-04
-7  10000  1.727469e-04 2.000000e-04
-8  31622  6.476536e-05 6.324711e-05
-9 100000  2.415821e-05 2.000000e-05
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(Mgrid, est\_var, }\AttributeTok{log =} \StringTok{"xy"}\NormalTok{, }\AttributeTok{type =} \StringTok{"b"}\NormalTok{,}
-     \AttributeTok{xlab =} \StringTok{"m (number of replicates, log scale)"}\NormalTok{,}
-     \AttributeTok{ylab =} \StringTok{"Var(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{u005Chat\{}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{u03B8\}) (log scale)"}\NormalTok{)}
-\FunctionTok{lines}\NormalTok{(Mgrid, theo\_var, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
-\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{,}
-       \AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Empirical"}\NormalTok{, }\StringTok{"Theory: Var(g(X))/m"}\NormalTok{),}
-       \AttributeTok{lwd =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }\AttributeTok{pch =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\ConstantTok{NA}\NormalTok{), }\AttributeTok{bty =} \StringTok{"n"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}[H]
-
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{04-monte-carlo_files/figure-pdf/unnamed-chunk-2-1.pdf}}
-
-}
-
-\caption{Empirical vs.~theoretical Var(\hat{\theta}) for g(X)=X\^{}2
-with X\textasciitilde N(0,1).}
-
-\end{figure}%
-
 \section{Rule-of-thumb for target standard
 error}\label{rule-of-thumb-for-target-standard-error}
 
@@ -4260,6 +4194,8 @@ Given a target standard error \(\varepsilon\), we can solve
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{sigma2\_true }\OtherTok{\textless{}{-}} \DecValTok{2}
 \NormalTok{epsilon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.01}\NormalTok{, }\FloatTok{0.005}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
 \NormalTok{required\_m }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(sigma2\_true }\SpecialCharTok{/}\NormalTok{ (epsilon}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
 \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{se\_target =}\NormalTok{ epsilon, }\AttributeTok{m\_needed =}\NormalTok{ required\_m)}
@@ -4335,6 +4271,41 @@ coordinates. That is, \(g\) is increasing if
 \((x_1, \dots , x_n) \le (y_1, . . . , y_n)\). Similarly \(g\) is
 decreasing if it is decreasing in its coordinates. Then \(g\) is
 monotone if it is increasing or decreasing.
+
+Let \(X\) be a random varaible, and \(f\) and \(g\) are monotonic
+increasing functions. Then \[
+\mathbb{E}[f(X)g(X)] \ge \mathbb{E}[f(X)]\mathbb{E}[g(X)].
+\]
+
+It is actually a corollary of the above theorem.
+
+Let \(g := g(X_1, \dots, X_n)\) be monotonic, and
+\(U_1, \dots, U_n \sim \operatorname{Unif}(0,1)\) be independent. Then
+
+\[ Y_j^\prime = g(F^{−1}_X(1-U_1 ), . . . , F^{−1}_X(1-U_n))\] and
+\[ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))\] are
+\textbf{negatively correlated}.
+
+\section{Control Variates}\label{control-variates}
+
+Control variates is another variance reduction technique used in MC
+simulation to improve the efficiency of estimators. The basic idea is to
+use a known variable that is correlated with the variable of interest to
+reduce the variance of the estimator.
+
+Suppose there exists a function \(f(\cdot)\) such that
+\(\mu=\mathbb{E}[f(X)]\) is known, and \(f(X)\) is correlated with
+\(g(X)\). Then, we have, for a constant \(c\in\mathbb{R}\),
+\(\hat{\theta}_c = g(X) + c(f(X) - \mu)\) is also an unbiased estimator
+of \(\theta\). The variance of \(\hat{\theta}_c\) is \[
+\mathbb{V}ar(\hat{\theta}_c) = \mathbb{V}ar\{g(X)\} + c^2\mathbb{V}ar\{f(X)\} + 2c\mathbb{C}ov\{g(X), f(X)\}.
+\] This is a quadratic function in \(c\), and it is minimized at \[
+c^*=-\frac{\mathbb{C}ov\{g(X), f(X))\}}{\mathbb{V}ar\{f(X)\}}.
+\] By plugging in this optimizer \(c=c^\ast\), the resulting variance is
+\[
+\mathbb{V}ar(\hat{\theta}_{c^\ast}) = \mathbb{V}ar\{g(X)\} - \frac{[\mathbb{C}ov\{g(X), f(X)\}]^2}{\mathbb{V}ar\{f(X)\}}.
+\] This RV \(f(X)\) is called a \emph{control variate} for the estimator
+of \(g(X)\).
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 

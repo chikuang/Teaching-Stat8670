@@ -199,12 +199,12 @@ In this example, compared with the previous example, it appears that we have bet
 :::
 
 ::: callout-note
-Summarizing, if $f (x)$ is a probability density function supported on a set A, (that is, $f (x) \ge 0$ for all $x\in\mathbb{R}$ and $\int_A f (x) = 1$), to estimate the integral $$\theta = \int_A g(x)f (x)dx,$$ generate a random sample $x_1,\dots,x_m$ from the distribution $f (x)$, and compute the sample mean $$\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).$$ Then $\hat{\theta}\overset{p}{\to}\theta$
+Summarizing, if $f (x)$ is a probability density function supported on a set A, (that is, $f (x) \ge 0$ for all $x\in\mathbb{R}$ and $\int_A f (x) = 1$), to estimate the integral $$\theta = \int_A g(x)f (x)dx,$$ generate a random sample $x_1,\dots,x_m$ from the distribution $f (x)$, and compute the sample mean $$\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).$$ Then $\hat{\theta}\overset{p}{\to}\theta$ by the weak law of large numbers (WLLN).
 :::
 
 The standard error of $\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)$.
 
-Recall that, $\mathbb{V}ar{\hat{\theta}}=\sigma^2/m$ where $\sigma^2 = \mathbb{V}ar{g(X)}$. When the distribution of $X$ is unknown, we substitute for $F_X$ the empirical distribution $F_m$ of the sample $x_1, \dots , x_m$. The variance of $\hat{\theta}$ can be estimated by $$
+Recall that, $\var({\hat{\theta}})=\sigma^2/m$ where $\sigma^2 = \mathbb{V}ar{g(X)}$. When the distribution of $X$ is unknown, we substitute for $F_X$ the empirical distribution $F_m$ of the sample $x_1, \dots , x_m$. The variance of $\hat{\theta}$ can be estimated by $$
 \frac{\hat{\sigma}}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
 $$
 
@@ -232,7 +232,7 @@ c(cdf - 1.96 * sqrt(v), cdf + 1.96 * sqrt(v))
 
 The interpretation is:
 
-the probability $P (I(Z < x) = 1)$ is $\Phi(2)\approx 0.977$. Here $g(X)$ has the distribution of the sample proportion of 1’s in $m = 10000$ Bernoulli trials with $p\approx 0.977$, and the variance of $g(X)$ is therefore $(0.977)(1 − 0.977)/10000 =2.223e-06$. The MC estimate $2.228e-06$ of variance is quite close to this value.
+the probability $P (I(Z < x) = 1)$ is $\Phi(2)\approx 0.977$. Here $g(X)$ has the distribution of the sample proportion of 1’s in $m = 10000$ Bernoulli trials with $p\approx 0.977$, and the variance of $g(X)$ is therefore $(0.977)(1 − 0.977)/10000 =2.223 \times 10^{-6}$. The MC estimate $2.228\times 10^{-6}$ of variance is quite close to this value.
 
 Q: What about $\Phi(2.5)$? 
 :::
@@ -322,7 +322,7 @@ Note, the variance can *always be reduced by increasing the number of replicates
 
 ## Variance Reduction
 
-We have seen that MC integration may be used to estimate $\theta:=\E[g(X)]$. However, how to have the *efficient estimator * for $\theta$, and if we have a several ways $\hat{\theta}_1,\dots,\hat{\theta}_k $to estimate $\theta$, which one is *better*, or, more efficient? Here, we try to introduce some variance reduction techniques.
+We have seen that MC integration may be used to estimate $\theta:=\E[g(X)]$. However, how to have the *efficient estimator * for $\theta$, and if we have a several ways $\hat{\theta}_1,\dots,\hat{\theta}_k$to estimate $\theta$, which one is *better*, or, more efficient? Here, we try to introduce some variance reduction techniques.
 
 ::: {.callout-definition title="Relative Efficency Gain"}
 Let $\hat{\theta}_1$ and $\hat{\theta}_2$ be two estimators of $\theta$ where $\var(\hat{\theta}_1) > \var(\hat{\theta}_2)$. The *relative efficiency gain * of $\hat{\theta_2}$ instead of using $\hat{\theta_1}$ is defined as
@@ -333,9 +333,7 @@ $$
 
 
 Let $X$ be a random object and let $g(\cdot)$ be a (possibly vector–valued) statistic of a *sample* from the distribution of $X$.
-For $j=1,\ldots,m$, draw an i.i.d. replicate sample $
-X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}
-$
+For $j=1,\ldots,m$, draw an i.i.d. replicate sample $X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}$
 and compute
 $$
 Y_j = g\!\big(X^{(j)}\big).
@@ -370,53 +368,14 @@ replicates suffice (ignoring finite–$m$ effects).
 
 The remainder of this note gives a minimal simulation illustrating the $1/\sqrt{m}$ behavior and provides a template for later variance–reduction sections (e.g., control variates, antithetic sampling, importance sampling).
 
-## A minimal R simulation
-
-```{r setup2, include=FALSE}
-knitr::opts_chunk$set(fig.width = 6, fig.height = 4, echo = TRUE, message = FALSE, warning = FALSE)
-set.seed(1)
-```
-
-We will estimate $\theta=\E[g(X)]$ with $X\sim\mathcal N(0,1)$ and $g(x)=x^2$.
-Here, $\theta=1$ and $\var(g(X))=\var(X^2)=2$.
-
-```{r}
-g <- function(x) x^2
-theta_true <- 1
-sigma2_true <- 2
-
-mc_once <- function(m) {
-  # one replicate of the MC mean based on m i.i.d. Y_j = g(X^{(j)}_1)
-  # (for simplicity, treat each "replicate sample" as size n=1)
-  x <- rnorm(m)
-  mean(g(x))
-}
-
-Mgrid <- as.integer(10^seq(1, 5, length.out = 9)) # m from 10 to 1e5 on a log grid
-R <- 200                                         # repetitions to estimate Monte Carlo variance
-
-mc_means <- sapply(Mgrid, function(m) replicate(R, mc_once(m)))
-est_var <- apply(mc_means, 2, var)                # empirical Var(\hat theta)
-theo_var <- sigma2_true / Mgrid                   # Var(g(X))/m
-
-data.frame(m = Mgrid, empirical_var = est_var, theory_var = theo_var)
-```
-
-```{r, fig.cap="Empirical vs. theoretical Var(\\hat{\\theta}) for g(X)=X^2 with X~N(0,1)."}
-plot(Mgrid, est_var, log = "xy", type = "b",
-     xlab = "m (number of replicates, log scale)",
-     ylab = "Var(\\u005Chat{\\u03B8}) (log scale)")
-lines(Mgrid, theo_var, lwd = 2)
-legend("topright",
-       legend = c("Empirical", "Theory: Var(g(X))/m"),
-       lwd = c(1,2), pch = c(1, NA), bty = "n")
-```
 
 ## Rule-of-thumb for target standard error
 
 Given a target standard error $\varepsilon$, we can solve $\sqrt{\sigma^2/m} \le \varepsilon $ for $m$.
 
 ```{r}
+theta_true <- 1
+sigma2_true <- 2
 epsilon <- c(0.1, 0.05, 0.01, 0.005, 0.001)
 required_m <- ceiling(sigma2_true / (epsilon^2))
 data.frame(se_target = epsilon, m_needed = required_m)
@@ -430,7 +389,7 @@ Antithetic variables are a variance reduction technique used in MC simulation to
 $$
 \var(X+Y) = \var(X) + \var(Y) + 2\cov(X,Y),
 $$
-where $\cov(X,Y) =\E[XY] - \E X \E Y$. The covariance can be written as $\cov(X,Y) = rho_{YX} \sigma_X \sigma_Y$, where $\rho_{YX}$ is the correlation coefficient between $X$ and $Y$. If $X$ and $Y$ are negatively correlated, i.e., $\rho_{YX} < 0$, then $\cov(X,Y) < 0$, which can lead to a reduction in the variance of the sum $X + Y$.
+where $\cov(X,Y) =\E[XY] - \E[X] \E[Y]$. The covariance can be written as $\cov(X,Y) = \rho_{YX} \sigma_X \sigma_Y$, where $\rho_{YX}$ is the correlation coefficient between $X$ and $Y$. If $X$ and $Y$ are negatively correlated, i.e., $\rho_{YX} < 0$, then $\cov(X,Y) < 0$, which can lead to a reduction in the variance of the sum $X + Y$.
 
 
 ::: {.callout-definition title="Antithetic Variables"}
@@ -439,7 +398,7 @@ Random Variables $X$ and $Y$ on the same probability space are said to be *antit
 
 Now, consier two random variable $U_1$ and $U_2$ that follows the same distribution. Then, if we take the average of the two random variables, we have
 $$
-\var\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left(\var(U_1) + \var(U_2) + 2\cov(U_1,U_2)\right),
+\var\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\var(U_1) + \var(U_2) + 2\cov(U_1,U_2)\right\},
 $$
 which will be smaller than when the two variables are independent (in that case, the last term is 0). Hence, the idea here it to consider the case where the RVs are **negatively correlated.**
 
