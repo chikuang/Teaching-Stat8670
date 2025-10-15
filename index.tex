@@ -2406,7 +2406,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2525,7 +2525,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2973,7 +2973,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -2982,7 +2982,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3138,7 +3138,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3345,7 +3345,7 @@ mixture of \(k\) multivariate normal distributions is given by \[
 \] Similar to the univariate case, different choice of \(\alpha\) will
 lead to different degree of departure from the normal.
 
-Given a \(\alpha\), to simulate a random sample from
+Given a \(\alpha\), to simulatecallout-note a random sample from
 \(\alpha N_d(\mu_1, \Sigma_1) + (1 − p) N_d(\mu_2, \Sigma_2)\)
 
 There are two ways.
@@ -3409,7 +3409,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3457,7 +3457,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3943,7 +3943,7 @@ In this example, compared with the previous example, it appears that we
 have better agreement with \texttt{pnorm()} in the upper tail, but worse
 agreement near the center.
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, toprule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, rightrule=.15mm, toptitle=1mm, breakable, titlerule=0mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, colback=white, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
 
 Summarizing, if \(f (x)\) is a probability density function supported on
 a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
@@ -3951,29 +3951,30 @@ a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
 \[\theta = \int_A g(x)f (x)dx,\] generate a random sample
 \(x_1,\dots,x_m\) from the distribution \(f (x)\), and compute the
 sample mean \[\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).\] Then
-\(\hat{\theta}\overset{p}{\to}\theta\)
+\(\hat{\theta}\overset{p}{\to}\theta\) by the weak law of large numbers
+(WLLN).
 
 \end{tcolorbox}
 
 The standard error of \(\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)\).
 
-Recall that, \(\mathbb{V}ar{\hat{\theta}}=\sigma^2/m\) where
-\(\sigma^2 = \mathbb{V}ar{g(X)}\). When the distribution of \(X\) is
+Recall that, \(\mathbb{V}ar({\hat{\theta}})=\sigma^2/m\) where
+\(\sigma^2 = \mathbb{V}ar\{g(X)\}\). When the distribution of \(X\) is
 unknown, we substitute for \(F_X\) the empirical distribution \(F_m\) of
 the sample \(x_1, \dots , x_m\). The variance of \(\hat{\theta}\) can be
 estimated by \[
-\frac{\hat{\sigma}}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
+\frac{\hat{\sigma}^2}{m} = \frac{1}{m^2}\sum_{i=1}^m [g(x_i) - \bar{g}(x)]^2.
 \]
 
-Note that \[\frac{1}{m}\sum_{i=1}^m[g(x_i)-\bar{g}(x_i)],\] is the
+Note that \[\frac{1}{m}\sum_{i=1}^m[g(x_i)-\bar{g}(x_i)]^2,\] is the
 \emph{plug-in estimate} of \(\mathbb{V}ar\{g(X)\}\). That is, it is the
 variance of \(U\) , where \(U\) is uniformly distributed on the set of
 replicates \(\{g(x_i)\}\). The corresponding estimated standard error of
 \(\hat{\theta}\) is \[
-\widehat{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}} = \frac{1}{m}\left\{\sum_{i=1}^m [ g(x_i)- \bar{g}(x)]^2\right\}.
+\widehat{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}} = \frac{1}{m}\left\{\sum_{i=1}^m [ g(x_i)- \bar{g}(x)]^2\right\}^{1/2}.
 \] The CLT implies \[
-\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\mathbb{V}ar\hat{\theta}}} \overset{D}{\to} N(0,1),
-\] as \(m\to\infty\).Hence, if \(m\) is sufficiently large,
+\frac{\hat{\theta}-E[\hat{\theta}]}{\sqrt{\mathbb{V}ar(\hat{\theta})}} \overset{D}{\to} N(0,1),
+\] as \(m\to\infty\). Hence, if \(m\) is sufficiently large,
 \(\hat{\theta}\) is approximately normal with mean \(\theta\). The
 large-sample, approximately normal distribution of \(\hat{\theta}\) can
 be applied to put confidence limits or error bounds on the MC estimate
@@ -4013,8 +4014,9 @@ The interpretation is:
 the probability \(P (I(Z < x) = 1)\) is \(\Phi(2)\approx 0.977\). Here
 \(g(X)\) has the distribution of the sample proportion of 1's in
 \(m = 10000\) Bernoulli trials with \(p\approx 0.977\), and the variance
-of \(g(X)\) is therefore \((0.977)(1 − 0.977)/10000 =2.223e-06\). The MC
-estimate \(2.228e-06\) of variance is quite close to this value.
+of \(g(X)\) is therefore
+\((0.977)(1 − 0.977)/10000 =2.223 \times 10^{-6}\). The MC estimate
+\(2.228\times 10^{-6}\) of variance is quite close to this value.
 
 Q: What about \(\Phi(2.5)\)?
 
@@ -4031,8 +4033,8 @@ of a function of a uniform random variable. That is, suppose
 \end{aligned}
 \]
 
-Recall that the sample-mean MC estimator of the integral \(\theta\) is
-computed as follows.
+Recall that, from \emph{Algorithm 2}, the sample-mean MC estimator of
+the integral \(\theta\) is computed as follows.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -4051,12 +4053,24 @@ CLT, \(\bar{g}(X)\) is approximately normal for large \(m\). Therefore,
 the variance of the MC estimator \(\hat{\theta}\) is approximately
 normal with mean \(\theta\) and variance \(\mathbb{V}ar\{g(X)\}/m\).
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+
+The expectation and the variance of the MC estimator \(\hat{\theta}\)
+are given by \begin{align*}
+\mathbb{E}[\hat{\theta}] & = \theta, \\
+\mathbb{V}ar(\hat{\theta}) &= (b-a)^2 \mathbb{V}ar(\overline{g}(X))=\frac{(b-a)^2}{m} \mathbb{V}ar\{g(X)\} .
+\end{align*} Further more, by CLT, for large \(m\), \(\overline{g}(X)\)
+is approximately normally distributed, and with the mean and variance
+given above.
+
+\end{tcolorbox}
+
+\subsection{Hit-or-Miss Approach}\label{hit-or-miss-approach}
 
 The \textbf{``hit-or-miss''} approach to MC integration also uses a
 \emph{sample mean} to estimate the integral, but the sample mean is
-taken over a \emph{different sample} and therefore this estimator has a
-different variance than the one we have above.
+taken over a \emph{different sample} and \textbf{therefore this
+estimator has a different variance than the one we have above}.
 
 \begin{figure}[H]
 
@@ -4068,12 +4082,9 @@ different variance than the one we have above.
 
 \end{figure}%
 
-Suppose \(f(x)\) is the density of a random variable \(X\).\\
-The ``hit-or-miss'' approach to estimating \[
-F(x) = \int_{-\infty}^x f(t)\,dt
-\]
-
-is as follows:
+Suppose \(f(x)\) is the density of a random variable \(X\). The
+``hit-or-miss'' approach to estimating
+\(F(x) = \int_{-\infty}^x f(t)\,dt\) is as follows:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -4141,8 +4152,8 @@ of replicates}, so computational efficiency is also relevant.
 We have seen that MC integration may be used to estimate
 \(\theta:=\mathbb{E}[g(X)]\). However, how to have the \emph{efficient
 estimator } for \(\theta\), and if we have a several ways
-\(\hat{\theta}_1,\dots,\hat{\theta}_k\)to estimate \(\theta\), which one
-is \emph{better}, or, more efficient? Here, we try to introduce some
+\(\hat{\theta}_1,\dots,\hat{\theta}_k\) to estimate \(\theta\), which
+one is \emph{better}, or, more efficient? Here, we try to introduce some
 variance reduction techniques.
 
 Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
@@ -4155,9 +4166,8 @@ Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
 
 Let \(X\) be a random object and let \(g(\cdot)\) be a (possibly
 vector--valued) statistic of a \emph{sample} from the distribution of
-\(X\). For \(j=1,\ldots,m\), draw an i.i.d. replicate sample \$
-X\textsuperscript{\{(j)\}=\{X}\{(j)\}\_1,\ldots,X\^{}\{(j)\}\_n\} \$ and
-compute \[
+\(X\). For \(j=1,\ldots,m\), draw an i.i.d. replicate sample
+\(X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}\) and compute \[
 Y_j = g\!\big(X^{(j)}\big).
 \tag{6.5}
 \] Then \(Y_1,\ldots,Y_m\) are i.i.d. with common mean \[
@@ -4190,7 +4200,7 @@ sampling, importance sampling).
 error}\label{rule-of-thumb-for-target-standard-error}
 
 Given a target standard error \(\varepsilon\), we can solve
-\$\sqrt{\sigma^2/m} \le \varepsilon \$ for \(m\).
+\(\sqrt{\sigma^2/m} \le \varepsilon\) for \(m\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4227,9 +4237,9 @@ variance of the estimator. Recall that the variance of two variables are
 \[
 \mathbb{V}ar(X+Y) = \mathbb{V}ar(X) + \mathbb{V}ar(Y) + 2\mathbb{C}ov(X,Y),
 \] where
-\(\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}X \mathbb{E}Y\). The
+\(\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}[X] \mathbb{E}[Y]\). The
 covariance can be written as
-\(\mathbb{C}ov(X,Y) = rho_{YX} \sigma_X \sigma_Y\), where \(\rho_{YX}\)
+\(\mathbb{C}ov(X,Y) = \rho_{YX} \sigma_X \sigma_Y\), where \(\rho_{YX}\)
 is the correlation coefficient between \(X\) and \(Y\). If \(X\) and
 \(Y\) are negatively correlated, i.e., \(\rho_{YX} < 0\), then
 \(\mathbb{C}ov(X,Y) < 0\), which can lead to a reduction in the variance
@@ -4242,7 +4252,7 @@ to be \emph{antithetic} if they are negatively correlated, i.e.,
 Now, consier two random variable \(U_1\) and \(U_2\) that follows the
 same distribution. Then, if we take the average of the two random
 variables, we have \[
-\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left(\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right),
+\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right\},
 \] which will be smaller than when the two variables are independent (in
 that case, the last term is 0). Hence, the idea here it to consider the
 case where the RVs are \textbf{negatively correlated.}
@@ -4296,8 +4306,8 @@ reduce the variance of the estimator.
 Suppose there exists a function \(f(\cdot)\) such that
 \(\mu=\mathbb{E}[f(X)]\) is known, and \(f(X)\) is correlated with
 \(g(X)\). Then, we have, for a constant \(c\in\mathbb{R}\),
-\(\hat{\theta}_c = g(X) + c(f(X) - \mu)\) is also an unbiased estimator
-of \(\theta\). The variance of \(\hat{\theta}_c\) is \[
+\(\hat{\theta}_c = g(X) + c\{f(X) - \mu\}\) is also an unbiased
+estimator of \(\theta\). The variance of \(\hat{\theta}_c\) is \[
 \mathbb{V}ar(\hat{\theta}_c) = \mathbb{V}ar\{g(X)\} + c^2\mathbb{V}ar\{f(X)\} + 2c\mathbb{C}ov\{g(X), f(X)\}.
 \] This is a quadratic function in \(c\), and it is minimized at \[
 c^*=-\frac{\mathbb{C}ov\{g(X), f(X))\}}{\mathbb{V}ar\{f(X)\}}.

@@ -702,7 +702,7 @@ A mixture of multivariate normal distributions is a convex combination of multiv
 $$ Similar to the univariate case, different choice of $\alpha$ will lead to different degree of departure from the normal.
 
 ::: {.callout-algorithm title="Mixture of multivariate normal"}
-Given a $\alpha$, to simulate a random sample from $\alpha N_d(\mu_1, \Sigma_1) + (1 − p) N_d(\mu_2, \Sigma_2)$
+Given a $\alpha$, to simulatecallout-note a random sample from $\alpha N_d(\mu_1, \Sigma_1) + (1 − p) N_d(\mu_2, \Sigma_2)$
 
 There are two ways.
 
