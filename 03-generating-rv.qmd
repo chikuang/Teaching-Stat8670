@@ -1,12 +1,18 @@
 # Generating Random Variables
 
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\corr}{\mathbb{C}orr}
 \newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\geom}{\operatorname{Geom}}
-\newcommand{\beta}{\operatorname{Beta}}
+\newcommand{\bet}{\operatorname{Beta}}
 \newcommand{\bern}{\operatorname{Bern}}
-\newcommand{\R}{\mathbb{R}}
 \newcommand{\iid}{\overset{iid}{\sim}}
-\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
+
 
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
 pacman::p_load(MASS, microbenchmark, ggplot2, dplyr)
@@ -71,13 +77,15 @@ The first method to simulate rvs is the *inverse transformation method* (ITM).
 If $X\sim F_X$ is a continuous rv, then the rv $U = F_X(x) \sim \operatorname{Unif}(0,1)$.
 :::
 
-ITM of generating rvs applies the probability integral transformation. Define the inverse transformation $$ F^{−1}_X(u) = \inf\{x : F_X(x) = u\},\quad  0 < u < 1.$$ Then, if $U \sim \operatorname{Unif}(0,1)$, the rv $X = F^{−1}_X(U)$ has the distribution $F_X$. This can be shown as, for all $x \in R$ \begin{align}
+ITM of generating rvs applies the probability integral transformation. Define the inverse transformation $$ F^{−1}_X(u) = \inf\{x : F_X(x) = u\},\quad  0 < u < 1.$$ Then, if $U \sim \operatorname{Unif}(0,1)$, the rv $X = F^{−1}_X(U)$ has the distribution $F_X$. This can be shown as, for all $x \in \R$
+
+$$
+\begin{aligned}
 P\left(F_X^{-1}(U) \leq x\right) & =P\left(\inf \left\{t: F_X(t)=U\right\} \leq x\right) \\
 & =P\left(U \leq F_X(x)\right) \\
 & =F_U\left(F_X(x)\right)=F_X(x),
-\end{align}
-
-Hence, $F_X^{-1}(U)$ and $X$ have the same distribution. So, in order to generate rv $X$, we can simulate $U\sim \operatorname{Unif}(0,1)$ first, then apply the inverse $F_X^{-1}(u)$.
+\end{aligned}
+$$ Hence, $F_X^{-1}(U)$ and $X$ have the same distribution. So, in order to generate rv $X$, we can simulate $U\sim \unif(0,1)$ first, then apply the inverse $F_X^{-1}(u)$.
 
 ::: {.callout-note title="Procedure with inverse transformation method"}
 Given a distribution function $F_X(\cdot)$, we can simulate/generate a rv $X$ using the ITM in **three** steps:
@@ -88,8 +96,11 @@ Given a distribution function $F_X(\cdot)$, we can simulate/generate a rv $X$ us
 
 3.  For each random variate required:
 
-    i)  Generate a random $u\sim \operatorname{Unif}(0,1)$.
-    ii) Obtain $x = F_X^{-1}(u)$.
+<!-- -->
+
+i)  Generate a random $u\sim \unif(0,1)$.
+
+ii) Obtain $x = F_X^{-1}(u)$.
 :::
 
 ### Continuous case
@@ -101,7 +112,7 @@ Suppose we want to use the ITM to simulate $N=1000$ rvs from the density $f_X(x)
 
 1.  The cdf is $F_X(x)=x^3$, so the inverse function is $F_X^{-1}(u)=u^{1/3}$.
 
-2.  Simulate $N=1000$ rvs from $u\sim\operatorname{Unif}(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
+2.  Simulate $N=1000$ rvs from $u\sim\unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
 
 ```{r example2, warning = FALSE, message = FALSE}
 set.seed(777)
@@ -171,8 +182,11 @@ Then the procedure is:
 
 3.  For each random variate required:
 
-    i)  Generate a random $u\sim \operatorname{Unif}(0,1)$.
-    ii) Find $x_i$ such that $F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})$ and set $x = x_i$.
+<!-- -->
+
+i)  Generate a random $u\sim\unif(0,1)$.
+
+ii) Find $x_i$ such that $F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})$ and set $x = x_i$.
 :::
 
 ::: {.callout-example title="Two point distribution"}
@@ -206,7 +220,7 @@ In this example, we will use ITM to simulate $X\sim \operatorname{Geom}(1/4)$.
 
 Let $q:=1-p$. The pmf is $f(x) = p q^x$, $x = 0,1,2,\ldots$. At the points of discontinuity $x = 0,1,2,\ldots$, the cdf is $$
 F(x) = 1 - q^{x+1}.
-$$ For each sample element we need to generate a $u\sim \operatorname{Unif}(0,1)$ and solve $$
+$$ For each sample element we need to generate a $u\sim \unif(0,1)$ and solve $$
 1 - q^x < u \leq 1 - q^{x+1}.
 $$
 
@@ -239,13 +253,13 @@ ggplot(df, aes(x = value, fill = group)) +
   theme_minimal()
 ```
 
-The geometric distribution was particularly easy to simulate by the inverse transform method because it was easy to solve the inequality \[ F(x-1) \< u \leq F(x) \] rather than compare each $u$ to all the possible values $F(x)$. \medskip
+The geometric distribution was particularly easy to simulate by the inverse transform method because it was easy to solve the inequality $F(x-1) < u \leq F(x)$ rather than compare each $u$ to all the possible values $F(x)$. \medskip
 
 The same method applied to the Poisson distribution is more complicated because we do not have an explicit formula for the value of $x$ such that $$
 F(x-1) < u \leq F(x).
 $$
 
-The R function \texttt{rpois} generates random Poisson samples. The basic method to generate a Poisson($\lambda$) variate is to generate and store the cdf via the recursive formula $$
+The R function \texttt{rpois} generates random Poisson samples. The basic method to generate a Poisson ($\lambda$) variate is to generate and store the cdf via the recursive formula $$
 f(x+1) = \frac{\lambda f(x)}{x+1}, 
 \qquad 
 F(x+1) = F(x) + f(x+1).
@@ -269,9 +283,13 @@ Then we can simulate $X$ using the following procedure:
 
 2.  For each rv, required:
 
-    (i) Generate a random $y$ from the distribution with density $g_Y$.
-    (ii) Generate a random $u\sim \operatorname{Unif}(0,1)$.
-    (iii) If $u < f_X(y)/(k g_Y(y))$, accept $y$ and set $x = y$; o.w. reject $y$ and jump back to (i)
+<!-- -->
+
+(i) Generate a random $y$ from the distribution with density $g_Y$.
+
+(ii) Generate a random $u\sim\unif(0,1)$.
+
+(iii) If $u < f_X(y)/(k g_Y(y))$, accept $y$ and set $x = y$; o.w. reject $y$ and jump back to (i)
 :::
 
 Why it work?Note that in Step 2c, $$
@@ -300,11 +318,11 @@ $$
 ::: {.callout-example title="ARM for beta"}
 This example illustrates the acceptance--rejection method for the beta distribution.
 
-Q: On average, how many random numbers must be simulated to generate $N=1000$ samples from the $\operatorname{Beta}$(\alpha=2,\operatorname{Beta}=2)\$ distribution by ARM?
+Q: On average, how many random numbers must be simulated to generate $N=1000$ samples from the $\bet(\alpha=2,\beta=2)$ distribution by ARM?
 
-A: Depends on the upper bound $k$ of $f_X(t)/_Yg(t)$, which depends on the choice of the function $g_Y(\cdot)$.
+A: Depends on the upper bound $k$ of $f_X(t)/g_Y(t)$, which depends on the choice of the function $g_Y(\cdot)$.
 
-Recall that the $\operatorname{Beta}(2,2)$ density is $$
+Recall that the $\bet(2,2)$ density is $$
 f(t) = 6t(1-t), \quad 0 < t < 1.
 $$ Let $g(\cdot)$ be the Uniform(0,1) density. Then $$
 \frac{f(t)}{g(t)} = \frac{6t(1-t)}{(1)} = 6t(1-t) \leq k \quad \text{for all } 0 < t < 1.
@@ -829,9 +847,9 @@ ggplot(df_long, aes(x = Value)) +
 
 ### Uniform Distribution on a Sphere
 
-The uniform distribution on the surface of a $d$-sphere in $\mathbb{R}^d$ is the distribution that assigns equal probability to equal areas on the surface of the sphere.
+The uniform distribution on the surface of a $d$-sphere in $\R^d$ is the distribution that assigns equal probability to equal areas on the surface of the sphere.
 
-The d-sphere is the set of all points $x \in R^d$ such that $\| x \| = \sqrt{x^\top x) = 1$. Random vectors uniformly distributed on the $d$-sphere have equally likely directions. A method of generating this distribution uses a property of the
+The d-sphere is the set of all points $x \in \R^d$ such that $\| x \| = \sqrt{x^\top x} = 1$. Random vectors uniformly distributed on the $d$-sphere have equally likely directions. A method of generating this distribution uses a property of the
 
 multivariate normal distribution (see \[97, 160\]). If X1, . . . , Xd are iid N (0, 1), then U = (U1, . . . , Ud) is uniformly distributed on the unit sphere in Rd, where
 

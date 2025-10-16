@@ -223,7 +223,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-10-15}
+\date{2025-10-16}
 \begin{document}
 \maketitle
 
@@ -246,9 +246,9 @@
 
 \markright{Description}
 
-Topics ins included are optimization, numerical integration,
-bootstrapping, cross-validation and Jackknife, density estimation,
-smoothing, and use of the statistical computer package of S-plus/R.
+Topics included are optimization, numerical integration, bootstrapping,
+cross-validation and Jackknife, density estimation, smoothing, and use
+of the statistical computer package of S-plus/R.
 
 \subsection*{Prerequisites}\label{prerequisites}
 \addcontentsline{toc}{subsection}{Prerequisites}
@@ -288,11 +288,11 @@ University.
 \item
   Assignments: 40\%
 \item
-  Term Exam 1: 15\%
+  Exam 1: 15\%
 \item
-  Term Exam 2: 15\%
+  Exam 2: 15\%
 \item
-  Final Project: 30\%
+  Project: 30\%
 \end{itemize}
 
 \section*{Assignment}\label{assignment}
@@ -307,7 +307,9 @@ University.
 \item[$\boxtimes$]
   Assignment 2: Due on September 22, 2025
 \item[$\square$]
-  Assignment 3: TBA
+  Assignment 3: Due on October 22, 2025
+\item[$\square$]
+  Assignment 4: TBA
 \end{itemize}
 
 \section*{Midterm}\label{midterm}
@@ -323,17 +325,17 @@ University.
   Midterm 2 on November 12, 2025
 \end{itemize}
 
-\section*{Final Project}\label{final-project}
-\addcontentsline{toc}{section}{Final Project}
+\section*{Project}\label{project}
+\addcontentsline{toc}{section}{Project}
 
-\markright{Final Project}
+\markright{Project}
 
 \begin{itemize}
 \tightlist
 \item[$\square$]
   Report: Due Date TBA
 \item[$\square$]
-  Presentation: Due Date TBA
+  Presentation: Date TBA
 \end{itemize}
 
 \section*{Topics and Corresponding
@@ -352,18 +354,17 @@ Topic & Lecture Covered \\
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Introduction to R Programming & 1--2 \\
+R Programming & 1--2 \\
 Numerical Approaches and Optimization in 1-D & 3--5 \\
 Review for Distribution & 6--7 \\
 Random Variable Generation & 8--10 \\
-Monte Carlo and Integration & 11-- \\
-Term Exam 1 & 13 \\
-Jackknife & TBA \\
-Bootstrap & TBA \\
+Monte Carlo and Integration & 11--15 \\
+Exam 1 & 13 \\
+Bootstrap and Jackknife & 16-- \\
 Cross-validation & TBA \\
+Exam 2 & 23 \\
 Smoothing & TBA \\
 Density estimation & TBA \\
-Monte Carlo Methods & TBA \\
 \end{longtable}
 
 \section*{Recommended Textbooks}\label{recommended-textbooks}
@@ -402,6 +403,19 @@ Monte Carlo Methods & TBA \\
 
 \chapter{Data Structure and R
 Programming}\label{data-structure-and-r-programming}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
 
 Data types, operators, variables
 
@@ -2284,13 +2298,18 @@ Examples are borrowed from the following sources:
 
 \chapter{Generating Random Variables}\label{generating-random-variables}
 
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\corr}{\mathbb{C}orr}
 \newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\geom}{\operatorname{Geom}}
-\newcommand{\beta}{\operatorname{Beta}}
+\newcommand{\bet}{\operatorname{Beta}}
 \newcommand{\bern}{\operatorname{Bern}}
-\newcommand{\R}{\mathbb{R}}
 \newcommand{\iid}{\overset{iid}{\sim}}
-\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
 
 One of the fundamental tools required in computational statistics is the
 ability to \emph{simulate random variables} (rvs) from specified
@@ -2394,19 +2413,20 @@ ITM of generating rvs applies the probability integral transformation.
 Define the inverse transformation
 \[ F^{−1}_X(u) = \inf\{x : F_X(x) = u\},\quad  0 < u < 1.\] Then, if
 \(U \sim \operatorname{Unif}(0,1)\), the rv \(X = F^{−1}_X(U)\) has the
-distribution \(F_X\). This can be shown as, for all \(x \in R\)
-\begin{align}
+distribution \(F_X\). This can be shown as, for all \(x \in \mathbb{R}\)
+
+\[
+\begin{aligned}
 P\left(F_X^{-1}(U) \leq x\right) & =P\left(\inf \left\{t: F_X(t)=U\right\} \leq x\right) \\
 & =P\left(U \leq F_X(x)\right) \\
 & =F_U\left(F_X(x)\right)=F_X(x),
-\end{align}
-
-Hence, \(F_X^{-1}(U)\) and \(X\) have the same distribution. So, in
+\end{aligned}
+\] Hence, \(F_X^{-1}(U)\) and \(X\) have the same distribution. So, in
 order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2419,15 +2439,14 @@ rv \(X\) using the ITM in \textbf{three} steps:
   Write a (\textbf{R}) command or function to compute \(F_X^{-1}(u)\).
 \item
   For each random variate required:
+\end{enumerate}
 
-  \begin{enumerate}
-  \def\labelenumii{\roman{enumii})}
-  \tightlist
-  \item
-    Generate a random \(u\sim \operatorname{Unif}(0,1)\).
-  \item
-    Obtain \(x = F_X^{-1}(u)\).
-  \end{enumerate}
+\begin{enumerate}
+\def\labelenumi{\roman{enumi})}
+\item
+  Generate a random \(u\sim \operatorname{Unif}(0,1)\).
+\item
+  Obtain \(x = F_X^{-1}(u)\).
 \end{enumerate}
 
 \end{tcolorbox}
@@ -2525,7 +2544,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2536,16 +2555,15 @@ Then the procedure is:
   Write a (\textbf{R}) command or function to compute \(F_X^{-1}(u)\).
 \item
   For each random variate required:
+\end{enumerate}
 
-  \begin{enumerate}
-  \def\labelenumii{\roman{enumii})}
-  \tightlist
-  \item
-    Generate a random \(u\sim \operatorname{Unif}(0,1)\).
-  \item
-    Find \(x_i\) such that \(F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})\) and
-    set \(x = x_i\).
-  \end{enumerate}
+\begin{enumerate}
+\def\labelenumi{\roman{enumi})}
+\item
+  Generate a random \(u\sim\operatorname{Unif}(0,1)\).
+\item
+  Find \(x_i\) such that \(F_X(x_{(i-1)}) < u \leq F_X(x_{(i)})\) and
+  set \(x = x_i\).
 \end{enumerate}
 
 \end{tcolorbox}
@@ -2638,9 +2656,9 @@ zero. Thus, we can simplify it to
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/geom2-1.pdf}}
 
 The geometric distribution was particularly easy to simulate by the
-inverse transform method because it was easy to solve the inequality {[}
-F(x-1) \textless{} u \leq F(x) {]} rather than compare each \(u\) to all
-the possible values \(F(x)\). \medskip
+inverse transform method because it was easy to solve the inequality
+\(F(x-1) < u \leq F(x)\) rather than compare each \(u\) to all the
+possible values \(F(x)\). \medskip
 
 The same method applied to the Poisson distribution is more complicated
 because we do not have an explicit formula for the value of \(x\) such
@@ -2649,7 +2667,7 @@ F(x-1) < u \leq F(x).
 \]
 
 The R function \texttt{rpois} generates random Poisson samples. The
-basic method to generate a Poisson(\(\lambda\)) variate is to generate
+basic method to generate a Poisson (\(\lambda\)) variate is to generate
 and store the cdf via the recursive formula \[
 f(x+1) = \frac{\lambda f(x)}{x+1}, 
 \qquad 
@@ -2683,18 +2701,17 @@ Then we can simulate \(X\) using the following procedure:
   \(f_X(t)/g_Y(t) \le k,\) for all \(t\) such that \(f(t) > 0\).
 \item
   For each rv, required:
+\end{enumerate}
 
-  \begin{enumerate}
-  \def\labelenumii{(\roman{enumii})}
-  \tightlist
-  \item
-    Generate a random \(y\) from the distribution with density \(g_Y\).
-  \item
-    Generate a random \(u\sim \operatorname{Unif}(0,1)\).
-  \item
-    If \(u < f_X(y)/(k g_Y(y))\), accept \(y\) and set \(x = y\); o.w.
-    reject \(y\) and jump back to (i)
-  \end{enumerate}
+\begin{enumerate}
+\def\labelenumi{(\roman{enumi})}
+\item
+  Generate a random \(y\) from the distribution with density \(g_Y\).
+\item
+  Generate a random \(u\sim\operatorname{Unif}(0,1)\).
+\item
+  If \(u < f_X(y)/(k g_Y(y))\), accept \(y\) and set \(x = y\); o.w.
+  reject \(y\) and jump back to (i)
 \end{enumerate}
 
 Why it work?Note that in Step 2c, \[
@@ -2731,11 +2748,10 @@ This example illustrates the acceptance--rejection method for the beta
 distribution.
 
 Q: On average, how many random numbers must be simulated to generate
-\(N=1000\) samples from the
-\(\operatorname{Beta}\)(\alpha=2,\operatorname{Beta}=2)\$ distribution
-by ARM?
+\(N=1000\) samples from the \(\operatorname{Beta}(\alpha=2,\beta=2)\)
+distribution by ARM?
 
-A: Depends on the upper bound \(k\) of \(f_X(t)/_Yg(t)\), which depends
+A: Depends on the upper bound \(k\) of \(f_X(t)/g_Y(t)\), which depends
 on the choice of the function \(g_Y(\cdot)\).
 
 Recall that the \(\operatorname{Beta}(2,2)\) density is \[
@@ -2973,7 +2989,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -2982,7 +2998,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3138,7 +3154,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3409,7 +3425,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3457,7 +3473,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3513,8 +3529,8 @@ The uniform distribution on the surface of a \(d\)-sphere in
 \(\mathbb{R}^d\) is the distribution that assigns equal probability to
 equal areas on the surface of the sphere.
 
-The d-sphere is the set of all points \(x \in R^d\) such that
-\(\| x \| = \sqrt{x^\top x) = 1\). Random vectors uniformly distributed
+The d-sphere is the set of all points \(x \in \mathbb{R}^d\) such that
+\(\| x \| = \sqrt{x^\top x} = 1\). Random vectors uniformly distributed
 on the \(d\)-sphere have equally likely directions. A method of
 generating this distribution uses a property of the
 
@@ -3628,16 +3644,17 @@ Reference used:
 \chapter{Monte Carlo Simulation and Variance
 Reduction}\label{monte-carlo-simulation-and-variance-reduction}
 
-\newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\E}{\mathbb{E}}
-\newcommand{\var}{\mathbb{V}ar}
-\newcommand{\geom}{\operatorname{Geom}}
-\newcommand{\beta}{\operatorname{Beta}}
-\newcommand{\bern}{\operatorname{Bern}}
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\var}{\mathbb{V}ar}
 \newcommand{\cov}{\mathbb{C}ov}
-\newcommand{\eff}{\operatorname{Eff}}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
 \newcommand{\htt}{\hat{\theta}}
 
 Monte Carlo (MC) integration is a simulation-based method for
@@ -3704,9 +3721,8 @@ Monte Carlo methods vary, but tend to follow a particular pattern:
 \end{enumerate}
 
 For example, consider a quadrant (circular sector) inscribed in a unit
-square. Given that the ratio of their areas is
-\$\pi/4\(4⁠, the value o f\)\piπ can be approximated using the Monte
-Carlo method:
+square. Given that the ratio of their areas is \(\pi/4\), the value of
+\(\pi\) can be approximated using the Monte Carlo method:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -3719,8 +3735,8 @@ Carlo method:
   from the origin of less than 1.
 \item
   The ratio of the inside-count and the total-sample-count is an
-  estimate of the ratio of the two areas, ⁠π/4⁠. Multiply the result by 4
-  to estimate π.
+  estimate of the ratio of the two areas, \(\pi/4\). Multiplying this
+  ratio by 4 gives an estimate of \(\pi\).
 \end{enumerate}
 
 \begin{figure}[H]
@@ -3837,7 +3853,7 @@ To summarize, the simple Monte Carlo estimator of the integral
 \item
   Compute \(\bar{g}(X) = \frac{1}{m} g(X_i)\).
 \item
-  \(\hat{\theta} = (b − a)\bar{g}(X)\).
+  \(\hat{\theta}= (b − a)\bar{g}(X)\).
 \end{enumerate}
 
 Compute a MC estimate of a standard normal cdf
@@ -3875,9 +3891,9 @@ compute
 \]
 
 The sample mean \(\hat{\theta}\) converges to
-\(\mathbb{E}\hat{\theta} = \theta\) as \(m\to \infty\). If \(x > 0\),
-the estimate of \(\Phi(x) = 1/2 + \hat{\theta}/\sqrt{2\pi}\). If
-\(x < 0\) compute \(\Phi(x) = 1 − \Phi(−x)\).
+\(\mathbb{E}\hat{\theta}= \theta\) as \(m\to \infty\). If \(x > 0\), the
+estimate of \(\Phi(x) = 1/2 + \hat{\theta}/\sqrt{2\pi}\). If \(x < 0\)
+compute \(\Phi(x) = 1 − \Phi(−x)\).
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3914,7 +3930,7 @@ evaluated at \(x\).
 
 Generate a random sample \(z_1, \dots , z_m\sim N(0,1)\). Then the
 theoretical mean and sample mean are
-\[\hat{\theta} = \frac{1}{m} \sum_{i=1}^m I(z_i \le x),\] and
+\[\hat{\theta}= \frac{1}{m} \sum_{i=1}^m I(z_i \le x),\] and
 \[\mathbb{E}[\hat{\theta}] = P(Z \le x) = \Phi(x).\]
 
 \begin{Shaded}
@@ -3943,20 +3959,20 @@ In this example, compared with the previous example, it appears that we
 have better agreement with \texttt{pnorm()} in the upper tail, but worse
 agreement near the center.
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 Summarizing, if \(f (x)\) is a probability density function supported on
 a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
 \(\int_A f (x) = 1\)), to estimate the integral
 \[\theta = \int_A g(x)f (x)dx,\] generate a random sample
 \(x_1,\dots,x_m\) from the distribution \(f (x)\), and compute the
-sample mean \[\hat{\theta} = \frac{1}{m}\sum_{i=1}^mg(x_i).\] Then
+sample mean \[\hat{\theta}= \frac{1}{m}\sum_{i=1}^mg(x_i).\] Then
 \(\hat{\theta}\overset{p}{\to}\theta\) by the weak law of large numbers
 (WLLN).
 
 \end{tcolorbox}
 
-The standard error of \(\hat{\theta} = \frac{1}{m}\sum_{i=1}^m g(x_i)\).
+The standard error of \(\hat{\theta}= \frac{1}{m}\sum_{i=1}^m g(x_i)\).
 
 Recall that, \(\mathbb{V}ar({\hat{\theta}})=\sigma^2/m\) where
 \(\sigma^2 = \mathbb{V}ar\{g(X)\}\). When the distribution of \(X\) is
@@ -4044,7 +4060,7 @@ the integral \(\theta\) is computed as follows.
 \item
   Compute \(\bar{g}(X) = g(X_i)/m\)
 \item
-  \(\hat{\theta} = (b − a)\bar{g}(X)\).
+  \(\hat{\theta}= (b − a)\bar{g}(X)\).
 \end{enumerate}
 
 The sample mean \(\bar{g}(X)\) has expected value \(g(X)=\theta/(b-a)\)
@@ -4053,7 +4069,7 @@ CLT, \(\bar{g}(X)\) is approximately normal for large \(m\). Therefore,
 the variance of the MC estimator \(\hat{\theta}\) is approximately
 normal with mean \(\theta\) and variance \(\mathbb{V}ar\{g(X)\}/m\).
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, coltitle=black, opacityback=0, toprule=.15mm, titlerule=0mm, breakable, bottomtitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, rightrule=.15mm, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, left=2mm, opacitybacktitle=0.6, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
 
 The expectation and the variance of the MC estimator \(\hat{\theta}\)
 are given by \begin{align*}
@@ -4110,7 +4126,7 @@ the success probability is\\
 p := P(X \leq x) = F(x).
 \]
 
-The transformed sample \(Y_1, \ldots, Y_m\) are the outcomes of \$ m\$
+The transformed sample \(Y_1, \ldots, Y_m\) are the outcomes of \(m\)
 independent, identically distributed Bernoulli trials.
 
 The estimator \(\hat{F}(x)\) is the sample proportion \[
@@ -4151,7 +4167,7 @@ of replicates}, so computational efficiency is also relevant.
 
 We have seen that MC integration may be used to estimate
 \(\theta:=\mathbb{E}[g(X)]\). However, how to have the \emph{efficient
-estimator } for \(\theta\), and if we have a several ways
+estimator} for \(\theta\), and if we have a several ways
 \(\hat{\theta}_1,\dots,\hat{\theta}_k\) to estimate \(\theta\), which
 one is \emph{better}, or, more efficient? Here, we try to introduce some
 variance reduction techniques.
@@ -4159,297 +4175,136 @@ variance reduction techniques.
 Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
 \(\theta\) where
 \(\mathbb{V}ar(\hat{\theta}_1) > \mathbb{V}ar(\hat{\theta}_2)\). The
-\emph{relative efficiency gain } of \(\hat{\theta_2}\) instead of using
-\(\hat{\theta_1}\) is defined as \[
+\emph{relative efficiency gain} of \(\hat{\theta}_2\) instead of using
+\(\hat{\theta}_1\) is defined as \[
 \operatorname{Eff}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\mathbb{V}ar(\hat{\theta}_1)- \mathbb{V}ar(\hat{\theta}_2)}{\mathbb{V}ar(\hat{\theta}_1)}.
 \]
-
-Let \(X\) be a random object and let \(g(\cdot)\) be a (possibly
-vector--valued) statistic of a \emph{sample} from the distribution of
-\(X\). For \(j=1,\ldots,m\), draw an i.i.d. replicate sample
-\(X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}\) and compute \[
-Y_j = g\!\big(X^{(j)}\big).
-\tag{6.5}
-\] Then \(Y_1,\ldots,Y_m\) are i.i.d. with common mean \[
-\theta \;=\; \mathbb{E}\big[g(X)\big] \;=\; \mathbb{E}[Y].
-\]
-
-The MC estimator of \(\theta\) is the sample mean \[
-\hat{\theta}\;=\; \bar Y \;=\; \frac{1}{m}\sum_{j=1}^m Y_j.
-\] By linearity of expectation, \[
-\mathbb{E}[\hat{\theta}] \;=\; \theta,
-\] so \(\hat{\theta}\) is unbiased. Its variance is \[
-\mathbb{V}ar(\hat{\theta})
-  \;=\; \mathbb{V}ar(\bar Y)
-  \;=\; \frac{\mathbb{V}ar\{g(X)\}}{m}.
-\]
-
-Hence the standard error decays as \(m^{-1/2}\). To reduce the standard
-error from \(0.01\) to \(0.0001\), one would need about \(10000\) times
-as many replicates. More generally, if \(\mathbb{V}ar\{g(X)\}=\sigma^2\)
-and we target standard error at most \(\varepsilon\), then \[
-m \;\ge\; \frac{\sigma^2}{\varepsilon^2}
-\] replicates suffice (ignoring finite--\(m\) effects).
-
-The remainder of this note gives a minimal simulation illustrating the
-\(1/\sqrt{m}\) behavior and provides a template for later
-variance--reduction sections (e.g., control variates, antithetic
-sampling, importance sampling).
-
-\section{Rule-of-thumb for target standard
-error}\label{rule-of-thumb-for-target-standard-error}
-
-Given a target standard error \(\varepsilon\), we can solve
-\(\sqrt{\sigma^2/m} \le \varepsilon\) for \(m\).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{theta\_true }\OtherTok{\textless{}{-}} \DecValTok{1}
-\NormalTok{sigma2\_true }\OtherTok{\textless{}{-}} \DecValTok{2}
-\NormalTok{epsilon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.01}\NormalTok{, }\FloatTok{0.005}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
-\NormalTok{required\_m }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(sigma2\_true }\SpecialCharTok{/}\NormalTok{ (epsilon}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
-\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{se\_target =}\NormalTok{ epsilon, }\AttributeTok{m\_needed =}\NormalTok{ required\_m)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  se_target m_needed
-1     0.100    2e+02
-2     0.050    8e+02
-3     0.010    2e+04
-4     0.005    8e+04
-5     0.001    2e+06
-\end{verbatim}
-
-\begin{quote}
-\textbf{Remark.} Increasing \(m\) always reduces variance but can be
-costly. Variance--reduction techniques seek lower variance at the
-\emph{same} \(m\) (or similar compute), rather than increasing \(m\)
-alone.
-\end{quote}
-
-\section{Antithetic Variables}\label{antithetic-variables}
-
-Antithetic variables are a variance reduction technique used in MC
-simulation to improve the efficiency of estimators. The basic idea is to
-use pairs of negatively correlated random variables to reduce the
-variance of the estimator. Recall that the variance of two variables are
-\[
-\mathbb{V}ar(X+Y) = \mathbb{V}ar(X) + \mathbb{V}ar(Y) + 2\mathbb{C}ov(X,Y),
-\] where
-\(\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}[X] \mathbb{E}[Y]\). The
-covariance can be written as
-\(\mathbb{C}ov(X,Y) = \rho_{YX} \sigma_X \sigma_Y\), where \(\rho_{YX}\)
-is the correlation coefficient between \(X\) and \(Y\). If \(X\) and
-\(Y\) are negatively correlated, i.e., \(\rho_{YX} < 0\), then
-\(\mathbb{C}ov(X,Y) < 0\), which can lead to a reduction in the variance
-of the sum \(X + Y\).
-
-Random Variables \(X\) and \(Y\) on the same probability space are said
-to be \emph{antithetic} if they are negatively correlated, i.e.,
-\(\mathbb{C}ov(X,Y) < 0\).
-
-Now, consier two random variable \(U_1\) and \(U_2\) that follows the
-same distribution. Then, if we take the average of the two random
-variables, we have \[
-\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right\},
-\] which will be smaller than when the two variables are independent (in
-that case, the last term is 0). Hence, the idea here it to consider the
-case where the RVs are \textbf{negatively correlated.}
-
-Suppose that \(X_1, \dots , X_n\) are simulated via the ITM. For each of
-the m replicates we have generated \(U_j \sim\operatorname{Unif}(0,1)\),
-and the corresponding \(X^{(j)} = F^{−1}_X(U_j), j = 1, \dots, n\). From
-before, we know that if \(U\sim\operatorname{Unif}(0,1)\), then
-\(1 − U\) has the same distribution as \(U\), but \(U\) and \(1 − U\)
-are negatively correlated. Then
-
-\[ Y_j = g(F^{−1}_X(U^{(j)}_1 ), \dots , F^{−1}_X(U_n^{(j)})),\] and
-
-\[ Y_j^\prime = g(F^{−1}_X(1-U^{(j)}_1 ), . . . , F^{−1}_X(1-U_n^{(j)}))\]
-have the same distribution. So the question now if, when will
-\(Y_j^{\prime}\) and \(Y_j\) be negatively correlated?
-
-We will see that if \(g(\cdot)\) is monotone, then \(Y_j\) and
-\(Y_j^{\prime}\) are negatively correlated.
-
-Define \((x_1, . . . , x_n) \le (y_1, \dots , y_n)\) if
-\(x_j ≤ y_j, j = 1, \dots, n\). An \(n\)-variate function
-\(g := g(X_1, \dots, X_n)\) is increasing if it is increasing in its
-coordinates. That is, \(g\) is increasing if
-\(g(x_1,\dots, x_n) \le g(y_1, \dots, y_n)\) whenever
-\((x_1, \dots , x_n) \le (y_1, . . . , y_n)\). Similarly \(g\) is
-decreasing if it is decreasing in its coordinates. Then \(g\) is
-monotone if it is increasing or decreasing.
-
-Let \(X\) be a random varaible, and \(f\) and \(g\) are monotonic
-increasing functions. Then \[
-\mathbb{E}[f(X)g(X)] \ge \mathbb{E}[f(X)]\mathbb{E}[g(X)].
-\]
-
-It is actually a corollary of the above theorem.
-
-Let \(g := g(X_1, \dots, X_n)\) be monotonic, and
-\(U_1, \dots, U_n \sim \operatorname{Unif}(0,1)\) be independent. Then
-
-\[ Y_j^\prime = g(F^{−1}_X(1-U_1 ), . . . , F^{−1}_X(1-U_n))\] and
-\[ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))\] are
-\textbf{negatively correlated}.
-
-\section{Control Variates}\label{control-variates}
-
-Control variates is another variance reduction technique used in MC
-simulation to improve the efficiency of estimators. The basic idea is to
-use a known variable that is correlated with the variable of interest to
-reduce the variance of the estimator.
-
-Suppose there exists a function \(f(\cdot)\) such that
-\(\mu=\mathbb{E}[f(X)]\) is known, and \(f(X)\) is correlated with
-\(g(X)\). Then, we have, for a constant \(c\in\mathbb{R}\),
-\(\hat{\theta}_c = g(X) + c\{f(X) - \mu\}\) is also an unbiased
-estimator of \(\theta\). The variance of \(\hat{\theta}_c\) is \[
-\mathbb{V}ar(\hat{\theta}_c) = \mathbb{V}ar\{g(X)\} + c^2\mathbb{V}ar\{f(X)\} + 2c\mathbb{C}ov\{g(X), f(X)\}.
-\] This is a quadratic function in \(c\), and it is minimized at \[
-c^*=-\frac{\mathbb{C}ov\{g(X), f(X))\}}{\mathbb{V}ar\{f(X)\}}.
-\] By plugging in this optimizer \(c=c^\ast\), the resulting variance is
-\[
-\mathbb{V}ar(\hat{\theta}_{c^\ast}) = \mathbb{V}ar\{g(X)\} - \frac{[\mathbb{C}ov\{g(X), f(X)\}]^2}{\mathbb{V}ar\{f(X)\}}.
-\] This RV \(f(X)\) is called a \emph{control variate} for the estimator
-of \(g(X)\).
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-Reference used:
-
-\begin{itemize}
-\item
-  Chapter 6 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
-  CRC Press, Roca Baton.
-\item
-  Monte Carlo Method page on Wikiepdia,
-  \href{https://en.wikipedia.org/wiki/Monte_Carlo_method}{Link}.
-\end{itemize}
-
-\bookmarksetup{startatroot}
-
-\chapter{Numerical integration}\label{numerical-integration}
-
-\newcommand{\E}{\mathbb E}
-\newcommand{\X}{\mathcal X}
-
-\section{Motivation and usage}\label{motivation-and-usage}
-
-Integration is a fundamental concept in statistics, for instance, when
-calculating the variance, we have \[
-  \mathbb EX = \int_{x\in\mathcal X} x dF_X(x),\quad \mathbb E_{x\in\mathcal X} g(X) = \int g(x) dF_X(x).
-\] If density exists, we have \[
-\mathbb EX = \int_{x\in\mathcal X} x f_X(x) dx,\quad \mathbb Eg(X) = \int_{x\in\mathcal X} g(x) f_X(x) dx.
-\] Other than calculating for the moments, integration also plays a big
-parts in other parts in the field of statistics and data science.
-
-\begin{itemize}
-\tightlist
-\item
-  Marginal likelihood and Bayesian statistics:
-\end{itemize}
-
-\[
-  p(x) = \int_{\theta\in\Theta}     p(x|\theta)p(\theta)\,d\theta,
-\] where the integration is over the nuisance/latent parameter
-\(\theta\in\Theta\).
-
-\begin{itemize}
-\tightlist
-\item
-  Bayesian Statistics
-\end{itemize}
-
-The Bayes' theorem involves integration in both the denominator and
-posterior expectations:
-
-\[
-p(\theta|x) = \frac{p(x|\theta)p(\theta)}{\int p(x|\theta)p(\theta)\,d\theta}
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  Functional observations
-\end{itemize}
-
-When you want to calculate the inner product of the two observations
-\(x,y\in L^2(\mathcal X)\), you need to calculate the integral
-
-\[
-\langle f,g \rangle = \int f(t)g(t)\,dt.
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  Machine Learning
-\end{itemize}
-
-In machine learning, you often need to compute integrals in many tasks,
-including calculating the \emph{risks} and \emph{loss}.
-
-For example, in \emph{supervised learning}, we have
-
-\[R(\theta) := \mathbb E{(X,Y) \sim P}[L(f_\theta(X), Y)],
-\] where \(L(\cdot,\cdot)\) is a loss function (e.g., squared error,
-cross-entropy).
-
-In variational inference (VI) solves this by approximating the true
-posterior \(p(\theta|x)\) with a simpler distribution
-\(q_\phi(\theta)\). We then maximize the \emph{Evidence Lower Bound}
-(ELBO):
-
-\[
-\log p(x) \geq \mathbb{E}{q\phi(\theta)}\big[\log p(x|\theta)\big] - \text{KL}(q_\phi(\theta)\,\|\,p(\theta)).
-\] In this formula, we have two integrals to solve:
-
-\begin{itemize}
-\tightlist
-\item
-  The 1st term is an integral:
-\end{itemize}
-
-\[\int q_\phi(\theta)\,\log p(x|\theta)\, d\theta,\] which is often
-approximated by Monte Carlo sampling.
-
-\begin{itemize}
-\tightlist
-\item
-  The 2nd term, the KL divergence, is another integral:
-\end{itemize}
-
-\[\text{KL}(q \| p) = \int q_\phi(\theta) \log \frac{q_\phi(\theta)}{p(\theta)} \, d\theta.\]
-
-\section{}\label{section}
-
-\section{Multivariate Case}\label{multivariate-case}
-
-We need to calculate the gradient/Jacobian matrix and Hessian matrix.
-
-\subsection{EM Algorithm}\label{em-algorithm}
-
-The EM (Expectation--Maximization) algorithm is an optimization method
-that is often applied to find maximum likelihood estimates when data is
-incomplete or has missing values. It iteratively refines estimates of
-parameters by alternating between (1) expectation step (E-step) and (2)
-maximization step (M-step).
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \bookmarksetup{startatroot}
 
 \chapter{Resampling, Jackknife and
 Bootstrap}\label{resampling-jackknife-and-bootstrap}
 
+\newcommand{\htt}{\hat{\theta}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\b}{\mathbb{b}}
+
 \section{Introduction}\label{introduction}
 
 This chapter covers resampling methods including the jackknife and
 bootstrap techniques.
+
+\section{Resampling methods}\label{resampling-methods}
+
+Resampling methods treat an observed sample as a \emph{finite
+population}, and random samples are generated/resampled from it to
+estimate population characteristics and make inferences about the
+sampled population. Some commonly used resampling methods include:
+
+\begin{itemize}
+\item
+  \textbf{Bootstrap}: Bootstrap methods are often used when the
+  distribution of the target population is not specified; the sample is
+  the only information available.
+\item
+  \textbf{Jackknife}: The jackknife is a resampling technique used to
+  estimate the bias and variance of a statistic. It is like a
+  leave-one-out (LOO) cross-validation.
+\item
+  \textbf{Cross-validation}: Cross-validation is a model validation
+  technique for assessing how the results of a statistical analysis will
+  generalize to an independent data set. It is mainly used in settings
+  where the goal is prediction, and one wants to estimate how accurately
+  a predictive model will perform in practice.
+\item
+  \textbf{Permutation tests}: Permutation tests are a type of
+  non-parametric statistical test that involves rearranging the data
+  points to test a hypothesis. They are used to determine whether the
+  observed effect is statistically significant by comparing it to the
+  distribution of effects obtained through random permutations of the
+  data.
+\end{itemize}
+
+\section{Motivations}\label{motivations}
+
+\subsection{Bias-Variance Tradeoff}\label{bias-variance-tradeoff}
+
+In statistics, the bias-variance tradeoff is the property of a model
+that the variance of the parameter estimated across samples can be
+reduced by increasing the bias in the estimated parameters. If we look
+at the Mean square error (MSE) of an estimator \(\hat{\theta}\) for a
+parameter \(\theta\):
+
+\[\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb{b}(\hat{\theta})]^2,\]
+where \(\mathbb{b}\) is the bias of the estimator.
+
+For most of our course, we focus on the unbiased estimator. Then, such
+as in the MC Chapter, we can compare the (relative) efficiency between
+the estimators, and discuss about the variance reduction.
+
+\section{Bootstrap}\label{bootstrap}
+
+The bootstrap is a resampling method that allows estimation of the
+\emph{sampling distribution} of almost any statistic using random
+sampling methods.
+
+\begin{itemize}
+\item
+  Parametric bootstrap:
+\item
+  Nonparametric bootstrap: In nonparametric bootstrap, the distribution
+  is not specified.
+\end{itemize}
+
+The distribution of the finite population represented by the sample can
+be regarded as a pseudo-population with similar characteristics as the
+true popu- lation. By repeatedly generating random samples from this
+pseudo-population (resampling), the sampling distribution of a statistic
+can be estimated. Prop- erties of an estimator such as bias or standard
+error can be estimated by resampling.
+
+Bootstrap estimates of a sampling distribution are analogous to the idea
+of density estimation. We construct a histogram of a sample to obtain an
+estimate of the shape of the density function. The histogram is not the
+density, but in a nonparametric problem, can be viewed as a reasonable
+estimate of the density. We have methods to generate random samples from
+completely specified densities; bootstrap generates random samples from
+the empirical distribution of the sample.
+
+The term \emph{bootstrap} can refer to nonparametric bootstrap or
+parametric bootstrap. Monte Carlo methods that involve sampling from a
+fully specified probability distribution, such as methods of Chapter 7
+are sometimes called parametric bootstrap. Nonparametric bootstrap is
+the subject of this chapter. In nonparametric bootstrap, the
+distribution is not specified.
+
+To generate a bootstrap random sample by resampling x, generate n random
+integers \(\{i_1,\dots, i_n\}\) uniformly distributed on
+\(\{1,\dots , n\}\) and select the bootstrap sample
+\(x^∗ = (x_{i_1} ,\dots, x_{i_n} )\). Suppose θ is the parameter of
+interest (θ could be a vector), and ˆθ is an estimator of θ. Then the
+bootstrap estimate of the distribution of ˆθ is obtained as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For each bootstrap replicate, indexed b = 1, . . . , B:
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with
+    replacement from the observed sample x1, . . . , xn.
+  \item
+    Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
+  \end{enumerate}
+\item
+  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the
+  repli- cates ˆθ(1), . . . , ˆθ(B).
+\end{enumerate}
 
 \section{Jackknife}\label{jackknife}
 
@@ -4471,16 +4326,94 @@ work?}\label{when-does-jackknife-not-work}
 Jackknife does not work when the function \(T(\cdot)\) is \textbf{not a
 smooth} functional!
 
-\section{Bootstrap}\label{bootstrap}
+\section{Jackknife}\label{jackknife-1}
 
-The bootstrap is a resampling method that allows estimation of the
-sampling distribution of almost any statistic using random sampling
-methods.
+The jackknife is another resampling method, proposed by Quenouille
+{[}225, 224{]} for estimating bias, and by Tukey {[}289{]} for
+estimating standard error, a few decades earlier than the bootstrap.
+Efron {[}88{]} is a good introduction to the jackknife.
+
+Jackknife is a special kind of \emph{Cross-validation} where we
+\emph{leave-one-out} (LOO) the observation, and calculate the quantities
+on the remaining data. To fix the idea, let \(x=(x_1,\dots,x_n)\) be the
+observed data of samele size \(n\). The \(i\)th jackknife sample is
+defined as \(x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\), that is,
+the sample with the \(i\)th observation removed. Let
+\(\hat{\theta}=T(x)\) be the estimator of the parameter of interest
+\(\theta\). The \(i\)th jackknife replicate is defined as
+\(\hat{\theta}_{-i}=T(x_{-i})\), that is, the estimate computed from the
+\(i\)th jackknife sample. The jackknife estimate of bias is defined as
+
+\subsection{Jackknife Estimate of
+Bias}\label{jackknife-estimate-of-bias}
+
+If ˆθ is a smooth (plug-in) statistic, then
+\(\hat{\theta}_{(\cdot)} = t\{F_{n−1}(x(i))\}\), and the jackknife
+estimate of bias is \[
+\hat{b}_{jack} = (n − 1)(\hat{\theta}_{(\cdot)} − \hat{\theta}), 
+\] where
+\(\overline{\hat{\theta}_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat{\theta}_{(i)}\)
+is the average of the estimate from LOO samples, and
+\(\hat{\theta}=\hat{\theta}(x)\) is the estimate from the original
+observed sample.
+
+Compute the jackknife estimate of bias for the patch data in the
+\texttt{bootstrap} package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(patch, }\AttributeTok{package =} \StringTok{"bootstrap"}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(patch)}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{y}
+\NormalTok{z }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{z}
+\NormalTok{theta.hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z)}
+\FunctionTok{print}\NormalTok{ (theta.hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.0713061
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#compute the jackknife replicates, leave{-}one{-}out estimates}
+\NormalTok{theta.jack }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
+\NormalTok{  theta.jack[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y[}\SpecialCharTok{{-}}\NormalTok{i]) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z[}\SpecialCharTok{{-}}\NormalTok{i])}
+\NormalTok{\}}
+\NormalTok{bias }\OtherTok{\textless{}{-}}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ (}\FunctionTok{mean}\NormalTok{(theta.jack) }\SpecialCharTok{{-}}\NormalTok{ theta.hat)  }
+\NormalTok{bias }\CommentTok{\#jackknife estimate of bias}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.008002488
+\end{verbatim}
 
 \section{Applications}\label{applications}
 
 These methods are widely used in statistical inference and have
 applications in various fields.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Reference:
+
+\begin{itemize}
+\item
+  Chapter 8 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
+  CRC Press, Roca Baton.
+\item
+  Wu, C.F.J.
+  (1986).\href{https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full}{Bootstrap
+  and Other Resampling Methods in Regression Analysis}. \emph{The Annals
+  of Statistics}.
+\end{itemize}
+
+\bookmarksetup{startatroot}
+
+\chapter{Cross Validation}\label{cross-validation}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -5128,20 +5061,20 @@ important role in Statistical Theory.
 
 Similar to the discrete uniform distribution except all values within an
 interval have equal probability. The parameters of the Uniform Density
-are \alpha and \operatorname{Beta} (\alpha \textless{}
-\operatorname{Beta}). The random variable X has the Uniform Distribution
-if it is continuous and its probability density function is given by \[
+are \alpha and \beta (\alpha \textless{} \beta). The random variable X
+has the Uniform Distribution if it is continuous and its probability
+density function is given by \[
 f_X(x) =
 \begin{cases}
-\dfrac{1}{\operatorname{Beta}- \alpha}, & \alpha < x < \operatorname{Beta}, \\[1ex]
+\dfrac{1}{\beta - \alpha}, & \alpha < x < \beta, \\[1ex]
 0, & \text{otherwise}.
 \end{cases}
 \]
 
 The mean and variance of the Uniform Distribution are
-\[\mathbb{E}X = \frac{\alpha + \operatorname{Beta}}{2},
+\[\mathbb{E}X = \frac{\alpha + \beta}{2},
 \qquad
-\mathbb{V}ar(X) = \frac{(\operatorname{Beta}- \alpha)^2}{12}.
+\mathbb{V}ar(X) = \frac{(\beta - \alpha)^2}{12}.
 \]
 
 \subsubsection{Implementation in R}\label{implementation-in-r-4}
@@ -5185,17 +5118,17 @@ For any positive integer \(\alpha > 0\),
 A continuous random variable follows a Gamma Distribution if and only if
 its probability density function is of the form \[f_X(x) =
 \begin{cases}
-\dfrac{1}{\operatorname{Beta}^{\alpha}\Gamma(\alpha)} x^{\alpha - 1} e^{-x/\operatorname{Beta}}, & x > 0, \\[2ex]
+\dfrac{1}{\beta^{\alpha}\Gamma(\alpha)} x^{\alpha - 1} e^{-x/\beta}, & x > 0, \\[2ex]
 0, & \text{otherwise},
-\end{cases}\] where \(\alpha, \operatorname{Beta}\) are positive. The
-parameters \(\alpha\) and \(\operatorname{Beta}\) determine the shape of
-the distribution. \(\alpha\) is called the shape parameter and
-\(\operatorname{Beta}\) is called the scale parameter.
+\end{cases}\] where \(\alpha, \beta\) are positive. The parameters
+\(\alpha\) and \(\beta\) determine the shape of the distribution.
+\(\alpha\) is called the shape parameter and \(\beta\) is called the
+scale parameter.
 
 Theorem: The mean and variance of the Gamma Distribution are
-\[\mathbb{E}X = \alpha \operatorname{Beta},
+\[\mathbb{E}X = \alpha \beta,
 \qquad
-\mathbb{V}ar(X) = \alpha \operatorname{Beta}^2\]
+\mathbb{V}ar(X) = \alpha \beta^2\]
 
 \subsubsection{Implementation in R}\label{implementation-in-r-5}
 
@@ -5209,9 +5142,9 @@ Theorem: The mean and variance of the Gamma Distribution are
 
 A special case of the Gamma Distribution arises when \(\alpha = 1\). To
 differentiate it from the Gamma distribution, we also let
-\(\operatorname{Beta}= \theta\). A continuous random variable follows an
-Exponential Distribution if and only if its probability density function
-is of the form: \[f_X(x) =
+\(\beta = \theta\). A continuous random variable follows an Exponential
+Distribution if and only if its probability density function is of the
+form: \[f_X(x) =
 \begin{cases}
 \dfrac{1}{\theta} e^{-x/\theta}, & x > 0, \\[2ex]
 0, & \text{otherwise}.
@@ -5270,7 +5203,7 @@ The mean and variance of the exponential distribution are
 \subsection{Chi-Square Distribution}\label{chi-square-distribution}
 
 There is another special form of the gamma distribution when
-\(\alpha =\nu/2\) and \(\operatorname{Beta}= 2.
+\(\alpha =\nu/2\) and \(\beta = 2.
 \nu\) is pronounced ``nu'' and is called the degrees of freedom.
 
 A continuous random variable follows a Chi-Square Distribution if and
@@ -5315,27 +5248,27 @@ The mean and variance of the Chi-Square Distribution are
 This is \textbf{Not} a special case of the Gamma distribution
 
 The Beta function is defined as \[
-B(\alpha, \operatorname{Beta}) = \frac{\Gamma(\alpha)\Gamma(\operatorname{Beta})}{\Gamma(\alpha + \operatorname{Beta})}
-= \int_0^1 x^{\alpha - 1} (1-x)^{\operatorname{Beta}- 1} \, dx.\]
+B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha + \beta)}
+= \int_0^1 x^{\alpha - 1} (1-x)^{\beta - 1} \, dx.\]
 
 Like any probability density, the area underneath it must be equal to 1.
 So, we can rearrange the above definition and write:
-\[1 = \int_0^1 \frac{\Gamma(\alpha+\operatorname{Beta})}{\Gamma(\alpha)\Gamma(\operatorname{Beta})}
-x^{\alpha-1} (1-x)^{\operatorname{Beta}-1} \, dx.\]
+\[1 = \int_0^1 \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+x^{\alpha-1} (1-x)^{\beta-1} \, dx.\]
 
 A continuous random variable follows a Beta Distribution if and only if
 its probability density function is given by \[
 f_X(x) =
 \begin{cases}
-\dfrac{\Gamma(\alpha+\operatorname{Beta})}{\Gamma(\alpha)\Gamma(\operatorname{Beta})}
-x^{\alpha-1}(1-x)^{\operatorname{Beta}-1}, & 0 < x < 1, \\[2ex]
+\dfrac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}
+x^{\alpha-1}(1-x)^{\beta-1}, & 0 < x < 1, \\[2ex]
 0, & \text{otherwise},
-\end{cases}\] where \(\alpha > 0\), \(\operatorname{Beta}> 0\).
+\end{cases}\] where \(\alpha > 0\), \(\beta > 0\).
 
 The mean and variance of the Beta Distribution are
-\[\mathbb{E}X = \frac{\alpha}{\alpha + \operatorname{Beta}},
+\[\mathbb{E}X = \frac{\alpha}{\alpha + \beta},
 \qquad
-\mathbb{V}ar(X) = \frac{\alpha \operatorname{Beta}}{(\alpha + \operatorname{Beta})^2 (\alpha + \operatorname{Beta}+ 1)}.
+\mathbb{V}ar(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}.
 \]
 
 \subsubsection{Implementation in R}\label{implementation-in-r-7}
@@ -5384,8 +5317,7 @@ where
 \(p^\prime = \text{Binomial}_{pmf}(k,n,p), \quad k = \text{mode}(\text{Binomial}(n,p)).\)
 
 To relate the binomial distribution to the scale and shape parameters of
-the beta distribution:
-\(\alpha = k + 1, \quad \operatorname{Beta}= n - \alpha + 2\).
+the beta distribution: \(\alpha = k + 1, \quad \beta = n - \alpha + 2\).
 
 \subsubsection{Implementation in R}\label{implementation-in-r-8}
 
@@ -5672,10 +5604,183 @@ Special thanks to
 Dr.~\href{https://cas.gsu.edu/profile/brian-pidgeon/}{Brian Pidgeon} who
 kindly share the notes.
 
-\chapter{Appendix: R Package}\label{appendix-r-package}
+\chapter{Appendix: Project \& R
+Package}\label{appendix-project-r-package}
 
-\newcommand{\E}{\mathbb{E}}
-\newcommand{\var}{\mathbb{V}ar}
+\section{Group}\label{group}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Group & Member 1 & Member 2 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & Akomanyi-Addo, Allswell & Sarpong, Felix \\
+2 & Zhang, Zilong & \\
+3 & Stell, Tommy & \\
+4 & Vu, Ha & \\
+5 & Zhang, Boshu & You, Sifan \\
+\end{longtable}
+
+\section{Format}\label{format}
+
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, colback=white, breakable, left=2mm, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm]
+\begin{minipage}[t]{5.5mm}
+\textcolor{quarto-callout-note-color}{\faInfo}
+\end{minipage}%
+\begin{minipage}[t]{\textwidth - 5.5mm}
+
+\vspace{-3mm}\textbf{Final Project --- Fall 2025}\vspace{3mm}
+
+\textbf{Due:} To be Annouced\\
+\textbf{Points:} {{[}20+10{]} points}\\
+\textbf{This version:} October 16, 2025
+
+\end{minipage}%
+\end{tcolorbox}
+
+\section{Overview}\label{overview-1}
+
+The final project is a key component of this course, designed to
+integrate computational thinking, statistical theory, and reproducible
+research practices. Your goal is to develop an \texttt{R} package that
+implements a computational or statistical method, document it, and
+present your work both in a written report and an oral presentation.
+
+This project will give you hands-on experience with:
+
+\begin{itemize}
+\tightlist
+\item
+  Implementing statistical algorithms efficiently in \texttt{R},
+\item
+  Packaging reproducible code and documentation,
+\item
+  Writing professional scientific reports,
+\item
+  Communicating technical results effectively.
+\end{itemize}
+
+\section{Project Components}\label{project-components}
+
+Your submission will consist of three main parts.
+
+\subsection{\texorpdfstring{1. \texttt{R}
+Package}{1. R Package}}\label{r-package}
+
+You will create an \texttt{R} package that provides a computational or
+statistical tool. The package should:
+
+\begin{itemize}
+\tightlist
+\item
+  Contain well-documented functions using \texttt{roxygen2},
+\item
+  Include example data (if appropriate),
+\item
+  Provide at least one working vignette demonstrating use cases,
+\item
+  Include meaningful unit tests (e.g., using \texttt{testthat}),
+\item
+  Pass \texttt{R\ CMD\ check} without errors.
+\end{itemize}
+
+Possible directions include:
+
+\begin{itemize}
+\tightlist
+\item
+  Implementation of a Monte Carlo or MCMC algorithm,
+\item
+  Other numerical optimization algorithms or integration routines,
+\item
+  Resampling methods (bootstrap, permutation tests),
+\item
+  Dimensionality reduction or regression algorithms,
+\item
+  Simulation frameworks for a statistical model.
+\item
+  Other things you find interesting. Come and talk to me before you
+  start.
+\end{itemize}
+
+\subsection{2. Written Report}\label{written-report}
+
+The report 8-10 pages should be written in LaTeX and may include but not
+limited to:
+
+\begin{itemize}
+\tightlist
+\item
+  Motivation and background of your method or problem,
+\item
+  Description of algorithmic implementation,
+\item
+  Simulation or data analysis examples,
+\item
+  Discussion of computational efficiency and accuracy,
+\item
+  Future extensions or open problems.
+\end{itemize}
+
+Try to look at the \href{https://journal.r-project.org/}{R Journal}
+articles for inspiration on structure and style.
+
+\subsection{3. Presentation}\label{presentation}
+
+You will give a presentation {[}Length TBA after everyone finds a
+team{]} during the class sessions. Your presentation should:
+
+\begin{itemize}
+\tightlist
+\item
+  Summarize the motivation, method, and results,
+\item
+  Include a live demo or code walkthrough (optional but encouraged),
+\item
+  Be clear, concise, and visually well-prepared.
+\end{itemize}
+
+\section{Collaboration Policy}\label{collaboration-policy}
+
+You may discuss ideas and coding techniques with classmates, but the
+final package and report must be your own work. All code and text should
+be written individually.
+
+\section{Submission Instructions}\label{submission-instructions}
+
+\begin{itemize}
+\tightlist
+\item
+  Submit your package via a public GitHub repository link.
+\item
+  Upload your report (PDF) and slides to the course submission portal.
+\item
+  Include installation instructions in the \texttt{README.md}.
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, colframe=quarto-callout-tip-color-frame, arc=.35mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+
+\textbf{Tip:} Start early --- the package structure, documentation, and
+testing usually take longer than expected!
+
+\end{tcolorbox}
+
+\section{Good readings}\label{good-readings}
+
+Another good
+\href{\%5Bhttps://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html\%5D}{reference}
+in writing a Rpackage written by \emph{Fong Chun Chan}.
+
+\begin{itemize}
+\item
+  An article by Posit (formerly Rstudio)
+  \href{https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html}{LINK}
+\item
+  Another one by the MIT folks
+  \href{https://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf}{LINK}
+\end{itemize}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -5687,7 +5792,124 @@ Resources
   page}
 \item
   Wickham, H. and Bryan, J. \href{https://r-pkgs.org/}{R Package}.
+\item
+  \href{https://cran.r-project.org/doc/manuals/r-release/R-exts.html}{Writing
+  R Extensions (CRAN Manual)}
+\item
+  \href{https://bookdown.org/yihui/rmarkdown/}{R Markdown Cookbook}
+\item
+  \href{https://adv-r.hadley.nz/}{Advanced R}
 \end{itemize}
+
+\chapter{Appendix: Numerical
+integration}\label{appendix-numerical-integration}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\X}{\mathcal X}
+
+\section{Motivation and usage}\label{motivation-and-usage}
+
+Integration is a fundamental concept in statistics, for instance, when
+calculating the variance, we have \[
+  \mathbb EX = \int_{x\in\mathcal X} x dF_X(x),\quad \mathbb E_{x\in\mathcal X} g(X) = \int g(x) dF_X(x).
+\] If density exists, we have \[
+\mathbb EX = \int_{x\in\mathcal X} x f_X(x) dx,\quad \mathbb Eg(X) = \int_{x\in\mathcal X} g(x) f_X(x) dx.
+\] Other than calculating for the moments, integration also plays a big
+parts in other parts in the field of statistics and data science.
+
+\begin{itemize}
+\tightlist
+\item
+  Marginal likelihood and Bayesian statistics:
+\end{itemize}
+
+\[
+  p(x) = \int_{\theta\in\Theta}     p(x|\theta)p(\theta)\,d\theta,
+\] where the integration is over the nuisance/latent parameter
+\(\theta\in\Theta\).
+
+\begin{itemize}
+\tightlist
+\item
+  Bayesian Statistics
+\end{itemize}
+
+The Bayes' theorem involves integration in both the denominator and
+posterior expectations:
+
+\[
+p(\theta|x) = \frac{p(x|\theta)p(\theta)}{\int p(x|\theta)p(\theta)\,d\theta}
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  Functional observations
+\end{itemize}
+
+When you want to calculate the inner product of the two observations
+\(x,y\in L^2(\mathcal X)\), you need to calculate the integral
+
+\[
+\langle f,g \rangle = \int f(t)g(t)\,dt.
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  Machine Learning
+\end{itemize}
+
+In machine learning, you often need to compute integrals in many tasks,
+including calculating the \emph{risks} and \emph{loss}.
+
+For example, in \emph{supervised learning}, we have
+
+\[R(\theta) := \mathbb E{(X,Y) \sim P}[L(f_\theta(X), Y)],
+\] where \(L(\cdot,\cdot)\) is a loss function (e.g., squared error,
+cross-entropy).
+
+In variational inference (VI) solves this by approximating the true
+posterior \(p(\theta|x)\) with a simpler distribution
+\(q_\phi(\theta)\). We then maximize the \emph{Evidence Lower Bound}
+(ELBO):
+
+\[
+\log p(x) \geq \mathbb{E}{q\phi(\theta)}\big[\log p(x|\theta)\big] - \text{KL}(q_\phi(\theta)\,\|\,p(\theta)).
+\] In this formula, we have two integrals to solve:
+
+\begin{itemize}
+\tightlist
+\item
+  The 1st term is an integral:
+\end{itemize}
+
+\[\int q_\phi(\theta)\,\log p(x|\theta)\, d\theta,\] which is often
+approximated by Monte Carlo sampling.
+
+\begin{itemize}
+\tightlist
+\item
+  The 2nd term, the KL divergence, is another integral:
+\end{itemize}
+
+\[\text{KL}(q \| p) = \int q_\phi(\theta) \log \frac{q_\phi(\theta)}{p(\theta)} \, d\theta.\]
+
+\section{}\label{section}
+
+\section{Multivariate Case}\label{multivariate-case}
+
+We need to calculate the gradient/Jacobian matrix and Hessian matrix.
+
+\subsection{EM Algorithm}\label{em-algorithm}
+
+The EM (Expectation--Maximization) algorithm is an optimization method
+that is often applied to find maximum likelihood estimates when data is
+incomplete or has missing values. It iteratively refines estimates of
+parameters by alternating between (1) expectation step (E-step) and (2)
+maximization step (M-step).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 
 
