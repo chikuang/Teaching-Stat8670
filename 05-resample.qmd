@@ -1,10 +1,69 @@
 # Resampling, Jackknife and Bootstrap
 
 \newcommand{\htt}{\hat{\theta}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\b}{\mathbb{b}}
 
 ## Introduction
 
 This chapter covers resampling methods including the jackknife and bootstrap techniques.
+
+## Resampling methods
+
+Resampling methods treat an observed sample as a finite population, and random samples are generated (resampled) from it to estimate population characteristics and make inferences about the sampled population. 
+
+
+- **Bootstrap**:  Bootstrap methods are often used when the distribution of the target population is not specified; the sample is the only information available.
+
+- **Jackknife**: The jackknife is a resampling technique used to estimate the bias and variance of a statistic. It is like a leave-one-out (LOO) cross-validation. 
+
+- *Cross-validation*: Cross-validation is a model validation technique for assessing how the results of a statistical analysis will generalize to an independent data set. It is mainly used in settings where the goal is prediction, and one wants to estimate how accurately a predictive model will perform in practice.
+
+- *Permutation tests*: Permutation tests are a type of non-parametric statistical test that involves rearranging the data points to test a hypothesis. They are used to determine whether the observed effect is statistically significant by comparing it to the distribution of effects obtained through random permutations of the data.
+
+## Motivations
+
+### Bias-Variance Tradeoff
+
+In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\hat{\theta}$ for a parameter $\theta$:
+
+$$\E[(\htt -\theta )^2 ]= \var(\htt) + [\b(\htt)]^2,$$
+where $\b$ is the bias of the estimator.
+
+## Bootstrap
+
+The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods.
+
+- Parametric bootstrap: 
+
+- Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified.
+
+The distribution of the finite population represented by the sample can be
+regarded as a pseudo-population with similar characteristics as the true popu-
+lation. By repeatedly generating random samples from this pseudo-population
+(resampling), the sampling distribution of a statistic can be estimated. Prop-
+erties of an estimator such as bias or standard error can be estimated by resampling.
+
+Bootstrap estimates of a sampling distribution are analogous to the idea
+of density estimation. We construct a histogram of a sample to obtain an
+estimate of the shape of the density function. The histogram is not the density,
+but in a nonparametric problem, can be viewed as a reasonable estimate of
+the density. We have methods to generate random samples from completely
+specified densities; bootstrap generates random samples from the empirical
+distribution of the sample.
+
+
+The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
+
+To generate a bootstrap random sample by resampling x, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.
+
+1.  For each bootstrap replicate, indexed b = 1, . . . , B:
+    (a) Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.
+    (b) Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
+2.  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).
+
+
 
 ## Jackknife
 
@@ -18,24 +77,7 @@ For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\ha
 
 Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
 
-## Bootstrap
 
-The bootstrap is a resampling method that allows estimation of the sampling distribution of almost any statistic using random sampling methods.
-
-## Applications
-
-These methods are widely used in statistical inference and have applications in various fields.
-
-## Bootstrap
-
-The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
-
-To generate a bootstrap random sample by resampling x, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.
-
-1.  For each bootstrap replicate, indexed b = 1, . . . , B:
-    (a) Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.
-    (b) Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
-2.  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).
 
 ## Jackknife
 
@@ -75,4 +117,19 @@ bias #jackknife estimate of bias
 ```
 :::
 
-------------------------------------------------------------------------
+## Applications
+
+These methods are widely used in statistical inference and have applications in various fields.
+
+
+
+
+----
+
+Reference:
+
+-   Chapter 8 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
+
+- Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.
+
+- Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.

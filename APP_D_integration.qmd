@@ -1,4 +1,4 @@
-# Appendix -- Numerical integration
+# Appendix: Numerical integration
 
 \newcommand{\E}{\mathbb E}
 \newcommand{\X}{\mathcal X}
