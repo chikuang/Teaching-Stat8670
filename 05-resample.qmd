@@ -124,12 +124,10 @@ These methods are widely used in statistical inference and have applications in 
 
 
 
-----
+---
 
 Reference:
 
 -   Chapter 8 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
-
-- Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.
 
 - Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.

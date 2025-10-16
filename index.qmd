@@ -2,7 +2,7 @@
 
 ## Description
 
-Topics ins included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
+Topics included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
 
 ### Prerequisites
 
@@ -22,9 +22,9 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 ## Grade Distribution
 
 -   Assignments: 40%
--   Term Exam 1: 15%
--   Term Exam 2: 15%
--   Final Project: 30%
+-   Exam 1: 15%
+-   Exam 2: 15%
+-   Project: 30%
 
 ## Assignment
 
@@ -38,10 +38,10 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 -   [x] Midterm 1 on October 8, 2025
 -   [ ] Midterm 2 on November 12, 2025
 
-## Final Project
+## Project
 
 -   [ ] Report: Due Date TBA
--   [ ] Presentation: Due Date TBA
+-   [ ] Presentation: Date TBA
 
 ## Topics and Corresponding Lectures
 
@@ -49,15 +49,15 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Topic                                        | Lecture Covered |
 |----------------------------------------------|:---------------:|
-| Introduction to R Programming                |      1--2       |
+| R Programming                                |      1--2       |
 | Numerical Approaches and Optimization in 1-D |      3--5       |
 | Review for Distribution                      |      6--7       |
 | Random Variable Generation                   |      8--10      |
-| Monte Carlo and Integration                  |      11--       |
-| Term Exam 1                                  |       13        |
-| Bootstrap and Jackknife                      |       TBA       |
+| Monte Carlo and Integration                  |     11--15      |
+| Exam 1                                       |       13        |
+| Bootstrap and Jackknife                      |      16--       |
 | Cross-validation                             |       TBA       |
-| Term Exam 2                                  |       23        |
+| Exam 2                                       |       23        |
 | Smoothing                                    |       TBA       |
 | Density estimation                           |       TBA       |
 
