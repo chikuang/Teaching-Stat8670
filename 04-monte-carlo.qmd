@@ -61,7 +61,8 @@ Monte Carlo methods vary, but tend to follow a particular pattern:
 :::
 
 ::: {.callout-example title="Calculating the quadrant"}
-For example, consider a quadrant (circular sector) inscribed in a unit square. Given that the ratio of their areas is \$\pi/4$4⁠, the value o f$\piπ can be approximated using the Monte Carlo method:
+For example, consider a quadrant (circular sector) inscribed in a unit square. Given that the ratio of their areas is
+$\pi/4$, the value of $\pi$ can be approximated using the Monte Carlo method:
 
 1.  Draw a square, then inscribe a quadrant within it.
 
@@ -69,7 +70,7 @@ For example, consider a quadrant (circular sector) inscribed in a unit square. G
 
 3.  Count the number of points inside the quadrant, i.e. having a distance from the origin of less than 1.
 
-4.  The ratio of the inside-count and the total-sample-count is an estimate of the ratio of the two areas, ⁠π/4⁠. Multiply the result by 4 to estimate π.
+4.  The ratio of the inside-count and the total-sample-count is an estimate of the ratio of the two areas, $\pi/4$⁠. Multiply the result by 4 to estimate π.
 
 ![Picture borrowed from Wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Pi_monte_carlo_all.gif/660px-Pi_monte_carlo_all.gif "borrowed from Wikipedia")
 :::
@@ -298,7 +299,7 @@ $$
 p := P(X \leq x) = F(x).
 $$
 
-The transformed sample $Y_1, \ldots, Y_m$ are the outcomes of \$ m\$ independent, identically distributed Bernoulli trials.
+The transformed sample $Y_1, \ldots, Y_m$ are the outcomes of $m$ independent, identically distributed Bernoulli trials.
 
 The estimator $\hat{F}(x)$ is the sample proportion $$
 \hat{p} = \frac{y}{m},

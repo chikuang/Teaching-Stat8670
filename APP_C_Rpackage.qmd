@@ -1,6 +1,6 @@
 # Appendix: Project & R Package
 
-## Pairs
+## Group
 
 | Group | Member 1         | Member 2        |
 |--------|--------------------------------|--------------------------------|
@@ -8,6 +8,7 @@
 | 2      | Zhang, Zilong                  |                    |
 | 3      | Stell, Tommy                  |                    |
 | 4      | Vu, Ha                 |         |      
+| 5      | Zhang, Boshu                 |   You, Sifan      |      
 
 
 
