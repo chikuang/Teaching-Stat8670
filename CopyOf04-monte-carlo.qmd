@@ -319,3 +319,5 @@ Let $\htt_1$ and $\htt_2$ be two estimators of $\theta$ where $\var(\htt_1) > \v
 \ef(\htt_1, \htt_2) = \frac{\var(\htt_1)- \var(\htt_2)}{\var(\htt_1)}.
 $$
 :::
+
+
