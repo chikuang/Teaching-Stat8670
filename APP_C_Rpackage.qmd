@@ -2,22 +2,24 @@
 
 ## Group
 
-| Group | Member 1                | Member 2       |
-|-------|-------------------------|----------------|
-| 1     | Akomanyi-Addo, Allswell | Sarpong, Felix |
-| 2     | Zhang, Zilong           |                |
-| 3     | Stell, Tommy            |                |
-| 4     | Vu, Ha                  |                |
-| 5     | Zhang, Boshu            | You, Sifan     |
+| Group | Member 1                | Member 2       | Topic | 
+|:-------:|:-------------------------:|:----------------:|:----------------:|
+| 1     | Akomanyi-Addo, Allswell | Sarpong, Felix | TBA | 
+| 2     | Zhang, Zilong           |                | TBA|
+| 3     | Stell, Tommy            |                | TBA|
+| 4     | Vu, Ha                  |                |TBA|
+| 5     | Zhang, Boshu            | You, Sifan     |TBA|
+| 6     | Zhang, Yalin            |                |TBA|
 
-## Format 
+## Format
 
 ::: {.callout-note appearance="simple"}
 ## Final Project — Fall 2025
 
 <!-- **Due:** <span style="color:blue">Friday, December 5, 2025</span>   -->
-**Due:** To be Annouced</span>  
-**Points:** <span style="color:blue">[20+10] points</span>  
+
+**Due:** To be Annouced</span>\
+**Points:** [\[20+10\] points]{style="color:blue"}\
 **This version:** October 16, 2025
 :::
 
@@ -27,10 +29,10 @@ The final project is a key component of this course, designed to integrate compu
 
 This project will give you hands-on experience with:
 
-- Implementing statistical algorithms efficiently in `R`,
-- Packaging reproducible code and documentation,
-- Writing professional scientific reports,
-- Communicating technical results effectively.
+-   Implementing statistical algorithms efficiently in `R`,
+-   Packaging reproducible code and documentation,
+-   Writing professional scientific reports,
+-   Communicating technical results effectively.
 
 ## Project Components
 
@@ -40,55 +42,56 @@ Your submission will consist of three main parts.
 
 You will create an `R` package that provides a computational or statistical tool. The package should:
 
-- Contain well-documented functions using `roxygen2`,
-- Include example data (if appropriate),
-- Provide at least one working vignette demonstrating use cases,
-- Include meaningful unit tests (e.g., using `testthat`),
-- Pass `R CMD check` without errors.
+-   Contain well-documented functions using `roxygen2`,
+-   Include example data (if appropriate),
+-   Provide at least one working vignette demonstrating use cases,
+-   Include meaningful unit tests (e.g., using `testthat`),
+-   Pass `R CMD check` without errors.
 
 Possible directions include:
 
-- Implementation of a Monte Carlo or MCMC algorithm,
-- Other numerical optimization algorithms or integration routines,
-- Resampling methods (bootstrap, permutation tests),
-- Dimensionality reduction or regression algorithms,
-- Simulation frameworks for a statistical model.
-- Other things you find interesting. Come and talk to me before you start.
+-   Implementation of a Monte Carlo or MCMC algorithm,
+-   Other numerical optimization algorithms or integration routines,
+-   Resampling methods (bootstrap, permutation tests),
+-   Dimensionality reduction or regression algorithms,
+-   Simulation frameworks for a statistical model.
+-   Other things you find interesting. Come and talk to me before you start.
 
 ### 2. Written Report
 
 The report 8-10 pages should be written in LaTeX and may include but not limited to:
 
-- Motivation and background of your method or problem,
-- Description of algorithmic implementation,
-- Simulation or data analysis examples,
-- Discussion of computational efficiency and accuracy,
-- Future extensions or open problems.
+-   Motivation and background of your method or problem,
+-   Description of algorithmic implementation,
+-   Simulation or data analysis examples,
+-   Discussion of computational efficiency and accuracy,
+-   Future extensions or open problems.
 
 Try to look at the [R Journal](https://journal.r-project.org/) articles for inspiration on structure and style.
 
 ### 3. Presentation
 
-You will give a presentation [Length TBA after everyone finds a team] during the class sessions. Your presentation should:
+You will give a presentation \[Length TBA after everyone finds a team\] during the class sessions. Your presentation should:
 
-- Summarize the motivation, method, and results,
-- Include a live demo or code walkthrough (optional but encouraged),
-- Be clear, concise, and visually well-prepared.
+-   Summarize the motivation, method, and results,
+-   Include a live demo or code walkthrough (optional but encouraged),
+-   Be clear, concise, and visually well-prepared.
 
 ## Collaboration Policy
 
-You may discuss ideas and coding techniques with classmates, but the final package and report must be your own work. All code and text should be written individually.
+You may discuss ideas and coding techniques with classmates, but the final package and report must be your own work. All code and text should be written individually or with your groupmate if you decide to team up.
 
 ## Submission Instructions
 
-- Submit your package via a public GitHub repository link.
-- Upload your report (PDF) and slides to the course submission portal.
-- Include installation instructions in the `README.md`.
+-   Submit your package via a public GitHub repository link.
+-   Upload your report (PDF) and slides to the course submission portal.
+-   Include installation instructions in the `README.md`.
 
-::: {.callout-tip}
+::: callout-tip
 **Tip:** Start early — the package structure, documentation, and testing usually take longer than expected!
 :::
 
+```{=html}
 <!--
 ## Grading Breakdown (optional)
 - R Package — 50
@@ -96,7 +99,7 @@ You may discuss ideas and coding techniques with classmates, but the final packa
 - Presentation — 20
 **Total — 100**
 -->
-
+```
 
 ## Good readings
 
@@ -114,10 +117,8 @@ Resources
 
 -   Wickham, H. and Bryan, J. [R Package](https://r-pkgs.org/).
 
+-   [Writing R Extensions (CRAN Manual)](https://cran.r-project.org/doc/manuals/r-release/R-exts.html)
 
-- [Writing R Extensions (CRAN Manual)](https://cran.r-project.org/doc/manuals/r-release/R-exts.html)
+-   [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown/)
 
-- [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown/)
-
-- [Advanced R](https://adv-r.hadley.nz/)
-
+-   [Advanced R](https://adv-r.hadley.nz/)

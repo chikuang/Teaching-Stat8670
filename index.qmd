@@ -1,7 +1,5 @@
 # Preface {.unnumbered}
 
-
-
 ## Description
 
 Topics included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
