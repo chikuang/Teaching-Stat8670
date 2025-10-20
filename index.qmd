@@ -17,7 +17,9 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Office Hour
 
-14:00--15:00 on Tuesday and Wednesday.
+14:00--15:00 on Tuesday
+
+13:00 - 14:00 on Friday (online)
 
 ## Grade Distribution
 
@@ -47,20 +49,19 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-| Topic                                        | Lecture Covered |
-|----------------------------------------------|:---------------:|
-| R Programming                                |      1--2       |
-| Numerical Approaches and Optimization in 1-D |      3--5       |
-| Review for Distribution                      |      6--7       |
-| Random Variable Generation                   |      8--10      |
-| Monte Carlo and Integration                  |     11--15      |
-| Exam 1                                       |       13        |
-| Bootstrap and Jackknife                      |      16--       |
-| Cross-validation                             |       TBA       |
-| Exam 2                                       |       23        |
-| Smoothing                                    |       TBA       |
-| Density estimation                           |       TBA       |
 
+| Status      |                 Topic                 | Lecture Covered |
+|:------------:|:------------------------------------:|:---------------:|
+| ✅ Complete  | R Programming                        |      1–2        |
+| ✅ Complete  | Numerical Approaches and Optimization in 1-D |      3–5        |
+| ✅ Complete  | Review for Distribution              |      6–7        |
+| ✅ Complete  | Random Variable Generation           |      8–10       |
+| ✅ Complete| Monte Carlo and Integration         |     11–15       |
+| ✅ Complete  | Exam 1                               |      13         |
+| ⏳ In Progress    | Resampling methods: Cross-validation, Bootstrap and Jackknife | 16– |
+| 🔜 Planned   | Exam 2                               |      23         |
+| 🔜 Planned   | Smoothing                            |      TBA        |
+| 🔜 Planned   | Density estimation                   |      TBA        |
 ## Recommended Textbooks
 
 -   Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.

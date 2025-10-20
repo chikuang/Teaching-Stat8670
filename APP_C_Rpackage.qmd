@@ -2,14 +2,14 @@
 
 ## Group
 
-| Group | Member 1                | Member 2       | Topic | 
-|:-------:|:-------------------------:|:----------------:|:----------------:|
-| 1     | Akomanyi-Addo, Allswell | Sarpong, Felix | TBA | 
-| 2     | Zhang, Zilong           |                | TBA|
-| 3     | Stell, Tommy            |                | TBA|
-| 4     | Vu, Ha                  |                |TBA|
-| 5     | Zhang, Boshu            | You, Sifan     |TBA|
-| 6     | Zhang, Yalin            |                |TBA|
+| Group |        Member 1         |    Member 2    | Topic |
+|:-----:|:-----------------------:|:--------------:|:-----:|
+|   1   | Akomanyi-Addo, Allswell | Sarpong, Felix |  TBA  |
+|   2   |      Zhang, Zilong      |                |  TBA  |
+|   3   |      Stell, Tommy       |                |  TBA  |
+|   4   |         Vu, Ha          |                |  TBA  |
+|   5   |      Zhang, Boshu       |   You, Sifan   |  TBA  |
+|   6   |      Zhang, Yalin       |                |  TBA  |
 
 ## Format
 
@@ -101,6 +101,22 @@ You may discuss ideas and coding techniques with classmates, but the final packa
 -->
 ```
 
+## Some useful functions
+
+### Create
+
+-   `devtools::create()` function is used to create the basic structure of an R package. It sets up the necessary directories and files for package development.
+
+### Build
+
+-   `devtools::build()` function is used to build the R package into a distributable format (e.g., a tar.gz file). This function compiles the package and prepares it for installation.
+
+### Documentation
+
+-   `roxygen2::roxygenise()` function is used to generate documentation for R packages. It processes specially formatted comments in your R code and creates the necessary documentation files.
+
+------------------------------------------------------------------------
+
 ## Good readings
 
 Another good [reference](%5Bhttps://tinyheero.github.io/jekyll/update/2015/07/26/making-your-first-R-package.html%5D) in writing a Rpackage written by *Fong Chun Chan*.
@@ -108,8 +124,6 @@ Another good [reference](%5Bhttps://tinyheero.github.io/jekyll/update/2015/07/26
 -   An article by Posit (formerly Rstudio) [LINK](https://docs.posit.co/ide/user/ide/guide/pkg-devel/writing-packages.html)
 
 -   Another one by the MIT folks [LINK](https://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf)
-
-------------------------------------------------------------------------
 
 Resources
 

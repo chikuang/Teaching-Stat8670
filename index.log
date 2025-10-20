@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.10.16)  16 OCT 2025 14:08
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.10.16)  17 OCT 2025 20:35
  restricted system commands enabled.
 **index.tex
 (./index.tex
@@ -1329,131 +1329,6 @@ LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10.95> not available
 
 [17]
 chapter 2.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 10.95pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 7.665pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/b/n' will be
-(Font)              scaled to size 5.475pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 10.95pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 7.665pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/b/n' will be
-(Font)              scaled to size 5.475pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 10.95pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 7.665pt on input line 1113.
-LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/b/n' will be
-(Font)              scaled to size 5.475pt on input line 1113.
-
-
-[18
-
-]
-
-[19]
-
-[20]
-
-[21]
-
-[22]
-
-[23]
-Overfull \hbox (7.39111pt too wide) in paragraph at lines 1466--1466
-[]\TU/lmtt/m/n/10.95 Warning in microbenchmark(solve(t(X) %*% X) %*% t(X) %*% y, solve(crossprod(X),[] 
- []
-
-<02-optimization_files/figure-pdf/unnamed-chunk-5-1.pdf, id=175, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-5-1.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-5-1.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-5-1.pdf  used on input line 1485.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[24]
-
-[25<./02-optimization_files/figure-pdf/unnamed-chunk-5-1.pdf>]
-Missing character: There is no 𝛴 (U+1D6F4) in font [lmroman10-regular]:+tlig;!
-Missing character: There is no 𝛴 (U+1D6F4) in font [lmroman10-regular]:+tlig;!
-Missing character: There is no 𝛴 (U+1D6F4) in font [lmroman10-regular]:+tlig;!
-
-
-[26
-Missing character: There is no 𝛴 (U+1D6F4) in font [lmroman10-regular]:+tlig;!
-]
-<02-optimization_files/figure-pdf/unnamed-chunk-8-1.pdf, id=196, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-8-1.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-8-1.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-8-1.pdf  used on input line 1616.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[27]
-
-[28<./02-optimization_files/figure-pdf/unnamed-chunk-8-1.pdf>]
-
-[29]
-
-[30]
-<02-optimization_files/figure-pdf/unnamed-chunk-9-1.pdf, id=227, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-9-1.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-9-1.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-9-1.pdf  used on input line 1795.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[31]
-<02-optimization_files/figure-pdf/unnamed-chunk-9-2.pdf, id=233, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-9-2.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-9-2.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-9-2.pdf  used on input line 1827.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[32<./02-optimization_files/figure-pdf/unnamed-chunk-9-1.pdf>]
-
-[33<./02-optimization_files/figure-pdf/unnamed-chunk-9-2.pdf>]
-
-[34]
-<02-optimization_files/figure-pdf/unnamed-chunk-10-1.pdf, id=256, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-10-1.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-10-1.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-10-1.pdf  used on input line 1929.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[35<./02-optimization_files/figure-pdf/unnamed-chunk-10-1.pdf>]
-<02-optimization_files/figure-pdf/unnamed-chunk-11-1.pdf, id=266, 397.485pt x 252.945pt>
-File: 02-optimization_files/figure-pdf/unnamed-chunk-11-1.pdf Graphic file (type pdf)
-<use 02-optimization_files/figure-pdf/unnamed-chunk-11-1.pdf>
-Package luatex.def Info: 02-optimization_files/figure-pdf/unnamed-chunk-11-1.pdf  used on input line 1978.
-(luatex.def)             Requested size: 397.48402pt x 252.94438pt.
-
-
-[36]
-
-[37<./02-optimization_files/figure-pdf/unnamed-chunk-11-1.pdf>]
-
-[38]
-Overfull \hbox (44.95462pt too wide) in paragraph at lines 2062--2067
-[]\TU/lmr/m/n/10.95 In the pre-vi-ous lec-ture(s), we saw that we can use R func-tions such \TU/lmtt/m/n/10.95 microbenchmark::microbenchmark()\TU/lmr/m/n/10.95 ,
- []
-
-
-
-[39]
-
-[40]
-
-[41]
-
-[42]
-
-[43]
-chapter 3.
 
 ! LaTeX Error: Command \E already defined.
                Or name \end... illegal, see p.192 of the manual.
@@ -1462,16 +1337,16 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.2301 \newcommand{\E}{\mathbb{E}}
+l.1078 \newcommand{\E}{\mathbb{E}}
                                 
 
 Here is how much of LuaTeX's memory you used:
- 41932 strings out of 476291
+ 41730 strings out of 476291
  100000,1648299 words of node,token memory allocated
- 1397 words of node memory still in use:
-   17 hlist, 4 vlist, 3 rule, 5 disc, 2 local_par, 1 dir, 21 glue, 8 kern, 6 penalty, 34 glyph, 55 attribute, 68 glue_spec, 55 attribute_list, 5 write, 1 pdf_dest, 4 pdf_colorstack nodes
-   avail lists: 1:1,2:1552,3:786,4:816,5:324,6:51,7:5041,8:102,9:339,10:16,11:408,12:1
- 63238 multiletter control sequences out of 65536+600000
- 78 fonts using 24747123 bytes
- 108i,12n,114p,11226b,1126s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 1347 words of node memory still in use:
+   10 hlist, 4 vlist, 2 rule, 8 disc, 2 local_par, 1 dir, 23 glue, 5 kern, 7 penalty, 51 glyph, 24 attribute, 68 glue_spec, 24 attribute_list, 5 write, 1 pdf_dest, 2 pdf_colorstack nodes
+   avail lists: 1:1,2:848,3:785,4:456,5:266,6:51,7:4499,8:12,9:282,10:16,11:298,12:1
+ 63122 multiletter control sequences out of 65536+600000
+ 67 fonts using 19682551 bytes
+ 108i,8n,114p,11226b,1126s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

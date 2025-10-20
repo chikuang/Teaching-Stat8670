@@ -223,7 +223,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-10-16}
+\date{2025-10-17}
 \begin{document}
 \maketitle
 
@@ -1074,6 +1074,19 @@ Analysis}.
 
 \chapter{Numerical Approaches and Optimization in
 1-D}\label{numerical-approaches-and-optimization-in-1-d}
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
 
 The optimization plays an important role in statistical computing,
 especially in the context of maximum likelihood estimation (MLE) and
@@ -2426,7 +2439,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2544,7 +2557,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2989,7 +3002,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -2998,7 +3011,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3154,7 +3167,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3425,7 +3438,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3473,7 +3486,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3959,7 +3972,7 @@ In this example, compared with the previous example, it appears that we
 have better agreement with \texttt{pnorm()} in the upper tail, but worse
 agreement near the center.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 Summarizing, if \(f (x)\) is a probability density function supported on
 a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
@@ -4069,7 +4082,7 @@ CLT, \(\bar{g}(X)\) is approximately normal for large \(m\). Therefore,
 the variance of the MC estimator \(\hat{\theta}\) is approximately
 normal with mean \(\theta\) and variance \(\mathbb{V}ar\{g(X)\}/m\).
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 The expectation and the variance of the MC estimator \(\hat{\theta}\)
 are given by \begin{align*}
@@ -4180,15 +4193,403 @@ Let \(\hat{\theta}_1\) and \(\hat{\theta}_2\) be two estimators of
 \operatorname{Eff}(\hat{\theta}_1, \hat{\theta}_2) = \frac{\mathbb{V}ar(\hat{\theta}_1)- \mathbb{V}ar(\hat{\theta}_2)}{\mathbb{V}ar(\hat{\theta}_1)}.
 \]
 
+Let \(X\) be a random object and let \(g(\cdot)\) be a (possibly
+vector--valued) statistic of a \emph{sample} from the distribution of
+\(X\). For \(j=1,\ldots,m\), draw an i.i.d. replicate sample
+\(X^{(j)}=\{X^{(j)}_1,\ldots,X^{(j)}_n\}\) and compute \[
+Y_j = g\!\big(X^{(j)}\big).
+\tag{6.5}
+\] Then \(Y_1,\ldots,Y_m\) are i.i.d. with common mean \[
+\theta \;=\; \mathbb{E}\big[g(X)\big] \;=\; \mathbb{E}[Y].
+\]
+
+The MC estimator of \(\theta\) is the sample mean \[
+\hat{\theta}\;=\; \bar Y \;=\; \frac{1}{m}\sum_{j=1}^m Y_j.
+\] By linearity of expectation, \[
+\mathbb{E}[\hat{\theta}] \;=\; \theta,
+\] so \(\hat{\theta}\) is unbiased. Its variance is \[
+\mathbb{V}ar(\hat{\theta})
+  \;=\; \mathbb{V}ar(\bar Y)
+  \;=\; \frac{\mathbb{V}ar\{g(X)\}}{m}.
+\]
+
+Hence the standard error decays as \(m^{-1/2}\). To reduce the standard
+error from \(0.01\) to \(0.0001\), one would need about \(10000\) times
+as many replicates. More generally, if \(\mathbb{V}ar\{g(X)\}=\sigma^2\)
+and we target standard error at most \(\varepsilon\), then \[
+m \;\ge\; \frac{\sigma^2}{\varepsilon^2}
+\] replicates suffice (ignoring finite--\(m\) effects).
+
+The remainder of this note gives a minimal simulation illustrating the
+\(1/\sqrt{m}\) behavior and provides a template for later
+variance--reduction sections (e.g., control variates, antithetic
+sampling, importance sampling).
+
+\subsection{Rule-of-thumb for target standard
+error}\label{rule-of-thumb-for-target-standard-error}
+
+Given a target standard error \(\varepsilon\), we can solve
+\(\sqrt{\sigma^2/m} \le \varepsilon\) for \(m\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sigma2\_true }\OtherTok{\textless{}{-}} \DecValTok{2}
+\NormalTok{epsilon }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.1}\NormalTok{, }\FloatTok{0.05}\NormalTok{, }\FloatTok{0.01}\NormalTok{, }\FloatTok{0.005}\NormalTok{, }\FloatTok{0.001}\NormalTok{)}
+\NormalTok{required\_m }\OtherTok{\textless{}{-}} \FunctionTok{ceiling}\NormalTok{(sigma2\_true }\SpecialCharTok{/}\NormalTok{ (epsilon}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{se\_target =}\NormalTok{ epsilon, }\AttributeTok{m\_needed =}\NormalTok{ required\_m)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  se_target m_needed
+1     0.100    2e+02
+2     0.050    8e+02
+3     0.010    2e+04
+4     0.005    8e+04
+5     0.001    2e+06
+\end{verbatim}
+
+\begin{quote}
+\textbf{Remark.} Increasing \(m\) always reduces variance but can be
+costly. Variance--reduction techniques seek lower variance at the
+\emph{same} \(m\) (or similar compute), rather than increasing \(m\)
+alone.
+\end{quote}
+
+\section{Antithetic Variables}\label{antithetic-variables}
+
+Antithetic variables are a variance reduction technique used in MC
+simulation to improve the efficiency of estimators. The basic idea is to
+use pairs of negatively correlated random variables to reduce the
+variance of the estimator. Recall that the variance of two variables are
+\[
+\mathbb{V}ar(X+Y) = \mathbb{V}ar(X) + \mathbb{V}ar(Y) + 2\mathbb{C}ov(X,Y),
+\] where
+\(\mathbb{C}ov(X,Y) =\mathbb{E}[XY] - \mathbb{E}[X] \mathbb{E}[Y]\). The
+covariance can be written as
+\(\mathbb{C}ov(X,Y) = \rho_{YX} \sigma_X \sigma_Y\), where \(\rho_{YX}\)
+is the correlation coefficient between \(X\) and \(Y\). If \(X\) and
+\(Y\) are negatively correlated, i.e., \(\rho_{YX} < 0\), then
+\(\mathbb{C}ov(X,Y) < 0\), which can lead to a reduction in the variance
+of the sum \(X + Y\).
+
+Random Variables \(X\) and \(Y\) on the same probability space are said
+to be \emph{antithetic} if they are negatively correlated, i.e.,
+\(\mathbb{C}ov(X,Y) < 0\).
+
+Now, consier two random variable \(U_1\) and \(U_2\) that follows the
+same distribution. Then, if we take the average of the two random
+variables, we have \[
+\mathbb{V}ar\left(\frac{U_1 + U_2}{2}\right) = \frac{1}{4} \left\{\mathbb{V}ar(U_1) + \mathbb{V}ar(U_2) + 2\mathbb{C}ov(U_1,U_2)\right\},
+\] which will be smaller than when the two variables are independent (in
+that case, the last term is 0). Hence, the idea here it to consider the
+case where the RVs are \textbf{negatively correlated.}
+
+Suppose that \(X_1, \dots , X_n\) are simulated via the ITM. For each of
+the m replicates we have generated \(U_j \sim\operatorname{Unif}(0,1)\),
+and the corresponding \(X^{(j)} = F^{−1}_X(U_j), j = 1, \dots, n\). From
+before, we know that if \(U\sim\operatorname{Unif}(0,1)\), then
+\(1 − U\) has the same distribution as \(U\), but \(U\) and \(1 − U\)
+are negatively correlated. Then
+
+\[ Y_j = g(F^{−1}_X(U^{(j)}_1 ), \dots , F^{−1}_X(U_n^{(j)})),\] and
+
+\[ Y_j^\prime = g(F^{−1}_X(1-U^{(j)}_1 ), . . . , F^{−1}_X(1-U_n^{(j)}))\]
+have the same distribution. So the question now if, when will
+\(Y_j^{\prime}\) and \(Y_j\) be negatively correlated?
+
+We will see that if \(g(\cdot)\) is monotone, then \(Y_j\) and
+\(Y_j^{\prime}\) are negatively correlated.
+
+Define \((x_1, . . . , x_n) \le (y_1, \dots , y_n)\) if
+\(x_j ≤ y_j, j = 1, \dots, n\). An \(n\)-variate function
+\(g := g(X_1, \dots, X_n)\) is increasing if it is increasing in its
+coordinates. That is, \(g\) is increasing if
+\(g(x_1,\dots, x_n) \le g(y_1, \dots, y_n)\) whenever
+\((x_1, \dots , x_n) \le (y_1, . . . , y_n)\). Similarly \(g\) is
+decreasing if it is decreasing in its coordinates. Then \(g\) is
+monotone if it is increasing or decreasing.
+
+Let \(X\) be a random varaible, and \(f\) and \(g\) are monotonic
+increasing functions. Then \[
+\mathbb{E}[f(X)g(X)] \ge \mathbb{E}[f(X)]\mathbb{E}[g(X)].
+\]
+
+It is actually a corollary of the above theorem.
+
+Let \(g := g(X_1, \dots, X_n)\) be monotonic, and
+\(U_1, \dots, U_n \sim \operatorname{Unif}(0,1)\) be independent. Then
+
+\[ Y_j^\prime = g(F^{−1}_X(1-U_1 ), . . . , F^{−1}_X(1-U_n))\] and
+\[ Y_j = g(F^{−1}_X(U_1 ), . . . , F^{−1}_X(U_n))\] are
+\textbf{negatively correlated}.
+
+Refer to the example 4, illustrating MC integration applied to estimate
+the standard normal cdf
+
+\[
+\Phi(x)=\int_{-\infty}^x \frac{1}{\sqrt{2 \pi}} e^{-t^2 / 2} d t
+\]
+
+Repeat the estimation using antithetic variables, and find the
+approximate reduction in standard error. In this example, after change
+of variable, the target parameter is
+\(\theta = \mathbb{E}_U[x\exp\{-(xU)^2/2\}]\) where
+\(U\sim\operatorname{Unif}(0,1)\).
+
+By restricting the simualtion to the upper tail, the function \(g\) is
+monotone, so the hypothesis of Theorem 2 is satisfied. Now, we generate
+\(u_1,\dots,u_{m/2}\overset{iid}{\sim}\operatorname{Unif}(0,1)\), and
+compute the half of the replicates using \[
+Y_j=g^{(j)}(u)=x e^{-\left(u_j x\right)^2 / 2}, \quad j=1, \ldots, m / 2,
+\] as before, but also compute \[
+Y_j^{\prime}=x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}, \quad j=1, \ldots, m / 2 .
+\]
+
+Thus, the sample mean is \[
+\begin{aligned}
+\hat{\theta}=\overline{g_m(u)} & =\frac{1}{m} \sum_{j=1}^{m / 2}\left(x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}\right) \\
+& =\frac{1}{m / 2} \sum_{j=1}^{m / 2}\left(\frac{x e^{-\left(u_j x\right)^2 / 2}+x e^{-\left(\left(1-u_j\right) x\right)^2 / 2}}{2}\right)\\
+& \to \mathbb{E}[\hat{\theta}] = \theta, \quad \text{as } m\to\infty.
+\end{aligned}
+\] If \(x\ge 0\), the estimate is
+\(\Phi(x) = 0.5 + \hat{\theta}/ \sqrt{2\pi}\), where as if \(x< 0\), the
+estimate is \(\Phi(x) = 1-\Phi(-x)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{MC.Phi }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, }\AttributeTok{R =} \DecValTok{10000}\NormalTok{, }\AttributeTok{antithetic =} \ConstantTok{TRUE}\NormalTok{) \{}
+\NormalTok{  u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(R }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\NormalTok{antithetic) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(R }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ u}
+\NormalTok{  \}}
+\NormalTok{  u }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(u, v)}
+\NormalTok{  cdf }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(}\FunctionTok{length}\NormalTok{(x))}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(x)) \{}
+\NormalTok{    g }\OtherTok{\textless{}{-}}\NormalTok{ x[i] }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(u }\SpecialCharTok{*}\NormalTok{ x[i])}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+\NormalTok{    cdf[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(g) }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{2} \SpecialCharTok{*}\NormalTok{ pi) }\SpecialCharTok{+} \FloatTok{0.5}
+\NormalTok{  \}}
+\NormalTok{  cdf}
+\NormalTok{\}}
+
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(.}\DecValTok{1}\NormalTok{, }\FloatTok{2.5}\NormalTok{, }\AttributeTok{length=}\DecValTok{5}\NormalTok{)}
+\NormalTok{Phi }\OtherTok{\textless{}{-}} \FunctionTok{pnorm}\NormalTok{(x)}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{MC\_raw }\OtherTok{\textless{}{-}} \FunctionTok{MC.Phi}\NormalTok{(x, }\AttributeTok{anti =} \ConstantTok{FALSE}\NormalTok{)}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{MC\_anti }\OtherTok{\textless{}{-}} \FunctionTok{MC.Phi}\NormalTok{(x)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{round}\NormalTok{(}\FunctionTok{rbind}\NormalTok{(x, MC\_raw, MC\_anti, Phi), }\DecValTok{5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           [,1]    [,2]    [,3]    [,4]    [,5]
+x       0.10000 0.70000 1.30000 1.90000 2.50000
+MC_raw  0.53983 0.75825 0.90418 0.97311 0.99594
+MC_anti 0.53983 0.75805 0.90325 0.97132 0.99370
+Phi     0.53983 0.75804 0.90320 0.97128 0.99379
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# For variance}
+\NormalTok{m }\OtherTok{\textless{}{-}} \DecValTok{1000}
+\NormalTok{MC\_raw }\OtherTok{\textless{}{-}}\NormalTok{ MC\_anti }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(m)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FloatTok{1.95}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{m) \{}
+\NormalTok{  MC\_raw[i] }\OtherTok{\textless{}{-}} \FunctionTok{MC.Phi}\NormalTok{(x, }\AttributeTok{R =} \DecValTok{1000}\NormalTok{, }\AttributeTok{anti =} \ConstantTok{FALSE}\NormalTok{)}
+\NormalTok{  MC\_anti[i] }\OtherTok{\textless{}{-}} \FunctionTok{MC.Phi}\NormalTok{(x, }\AttributeTok{R =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{\}}
+\FunctionTok{sd}\NormalTok{(MC\_raw) }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{6}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.006875
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(MC\_anti) }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.000439
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eff }\OtherTok{\textless{}{-}}\NormalTok{ (}\FunctionTok{var}\NormalTok{(MC\_raw) }\SpecialCharTok{{-}} \FunctionTok{var}\NormalTok{(MC\_anti))}\SpecialCharTok{/}\FunctionTok{var}\NormalTok{(MC\_raw) }
+\NormalTok{eff }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.995917
+\end{verbatim}
+
+Conclusion: The antithetic variable approach achieved approximately
+0.9959 reduction in variance at x = 1.95.
+
+\section{Control Variates}\label{control-variates}
+
+Control variates is another variance reduction technique used in MC
+simulation to improve the efficiency of estimators. The basic idea is to
+use a known variable that is correlated with the variable of interest to
+reduce the variance of the estimator.
+
+Suppose there exists a function \(f(\cdot)\) such that
+\(\mu=\mathbb{E}[f(X)]\) is known, and \(f(X)\) is correlated with
+\(g(X)\). Then, we have, for a constant \(c\in\mathbb{R}\),
+\(\hat{\theta}_c = g(X) + c\{f(X) - \mu\}\) is also an unbiased
+estimator of \(\theta\). The variance of \(\hat{\theta}_c\) is \[
+\mathbb{V}ar(\hat{\theta}_c) = \mathbb{V}ar\{g(X)\} + c^2\mathbb{V}ar\{f(X)\} + 2c\mathbb{C}ov\{g(X), f(X)\}.
+\] This is a quadratic function in \(c\), and it is minimized at \[
+c^*=-\frac{\mathbb{C}ov\{g(X), f(X))\}}{\mathbb{V}ar\{f(X)\}}.
+\] By plugging in this optimizer \(c=c^\ast\), the resulting variance is
+\[
+\mathbb{V}ar(\hat{\theta}_{c^\ast}) = \mathbb{V}ar\{g(X)\} - \frac{[\mathbb{C}ov\{g(X), f(X)\}]^2}{\mathbb{V}ar\{f(X)\}}.
+\] This RV \(f(X)\) is called a \emph{control variate} for the estimator
+of \(g(X)\). We can see that the \(\mathbb{V}ar\{g(X)\}\) is reduced by
+the second term \([\mathbb{C}ov\{g(X), f(X)\}]^2/\mathbb{V}ar\{f(X)\}\),
+and the percentage of variance reduction is \[
+100 \frac{[\mathbb{C}ov(g(X), f(X))]^2}{\mathbb{V}ar(g(X)) \mathbb{V}ar(f(X))}=100[\mathbb{C}orr(g(X), f(X))]^2 .
+\] Thus, if \(g(X)\) and \(f(X)\) is strongly correlated, the variance
+will be reduced, and if they are uncorrelated, there is no reduction in
+variance.
+
+TO estimate \(c^*\), we need to estimate \(\mathbb{C}ov\{g(X),f(X)\}\)
+and \(\mathbb{V}ar\{f(X)\}\), which may be estimated using MC too, in
+the preliminary steps.
+
+Use control variate approach to compute \[
+\theta = \mathbb{E}[\exp(U)] =\int_0^1\exp(u)du,\quad \text{where } U\sim\operatorname{Unif}(0,1).
+\] We can easily find the analytical solution
+\(\theta=\exp(1) - \exp(0) = e - 1 = 1.718282\), but how to use the
+control variate approach to estimate \(\theta\)?
+
+We can apply the simple MC approach where the variance is
+\(\mathbb{V}ar\{g(U)\}/m\), where \[
+\mathbb{V}ar(g(U))=\mathbb{V}ar\left(e^U\right)=\mathbb{E}\left[e^{2 U}\right]-\theta^2=\frac{e^2-1}{2}-(e-1)^2 \approx 0.2420
+\]
+
+As for control variate, a natural choice is
+\(U\sim\operatorname{Unif}(0,1)\). Then the mean is
+\(\mu=\mathbb{E}[U]=1/2\), variance is \(\mathbb{V}ar(U) = 1/12\) and
+the covariance is
+\(\mathbb{C}ov(e^U, U)= \mathbb{E}[Ue^U]-\mathbb{E}[U]\mathbb{E}[\exp(U)]= 1-(e-1)/2 \approx 0.1409\).
+Thus, the optimal
+\(c^* = -\mathbb{C}ov(e^U,U)/\mathbb{V}ar(U) =-12+6(e-1)^2 \approx -1.6903\).
+
+Then, the controlled estimator is
+\(\hat{\theta}_{c^\ast}=\exp(U)-1.6903(U-0.5)\). With \(m\)
+replications, we have \[
+\begin{aligned}
+m\mathbb{V}ar(\hat{\theta}_{c^\ast})
+&=\operatorname{Var}\left(e^U\right)-\frac{\left[\operatorname{Cov}\left(e^U, U\right)\right]^2}{\operatorname{Var}(U)} \\ &=\frac{e^2-1}{2}-(e-1)^2-12\left(1-\frac{e-1}{2}\right) \\
+& \doteq 0.2420356-12(0.1408591)^2 \\
+& =0.003940175 .
+\end{aligned}
+\]
+
+Thus, the reduction in variance using the control variate compared with
+the simple Monte Carlo estimate is
+\[100 \frac{1-0.003940175}{0.2429355} = 98.3781 \%\].
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{m }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\NormalTok{a }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}} \DecValTok{12} \SpecialCharTok{+} \DecValTok{6} \SpecialCharTok{*}\NormalTok{ (}\FunctionTok{exp}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}
+\NormalTok{U }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(m)}
+\NormalTok{T1\_MC }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(U) }\CommentTok{\#simple MC}
+\NormalTok{T2\_cv }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(U) }\SpecialCharTok{+}\NormalTok{ a }\SpecialCharTok{*}\NormalTok{ (U }\SpecialCharTok{{-}} \DecValTok{1}\SpecialCharTok{/}\DecValTok{2}\NormalTok{) }\CommentTok{\#controlled}
+\FunctionTok{mean}\NormalTok{(T1\_MC) }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1.715071
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(T2\_cv) }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1.717789
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eff }\OtherTok{\textless{}{-}}\NormalTok{ (}\FunctionTok{var}\NormalTok{(T1\_MC) }\SpecialCharTok{{-}} \FunctionTok{var}\NormalTok{(T2\_cv)) }\SpecialCharTok{/} \FunctionTok{var}\NormalTok{(T1\_MC)}
+\NormalTok{eff }\SpecialCharTok{|\textgreater{}} \FunctionTok{round}\NormalTok{(}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.9835
+\end{verbatim}
+
+This show that the reduction is 0.9835\% in variance using the control
+variate approach, which is the same as our analysis above
+
+\section{Other methods}\label{other-methods}
+
+There are other variance reduction techniques, including
+
+\begin{itemize}
+\item
+  Importance Sampling
+\item
+  Stratified Sampling
+\item
+  Stratified Importance Sampling
+\end{itemize}
+
+Due to the limited amount of time we have, we will not go over those
+methods here. Interested readers may refer to the references below.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Reference used:
+
+\begin{itemize}
+\item
+  Chapter 6 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
+  CRC Press, Roca Baton.
+\item
+  Monte Carlo Method page on Wikiepdia,
+  \href{https://en.wikipedia.org/wiki/Monte_Carlo_method}{Link}.
+\item
+  Wasserman, L. (2003).
+  \href{https://egrcc.github.io/docs/math/all-of-statistics.pdf}{\emph{All
+  of Statistics: A Concise Course in Statistical Inference}}.
+\end{itemize}
+
 \bookmarksetup{startatroot}
 
 \chapter{Resampling, Jackknife and
 Bootstrap}\label{resampling-jackknife-and-bootstrap}
 
-\newcommand{\htt}{\hat{\theta}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
 \newcommand{\var}{\mathbb{V}ar}
-\newcommand{\b}{\mathbb{b}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat{\theta}}
+\newcommand{\b}{\mathbb b}
 
 \section{Introduction}\label{introduction}
 
@@ -4197,10 +4598,20 @@ bootstrap techniques.
 
 \section{Resampling methods}\label{resampling-methods}
 
-Resampling methods treat an observed sample as a \emph{finite
+\emph{Resampling methods} is a way to use the observed data to generate
+hypothetical samples. It treats an observed sample as a \emph{finite
 population}, and random samples are generated/resampled from it to
 estimate population characteristics and make inferences about the
-sampled population. Some commonly used resampling methods include:
+sampled population. It is useful when:
+
+\begin{itemize}
+\item
+  Do not know the underlying distribution of a population
+\item
+  The formula may be difficult to be calculated.
+\end{itemize}
+
+Some commonly used resampling methods include:
 
 \begin{itemize}
 \item
@@ -4226,7 +4637,7 @@ sampled population. Some commonly used resampling methods include:
   data.
 \end{itemize}
 
-\section{Motivations}\label{motivations}
+\section{Estimators}\label{estimators}
 
 \subsection{Bias-Variance Tradeoff}\label{bias-variance-tradeoff}
 
@@ -4236,12 +4647,19 @@ reduced by increasing the bias in the estimated parameters. If we look
 at the Mean square error (MSE) of an estimator \(\hat{\theta}\) for a
 parameter \(\theta\):
 
-\[\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb{b}(\hat{\theta})]^2,\]
-where \(\mathbb{b}\) is the bias of the estimator.
+Suppose we have a parameter \(\theta\) and an estimator
+\(\hat{\theta}\). The mean square error (MSE) of the estimator is
+defined as
+\[\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,\]
+where \(\mathbb b\) is the bias of the estimator.
 
-For most of our course, we focus on the unbiased estimator. Then, such
-as in the MC Chapter, we can compare the (relative) efficiency between
-the estimators, and discuss about the variance reduction.
+\textbf{Questions}: Why do we care about the bias? Can we always find an
+unbiased estimator? What does it mean?
+
+For most of the course, we focus on the \emph{unbiased estimator}. This
+may often be obtained from using the LLN. Then, such as in the MC
+Chapter, we can compare the (relative) efficiency between the
+estimators, and discuss about the variance reduction.
 
 \section{Bootstrap}\label{bootstrap}
 
@@ -4251,18 +4669,88 @@ sampling methods.
 
 \begin{itemize}
 \item
-  Parametric bootstrap:
+  Parametric bootstrap
 \item
   Nonparametric bootstrap: In nonparametric bootstrap, the distribution
   is not specified.
 \end{itemize}
 
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simple example of Bootstrap}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{333}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FloatTok{1E4}
+\NormalTok{B }\OtherTok{\textless{}{-}} \FloatTok{1E4}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(n, }\AttributeTok{mean =} \DecValTok{5}\NormalTok{, }\AttributeTok{sd =} \DecValTok{2}\NormalTok{) }\CommentTok{\#original sample}
+
+
+\NormalTok{boot\_means }\OtherTok{\textless{}{-}}\NormalTok{ pbapply}\SpecialCharTok{::}\FunctionTok{pbsapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{B, }\ControlFlowTok{function}\NormalTok{(i)\{}
+\NormalTok{  indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{) }\CommentTok{\#resample}
+\NormalTok{  boot.sample }\OtherTok{\textless{}{-}}\NormalTok{ x[indices]}
+  \FunctionTok{mean}\NormalTok{(boot.sample)}
+\NormalTok{\}) }
+\FunctionTok{mean}\NormalTok{(boot\_means)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 4.999525
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{hist}\NormalTok{(boot\_means, }\AttributeTok{breaks =} \DecValTok{50}\NormalTok{, }\AttributeTok{main =} \StringTok{"Bootstrap distribution of the mean"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"Mean"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{05-resample_files/figure-pdf/bootstrap-simple-example-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Compute statistics}
+\NormalTok{true\_mean }\OtherTok{\textless{}{-}} \DecValTok{5}
+\NormalTok{boot\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(boot\_means)}
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(}\AttributeTok{x =}\NormalTok{ boot\_means)}
+\CommentTok{\# Plot}
+\FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ ..density..), }\AttributeTok{bins =} \DecValTok{50}\NormalTok{, }
+                 \AttributeTok{fill =} \StringTok{"lightgreen"}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{color =} \StringTok{"darkgreen"}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ true\_mean, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\AttributeTok{size =} \FloatTok{1.1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =}\NormalTok{ boot\_mean, }\AttributeTok{color =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"solid"}\NormalTok{, }\AttributeTok{size =} \FloatTok{1.1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Bootstrap Distribution of the Sample Mean"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Bootstrap Mean"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Density"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{annotate}\NormalTok{(}\StringTok{"text"}\NormalTok{, }\AttributeTok{x =}\NormalTok{ true\_mean, }\AttributeTok{y =} \FloatTok{0.3}\NormalTok{, }\AttributeTok{label =} \StringTok{"True mean = 5"}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{hjust =} \SpecialCharTok{{-}}\FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{annotate}\NormalTok{(}\StringTok{"text"}\NormalTok{, }\AttributeTok{x =}\NormalTok{ boot\_mean, }\AttributeTok{y =} \FloatTok{0.25}\NormalTok{, }\AttributeTok{label =} \FunctionTok{sprintf}\NormalTok{(}\StringTok{"Bootstrap mean = \%.2f"}\NormalTok{, boot\_mean),}
+           \AttributeTok{color =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{hjust =} \SpecialCharTok{{-}}\FloatTok{0.1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+i Please use `linewidth` instead.
+\end{verbatim}
+
+\begin{verbatim}
+Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+i Please use `after_stat(density)` instead.
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{05-resample_files/figure-pdf/bootstrap-simple-example-2.pdf}}
+
+\end{tcolorbox}
+
 The distribution of the finite population represented by the sample can
 be regarded as a pseudo-population with similar characteristics as the
-true popu- lation. By repeatedly generating random samples from this
+true population. By repeatedly generating random samples from this
 pseudo-population (resampling), the sampling distribution of a statistic
-can be estimated. Prop- erties of an estimator such as bias or standard
-error can be estimated by resampling.
+can be estimated. Properties of an estimator such as \emph{bias} or
+\emph{standard error} can be estimated by resampling.
 
 Bootstrap estimates of a sampling distribution are analogous to the idea
 of density estimation. We construct a histogram of a sample to obtain an
@@ -4290,7 +4778,7 @@ bootstrap estimate of the distribution of ˆθ is obtained as follows.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  For each bootstrap replicate, indexed b = 1, . . . , B:
+  For each bootstrap replicate, indexed \(b = 1, \dots, B\):
 
   \begin{enumerate}
   \def\labelenumii{(\alph{enumii})}
@@ -5609,23 +6097,36 @@ Package}\label{appendix-project-r-package}
 
 \section{Group}\label{group}
 
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1250}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3750}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
 \toprule\noalign{}
-Group & Member 1 & Member 2 \\
+\begin{minipage}[b]{\linewidth}\centering
+Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Member 1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Member 2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-1 & Akomanyi-Addo, Allswell & Sarpong, Felix \\
-2 & Zhang, Zilong & \\
-3 & Stell, Tommy & \\
-4 & Vu, Ha & \\
-5 & Zhang, Boshu & You, Sifan \\
+1 & Akomanyi-Addo, Allswell & Sarpong, Felix & TBA \\
+2 & Zhang, Zilong & & TBA \\
+3 & Stell, Tommy & & TBA \\
+4 & Vu, Ha & & TBA \\
+5 & Zhang, Boshu & You, Sifan & TBA \\
+6 & Zhang, Yalin & & TBA \\
 \end{longtable}
 
 \section{Format}\label{format}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, colback=white, breakable, left=2mm, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, breakable, colback=white, leftrule=.75mm, rightrule=.15mm, arc=.35mm, opacityback=0, left=2mm, toprule=.15mm, bottomrule=.15mm]
 \begin{minipage}[t]{5.5mm}
 \textcolor{quarto-callout-note-color}{\faInfo}
 \end{minipage}%
@@ -5746,7 +6247,7 @@ team{]} during the class sessions. Your presentation should:
 
 You may discuss ideas and coding techniques with classmates, but the
 final package and report must be your own work. All code and text should
-be written individually.
+be written individually or with your groupmate if you decide to team up.
 
 \section{Submission Instructions}\label{submission-instructions}
 
@@ -5760,7 +6261,7 @@ be written individually.
   Include installation instructions in the \texttt{README.md}.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, coltitle=black, opacitybacktitle=0.6, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, colframe=quarto-callout-tip-color-frame, arc=.35mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, colback=white, breakable, titlerule=0mm, toprule=.15mm, toptitle=1mm, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 \textbf{Tip:} Start early --- the package structure, documentation, and
 testing usually take longer than expected!

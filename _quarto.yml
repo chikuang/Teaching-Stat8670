@@ -11,8 +11,8 @@ book:
     - 02-optimization.qmd
     - 03-generating-rv.qmd
     - 04-monte-carlo.qmd
-    - 05-resample.qmd
-    - 06-cv.qmd
+    - 05-cv.qmd
+    - 06-resample.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"

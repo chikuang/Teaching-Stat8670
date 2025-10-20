@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Resampling, Jackknife and Bootstrap – STAT 8670 - Computational Methods in Statistics</title>
+<title>5&nbsp; Cross Validation – STAT 8670 - Computational Methods in Statistics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./06-cv.html" rel="next">
+<link href="./06-resample.html" rel="next">
 <link href="./04-monte-carlo.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -179,7 +179,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-resample.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resampling, Jackknife and Bootstrap</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05-cv.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cross Validation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -227,14 +227,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./05-resample.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resampling, Jackknife and Bootstrap</span></span></a>
+  <a href="./05-cv.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cross Validation</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./06-cv.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cross Validation</span></span></a>
+  <a href="./06-resample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Resampling, Jackknife and Bootstrap</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -296,20 +296,16 @@ window.Quarto = {
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">5.1</span> Introduction</a></li>
   <li><a href="#resampling-methods" id="toc-resampling-methods" class="nav-link" data-scroll-target="#resampling-methods"><span class="header-section-number">5.2</span> Resampling methods</a></li>
-  <li><a href="#motivations" id="toc-motivations" class="nav-link" data-scroll-target="#motivations"><span class="header-section-number">5.3</span> Motivations</a>
-  <ul class="collapse">
-  <li><a href="#bias-variance-tradeoff" id="toc-bias-variance-tradeoff" class="nav-link" data-scroll-target="#bias-variance-tradeoff"><span class="header-section-number">5.3.1</span> Bias-Variance Tradeoff</a></li>
-  </ul></li>
-  <li><a href="#bootstrap" id="toc-bootstrap" class="nav-link" data-scroll-target="#bootstrap"><span class="header-section-number">5.4</span> Bootstrap</a></li>
-  <li><a href="#jackknife" id="toc-jackknife" class="nav-link" data-scroll-target="#jackknife"><span class="header-section-number">5.5</span> Jackknife</a>
-  <ul class="collapse">
-  <li><a href="#when-does-jackknife-not-work" id="toc-when-does-jackknife-not-work" class="nav-link" data-scroll-target="#when-does-jackknife-not-work"><span class="header-section-number">5.5.1</span> When does jackknife not work?</a></li>
-  </ul></li>
-  <li><a href="#jackknife-1" id="toc-jackknife-1" class="nav-link" data-scroll-target="#jackknife-1"><span class="header-section-number">5.6</span> Jackknife</a>
-  <ul class="collapse">
-  <li><a href="#jackknife-estimate-of-bias" id="toc-jackknife-estimate-of-bias" class="nav-link" data-scroll-target="#jackknife-estimate-of-bias"><span class="header-section-number">5.6.1</span> Jackknife Estimate of Bias</a></li>
-  </ul></li>
-  <li><a href="#applications" id="toc-applications" class="nav-link" data-scroll-target="#applications"><span class="header-section-number">5.7</span> Applications</a></li>
+  <li><a href="#machine-learning-models" id="toc-machine-learning-models" class="nav-link" data-scroll-target="#machine-learning-models"><span class="header-section-number">5.3</span> Machine Learning Models</a></li>
+  <li><a href="#training-and-testingvalidating-sets" id="toc-training-and-testingvalidating-sets" class="nav-link" data-scroll-target="#training-and-testingvalidating-sets"><span class="header-section-number">5.4</span> Training and testing/validating sets</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">5.5</span> Setup</a></li>
+  <li><a href="#what-is-cross-validation" id="toc-what-is-cross-validation" class="nav-link" data-scroll-target="#what-is-cross-validation"><span class="header-section-number">5.6</span> What is Cross-Validation?</a></li>
+  <li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation"><span class="header-section-number">5.7</span> K-Fold Cross-Validation</a></li>
+  <li><a href="#discussion" id="toc-discussion" class="nav-link" data-scroll-target="#discussion"><span class="header-section-number">5.8</span> Discussion</a></li>
+  <li><a href="#choice-of-fold-k" id="toc-choice-of-fold-k" class="nav-link" data-scroll-target="#choice-of-fold-k"><span class="header-section-number">5.9</span> Choice of Fold K</a></li>
+  <li><a href="#example-stock-market" id="toc-example-stock-market" class="nav-link" data-scroll-target="#example-stock-market"><span class="header-section-number">5.10</span> Example: Stock market</a></li>
+  <li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="header-section-number">5.11</span> Leave-One-Out Cross-Validation (LOOCV)</a></li>
+  <li><a href="#take-home-messages" id="toc-take-home-messages" class="nav-link" data-scroll-target="#take-home-messages"><span class="header-section-number">5.12</span> Take Home Messages</a></li>
   </ul>
 </nav>
     </div>
@@ -318,7 +314,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Resampling, Jackknife and Bootstrap</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Cross Validation</span></h1>
 </div>
 
 
@@ -337,11 +333,17 @@ window.Quarto = {
 
 <section id="introduction" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.1</span> Introduction</h2>
-<p>This chapter covers resampling methods including the jackknife and bootstrap techniques.</p>
+<p>This chapter covers resampling technique called <em>cross-validation</em>.</p>
+<p>Cross-validation (CV) is a statistical method used to estimate the <em>skill</em> of machine learning (ML) models. It is commonly used in applied ML to compare and select a model for a given predictive modeling problem because it is easy to understand, easy to implement, and results in skill estimates that generally have a lower <em>bias</em> than other methods.</p>
 </section>
 <section id="resampling-methods" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="resampling-methods"><span class="header-section-number">5.2</span> Resampling methods</h2>
-<p>Resampling methods treat an observed sample as a <em>finite population</em>, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. Some commonly used resampling methods include:</p>
+<p><em>Resampling methods</em> is a way to use the observed data to generate hypothetical samples. It treats an observed sample as a <em>finite population</em>, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. It is useful when:</p>
+<ul>
+<li><p>Do not know the underlying distribution of a population</p></li>
+<li><p>The formula may be difficult to be calculated.</p></li>
+</ul>
+<p>Some commonly used resampling methods include:</p>
 <ul>
 <li><p><strong>Bootstrap</strong>: Bootstrap methods are often used when the distribution of the target population is not specified; the sample is the only information available.</p></li>
 <li><p><strong>Jackknife</strong>: The jackknife is a resampling technique used to estimate the bias and variance of a statistic. It is like a leave-one-out (LOO) cross-validation.</p></li>
@@ -349,94 +351,373 @@ window.Quarto = {
 <li><p><strong>Permutation tests</strong>: Permutation tests are a type of non-parametric statistical test that involves rearranging the data points to test a hypothesis. They are used to determine whether the observed effect is statistically significant by comparing it to the distribution of effects obtained through random permutations of the data.</p></li>
 </ul>
 </section>
-<section id="motivations" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="motivations"><span class="header-section-number">5.3</span> Motivations</h2>
-<section id="bias-variance-tradeoff" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="bias-variance-tradeoff"><span class="header-section-number">5.3.1</span> Bias-Variance Tradeoff</h3>
-<p>In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator <span class="math inline">\(\hat{\theta}\)</span> for a parameter <span class="math inline">\(\theta\)</span>:</p>
-<div class="callout-definition" title="Mean Square Errors ">
-<p>Suppose we have a parameter <span class="math inline">\(\theta\)</span> and an estimator <span class="math inline">\(\hat{\theta}\)</span>. The mean square error (MSE) of the estimator is defined as <span class="math display">\[\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,\]</span> where <span class="math inline">\(\mathbb b\)</span> is the bias of the estimator.</p>
-</div>
-<p><strong>Questions</strong>: Why do we care about the bias? Can we always find an unbiased estimator? What does it mean?</p>
-<p>For most of the course, we focus on the <em>unbiased estimator</em>. This may often be obtained from using the LLN. Then, such as in the MC Chapter, we can compare the (relative) efficiency between the estimators, and discuss about the variance reduction.</p>
-</section>
-</section>
-<section id="bootstrap" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="bootstrap"><span class="header-section-number">5.4</span> Bootstrap</h2>
-<p>The bootstrap is a resampling method that allows estimation of the <em>sampling distribution</em> of almost any statistic using random sampling methods.</p>
+<section id="machine-learning-models" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="machine-learning-models"><span class="header-section-number">5.3</span> Machine Learning Models</h2>
 <ul>
-<li><p>Parametric bootstrap:</p></li>
-<li><p>Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified.</p></li>
+<li><p><strong>Left</strong>: What machine learning can do</p></li>
+<li><p><strong>Right</strong>: Model/Methods</p></li>
 </ul>
-<p>The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true popu- lation. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Prop- erties of an estimator such as bias or standard error can be estimated by resampling.</p>
-<p>Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.</p>
-<p>The term <em>bootstrap</em> can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.</p>
-<p>To generate a bootstrap random sample by resampling x, generate n random integers <span class="math inline">\(\{i_1,\dots, i_n\}\)</span> uniformly distributed on <span class="math inline">\(\{1,\dots , n\}\)</span> and select the bootstrap sample <span class="math inline">\(x^∗ = (x_{i_1} ,\dots, x_{i_n} )\)</span>. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.</p>
+<div class="columns">
+<div class="column">
+<p><img src="fig/ML_gpt.png" class="img-fluid" style="width:100.0%"></p>
+</div><div class="column">
+<p><img src="fig/ML_models.png" class="img-fluid" style="width:100.0%"></p>
+</div>
+</div>
+</section>
+<section id="training-and-testingvalidating-sets" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="training-and-testingvalidating-sets"><span class="header-section-number">5.4</span> Training and testing/validating sets</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig/train_test.jpeg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Questions</strong><br>
+How do we choose between different models <span class="math inline">\(f_1,\dots,f_m\)</span>?</p>
+<!-- ## Data split -->
+<!-- * Train a model $\hat{f}$ on the \blue{training set}.  -->
+<!-- * Use the $\hat{f}$ with the \orange{features} to predict the \red{outcomes}, $\hat{y}$ -->
+<!-- * Difference between $\red{y}$ and $\hat{y}$. -->
+<!-- ![Data split.](fig/data-split.png){width=55%} -->
+<!-- ## Evaluation -->
+<!-- There are different metrics to evaluation the prediction. For instance -->
+<!-- If $y$ is continuous variable, we can use Mean-Square error. -->
+<!-- If $y$ is categorical, we can use the error rate.  -->
+<!-- ## Bias-Variance Tradeoff -->
+<!-- If we have a complex model, we may have many different tuning parameters.  -->
+<!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock_blue} -->
+<!--     \textbf{\large Bias-Variance Tradeoff}\\ -->
+<!-- $$ -->
+<!-- \mse[y,\hat{y}] \propto \var(\hat{y}) + \bias^2(\hat{y}) -->
+<!-- $$ -->
+<!-- \end{beamercolorbox} -->
+</section>
+<section id="setup" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="setup"><span class="header-section-number">5.5</span> Setup</h2>
+<p>Suppose we have a <strong>supervised learning</strong> model <span class="math inline">\(f(X)\to Y\)</span>.</p>
+<p>Denote the training set by <span class="math inline">\(\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}\)</span>.</p>
+<p>How to choose between the models <span class="math inline">\(f_1,\dots,f_m\)</span>?</p>
+<p>Ideal: <span class="math inline">\((X,Y)\sim F_{X,Y}\)</span>.</p>
+<p>Define the generalization error (Population error) as <span class="math display">\[
+  \mathrm{Err}(f) = \mathbb{E}_{X,Y}[\{Y-f(X)\}^2]
+\]</span></p>
+<p>Choose <span class="math inline">\(f\)</span> by <span class="math display">\[
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
+\]</span></p>
+<p>Suppose we have a <strong>supervised learning</strong> model <span class="math inline">\(f(X)\to Y\)</span>.</p>
+<p>Denote the training set by <span class="math inline">\(\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}\)</span>.</p>
+<p>How to choose between the models <span class="math inline">\(f_1,\dots,f_m\)</span>?</p>
+<p>Ideal: <span class="math inline">\((X,Y)\sim F_{X,Y}\)</span> ().</p>
+<p>Define the generalization error (Population error) as <span class="math display">\[
+  \mathrm{Err}(f) = E_{X,Y}[(Y-f(X))^2]
+\]</span></p>
+<p>Choose <span class="math inline">\(f\)</span> by <span class="math display">\[
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
+\]</span></p>
+<p><strong>Question</strong>:</p>
+<p>What to do if we do not know about <span class="math inline">\(F_{X_Y}\)</span>?</p>
+<p>Let <span class="math inline">\(V:=\{(X_i,Y_i)\}_{i=1}^{N_{Val}}\)</span> be the validating/testing set.</p>
+<p><span class="math display">\[
+  \mathrm{Err}(f) = E[(Y-f(X))^2] \approx \frac{1}{N_{Val}}\sum_{i=1}^{N_{Val}}(Y_i-f(X_i))^2 =: \mathrm{err}_{Val}(f).
+\]</span></p>
+<p>When <span class="math inline">\(N_{Val}\to\infty\)</span>, <span class="math inline">\(\mathrm{err}_{Val}(f)\to \mathrm{Err}(f)\)</span>.</p>
+<p>We can then do <span class="math display">\[
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{Val}(f)
+\]</span> If <span class="math inline">\(N_{val}\)</span> is large, we can have good estimate of <span class="math inline">\(\mathrm{Err}(f)\)</span>.</p>
+<p>But actually, we may only have <em>small</em> validating set.</p>
+<p>Problems with simple Train-Test Split:</p>
+<ul>
+<li><p>Splitting 50-50 wastes data that could improve the model.</p></li>
+<li><p>Splitting 80-20 may leave too little test data for reliable evaluation.</p></li>
+</ul>
+<p>What we can do? !</p>
+<p>Cross-validation uses <strong>all</strong> data efficiently for training and testing.</p>
+</section>
+<section id="what-is-cross-validation" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="what-is-cross-validation"><span class="header-section-number">5.6</span> What is Cross-Validation?</h2>
+<p>Suppose there are 5 folds (<span class="math inline">\(K=5\)</span>).</p>
+<p><img src="fig/yy/Training_ipad2.jpeg" class="img-fluid"></p>
+<p>Put together, we have</p>
+<p><span class="math display">\[
+  \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^5 \sum_{i\in S_k}(y_i-\hat{f}^{[s_k^C]}(x_i))^2.
+\]</span></p>
+<p>Then cross-validation is to find <span class="math display">\[
+  f^* = \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{cv}(f).
+\]</span></p>
+</section>
+<section id="k-fold-cross-validation" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="k-fold-cross-validation"><span class="header-section-number">5.7</span> K-Fold Cross-Validation</h2>
+<p>Let <span class="math inline">\(\mathcal{D}=\{X_i,Y_i\}_{i=1}^N\)</span> be our data.</p>
 <ol type="1">
-<li>For each bootstrap replicate, indexed b = 1, . . . , B:
-<ol type="a">
-<li>Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.</li>
-<li>Compute the bth replicate ˆθ(b) from the bth bootstrap sample.</li>
+<li><p>Split the data into K approximately equal sizes parts/fold <span class="math inline">\(K\)</span></p></li>
+<li><p>For each <span class="math inline">\(k=1,2,\dots,K\)</span>, repeat the following steps:</p>
+<ol type="i">
+<li>Leave the <span class="math inline">\(k\)</span>th fold <span class="math inline">\(S_k\)</span> from the data <span class="math inline">\(\mathcal{D}\)</span>, and denote the remaining data as <span class="math inline">\(S_k^C\)</span>. We fit the model to <span class="math inline">\(S_k^C\)</span> and denote the corresponding model we obtained by <span class="math inline">\(\hat{f}^{[S_k^C]}\)</span></li>
+<li>Calculate the total prediction error on the fitted model <span class="math inline">\(\hat{f}^{[S_k^C]}\)</span> on the left-out fold <span class="math inline">\(S_k\)</span> <span class="math display">\[
+  \mathrm{err}_{cv,k}(f) = \sum_{i\in S_k} L(Y_i, \hat{f}^{[S_k^C]}(X_i)).
+\]</span></li>
 </ol></li>
-<li>The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).</li>
+<li><p>The <strong>CV estimate</strong> of prediction error is <span class="math display">\[
+  \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \mathrm{err}_{cv,k}(f).
+\]</span></p></li>
 </ol>
-</section>
-<section id="jackknife" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="jackknife"><span class="header-section-number">5.5</span> Jackknife</h2>
-<p>The jackknife is a resampling technique used to estimate the bias and variance of a statistic.</p>
-<p>Jackknife is like a <strong>leave-one-out cross-validation</strong>. Let <span class="math inline">\(\mathbf{x}= (x_1,\dots,x_n)\)</span> be an observed random sample, and denote the <span class="math inline">\(i\)</span>th jackknife sample by <span class="math inline">\(\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\)</span>, that is, a subset of <span class="math inline">\(\mathbf{x}\)</span>.</p>
-<p>For the parameter of interest <span class="math inline">\(\theta\)</span>, if the statistics is <span class="math inline">\(T(\mathbf{x})=:\hat{\theta}\)</span> is computed on the full</p>
-<section id="when-does-jackknife-not-work" class="level3" data-number="5.5.1">
-<h3 data-number="5.5.1" class="anchored" data-anchor-id="when-does-jackknife-not-work"><span class="header-section-number">5.5.1</span> When does jackknife not work?</h3>
-<p>Jackknife does not work when the function <span class="math inline">\(T(\cdot)\)</span> is <strong>not a smooth</strong> functional!</p>
-</section>
-</section>
-<section id="jackknife-1" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="jackknife-1"><span class="header-section-number">5.6</span> Jackknife</h2>
-<p>The jackknife is another resampling method, proposed by Quenouille [225, 224] for estimating bias, and by Tukey [289] for estimating standard error, a few decades earlier than the bootstrap. Efron [88] is a good introduction to the jackknife.</p>
-<p>Jackknife is a special kind of <em>Cross-validation</em> where we <em>leave-one-out</em> (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let <span class="math inline">\(x=(x_1,\dots,x_n)\)</span> be the observed data of samele size <span class="math inline">\(n\)</span>. The <span class="math inline">\(i\)</span>th jackknife sample is defined as <span class="math inline">\(x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\)</span>, that is, the sample with the <span class="math inline">\(i\)</span>th observation removed. Let <span class="math inline">\(\hat{\theta}=T(x)\)</span> be the estimator of the parameter of interest <span class="math inline">\(\theta\)</span>. The <span class="math inline">\(i\)</span>th jackknife replicate is defined as <span class="math inline">\(\hat{\theta}_{-i}=T(x_{-i})\)</span>, that is, the estimate computed from the <span class="math inline">\(i\)</span>th jackknife sample. The jackknife estimate of bias is defined as</p>
-<section id="jackknife-estimate-of-bias" class="level3" data-number="5.6.1">
-<h3 data-number="5.6.1" class="anchored" data-anchor-id="jackknife-estimate-of-bias"><span class="header-section-number">5.6.1</span> Jackknife Estimate of Bias</h3>
-<p>If ˆθ is a smooth (plug-in) statistic, then <span class="math inline">\(\hat{\theta}_{(\cdot)} = t\{F_{n−1}(x(i))\}\)</span>, and the jackknife estimate of bias is <span class="math display">\[
-\hat{b}_{jack} = (n − 1)(\hat{\theta}_{(\cdot)} − \hat{\theta}),
-\]</span> where <span class="math inline">\(\overline{\hat{\theta}_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat{\theta}_{(i)}\)</span> is the average of the estimate from LOO samples, and <span class="math inline">\(\hat{\theta}=\hat{\theta}(x)\)</span> is the estimate from the original observed sample.</p>
-<div class="callout-example" title="Jackknife Estimate of Bias">
-<p>Compute the jackknife estimate of bias for the patch data in the <code>bootstrap</code> package.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(patch, <span class="at">package =</span> <span class="st">"bootstrap"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(patch)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> patch<span class="sc">$</span>y</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> patch<span class="sc">$</span>z</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>theta.hat <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">/</span> <span class="fu">mean</span>(z)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span> (theta.hat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.0713061</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#compute the jackknife replicates, leave-one-out estimates</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>theta.jack <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  theta.jack[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(y[<span class="sc">-</span>i]) <span class="sc">/</span> <span class="fu">mean</span>(z[<span class="sc">-</span>i])</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>bias <span class="ot">&lt;-</span> (n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="fu">mean</span>(theta.jack) <span class="sc">-</span> theta.hat)  </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>bias <span class="co">#jackknife estimate of bias</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.008002488</code></pre>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="applications" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="applications"><span class="header-section-number">5.7</span> Applications</h2>
-<p>These methods are widely used in statistical inference and have applications in various fields.</p>
 <hr>
-<p>Reference:</p>
+<p>So if we have <span class="math inline">\(M\)</span> models, <span class="math inline">\(f_1,f_2,\dots,f_M\)</span>, we can use cross-validation to select the best model by computing the cross-validation error for each model <span class="math inline">\(\mathrm{err}_{cv}(f_1), \mathrm{err}_{cv}(f_2),\dots \mathrm{err}_{cv}(f_M)\)</span></p>
+<p>Then the best model is <span class="math display">\[
+  f^*=\arg\min_{f\in\{f_1,\dots,f_M\}} \mathrm{err}_{cv}(f).
+\]</span></p>
+<p>There are two many use of the K-fold CV</p>
+<ol type="1">
+<li><p>Tune hyperparameters</p>
+<p>e.g., In linear regression: <span class="math inline">\(y=\beta_0+\sum_{j=1}^L\beta_kx^k+\varepsilon\)</span>, <span class="math inline">\(L\)</span> is the hyperparameter here.</p>
+<p>M1. <span class="math inline">\(y = \beta_0 + \beta_1 x_1 + \varepsilon\)</span></p>
+<p>M2. <span class="math inline">\(y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon\)</span></p>
+<p>M3. <span class="math inline">\(y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon\)</span></p></li>
+<li><p>To better evaluate the performance of a model</p></li>
+</ol>
+<p>The number of folds depends on the data size.</p>
+</section>
+<section id="discussion" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="discussion"><span class="header-section-number">5.8</span> Discussion</h2>
+<p><strong>Question</strong>:</p>
+<p>What would you consider when choosing <span class="math inline">\(K\)</span>?**</p>
+<p>Answer: The Bias-Variance Decomposition!</p>
+<p><span class="math display">\[\begin{align*}
+\text{Generalization error} &amp;~=~ \text{variance} &amp;~+~&amp; \text{bias} &amp;~+~&amp; \text{irreducible error} \\
+\mathbb{E}_\mathcal{T}[(y-f(x;\mathcal{T}))^2] &amp;~=~ \mathbb{V}ar(x) &amp;~+~&amp; \mathbb{B}\mathrm{ias}^2(x) &amp;~+~&amp; \varepsilon^2.
+\end{align*}\]</span></p>
+<p>See Section 7.3, Equation (7.9) Hastie et al.&nbsp;(2009).</p>
+<hr>
+<p><strong>Pop-up quiz</strong>:</p>
+<p>Q: What are the characteristic a good model <span class="math inline">\(f\)</span> should have?</p>
+<ol type="1">
+<li><p>Low bias, high variance</p></li>
+<li><p>High bias, low variance</p></li>
+<li><p>Low bias, low variance</p></li>
+<li><p>High bias, high variance</p></li>
+<li><p>None of above</p></li>
+</ol>
+<hr>
+<!-- ## Modeling steps (from Dubin) -->
+<!-- E. Steyerberg[^note3], an expert in model prediction and validation, recommends seven modeling steps: -->
+<!-- [^note3]:  Steyerberg, E.W. and Vergouwe, Y. (2014) Towards better clinical prediction models: seven steps for development and an ABCD for validation. European Heart Journal, 35, 1925--1931. -->
+<!-- 1. data inspection -->
+<!-- 2. coding of predictors (based on a priori plans) -->
+<!-- 3. model specification -->
+<!-- 4. model estimation -->
+<!-- 5. model performance -->
+<!-- 6. model validation -->
+<!-- 7. presentation of results -->
+<!-- We will be focusing mainly on (5) and (6). -->
+<!-- ## What is cross validation? -->
+<!-- Cross validation (CV) is a widely used technique to estimate **prediction error**.  -->
+<!-- One would like to think cross-validation estimates the **prediction error** for the model at hand, fit to the training data -->
+<!-- ##  -->
+<!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock_pink} -->
+<!--     \textbf{\large Pop-up quiz}\\ -->
+<!--   Q: If you are given an arbitrary data set? What is the split ratio between training and testing data you would choose? -->
+<!-- \vspace{0.5cm}  -->
+<!-- 1. 50-50 -->
+<!-- 2. 90-10 -->
+<!-- 3. 80-20 -->
+<!-- 4. 70-30 -->
+<!-- 5. Depends -->
+<!-- 6. Unsure -->
+<!-- \end{beamercolorbox} -->
+<!-- ## Key Concepts: Bias and Variance -->
+<!-- Bias -->
+<!-- * Systematic error: The difference between predicted values and the true target. -->
+<!-- * Example: A model missing the target entirely. -->
+<!-- Variance -->
+<!-- * Sensitivity to data changes: How much predictions change with new data. -->
+<!-- * Example: Hitting different spots on the target each time. -->
+<!-- Goal -->
+<!-- * Minimize both bias and variance. -->
+<!-- ![](fig/bias-variance.png). -->
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig/b-v-tradeoff.png" class="img-fluid figure-img"></p>
+<figcaption>Picture borrowed from <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</figcaption>
+</figure>
+</div>
+<p><img src="fig/fig2_crop.png" class="img-fluid"></p>
+<p>With new data <span class="math inline">\((X,Y)\)</span> from the same distribution:</p>
+<p><img src="fig/fig3_crop.png" class="img-fluid"></p>
+<!-- ## Prediction  -->
+<!-- Suppose we have a training data and testing data -->
+<!-- \[ -->
+<!-- \err = \E[L(Y, \hat{f}(X))], -->
+<!-- \] -->
+<!-- the average generalization error when the method $\hat{f}(X)$ is applied to an independent test sample from the joint distribution of $X$ and $Y$. -->
+<!-- ## Notation -->
+<!-- Let the training set that consist $N$ samples as  -->
+<!-- \[ -->
+<!--   \T = \{(X_i, Y_i)\}_{i=1}^N, -->
+<!-- \] -->
+<!-- where -->
+<!-- * $X_i\in \R^P$ are the features. -->
+<!-- * $Y_i\in \R$ are the responses. -->
+<!-- We train the model, and use some *prediction rule* to determine $\hat{Y}=\hat{f}_\T(X)$. -->
+<!-- ## Understanding K -Fold Cross-Validation {.allowframebreaks} -->
+<!-- There are two many use of the K-fold CV -->
+<!-- 1. Tune hyper parameters  -->
+<!-- 2. To better evaluate the performance of a model -->
+<!-- The number of folds depends on the data size. -->
+<!-- 1. The cross-validation approach involves randomly dividing the set of observations into $K$ groups, or folds, of approximately equal size.  -->
+<!-- 2. The first fold is treated as a validation set and the method is fit on the remaining $K-1$ folds -->
+<!-- 3. Repeat step 2 for $K$ times; each time, a different group of observations is treated as a validation set.  -->
+<!-- \framebreak -->
+<!-- Let $\T=\{X_i,Y_i\}_{i=1}^N$ be the training data. -->
+<!-- 1. Split the data into K roughly equal sizes parts $K$ -->
+<!-- 2. For each $k=1,2,\dots,K$, repeat the following steps: -->
+<!--     (i) Leave the $k$th fold $\T_k$ (i.e., part) from the data $\T$, and denote the remaining data as $\T_{-k}$. We fit the model to $\T_{-k}$ and denote the corresponding model we obtained by $\hat{f}_{\T_{-k}}$ -->
+<!--     (ii) Calculate the total prediction error on the fitted model $\hat{f}_{\T_{-k}}$ on the left-out fold $\T_k$ -->
+<!-- \[ -->
+<!--   cv_k = \sum_{i\in \T_k} L(Y_i, \hat{f}_{\T_{-k}}(X_i)). -->
+<!-- \] -->
+<!-- 3. The **CV estimate** of prediction error is  -->
+<!-- \[ -->
+<!--   \widehat{\err}_{cv} = \frac{1}{K}\sum_{k=1}^K cv_k. -->
+<!-- \] -->
+</section>
+<section id="choice-of-fold-k" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="choice-of-fold-k"><span class="header-section-number">5.9</span> Choice of Fold K</h2>
+<!-- If we have our fitted model $\hat{f}$, we then have -->
+<!-- \begin{align*} -->
+<!-- \mse(x_0)  -->
+<!--   &= \E_\T[f(x_0)-\hat{y}_0]^2 \\ -->
+<!--   &= \E_\T[\hat{y}_0-\E_\T(\hat{y}_0)]^2 + \{\E_\T(\hat{y}_0-f(x_0)\}^2\\ -->
+<!--   &= \var_\T(\hat{y}_0) + \bias^2(\hat{y}_0) -->
+<!-- \end{align*} -->
+<p>Q: What values of <span class="math inline">\(K, 2 \leq K \leq N\)</span> should we use? </p>
 <ul>
-<li><p>Chapter 8 of Rizzo, M.L. (2007). <em>Statistical Computing with R</em>. CRC Press, Roca Baton.</p></li>
-<li><p>Wu, C.F.J. (1986).<a href="https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full">Bootstrap and Other Resampling Methods in Regression Analysis</a>. <em>The Annals of Statistics</em>.</p></li>
+<li><p>Large <span class="math inline">\(K\)</span>: <strong>high variance</strong>, but <strong>small bias</strong>.</p></li>
+<li><p>Small <span class="math inline">\(K\)</span>: <strong>low variance</strong>, but <strong>high bias</strong>.</p></li>
+</ul>
+<!-- training set. CV overestimates the test error for the model fit on -->
+<!--       the entire data set. Thus, the CV-estimate of prediction -->
+<!--       error is always biased high, and  -->
+<p>Bias decreases as <span class="math inline">\(K\)</span> increases.</p>
+<!-- ##  -->
+<!-- An extreme case $K=N$:  -->
+<!-- * the CV estimator is approximately \purple{unbiased} for the true -->
+<!-- (expected) prediction error, but can have \purple{high variance} because the N “training sets” are so similar to one another. But computational burden! -->
+<!-- $K = 5$  -->
+<!-- * Cross-validation has \purple{lower variance}. But \purple{bias} -->
+<!-- could be a problem, depending on how the performance of the learning method varies with the size of the training set. -->
+</section>
+<section id="example-stock-market" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="example-stock-market"><span class="header-section-number">5.10</span> Example: Stock market</h2>
+<p>We look at the dataset in <strong>Smarket</strong> package in R.</p>
+<p>It contains the daily percentage returns for the S&amp;P 500 stock index between 2001 and 2005.</p>
+<p><span class="math inline">\(N = 1250\)</span></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(Smarket)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the table and scale it to fit the page</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Smarket) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="st">"latex"</span>, <span class="at">caption =</span><span class="st">" First Few Rows of Smarket Dataset"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="st">"center"</span>, <span class="at">font_size =</span> <span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+
+</div>
+</div>
+</section>
+<section id="leave-one-out-cross-validation-loocv" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="leave-one-out-cross-validation-loocv"><span class="header-section-number">5.11</span> Leave-One-Out Cross-Validation (LOOCV)</h2>
+<ul>
+<li><p>When <span class="math inline">\(K=N\)</span>, the size of the training data, it is leave-one-out cross validation.</p></li>
+<li><p>Instead of creating two subsets of comparable size, a single observation <span class="math inline">\((x_i, y_i)\)</span> is used for the validation set and the remaining observations make up the training set.</p></li>
+<li><p>Repeat this for each observation and get the average.</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig/LOOCV.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Illustration for Leave one out CV.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig/yeying/pic5.png" class="img-fluid figure-img"></p>
+<figcaption>5 fold CV.</figcaption>
+</figure>
+</div>
+<!-- ![Result of the 5-fold CV with 10 runs.](fig/yeying/pic10.pdf) -->
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><embed src="fig/yeying/pic10.pdf" class="img-fluid" style="width:50.0%"></p>
+<figcaption>Result of the 5-fold CV with 10 runs.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<!-- ## Cross validation may be used to choose the hyper parameter  -->
+<!-- * Linear Regression (\purple{No hyper parameter}) -->
+<!-- * LASSO Regression -->
+<!-- * Ridge Regression -->
+<!-- * Random Forest -->
+<!-- * Gradient Boosting -->
+<!-- * Neural Networks -->
+<!-- Many of the models have something called **Hyperparameter**.  -->
+<!-- ##  -->
+<!-- Some models have hyperparameters that need to be tuned, some have only a few, some have more. -->
+<!-- For example, in LASSO regression, there is only 1 hyperparameter -->
+<!-- whereas in Random Forest, the hyperparameters are -->
+<!--   1. max depth  -->
+<!--   2. min sample split -->
+<!--   3. max terminal node -->
+<!--   4. min sample leaf -->
+<!--   5. ...  -->
+<!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock} -->
+<!--     \textbf{\large }\\ -->
+<!--     CV can help in choosing the hyperparameter(s). -->
+<!-- \end{beamercolorbox} -->
+</section>
+<section id="take-home-messages" class="level2" data-number="5.12">
+<h2 data-number="5.12" class="anchored" data-anchor-id="take-home-messages"><span class="header-section-number">5.12</span> Take Home Messages</h2>
+<p>What is CV?</p>
+<ul>
+<li>A method to estimate prediction error using all data efficiently.</li>
+</ul>
+<p>Why K-fold?:</p>
+<ul>
+<li>Balances bias and variance effectively.</li>
+</ul>
+<p>LOOCV:</p>
+<ul>
+<li>Special case with K = N, unbiased but expensive.</li>
+</ul>
+<p>Practical Tips:</p>
+<ul>
+<li><p>K = 5 or K = 10 is common and (usually) works well.</p></li>
+<li><p>Use CV to tune hyperparameters and compare models.</p></li>
+</ul>
+<p>Note:</p>
+<ul>
+<li>Cross-validation can be applied in various contexts!</li>
+</ul>
+<hr>
+<ul>
+<li><p>Note: This lecture is based on the book by Hastie et al.&nbsp;(2009), and James et al.&nbsp;(2013).</p></li>
+<li><p>Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). <a href="https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf">The Elements of Statistical Learning</a>. Springer, 2nd edition.</p></li>
 </ul>
 
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://djsaunde.wordpress.com/2017/07/17/the-bias-variance-tradeoff/<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -847,8 +1128,8 @@ window.Quarto = {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./06-cv.html" class="pagination-link" aria-label="Cross Validation">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Cross Validation</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./06-resample.html" class="pagination-link" aria-label="Resampling, Jackknife and Bootstrap">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Resampling, Jackknife and Bootstrap</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

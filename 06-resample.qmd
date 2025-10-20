@@ -14,13 +14,30 @@
 \newcommand{\htt}{\hat{\theta}}
 \newcommand{\b}{\mathbb b}
 
+```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
+pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble)
+# Set global theme
+theme_set(
+  theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5)  # center title
+    )
+)
+```
+
 ## Introduction
 
 This chapter covers resampling methods including the jackknife and bootstrap techniques.
 
 ## Resampling methods
 
-Resampling methods treat an observed sample as a *finite population*, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. Some commonly used resampling methods include:
+*Resampling methods* is a way to use the observed data to generate hypothetical samples. It treats an observed sample as a *finite population*, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. It is useful when:
+
+* Do not know the underlying distribution of a population
+
+* The formula may be difficult to be calculated.
+
+Some commonly used resampling methods include:
 
 -   **Bootstrap**: Bootstrap methods are often used when the distribution of the target population is not specified; the sample is the only information available.
 
@@ -30,14 +47,14 @@ Resampling methods treat an observed sample as a *finite population*, and random
 
 -   **Permutation tests**: Permutation tests are a type of non-parametric statistical test that involves rearranging the data points to test a hypothesis. They are used to determine whether the observed effect is statistically significant by comparing it to the distribution of effects obtained through random permutations of the data.
 
-## Motivations
+## Estimators
 
 ### Bias-Variance Tradeoff
 
 In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\hat{\theta}$ for a parameter $\theta$:
 
 ::: {.callout-definition title="Mean Square Errors "}
-Suppose we have a parameter $\theta$ and an estimator $\hat{\theta}$. The mean square error (MSE) of the estimator is defined as $$\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,$$ where $\mathbb b$ is the bias of the estimator.
+Suppose we have a parameter $\theta$ and an estimator $\hat{\theta}$. The mean square error (MSE) of the estimator is defined as $$\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \var(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,$$ where $\b$ is the bias of the estimator.
 :::
 
 **Questions**: Why do we care about the bias? Can we always find an unbiased estimator? What does it mean?
@@ -48,11 +65,55 @@ For most of the course, we focus on the *unbiased estimator*. This may often be 
 
 The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods.
 
--   Parametric bootstrap:
+-   Parametric bootstrap
 
 -   Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified.
 
-The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true popu- lation. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Prop- erties of an estimator such as bias or standard error can be estimated by resampling.
+::: { .callout-note title="Simple example of Bootstrap"}
+```{r bootstrap-simple-example}
+set.seed(333)
+n <- 1E4
+B <- 1E4
+x <- rnorm(n, mean = 5, sd = 2) #original sample
+
+
+boot_means <- pbapply::pbsapply(1:B, function(i){
+  indices <- sample(1:n, size = n, replace = TRUE) #resample
+  boot.sample <- x[indices]
+  mean(boot.sample)
+}) 
+mean(boot_means)
+hist(boot_means, breaks = 50, main = "Bootstrap distribution of the mean", xlab = "Mean")
+
+
+# Compute statistics
+true_mean <- 5
+boot_mean <- mean(boot_means)
+df <- tibble(x = boot_means)
+# Plot
+ggplot(df, aes(x = x)) +
+  geom_histogram(aes(y = ..density..), bins = 50, 
+                 fill = "lightgreen", color = "black", alpha = 0.7) +
+  geom_density(color = "darkgreen", size = 1) +
+  geom_vline(xintercept = true_mean, color = "red", linetype = "dashed", size = 1.1) +
+  geom_vline(xintercept = boot_mean, color = "blue", linetype = "solid", size = 1.1) +
+  labs(
+    title = "Bootstrap Distribution of the Sample Mean",
+    x = "Bootstrap Mean",
+    y = "Density"
+  ) +
+  annotate("text", x = true_mean, y = 0.3, label = "True mean = 5", color = "red", hjust = -0.1) +
+  annotate("text", x = boot_mean, y = 0.25, label = sprintf("Bootstrap mean = %.2f", boot_mean),
+           color = "blue", hjust = -0.1) +
+  theme_minimal(base_size = 14)
+```
+:::
+
+The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates
+well only the expected prediction error Err.
+
+
+The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true population. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Properties of an estimator such as *bias* or *standard error* can be estimated by resampling.
 
 Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.
 
@@ -60,7 +121,7 @@ The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstra
 
 To generate a bootstrap random sample by resampling x, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.
 
-1.  For each bootstrap replicate, indexed b = 1, . . . , B:
+1.  For each bootstrap replicate, indexed $b = 1, \dots, B$:
     (a) Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.
     (b) Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
 2.  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).
@@ -117,6 +178,8 @@ These methods are widely used in statistical inference and have applications in 
 ------------------------------------------------------------------------
 
 Reference:
+
+-   Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
 
 -   Chapter 8 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
 
