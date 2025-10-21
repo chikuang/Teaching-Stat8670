@@ -5,3 +5,5 @@ dplyr
 tibble
 ISLR2
 kableExtra
+DAAG
+patchwork

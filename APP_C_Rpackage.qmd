@@ -10,6 +10,7 @@
 |   4   |         Vu, Ha          |                |  TBA  |
 |   5   |      Zhang, Boshu       |   You, Sifan   |  TBA  |
 |   6   |      Zhang, Yalin       |                |  TBA  |
+|   7   |      Rehman, Muhammad Aimal        |  Lu, Zhili              |  TBA  |
 
 ## Format
 

@@ -10,7 +10,6 @@
 \newcommand{\bias}{\mathbb{B}\mathrm{ias}}
 \newcommand{\mse}{\mathrm{MSE}}
 
-
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
 pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble)
 # Set global theme
@@ -28,14 +27,13 @@ This chapter covers resampling technique called *cross-validation*.
 
 Cross-validation (CV) is a statistical method used to estimate the *skill* of machine learning (ML) models. It is commonly used in applied ML to compare and select a model for a given predictive modeling problem because it is easy to understand, easy to implement, and results in skill estimates that generally have a lower *bias* than other methods.
 
-
 ## Resampling methods
 
 *Resampling methods* is a way to use the observed data to generate hypothetical samples. It treats an observed sample as a *finite population*, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. It is useful when:
 
-* Do not know the underlying distribution of a population
+-   Do not know the underlying distribution of a population
 
-* The formula may be difficult to be calculated.
+-   The formula may be difficult to be calculated.
 
 Some commonly used resampling methods include:
 
@@ -47,23 +45,21 @@ Some commonly used resampling methods include:
 
 -   **Permutation tests**: Permutation tests are a type of non-parametric statistical test that involves rearranging the data points to test a hypothesis. They are used to determine whether the observed effect is statistically significant by comparing it to the distribution of effects obtained through random permutations of the data.
 
-
-
 ## Machine Learning Models
 
-* **Left**: What machine learning can do
+-   **Left**: What machine learning can do
 
-* **Right**: Model/Methods
+-   **Right**: Model/Methods
 
-::: columns
+::::: columns
 ::: column
-![](fig/ML_gpt.png){width=100%}
-:::
-::: column
-![](fig/ML_models.png){width=100%}
-:::
+![](fig/ML_gpt.png){width="100%"}
 :::
 
+::: column
+![](fig/ML_models.png){width="100%"}
+:::
+:::::
 
 ## Training and testing/validating sets
 
@@ -95,88 +91,81 @@ How do we choose between different models $f_1,\dots,f_m$?
 <!-- ## Bias-Variance Tradeoff -->
 
 <!-- If we have a complex model, we may have many different tuning parameters.  -->
+
 <!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock_blue} -->
+
 <!--     \textbf{\large Bias-Variance Tradeoff}\\ -->
+
 <!-- $$ -->
+
 <!-- \mse[y,\hat{y}] \propto \var(\hat{y}) + \bias^2(\hat{y}) -->
+
 <!-- $$ -->
+
 <!-- \end{beamercolorbox} -->
 
 ## Setup
 
 Suppose we have a **supervised learning** model $f(X)\to Y$.
 
-Denote the training set by $\T=\{(X_i,Y_i)\}_{i=1}^{N_{train}}$.
+Denote the training set by $\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}$.
 
 How to choose between the models $f_1,\dots,f_m$?
 
 Ideal: $(X,Y)\sim F_{X,Y}$.
 
-Define the generalization error (Population error) as
-$$
-  \Err(f) = \E_{X,Y}[\{Y-f(X)\}^2] 
-$$
-
-Choose $f$ by 
-$$
-  \arg\min_{f\in\{f_1,\dots,f_m\}} \Err(f)
+Define the generalization error (Population error) as $$
+  \mathrm{Err}(f) = \mathbb{E}_{X,Y}[\{Y-f(X)\}^2] 
 $$
 
+Choose $f$ by $$
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
+$$
 
 Suppose we have a **supervised learning** model $f(X)\to Y$.
 
-Denote the training set by $\T=\{(X_i,Y_i)\}_{i=1}^{N_{train}}$.
+Denote the training set by $\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}$.
 
 How to choose between the models $f_1,\dots,f_m$?
 
-Ideal: $(X,Y)\sim F_{X,Y}$  (\textbf{\large \purple{unknown}}).
+Ideal: $(X,Y)\sim F_{X,Y}$ (\textbf{\large \purple{unknown}}).
 
-Define the generalization error (Population error) as
-$$
-  \Err(f) = E_{X,Y}[(Y-f(X))^2] 
-$$
-
-Choose $f$ by 
-$$
-  \arg\min_{f\in\{f_1,\dots,f_m\}} \Err(f)
+Define the generalization error (Population error) as $$
+  \mathrm{Err}(f) = E_{X,Y}[(Y-f(X))^2] 
 $$
 
+Choose $f$ by $$
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
+$$
 
 **Question**:
 
 What to do if we do not know about $F_{X_Y}$?
 
-
-
 Let $V:=\{(X_i,Y_i)\}_{i=1}^{N_{Val}}$ be the validating/testing set.
 
 $$
-  \Err(f) = E[(Y-f(X))^2] \approx \frac{1}{N_{Val}}\sum_{i=1}^{N_{Val}}(Y_i-f(X_i))^2 =: \err_{Val}(f).
+  \mathrm{Err}(f) = E[(Y-f(X))^2] \approx \frac{1}{N_{Val}}\sum_{i=1}^{N_{Val}}(Y_i-f(X_i))^2 =: \mathrm{err}_{Val}(f).
 $$
 
-When $N_{Val}\to\infty$, $\err_{Val}(f)\to \Err(f)$.
+When $N_{Val}\to\infty$, $\mathrm{err}_{Val}(f)\to \mathrm{Err}(f)$.
 
-We can then do 
-$$
-  \arg\min_{f\in\{f_1,\dots,f_m\}} \err_{Val}(f)
-$$
-If $N_{val}$ is large, we can have good estimate of $\Err(f)$.
-
-
+We can then do $$
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{Val}(f)
+$$ If $N_{val}$ is large, we can have good estimate of $\mathrm{Err}(f)$.
 
 But actually, we may only have *small* validating set.
 
-
-
 Problems with simple Train-Test Split:
 
-* Splitting 50-50 wastes data that could improve the model.
+-   Splitting 50-50 wastes data that could improve the model.
 
-* Splitting 80-20 may leave too little test data for reliable evaluation.
+-   Splitting 80-20 may leave too little test data for reliable evaluation.
 
 \pause
+
 What we can do? \purple{Cross-validation}!
-	
+
 Cross-validation uses **all** data efficiently for training and testing.
 
 ## What is Cross-Validation?
@@ -188,90 +177,86 @@ Suppose there are 5 folds ($K=5$).
 Put together, we have
 
 $$
-  \err_{cv}(f) = \frac{1}{N}\sum_{k=1}^5 \sum_{i\in S_k}(y_i-\hat{f}^{[s_k^C]}(x_i))^2.
+  \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^5 \sum_{i\in S_k}(y_i-\hat{f}^{[s_k^C]}(x_i))^2.
 $$
 
-Then cross-validation is to find
-$$
-  f^* = \arg\min_{f\in\{f_1,\dots,f_m\}} \err_{cv}(f).
+Then cross-validation is to find $$
+  f^* = \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{cv}(f).
 $$
 
 ## K-Fold Cross-Validation
 
-Let $\D=\{X_i,Y_i\}_{i=1}^N$ be our data.
+Let $\mathcal{D}=\{X_i,Y_i\}_{i=1}^N$ be our data.
 
-1. Split the data into K approximately equal sizes parts/fold $K$
+1.  Split the data into K approximately equal sizes parts/fold $K$
 
-2. For each $k=1,2,\dots,K$, repeat the following steps:
-    (i) Leave the $k$th fold $S_k$ from the data $\D$, and denote the remaining data as $S_k^C$. We fit the model to $S_k^C$ and denote the corresponding model we obtained by $\hat{f}^{[S_k^C]}$
-    (ii) Calculate the total prediction error on the fitted model $\hat{f}^{[S_k^C]}$ on the left-out fold $S_k$
-$$
-  \err_{cv,k}(f) = \sum_{i\in S_k} L(Y_i, \hat{f}^{[S_k^C]}(X_i)).
-$$
+2.  For each $k=1,2,\dots,K$, repeat the following steps:
 
-3. The **CV estimate** of prediction error is 
-$$
-  \err_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \err_{cv,k}(f).
-$$
+    (i) Leave the $k$th fold $S_k$ from the data $\mathcal{D}$, and denote the remaining data as $S_k^C$. We fit the model to $S_k^C$ and denote the corresponding model we obtained by $\hat{f}^{[S_k^C]}$
+    (ii) Calculate the total prediction error on the fitted model $\hat{f}^{[S_k^C]}$ on the left-out fold $S_k$ $$
+           \mathrm{err}_{cv,k}(f) = \sum_{i\in S_k} L(Y_i, \hat{f}^{[S_k^C]}(X_i)).
+         $$
 
+3.  The **CV estimate** of prediction error is $$
+      \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \mathrm{err}_{cv,k}(f).
+    $$
 
----
+------------------------------------------------------------------------
 
-So if we have $M$ models, $f_1,f_2,\dots,f_M$, we can use cross-validation to select the best model by computing the cross-validation error for each model $\err_{cv}(f_1), \err_{cv}(f_2),\dots \err_{cv}(f_M)$
+So if we have $M$ models, $f_1,f_2,\dots,f_M$, we can use cross-validation to select the best model by computing the cross-validation error for each model $\mathrm{err}_{cv}(f_1), \mathrm{err}_{cv}(f_2),\dots \mathrm{err}_{cv}(f_M)$
 
-Then the best model is 
-$$
-  f^*=\arg\min_{f\in\{f_1,\dots,f_M\}} \err_{cv}(f).
+Then the best model is $$
+  f^*=\arg\min_{f\in\{f_1,\dots,f_M\}} \mathrm{err}_{cv}(f).
 $$
 
 There are two many use of the K-fold CV
 
-1. Tune hyperparameters
-  
+1.  Tune hyperparameters
+
     e.g., In linear regression: $y=\beta_0+\sum_{j=1}^L\beta_kx^k+\varepsilon$, $L$ is the hyperparameter here.
-    
+
     M1. $y = \beta_0 + \beta_1 x_1 + \varepsilon$
-  
+
     M2. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon$
-  
+
     M3. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon$
 
-2. To better evaluate the performance of a model
+2.  To better evaluate the performance of a model
 
 The number of folds depends on the data size.
 
-## Discussion 
+## Discussion
 
-**Question**: 
+**Question**:
 
-What would you consider when choosing $K$?**
+What would you consider when choosing $K$?\*\*
 
 Answer: The Bias-Variance Decomposition!
 
 \begin{align*}
 \text{Generalization error} &~=~ \text{variance} &~+~& \text{bias} &~+~& \text{irreducible error} \\
-\E_\T[(y-f(x;\T))^2] &~=~ \var(x) &~+~& \bias^2(x) &~+~& \varepsilon^2.
+\mathbb{E}_\mathcal{T}[(y-f(x;\mathcal{T}))^2] &~=~ \mathbb{V}ar(x) &~+~& \mathbb{B}\mathrm{ias}^2(x) &~+~& \varepsilon^2.
 \end{align*}
 
 See Section 7.3, Equation (7.9) Hastie et al. (2009).
 
----
- 
+------------------------------------------------------------------------
+
 **Pop-up quiz**:
-  
+
 Q: What are the characteristic a good model $f$ should have?
 
-1. Low bias, high variance
+1.  Low bias, high variance
 
-2. High bias, low variance
+2.  High bias, low variance
 
-3. Low bias, low variance
+3.  Low bias, low variance
 
-4. High bias, high variance
+4.  High bias, high variance
 
-5. None of above
-    
----
+5.  None of above
+
+------------------------------------------------------------------------
 
 <!-- ## Modeling steps (from Dubin) -->
 
@@ -301,12 +286,12 @@ Q: What are the characteristic a good model $f$ should have?
 
 <!-- One would like to think cross-validation estimates the **prediction error** for the model at hand, fit to the training data -->
 
-
-
 <!-- ##  -->
 
 <!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock_pink} -->
+
 <!--     \textbf{\large Pop-up quiz}\\ -->
+
 <!--   Q: If you are given an arbitrary data set? What is the split ratio between training and testing data you would choose? -->
 
 <!-- \vspace{0.5cm}  -->
@@ -330,6 +315,7 @@ Q: What are the characteristic a good model $f$ should have?
 <!-- Bias -->
 
 <!-- * Systematic error: The difference between predicted values and the true target. -->
+
 <!-- * Example: A model missing the target entirely. -->
 
 <!-- Variance -->
@@ -338,13 +324,11 @@ Q: What are the characteristic a good model $f$ should have?
 
 <!-- * Example: Hitting different spots on the target each time. -->
 
-
 <!-- Goal -->
 
 <!-- * Minimize both bias and variance. -->
 
 <!-- ![](fig/bias-variance.png). -->
-
 
 \begin{multicols}{2}
 
@@ -363,11 +347,11 @@ Q: What are the characteristic a good model $f$ should have?
   \vfill \null
 \end{multicols}
 
+![Picture borrowed from [^05-cv-1].](fig/b-v-tradeoff)
 
-![Picture borrowed from [^note6].  ](fig/b-v-tradeoff)
+[^05-cv-1]: https://djsaunde.wordpress.com/2017/07/17/the-bias-variance-tradeoff/
 
-[^note6]: https://djsaunde.wordpress.com/2017/07/17/the-bias-variance-tradeoff/
-
+[^05-cv-2]: https://djsaunde.wordpress.com/2017/07/17/the-bias-variance-tradeoff/
 
 ![](fig/fig2_crop.png)
 
@@ -375,13 +359,14 @@ With new data $(X,Y)$ from the same distribution:
 
 ![](fig/fig3_crop.png)
 
-
-
 <!-- ## Prediction  -->
 
 <!-- Suppose we have a training data and testing data -->
+
 <!-- \[ -->
+
 <!-- \err = \E[L(Y, \hat{f}(X))], -->
+
 <!-- \] -->
 
 <!-- the average generalization error when the method $\hat{f}(X)$ is applied to an independent test sample from the joint distribution of $X$ and $Y$. -->
@@ -389,12 +374,17 @@ With new data $(X,Y)$ from the same distribution:
 <!-- ## Notation -->
 
 <!-- Let the training set that consist $N$ samples as  -->
+
 <!-- \[ -->
+
 <!--   \T = \{(X_i, Y_i)\}_{i=1}^N, -->
+
 <!-- \] -->
+
 <!-- where -->
 
 <!-- * $X_i\in \R^P$ are the features. -->
+
 <!-- * $Y_i\in \R$ are the responses. -->
 
 <!-- We train the model, and use some *prediction rule* to determine $\hat{Y}=\hat{f}_\T(X)$. -->
@@ -404,12 +394,13 @@ With new data $(X,Y)$ from the same distribution:
 <!-- There are two many use of the K-fold CV -->
 
 <!-- 1. Tune hyper parameters  -->
+
 <!-- 2. To better evaluate the performance of a model -->
 
 <!-- The number of folds depends on the data size. -->
 
-
 <!-- 1. The cross-validation approach involves randomly dividing the set of observations into $K$ groups, or folds, of approximately equal size.  -->
+
 <!-- 2. The first fold is treated as a validation set and the method is fit on the remaining $K-1$ folds -->
 
 <!-- 3. Repeat step 2 for $K$ times; each time, a different group of observations is treated as a validation set.  -->
@@ -420,17 +411,24 @@ With new data $(X,Y)$ from the same distribution:
 
 <!-- 1. Split the data into K roughly equal sizes parts $K$ -->
 
-
 <!-- 2. For each $k=1,2,\dots,K$, repeat the following steps: -->
+
 <!--     (i) Leave the $k$th fold $\T_k$ (i.e., part) from the data $\T$, and denote the remaining data as $\T_{-k}$. We fit the model to $\T_{-k}$ and denote the corresponding model we obtained by $\hat{f}_{\T_{-k}}$ -->
+
 <!--     (ii) Calculate the total prediction error on the fitted model $\hat{f}_{\T_{-k}}$ on the left-out fold $\T_k$ -->
+
 <!-- \[ -->
+
 <!--   cv_k = \sum_{i\in \T_k} L(Y_i, \hat{f}_{\T_{-k}}(X_i)). -->
+
 <!-- \] -->
 
 <!-- 3. The **CV estimate** of prediction error is  -->
+
 <!-- \[ -->
+
 <!--   \widehat{\err}_{cv} = \frac{1}{K}\sum_{k=1}^K cv_k. -->
+
 <!-- \] -->
 
 ## Choice of Fold K
@@ -442,27 +440,33 @@ With new data $(X,Y)$ from the same distribution:
 \end{beamercolorbox}
 
 <!-- If we have our fitted model $\hat{f}$, we then have -->
+
 <!-- \begin{align*} -->
+
 <!-- \mse(x_0)  -->
+
 <!--   &= \E_\T[f(x_0)-\hat{y}_0]^2 \\ -->
+
 <!--   &= \E_\T[\hat{y}_0-\E_\T(\hat{y}_0)]^2 + \{\E_\T(\hat{y}_0-f(x_0)\}^2\\ -->
+
 <!--   &= \var_\T(\hat{y}_0) + \bias^2(\hat{y}_0) -->
+
 <!-- \end{align*} -->
-  
-\pause
-Q: What values of $K, 2 \leq K \leq N$ should we use?
+
 \pause
 
-* Large $K$: **high variance**, but **small bias**.
+Q: What values of $K, 2 \leq K \leq N$ should we use? \pause
 
-* Small $K$: **low variance**, but **high bias**.
+-   Large $K$: **high variance**, but **small bias**.
 
+-   Small $K$: **low variance**, but **high bias**.
 
 <!-- training set. CV overestimates the test error for the model fit on -->
+
 <!--       the entire data set. Thus, the CV-estimate of prediction -->
+
 <!--       error is always biased high, and  -->
 
-      
 Bias decreases as $K$ increases.
 
 <!-- ##  -->
@@ -470,22 +474,22 @@ Bias decreases as $K$ increases.
 <!-- An extreme case $K=N$:  -->
 
 <!-- * the CV estimator is approximately \purple{unbiased} for the true -->
+
 <!-- (expected) prediction error, but can have \purple{high variance} because the N “training sets” are so similar to one another. But computational burden! -->
 
 <!-- $K = 5$  -->
 
 <!-- * Cross-validation has \purple{lower variance}. But \purple{bias} -->
+
 <!-- could be a problem, depending on how the performance of the learning method varies with the size of the training set. -->
 
-
-## Example: Stock market 
+## Example: Stock market
 
 We look at the dataset in **Smarket** package in R.
 
 It contains the daily percentage returns for the S&P 500 stock index between 2001 and 2005.
 
 $N = 1250$
-
 
 ```{r, message = FALSE, warning = FALSE}
 library(ISLR2)
@@ -499,21 +503,17 @@ head(Smarket) %>%
   kable_styling(full_width = FALSE, position = "center", font_size = 8)
 ```
 
-
 ## Leave-One-Out Cross-Validation (LOOCV)
 
-* When $K=N$, the size of the training data, it is leave-one-out cross validation.
+-   When $K=N$, the size of the training data, it is leave-one-out cross validation.
 
-* Instead of creating two subsets of comparable size, a single observation $(x_i, y_i)$ is used for the validation set and the remaining observations make up the training set. 
-   
-* Repeat this for each observation and get the average.
+-   Instead of creating two subsets of comparable size, a single observation $(x_i, y_i)$ is used for the validation set and the remaining observations make up the training set.
 
-![Illustration for Leave one out CV.](fig/LOOCV.png){width=80%}
+-   Repeat this for each observation and get the average.
 
-
+![Illustration for Leave one out CV.](fig/LOOCV.png){width="80%"}
 
 ![5 fold CV.](fig/yeying/pic5.png)
-
 
 <!-- ![Result of the 5-fold CV with 10 runs.](fig/yeying/pic10.pdf) -->
 
@@ -521,18 +521,18 @@ head(Smarket) %>%
 knitr::include_graphics("fig/yeying/pic10.pdf")
 ```
 
-
-
-
-
 <!-- ## Cross validation may be used to choose the hyper parameter  -->
 
-
 <!-- * Linear Regression (\purple{No hyper parameter}) -->
+
 <!-- * LASSO Regression -->
+
 <!-- * Ridge Regression -->
+
 <!-- * Random Forest -->
+
 <!-- * Gradient Boosting -->
+
 <!-- * Neural Networks -->
 
 <!-- Many of the models have something called **Hyperparameter**.  -->
@@ -541,50 +541,196 @@ knitr::include_graphics("fig/yeying/pic10.pdf")
 
 <!-- Some models have hyperparameters that need to be tuned, some have only a few, some have more. -->
 
-
 <!-- For example, in LASSO regression, there is only 1 hyperparameter -->
-
 
 <!-- whereas in Random Forest, the hyperparameters are -->
 
 <!--   1. max depth  -->
+
 <!--   2. min sample split -->
+
 <!--   3. max terminal node -->
+
 <!--   4. min sample leaf -->
+
 <!--   5. ...  -->
 
 <!-- \begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock} -->
-<!--     \textbf{\large }\\ -->
-<!--     CV can help in choosing the hyperparameter(s). -->
-<!-- \end{beamercolorbox} -->
 
+<!--     \textbf{\large }\\ -->
+
+<!--     CV can help in choosing the hyperparameter(s). -->
+
+<!-- \end{beamercolorbox} -->
 
 ## Take Home Messages
 
 What is CV?
 
-  * A method to estimate prediction error using all data efficiently.
+-   A method to estimate prediction error using all data efficiently.
 
 Why K-fold?:
 
-* Balances bias and variance effectively.
+-   Balances bias and variance effectively.
 
 LOOCV:
 
-* Special case with K = N, unbiased but expensive.
+-   Special case with K = N, unbiased but expensive.
 
 Practical Tips:
 
-* K = 5  or  K = 10  is common and (usually) works well.
+-   K = 5 or K = 10 is common and (usually) works well.
 
-* Use CV to tune hyperparameters and compare models.
+-   Use CV to tune hyperparameters and compare models.
 
-Note:  
+Note:
 
-- Cross-validation can be applied in various contexts!
+-   Cross-validation can be applied in various contexts!
 
----
 
-- Note: This lecture is based on the book by Hastie et al. (2009), and James et al. (2013).
+::: {.callout-example title="A"}
 
-- Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
+Each panel reproduces your model fit:
+
+- Linear: $y = \beta_0 + \beta_1 x$
+- Quadratic: $y = \beta_0 + \beta_1 x + \beta_2 x^2$
+- Exponential: $\log y = \beta_0 + \beta_1 x$
+- Log–Log: $\log y = \beta_0 + \beta_1 \log x$
+
+Once the model is estimated, we want to assess the fit. CV can be used to estimate the prediction errors.
+
+
+``` {r message = FALSE}
+library(DAAG); attach(ironslag)
+library(ggplot2)
+library(patchwork)
+
+# --- raw data ---
+  df <- data.frame(chemical, magnetic)
+a  <- seq(10, 40, 0.1)
+
+# --- fits (using coefficients explicitly) ---
+L1 <- lm(magnetic ~ chemical, data = df)
+yhat1 <- L1$coef[1] + L1$coef[2] * a
+
+L2 <- lm(magnetic ~ chemical + I(chemical^2), data = df)
+yhat2 <- L2$coef[1] + L2$coef[2] * a + L2$coef[3] * a^2
+
+L3 <- lm(log(magnetic) ~ chemical, data = df)
+logyhat3 <- L3$coef[1] + L3$coef[2] * a
+yhat3 <- exp(logyhat3)
+
+L4 <- lm(log(magnetic) ~ log(chemical), data = df)
+logyhat4 <- L4$coef[1] + L4$coef[2] * log(a)
+
+# --- assemble data for plotting ---
+fits <- data.frame(
+  a = a,
+  yhat1 = yhat1,
+  yhat2 = yhat2,
+  yhat3 = yhat3,
+  loga  = log(a),
+  logyhat4 = logyhat4
+)
+
+# --- plots ---
+p1 <- ggplot(df, aes(x = chemical, y = magnetic)) +
+  geom_point(shape = 16) +
+  geom_line(data = fits, aes(x = a, y = yhat1), linewidth = 1.1, color = "steelblue") +
+  ggtitle("Linear") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p2 <- ggplot(df, aes(x = chemical, y = magnetic)) +
+  geom_point(shape = 16) +
+  geom_line(data = fits, aes(x = a, y = yhat2), linewidth = 1.1, color = "darkgreen") +
+  ggtitle("Quadratic") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p3 <- ggplot(df, aes(x = chemical, y = magnetic)) +
+  geom_point(shape = 16) +
+  geom_line(data = fits, aes(x = a, y = yhat3), linewidth = 1.1, color = "firebrick") +
+  ggtitle("Exponential") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p4 <- ggplot(df, aes(x = log(chemical), y = log(magnetic))) +
+  geom_point(shape = 16) +
+  geom_line(data = fits, aes(x = loga, y = logyhat4), linewidth = 1.1, color = "purple") +
+  ggtitle("Log–Log") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# --- combine in 2×2 grid ---
+(p1 + p2) / (p3 + p4)
+```
+
+
+``` {r}
+attach(ironslag)
+n <- length(magnetic) # in DAAG ironslag
+e1 <- e2 <- e3 <- e4 <- numeric(n)
+# for n-fold cross validation
+# fit models on leave-one-out samples
+for (k in 1:n) {
+  y <- magnetic[-k]
+  x <- chemical[-k]
+  J1 <- lm(y ~ x)
+  yhat1 <- J1$coef[1] + J1$coef[2] * chemical[k]
+  e1[k] <- magnetic[k] - yhat1
+  
+  J2 <- lm(y ~ x + I(x^2))
+  yhat2 <- J2$coef[1] + J2$coef[2] * chemical[k] +
+    J2$coef[3] * chemical[k]^2
+  e2[k] <- magnetic[k] - yhat2
+  
+  J3 <- lm(log(y) ~ x)
+  logyhat3 <- J3$coef[1] + J3$coef[2] * chemical[k]
+  yhat3 <- exp(logyhat3)
+  e3[k] <- magnetic[k] - yhat3
+  
+  J4 <- lm(log(y) ~ log(x))
+  logyhat4 <- J4$coef[1] + J4$coef[2] * log(chemical[k])
+  yhat4 <- exp(logyhat4)
+  e4[k] <- magnetic[k] - yhat4
+}
+
+# compute MSEs
+mse <- c(mean(e1^2), mean(e2^2), mean(e3^2), mean(e4^2))
+
+# put into a tidy data frame
+results <- data.frame(
+  Model = c("Linear", "Quadratic", "Exponential", "Log–Log"),
+  MSE = round(mse, 4)
+)
+
+# display as a clean table
+knitr::kable(results, 
+             caption = "Model Comparison of Mean Squared Errors", align = c("l", "c"))
+L2
+```
+
+So the best fitted model is 
+$$
+\hat{Y} = 
+`r round(L2$coefficients[1], 3)` +
+`r round(L2$coefficients[2], 3)`\,X +
+`r round(L2$coefficients[3], 3)`\,X^2
+$$
+
+``` {r}
+par(mfrow = c(2, 2)) #layout for graphs
+plot(L2$fit, L2$res) #residuals vs fitted values
+abline(0, 0) #reference line
+qqnorm(L2$res) #normal probability plot
+qqline(L2$res) #reference line
+par(mfrow = c(1, 1)) #restore display
+```
+
+:::
+------------------------------------------------------------------------
+
+-   Note: This lecture is based on the book by Hastie et al. (2009), and James et al. (2013).
+
+-   Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
