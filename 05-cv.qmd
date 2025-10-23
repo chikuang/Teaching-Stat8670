@@ -122,25 +122,12 @@ Choose $f$ by $$
   \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
 $$
 
-Suppose we have a **supervised learning** model $f(X)\to Y$.
+But, $(X,Y)\sim F_{X,Y}$ is usally **unknown**!
 
-Denote the training set by $\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}$.
-
-How to choose between the models $f_1,\dots,f_m$?
-
-Ideal: $(X,Y)\sim F_{X,Y}$ (\textbf{\large \purple{unknown}}).
-
-Define the generalization error (Population error) as $$
-  \mathrm{Err}(f) = E_{X,Y}[(Y-f(X))^2] 
-$$
-
-Choose $f$ by $$
-  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
-$$
 
 **Question**:
 
-What to do if we do not know about $F_{X_Y}$?
+What to do if we do not know about $F_{X,Y}$?
 
 Let $V:=\{(X_i,Y_i)\}_{i=1}^{N_{Val}}$ be the validating/testing set.
 
@@ -188,6 +175,8 @@ $$
 
 Let $\mathcal{D}=\{X_i,Y_i\}_{i=1}^N$ be our data.
 
+::: {.callout-algorithm title="K-fold CV"}
+
 1.  Split the data into K approximately equal sizes parts/fold $K$
 
 2.  For each $k=1,2,\dots,K$, repeat the following steps:
@@ -201,7 +190,7 @@ Let $\mathcal{D}=\{X_i,Y_i\}_{i=1}^N$ be our data.
       \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \mathrm{err}_{cv,k}(f).
     $$
 
-------------------------------------------------------------------------
+:::
 
 So if we have $M$ models, $f_1,f_2,\dots,f_M$, we can use cross-validation to select the best model by computing the cross-validation error for each model $\mathrm{err}_{cv}(f_1), \mathrm{err}_{cv}(f_2),\dots \mathrm{err}_{cv}(f_M)$
 
@@ -213,13 +202,21 @@ There are two many use of the K-fold CV
 
 1.  Tune hyperparameters
 
-    e.g., In linear regression: $y=\beta_0+\sum_{j=1}^L\beta_kx^k+\varepsilon$, $L$ is the hyperparameter here.
+::: {.callout-example title="Hyperparameter Tuning using CV in linear regression"}
+Suppose we have a family of models:
 
-    M1. $y = \beta_0 + \beta_1 x_1 + \varepsilon$
+$y=\beta_0+\sum_{j=1}^L\beta_kx^k+\varepsilon$, $L$ is the hyperparameter here.
 
-    M2. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon$
+M1. $y = \beta_0 + \beta_1 x_1 + \varepsilon$
 
-    M3. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon$
+M2. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon$
+
+M3. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon$
+
+We may use K-fold CV to choose the best $L$.
+
+:::
+
 
 2.  To better evaluate the performance of a model
 
@@ -328,24 +325,15 @@ Q: What are the characteristic a good model $f$ should have?
 
 <!-- * Minimize both bias and variance. -->
 
-<!-- ![](fig/bias-variance.png). -->
+![](fig/bias-variance.png).
+<!-- fig/bias-variance.png} -->
 
-\begin{multicols}{2}
 
-  \null \vfill
-  \includegraphics[width=.58\textwidth]{fig/bias-variance.png}
-  \vfill \null
+- Bias (Systematic error): The difference between predicted values and the true target.
 
-\columnbreak
-
-  \null \vfill
-  \begin{itemize}
-    \item Bias (Systematic error): The difference between predicted values and the true target.
-    \item Variance (Sensitivity to data changes): How much predictions change with new data.
-    \item Goal: Minimize both bias and variance.
-  \end{itemize}
-  \vfill \null
-\end{multicols}
+- Variance (Sensitivity to data changes): How much predictions change with new data.
+    
+- Goal: Minimize both bias and variance.
 
 ![Picture borrowed from [^05-cv-1].](fig/b-v-tradeoff)
 
@@ -433,11 +421,9 @@ With new data $(X,Y)$ from the same distribution:
 
 ## Choice of Fold K
 
-\begin{beamercolorbox}[rounded=true,shadow=true,sep=10pt]{customblock_blue}
-    \textbf{\large Bias-Variance Tradeoff}\\
-    \vspace{0.1in}
-    The choice of K is a tradeoff between bias and variance.
-\end{beamercolorbox}
+Bias-Variance Tradeoff in CV: 
+
+The choice of K is a tradeoff between bias and variance.
 
 <!-- If we have our fitted model $\hat{f}$, we then have -->
 
@@ -453,9 +439,7 @@ With new data $(X,Y)$ from the same distribution:
 
 <!-- \end{align*} -->
 
-\pause
-
-Q: What values of $K, 2 \leq K \leq N$ should we use? \pause
+Q: What values of $K, 2 \leq K \leq N$ should we use?
 
 -   Large $K$: **high variance**, but **small bias**.
 
@@ -515,11 +499,7 @@ head(Smarket) %>%
 
 ![5 fold CV.](fig/yeying/pic5.png)
 
-<!-- ![Result of the 5-fold CV with 10 runs.](fig/yeying/pic10.pdf) -->
-
-```{r, echo=FALSE, fig.cap="Result of the 5-fold CV with 10 runs.",out.width='50%', fig.align='center'}
-knitr::include_graphics("fig/yeying/pic10.pdf")
-```
+![Result of the 5-fold CV with 10 runs.](fig/yeying/pic10.png)
 
 <!-- ## Cross validation may be used to choose the hyper parameter  -->
 
@@ -588,7 +568,7 @@ Note:
 -   Cross-validation can be applied in various contexts!
 
 
-::: {.callout-example title="A"}
+::: {.callout-example title="Model selection using CV"}
 
 Each panel reproduces your model fit:
 
