@@ -49,20 +49,20 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
+| Status | Topic | Lecture Covered |
+|:--:|:--:|:--:|
+| ✅ Complete | R Programming | 1–2 |
+| ✅ Complete | Numerical Approaches and Optimization in 1-D | 3–5 |
+| ✅ Complete | Review for Distribution | 6–7 |
+| ✅ Complete | Random Variable Generation | 8–10 |
+| ✅ Complete | Monte Carlo and Integration | 11–15 |
+| ✅ Complete | Exam 1 | 13 |
+| ✅ Complete | Resampling method: Cross-Validation | 16 -17 |
+| ⏳ In Progress | Resampling methods: Bootstrap and Jackknife | 18– |
+| 🔜 Planned | Exam 2 | 23 |
+| 🔜 Planned | Smoothing | TBA |
+| 🔜 Planned | Density estimation | TBA |
 
-| Status      |                 Topic                 | Lecture Covered |
-|:------------:|:------------------------------------:|:---------------:|
-| ✅ Complete  | R Programming                        |      1–2        |
-| ✅ Complete  | Numerical Approaches and Optimization in 1-D |      3–5        |
-| ✅ Complete  | Review for Distribution              |      6–7        |
-| ✅ Complete  | Random Variable Generation           |      8–10       |
-| ✅ Complete| Monte Carlo and Integration         |     11–15       |
-| ✅ Complete  | Exam 1                               |      13         |
-| ✅ Complete  | Resampling method: Cross-Validation                               |      16 -17      |
-| ⏳ In Progress    | Resampling methods: Bootstrap and Jackknife | 18– |
-| 🔜 Planned   | Exam 2                               |      23         |
-| 🔜 Planned   | Smoothing                            |      TBA        |
-| 🔜 Planned   | Density estimation                   |      TBA        |
 ## Recommended Textbooks
 
 -   Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.

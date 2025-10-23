@@ -124,7 +124,6 @@ $$
 
 But, $(X,Y)\sim F_{X,Y}$ is usally **unknown**!
 
-
 **Question**:
 
 What to do if we do not know about $F_{X,Y}$?
@@ -149,9 +148,8 @@ Problems with simple Train-Test Split:
 
 -   Splitting 80-20 may leave too little test data for reliable evaluation.
 
-\pause
 
-What we can do? \purple{Cross-validation}!
+What we can do? **Cross-validation**!
 
 Cross-validation uses **all** data efficiently for training and testing.
 
@@ -176,7 +174,6 @@ $$
 Let $\mathcal{D}=\{X_i,Y_i\}_{i=1}^N$ be our data.
 
 ::: {.callout-algorithm title="K-fold CV"}
-
 1.  Split the data into K approximately equal sizes parts/fold $K$
 
 2.  For each $k=1,2,\dots,K$, repeat the following steps:
@@ -189,7 +186,6 @@ Let $\mathcal{D}=\{X_i,Y_i\}_{i=1}^N$ be our data.
 3.  The **CV estimate** of prediction error is $$
       \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \mathrm{err}_{cv,k}(f).
     $$
-
 :::
 
 So if we have $M$ models, $f_1,f_2,\dots,f_M$, we can use cross-validation to select the best model by computing the cross-validation error for each model $\mathrm{err}_{cv}(f_1), \mathrm{err}_{cv}(f_2),\dots \mathrm{err}_{cv}(f_M)$
@@ -214,9 +210,7 @@ M2. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon$
 M3. $y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon$
 
 We may use K-fold CV to choose the best $L$.
-
 :::
-
 
 2.  To better evaluate the performance of a model
 
@@ -325,15 +319,13 @@ Q: What are the characteristic a good model $f$ should have?
 
 <!-- * Minimize both bias and variance. -->
 
-![](fig/bias-variance.png).
-<!-- fig/bias-variance.png} -->
+![](fig/bias-variance.png). <!-- fig/bias-variance.png} -->
 
+-   Bias (Systematic error): The difference between predicted values and the true target.
 
-- Bias (Systematic error): The difference between predicted values and the true target.
+-   Variance (Sensitivity to data changes): How much predictions change with new data.
 
-- Variance (Sensitivity to data changes): How much predictions change with new data.
-    
-- Goal: Minimize both bias and variance.
+-   Goal: Minimize both bias and variance.
 
 ![Picture borrowed from [^05-cv-1].](fig/b-v-tradeoff)
 
@@ -421,7 +413,7 @@ With new data $(X,Y)$ from the same distribution:
 
 ## Choice of Fold K
 
-Bias-Variance Tradeoff in CV: 
+Bias-Variance Tradeoff in CV:
 
 The choice of K is a tradeoff between bias and variance.
 
@@ -567,20 +559,17 @@ Note:
 
 -   Cross-validation can be applied in various contexts!
 
-
 ::: {.callout-example title="Model selection using CV"}
-
 Each panel reproduces your model fit:
 
-- Linear: $y = \beta_0 + \beta_1 x$
-- Quadratic: $y = \beta_0 + \beta_1 x + \beta_2 x^2$
-- Exponential: $\log y = \beta_0 + \beta_1 x$
-- Log–Log: $\log y = \beta_0 + \beta_1 \log x$
+-   Linear: $y = \beta_0 + \beta_1 x$
+-   Quadratic: $y = \beta_0 + \beta_1 x + \beta_2 x^2$
+-   Exponential: $\log y = \beta_0 + \beta_1 x$
+-   Log–Log: $\log y = \beta_0 + \beta_1 \log x$
 
 Once the model is estimated, we want to assess the fit. CV can be used to estimate the prediction errors.
 
-
-``` {r message = FALSE}
+```{r message = FALSE}
 library(DAAG); attach(ironslag)
 library(ggplot2)
 library(patchwork)
@@ -646,8 +635,7 @@ p4 <- ggplot(df, aes(x = log(chemical), y = log(magnetic))) +
 (p1 + p2) / (p3 + p4)
 ```
 
-
-``` {r}
+```{r}
 attach(ironslag)
 n <- length(magnetic) # in DAAG ironslag
 e1 <- e2 <- e3 <- e4 <- numeric(n)
@@ -691,15 +679,14 @@ knitr::kable(results,
 L2
 ```
 
-So the best fitted model is 
-$$
+So the best fitted model is $$
 \hat{Y} = 
 `r round(L2$coefficients[1], 3)` +
 `r round(L2$coefficients[2], 3)`\,X +
 `r round(L2$coefficients[3], 3)`\,X^2
 $$
 
-``` {r}
+```{r}
 par(mfrow = c(2, 2)) #layout for graphs
 plot(L2$fit, L2$res) #residuals vs fitted values
 abline(0, 0) #reference line
@@ -707,8 +694,8 @@ qqnorm(L2$res) #normal probability plot
 qqline(L2$res) #reference line
 par(mfrow = c(1, 1)) #restore display
 ```
-
 :::
+
 ------------------------------------------------------------------------
 
 -   Note: This lecture is based on the book by Hastie et al. (2009), and James et al. (2013).

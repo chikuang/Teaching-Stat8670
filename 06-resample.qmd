@@ -1,9 +1,11 @@
 # Resampling, Jackknife and Bootstrap
 
-\newcommand{\E}{\mathbb{E}}
+\newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\var}{\mathbb{V}ar}
+\newcommand{\bx}{\mathbf{x}}
 \newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\mse}{\mathrm{MSE}}
 \newcommand{\corr}{\mathbb{C}orr}
 \newcommand{\unif}{\operatorname{Unif}}
 \newcommand{\geom}{\operatorname{Geom}}
@@ -11,7 +13,7 @@
 \newcommand{\bern}{\operatorname{Bern}}
 \newcommand{\iid}{\overset{iid}{\sim}}
 \newcommand{\ef}{\operatorname{Eff}}
-\newcommand{\htt}{\hat{\theta}}
+\newcommand{\htt}{\hat \theta}
 \newcommand{\b}{\mathbb b}
 
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
@@ -33,9 +35,9 @@ This chapter covers resampling methods including the jackknife and bootstrap tec
 
 *Resampling methods* is a way to use the observed data to generate hypothetical samples. It treats an observed sample as a *finite population*, and random samples are generated/resampled from it to estimate population characteristics and make inferences about the sampled population. It is useful when:
 
-* Do not know the underlying distribution of a population
+-   Do not know the underlying distribution of a population
 
-* The formula may be difficult to be calculated.
+-   The formula may be difficult to be calculated.
 
 Some commonly used resampling methods include:
 
@@ -51,11 +53,58 @@ Some commonly used resampling methods include:
 
 ### Bias-Variance Tradeoff
 
-In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\hat{\theta}$ for a parameter $\theta$:
+In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\htt$ for a parameter $\theta$:
 
 ::: {.callout-definition title="Mean Square Errors "}
-Suppose we have a parameter $\theta$ and an estimator $\hat{\theta}$. The mean square error (MSE) of the estimator is defined as $$\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \var(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,$$ where $\b$ is the bias of the estimator.
+Suppose we have a parameter $\theta$ and an estimator $\htt$. The mean square error (MSE) of the estimator is defined as $$\mse_{\theta}(\htt)=\E[(\htt-\theta )^2 ]= \var(\htt) + [\b(\htt)]^2,$$ where $\b$ is the bias of the estimator.
 :::
+
+::: {.callout-note title = "Derivation"}
+We start with the definition of the mean squared error (MSE):
+$$
+\mse_\theta(\htt)
+= \E\big[(\htt - \theta)^2\big].
+$$
+
+Add and subtract $\E[\htt]$ inside the square:
+$$
+\E\big[(\htt - \theta)^2\big]
+= \E\big[(\htt - \E[\htt] + \E[\htt] - \theta)^2\big].
+$$
+
+Expand the square:
+$$
+\E\big[(\htt - \E[\htt])^2\big]
++ 2\,\E\big[(\htt - \E[\htt])(\E[\htt] - \theta)\big]
++ (\E[\htt] - \theta)^2.
+$$
+
+The middle term vanishes because
+$$
+\E\big[\htt - \E[\htt]\big] = 0.
+$$
+
+Hence,
+$$
+\E\big[(\htt - \theta)^2\big]
+= \E\big[(\htt - \E[\htt])^2\big]
++ (\E[\htt] - \theta)^2.
+$$
+
+Recognizing that
+$$
+\var(\htt) = \E\big[(\htt - \E[\htt])^2\big]
+\quad \text{and} \quad
+b(\htt) = \E[\htt] - \theta,
+$$
+we obtain the bias–variance decomposition:
+$$
+\boxed{
+\E\big[(\htt - \theta)^2\big]
+= \var(\htt) + [b(\htt)]^2.}
+$$
+:::
+
 
 **Questions**: Why do we care about the bias? Can we always find an unbiased estimator? What does it mean?
 
@@ -69,7 +118,7 @@ The bootstrap is a resampling method that allows estimation of the *sampling dis
 
 -   Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified.
 
-::: { .callout-note title="Simple example of Bootstrap"}
+::: {.callout-example title="Simple example of Bootstrap"}
 ```{r bootstrap-simple-example}
 set.seed(333)
 n <- 1E4
@@ -109,9 +158,7 @@ ggplot(df, aes(x = x)) +
 ```
 :::
 
-The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates
-well only the expected prediction error Err.
-
+The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates well only the expected prediction error Err.
 
 The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true population. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Properties of an estimator such as *bias* or *standard error* can be estimated by resampling.
 
@@ -119,12 +166,16 @@ Bootstrap estimates of a sampling distribution are analogous to the idea of dens
 
 The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
 
-To generate a bootstrap random sample by resampling x, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose θ is the parameter of interest (θ could be a vector), and ˆθ is an estimator of θ. Then the bootstrap estimate of the distribution of ˆθ is obtained as follows.
+To generate a bootstrap random sample by resampling $x$, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose $\theta$ is the parameter of interest ($\theta$ could be a vector), and $\htt$ is an estimator of $\theta$. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
+
+::: {.callout-algorithm title = "Procedure of Bootstrap"}
 
 1.  For each bootstrap replicate, indexed $b = 1, \dots, B$:
-    (a) Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with replacement from the observed sample x1, . . . , xn.
-    (b) Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
-2.  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the repli- cates ˆθ(1), . . . , ˆθ(B).
+    (a) Generate sample $x^{\ast (b)} = x_1^\ast,\dots,x_n^\ast$ by sampling with replacement from the observed sample $x_1,\dots,x_n$.
+    (b) Compute the $b$th replicate $\htt^{(b)}$ from the $b$th bootstrap sample.
+2.  The bootstrap estimate of $F_{\htt}(\cdot)$ is the empirical distribution of the replicates $\htt^{(1)},\dots ,\htt^{(B)}$.
+
+:::
 
 ## Jackknife
 
@@ -132,7 +183,7 @@ The jackknife is a resampling technique used to estimate the bias and variance o
 
 Jackknife is like a **leave-one-out cross-validation**. Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
 
-For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\hat{\theta}$ is computed on the full
+For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\htt$ is computed on the full
 
 ### When does jackknife not work?
 
@@ -142,13 +193,13 @@ Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functio
 
 The jackknife is another resampling method, proposed by Quenouille \[225, 224\] for estimating bias, and by Tukey \[289\] for estimating standard error, a few decades earlier than the bootstrap. Efron \[88\] is a good introduction to the jackknife.
 
-Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\hat{\theta}=T(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat{\theta}_{-i}=T(x_{-i})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
+Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\htt=T(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\htt_{-i}=T(x_{-i})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
 
 ### Jackknife Estimate of Bias
 
-If ˆθ is a smooth (plug-in) statistic, then $\hat{\theta}_{(\cdot)} = t\{F_{n−1}(x(i))\}$, and the jackknife estimate of bias is $$
-\hat{b}_{jack} = (n − 1)(\hat{\theta}_{(\cdot)} − \hat{\theta}), 
-$$ where $\overline{\hat{\theta}_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat{\theta}_{(i)}$ is the average of the estimate from LOO samples, and $\hat{\theta}=\hat{\theta}(x)$ is the estimate from the original observed sample.
+If ˆθ is a smooth (plug-in) statistic, then $\htt_{(\cdot)} = t\{F_{n−1}(x(i))\}$, and the jackknife estimate of bias is $$
+\hat{b}_{jack} = (n − 1)(\htt_{(\cdot)} − \htt), 
+$$ where $\overline{\htt_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \htt_{(i)}$ is the average of the estimate from LOO samples, and $\htt=\htt(x)$ is the estimate from the original observed sample.
 
 ::: {.callout-example title="Jackknife Estimate of Bias"}
 Compute the jackknife estimate of bias for the patch data in the `bootstrap` package.
