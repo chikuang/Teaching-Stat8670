@@ -11,6 +11,7 @@
 |   5   |      Zhang, Boshu       |   You, Sifan   |  TBA  |
 |   6   |      Zhang, Yalin       |                |  TBA  |
 |   7   |      Rehman, Muhammad Aimal        |  Lu, Zhili              |  TBA  |
+| 8 | Creary, Maya |  Alvarado, Alexus  | TBA | 
 
 ## Format
 
