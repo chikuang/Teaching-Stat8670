@@ -2,16 +2,17 @@
 
 ## Group
 
-| Group |        Member 1         |    Member 2    | Topic |
-|:-----:|:-----------------------:|:--------------:|:-----:|
-|   1   | Akomanyi-Addo, Allswell | Sarpong, Felix |  TBA  |
-|   2   |      Zhang, Zilong      |                |  TBA  |
-|   3   |      Stell, Tommy       |                |  TBA  |
-|   4   |         Vu, Ha          |                |  TBA  |
-|   5   |      Zhang, Boshu       |   You, Sifan   |  TBA  |
-|   6   |      Zhang, Yalin       |                |  TBA  |
-|   7   |      Rehman, Muhammad Aimal        |  Lu, Zhili              |  TBA  |
-| 8 | Creary, Maya |  Alvarado, Alexus  | TBA | 
+| Group |        Member 1         |     Member 2     | Topic |
+|:-----:|:-----------------------:|:----------------:|:-----:|
+|   1   | Akomanyi-Addo, Allswell |  Sarpong, Felix  |  TBA  |
+|   2   |      Zhang, Zilong      |                  |  TBA  |
+|   3   |      Stell, Tommy       |                  |  TBA  |
+|   4   |         Vu, Ha          |                  |  TBA  |
+|   5   |      Zhang, Boshu       |    You, Sifan    |  TBA  |
+|   6   |      Zhang, Yalin       |                  |  TBA  |
+|   7   | Rehman, Muhammad Aimal  |    Lu, Zhili     |  TBA  |
+|   8   |      Creary, Maya       | Alvarado, Alexus |  TBA  |
+|   9   |      Shamshad, Azka     | Khadka, Sushil |  TBA  |
 
 ## Format
 
