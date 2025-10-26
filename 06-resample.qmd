@@ -29,7 +29,7 @@ theme_set(
 
 ## Introduction
 
-This chapter covers resampling methods including the jackknife and bootstrap techniques.
+This chapter continues from the previous chapter, introducing more resampling methods; jackknife and bootstrap techniques.
 
 ## Resampling methods
 
@@ -41,17 +41,17 @@ This chapter covers resampling methods including the jackknife and bootstrap tec
 
 Some commonly used resampling methods include:
 
+-   **Cross-validation**: Cross-validation is a model validation technique for assessing how the results of a statistical analysis will generalize to an independent data set. It is mainly used in settings where the goal is prediction, and one wants to estimate how accurately a predictive model will perform in practice.
+
 -   **Bootstrap**: Bootstrap methods are often used when the distribution of the target population is not specified; the sample is the only information available.
 
 -   **Jackknife**: The jackknife is a resampling technique used to estimate the bias and variance of a statistic. It is like a leave-one-out (LOO) cross-validation.
-
--   **Cross-validation**: Cross-validation is a model validation technique for assessing how the results of a statistical analysis will generalize to an independent data set. It is mainly used in settings where the goal is prediction, and one wants to estimate how accurately a predictive model will perform in practice.
 
 -   **Permutation tests**: Permutation tests are a type of non-parametric statistical test that involves rearranging the data points to test a hypothesis. They are used to determine whether the observed effect is statistically significant by comparing it to the distribution of effects obtained through random permutations of the data.
 
 ## Estimators
 
-### Bias-Variance Tradeoff
+### Bias-Variance Tradeoff of an estimator
 
 In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\htt$ for a parameter $\theta$:
 
@@ -112,6 +112,251 @@ For most of the course, we focus on the *unbiased estimator*. This may often be 
 
 ## Bootstrap
 
+Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.
+
+Suppose we have an observed random sample $x=(x_1,\dots,x_n)$ from a distribution $F$. If $X^\ast$ is selected at random from $x$, then 
+$$P(X^\ast=x_i)=1/n,\quad i=1,\dots,n.$$ 
+
+Resampling generates a random sample $X^\ast_1,\dots,X_n^\ast$ by *sampling with replacement* from the observed sample $x$. Then the RVs $X_i^\ast$ are i.i.d. and uniformly distributed on the observed data points $\{x_1,\dots,x_n\}$.
+
+
+The empirical distribution function (ecdf) $F_n(x)$ is an estimator of $F(x)$. It can be shown that $F_n(x)$ is a sufficient statistic for $F(x)$; that is, all the
+information about $F(x)$ that is contained in the sample is also contained in $F_n(x)$. Moreover, $F_n(x)$ is itself the distribution function of a random variable; namely the random variable that is uniformly distributed on the set
+$\{x_1, \dots , x_n\}$. Hence the empirical cdf $F_n$ is the cdf of $X^\ast$. Thus in bootstrap,
+there are two approximations. The ecdf $F_n$ is an approximation to the cdf $F_X$. The ecdf $F_m^\ast$ of the bootstrap replicates is an approximation to the ecdf $F_n$.
+Resampling from the sample $x$ is equivalent to generating random samples from the distribution $F_n(x)$. The two approximations can be represented by the diagram
+
+$$
+\begin{aligned}
+F & \rightarrow X \rightarrow F_n \\
+F_n & \rightarrow X^* \rightarrow F_n^* .
+\end{aligned}
+$$
+
+To generate a bootstrap random sample by resampling $x$, generate $n$ random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the
+bootstrap sample $x^\ast = (x_{i_1} ,\dots , x_{i_n} )$.
+
+---
+
+Let $\theta$ be the parameter of interest ( $\theta$ could be a vector), and $\htt$ be an estimator. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
+
+::: {.callout-algorithm title = "Procedure of Bootstrap"}
+
+1.  For each bootstrap replicate, indexed $b = 1, \dots, B$:
+    (a) Generate sample $x^{\ast (b)} = x_1^\ast,\dots,x_n^\ast$ by sampling with replacement from the observed sample $x_1,\dots,x_n$.
+    (b) Compute the $b$th replicate $\htt^{(b)}$ from the $b$th bootstrap sample.
+2.  The bootstrap estimate of $F_{\htt}(\cdot)$ is the empirical distribution of the replicates $\htt^{(1)},\dots ,\htt^{(B)}$.
+:::
+
+::: {.callout-example title="Empirical CDF and Bootstrap Distribution"}
+Suppose that we have observed the sample 
+$$x = \{2, 2, 1, 1, 5, 4, 4, 3, 1, 2\}.$$
+
+Resampling from $x$ we select $1, 2, 3, 4$, or $5$ with probabilities $0.3, 0.3, 0.1, 0.2$, and $0.1$, respectively, so the cdf $F_{X^\ast}$ of a randomly selected replicate is
+exactly the ecdf $F_n(x)$:
+
+$$
+F_{X *}(x)=F_n(x)= \begin{cases}0, & x<1 ; \\ 0.3, & 1 \leq x<2 ; \\ 0.6, & 2 \leq x<3 ; \\ 0.7, & 3 \leq x<4 ; \\ 0.9, & 4 \leq x<5 ; \\ 1, & x \geq 5 .\end{cases}
+$$
+
+Note that if $F_n$ is not close to $F_X$ then the distribution of the replicates will not be close to $F_X$. The sample $x$ above is actually a sample from a Poisson(2) distribution. Resampling from $x$ a large number of replicates produces a good
+estimate of $F_n$ but not a good estimate of $F_X$ , because regardless of how many replicates are drawn, the bootstrap samples will never include $0$.
+:::
+
+### Bootstrap Estimation of Standard Error
+
+Recall that, in normal approximate, the $(100-\alpha)$% confidence interval (for $\mu$) is given as 
+$$
+  \bar{x}_n \pm z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}}.
+$$
+In the above formula, we refer 
+
+* $\sigma/\sqrt{n}$: as the **standard error** (se).
+* $z_{1-\alpha/2}  \sigma/\sqrt{n}$: as the **margin of error**.
+
+::: {.callout-definition title="Standard Error"}
+The standard error (SE) of a statistic is the standard deviation of its sampling distribution. The se is often used in calculations of confidence intervals.
+:::
+
+
+To estimate the se of an estimator $\htt$, we can use the bootstrap method. Let $\htt^{(1)},\dots,\htt^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\htt$ is given by the sample standard deviation of the replicates:
+
+$$
+\widehat{s e}\left(\hat{\theta}^*\right)=\sqrt{\frac{1}{B-1} \sum_{b=1}^B\left(\hat{\theta}^{(b)}-\overline{\hat{\theta}^*}\right)^2},
+$$
+where $\overline{\hat{\theta}^*}=\frac{1}{B} \sum_{b=1}^B \hat{\theta}^{(b)}$.
+
+::: {.callout-note title = "Remark for estimating se"}
+The number of replicates needed for good estimates of standard error is not large; $B = 50$ is usually large enough, and rarely is $B > 200$ necessary.
+:::
+
+::: {.callout-example title="Bootstrap Estimate of Standard Error"}
+Example 8.2 (Bootstrap estimate of standard error). The law school data
+set law in the bootstrap [286] package is from Efron and Tibshirani [91]. The
+data frame contains LSAT (average score on law school admission test score)
+and GPA (average undergraduate grade point average) for 15 law schools.
+
+
+| Observation | LSAT | GPA |
+|--------------|------|-----|
+| 1  | 576 | 339 |
+| 2  | 635 | 330 |
+| 3  | 558 | 281 |
+| 4  | 578 | 303 |
+| 5  | 666 | 344 |
+| 6  | 580 | 307 |
+| 7  | 555 | 300 |
+| 8  | 661 | 343 |
+| 9  | 651 | 336 |
+| 10 | 605 | 313 |
+| 11 | 653 | 312 |
+| 12 | 575 | 274 |
+| 13 | 545 | 276 |
+| 14 | 572 | 288 |
+| 15 | 594 | 296 |
+
+This data set is a random sample from the universe of 82 law schools in law82 (bootstrap). Estimate the correlation between LSAT and GPA scores, and compute the bootstrap estimate of the standard error of the sample correlation.
+
+The bootstrap procedure is 
+
+1. For each bootstrap replicate, indexed $b = 1,\dots , B$
+    (a) Generate sample $(\text{LSAT}^{\ast (b)}_i, \text{GPA}^{\ast (b)}_i), i = 1,\dots , n$ by sampling with replacement from the observed sample.
+    (b) Compute the $b$th replicate of the correlation $\htt^{(b)} = \cor(\text{LSAT}^{\ast (b)}, \text{GPA}^{\ast (b)})$ from the $b$th bootstrap sample.
+2. The bootstrap estimate of the standard error of $\htt$ is the sample standard deviation of the replicates $\htt^{(1)},\dots ,\htt^{(B)}$, $\{R^{(i)}\}_{i=1}^B$
+
+``` {r}
+library(bootstrap) #for the law data
+print(cor(law$LSAT, law$GPA))
+# [1] 0.7763745
+print(cor(law82$LSAT, law82$GPA))
+# [1] 0.7599979
+```
+
+
+``` {r}
+#set up the bootstrap
+B <- 200 #number of replicates
+n <- nrow(law) #sample size
+R <- numeric(B) #storage for replicates
+#bootstrap estimate of standard error of R
+for (b in 1:B) {
+  # randomly select the indices
+  i <- sample(1:n, size = n, replace = TRUE)
+  LSAT <- law$LSAT[i] # i is a vector of indices
+  GPA <- law$GPA[i]
+  R[b] <- cor(LSAT, GPA)
+}
+#output
+(se.R <- sd(R))
+# [1] 0.1358393
+hist(R, prob = TRUE)
+```
+
+The bootstrap estimate of se(R) is `r se.R`. The normal theory estimate for standard error of R is 0.115. 
+:::
+
+::: {.callout-example title="Bootstrap Estimate of Standard Error using *boot* function"}
+We can also use the `boot` function in the `boot` package to compute the bootstrap estimate of standard error.
+
+First, write a function that returns $\htt(b)$, where the first argument to the function is the sample data,
+and the second argument is the vector $\{i_1, \dots , i_n\}$ of indices. If the data is $x$ and the vector of indices is i, we need $x[i,1]$ to extract the first resampled variable, and x[i,2] to extract the second resampled variable. The code and
+output is shown below.
+
+``` {r}
+my_r <- function(x, i) {
+  # want correlation of columns 1 and 2
+  cor(x[i, 1], x[i, 2])
+}
+```
+
+
+The printed summary of output from the boot function is obtained by the
+command boot or the result can be saved in an object for further analysis.
+Here we save the result in obj and print the summary.
+
+``` {r}
+
+library(boot) #for boot function
+set.seed(777)
+(obj <- boot(data = bootstrap::law, statistic = my_r, R = 2000))
+```
+
+
+The observed value ˆθ of the correlation statistic is labeled t1*. The bootstrap
+estimate of standard error of the estimate iŝ se(ˆθ) .
+= 0.13, based on 2000
+replicates. To compare with formula (8.1), extract the replicates in $t, so that the standard deviation of the replicates can be computed directly 
+
+``` {r}
+sd(obj$t)
+```
+:::
+
+### Bootstrap Estimation of Bias
+
+Recall that a bias of an estimator $\htt$ is defined as
+$$
+\b(\htt) = \E[\htt] - \theta.
+$$
+
+An example of a biased estimator is the MLE of variance, $\hat{\sigma}^2 = \sum (X_i-\bar{X}_n)^2/n$ of $\sigma^2 = \sum (X_i-\bar{X}_n)^2/(n-1)$, which has expected value $(1 − 1/n)\sigma^2$. Here, the bias is $−\sigma^2/n$.
+
+The bootstrap estimation of bias uses the bootstrap replicates of $\htt$ to estimate the sampling distribution of $\htt$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\htt(x)$ and there are $B$ i.i.d. estimators $\htt^{(b)}$. The sample mean of the replicates {ˆθ(b)} is unbiased for its
+expected value $E[\htt^\ast]$, so the bootstrap estimate of bias is  
+$$bias(ˆθ) = ˆθ∗ − ˆθ$$,
+where $\htt^\ast  = \sum_{b=1}^B \htt^{(b)}$, and $\htt= \htt(x)$ is the estimate computed from the
+original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\htt$ to estimate the bias.) 
+
+::: {.callout-note title = "Remark for estimating bias"}
+
+* $\oplus$ Positive bias indicates that $\htt$ on average
+tends to overestimate $\theta$, 
+
+* $\ominus$ Negative bias is on average underestimate $\theta$
+
+:::
+
+::: {.callout-example title="Bootstrap Estimate of Bias"}
+
+In the law data of Example 8.2,
+compute the bootstrap estimate of bias in the sample correlation.
+
+```{r}
+# sample estimate for n=15
+theta.hat <- cor(law$LSAT, law$GPA)
+# bootstrap estimate of bias
+B <- 2000 # larger for estimating bias
+n <- nrow(law)
+theta.b <- numeric(B)
+for (b in 1:B) {
+  i <- sample(1:n, size = n, replace = TRUE)
+  LSAT <- law$LSAT[i]
+  GPA <- law$GPA[i]
+  theta.b[b] <- cor(LSAT, GPA)
+}
+bias <- mean(theta.b - theta.hat)
+bias
+# [1] -0.005797944
+```
+
+The estimate of bias is -0.005797944. Note that this is close to the estimate
+of bias returned by the boot function in Example 8.3. See Section 9.1 for
+the jackknife-after-bootstrap method to estimate the standard error of the
+bootstrap estimate of bias. 
+:::
+
+::: {.callout-example title="One more example of Bootstrap estimation of bias"}
+:::
+
+## Others
+
+
+
+
+The distribution of $X^\ast$ is the empirical distribution $F_n$ of the sample $x$. The empirical distribution places mass $1/n$ at each observed data point. The bootstrap uses the empirical distribution as an estimate of the true but unknown distribution $F$.
+
+
+
 The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods.
 
 -   Parametric bootstrap
@@ -168,15 +413,6 @@ The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstra
 
 To generate a bootstrap random sample by resampling $x$, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose $\theta$ is the parameter of interest ($\theta$ could be a vector), and $\htt$ is an estimator of $\theta$. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
 
-::: {.callout-algorithm title = "Procedure of Bootstrap"}
-
-1.  For each bootstrap replicate, indexed $b = 1, \dots, B$:
-    (a) Generate sample $x^{\ast (b)} = x_1^\ast,\dots,x_n^\ast$ by sampling with replacement from the observed sample $x_1,\dots,x_n$.
-    (b) Compute the $b$th replicate $\htt^{(b)}$ from the $b$th bootstrap sample.
-2.  The bootstrap estimate of $F_{\htt}(\cdot)$ is the empirical distribution of the replicates $\htt^{(1)},\dots ,\htt^{(B)}$.
-
-:::
-
 ## Jackknife
 
 The jackknife is a resampling technique used to estimate the bias and variance of a statistic.
@@ -217,8 +453,7 @@ theta.jack <- numeric(n)
 for (i in 1:n) {
   theta.jack[i] <- mean(y[-i]) / mean(z[-i])
 }
-bias <- (n - 1) * (mean(theta.jack) - theta.hat)  
-bias #jackknife estimate of bias
+(bias <- (n - 1) * (mean(theta.jack) - theta.hat) )
 ```
 :::
 
@@ -226,12 +461,126 @@ bias #jackknife estimate of bias
 
 These methods are widely used in statistical inference and have applications in various fields.
 
-------------------------------------------------------------------------
 
-Reference:
+## Side reading (Won't be on the exam)
+
+::: {.callout-note title="Normal theory for SE (will not be on exam)"}
+
+Normal Approximation for Correlation SE
+
+For a bivariate normal population, the sampling distribution of the sample correlation $r$ is approximately normal with variance
+
+$$
+\operatorname{Var}(r) \approx \frac{(1 - \rho^2)^2}{n - 1}.
+$$
+
+Thus, the **standard error (SE)** under the normal approximation is
+
+$$
+\operatorname{se}_{\text{normal}}(r) = \sqrt{\frac{(1 - r^2)^2}{n - 1}}.
+$$
+
+In the Law school example
+
+Given:
+- $r = 0.7763745$
+- $n = 15$
+
+We can compute:
+
+$$
+1 - r^2 = 1 - (0.776)^2 = 1 - 0.602 = 0.398,
+$$
+$$
+\operatorname{Var}(r) \approx \frac{(0.398)^2}{14} = \frac{0.158}{14} = 0.0113,
+$$
+$$
+\operatorname{se}(r) = \sqrt{0.0113} = 0.106.
+$$
+
+This gives a rough normal-theory estimate of **0.106**.
+
+- For Fisher z-Transformation Approximation
+
+A more accurate approximation uses the **Fisher z-transform**:
+
+$$
+z = \frac{1}{2}\log\!\left(\frac{1 + r}{1 - r}\right),
+$$
+
+which is approximately normal with
+
+$$
+\operatorname{Var}(z) = \frac{1}{n - 3}.
+$$
+
+Applying the delta method:
+
+$$
+\operatorname{se}(r) \approx (1 - r^2)\sqrt{\frac{1}{n - 3}}.
+$$
+
+Plug in the values:
+
+$$
+\operatorname{se}(r) = (1 - 0.776^2)\sqrt{\frac{1}{12}} = 0.398 \times 0.289 = 0.115.
+$$
+
+✅ **Normal approximation (Fisher z) SE = 0.115**
+
+Alternatively, we may use the **Bootstrap Estimate** to compare with:
+
+```{r bootstrap-se, message=FALSE, warning=FALSE}
+library(bootstrap) # for the law data
+set.seed(123)
+
+# Sample data
+law <- data.frame(
+  LSAT = c(576, 635, 558, 578, 666, 580, 555, 661, 651, 605, 653, 575, 545, 572, 594),
+  GPA  = c(339, 330, 281, 303, 344, 307, 300, 343, 336, 313, 312, 274, 276, 288, 296)
+)
+
+# Sample correlation
+r <- cor(law$LSAT, law$GPA)
+n <- nrow(law)
+
+# Bootstrap estimate of SE
+B <- 200
+R <- replicate(B, {
+  i <- sample(1:n, size = n, replace = TRUE)
+  cor(law$LSAT[i], law$GPA[i])
+})
+se_boot <- sd(R)
+
+# Normal approximation
+se_normal <- sqrt((1 - r^2)^2 / (n - 1))
+
+# Fisher z-approximation
+se_fisher <- (1 - r^2) / sqrt(n - 3)
+
+# Display results
+data.frame(
+  Method = c("Bootstrap", "Normal theory", "Fisher z-approximation"),
+  SE = c(se_boot, se_normal, se_fisher)
+)
+```
+
+----
+
+## Reference:
 
 -   Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
 
 -   Chapter 8 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
 
 -   Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.
+
+--- 
+
+## R Functions
+
+Some useful R functions for resampling methods:
+
+-   `sample()`: Generate random samples from a specified set of data points.
+
+-   `boot::boot()`: Perform bootstrap resampling and compute statistics.
