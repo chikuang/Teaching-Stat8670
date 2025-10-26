@@ -19,7 +19,7 @@
 \newcommand{\b}{\mathbb b}
 
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
-pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble)
+pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble, bootstrap, boot)
 # Set global theme
 theme_set(
   theme_minimal() +
@@ -248,7 +248,7 @@ The bootstrap estimate of se(R) is `r se.R`. The normal theory estimate for stan
 :::
 
 ::: {.callout-example title="Bootstrap Estimate of Standard Error using *boot* function"}
-We can also use the `boot` function in the `boot` package to compute the bootstrap estimate of standard error.
+We can also use the `boot(.)` function in the `boot` package to compute the bootstrap estimate of standard error.
 
 First, write a function that returns $\htt(b)$, where the first argument to the function is the sample data, and the second argument is the vector $\{i_1, \dots , i_n\}$ of indices. If the data is $x$ and the vector of indices is i, we need $x[i,1]$ to extract the first resampled variable, and x\[i,2\] to extract the second resampled variable. The code and output is shown below.
 
@@ -346,10 +346,14 @@ for (b in 1:B) {
 }
 bias <- mean(theta.b) - theta.hat
 se <- sd(theta.b)
-print(list(
-  est = theta.hat, bias = bias,
-  se = se, cv = bias / se
-))
+result <- data.frame(
+  Estimate = theta.hat,
+  Bias = bias,
+  SE = se,
+  CV = bias / se
+)
+
+knitr::kable(result, digits = 3, caption = "Bootstrap results for correlation estimate")
 ```
 
 If $|\b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\b$ is small relative to standard error ( $\b/se < 0.08$), so in this example it is not necessary to adjust for bias. 
