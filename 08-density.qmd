@@ -1,4 +1,4 @@
-# Resampling, Jackknife and Bootstrap
+# Density Estimation
 
 \newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb{R}}
@@ -27,4 +27,3 @@ theme_set(
     )
 )
 ```
-

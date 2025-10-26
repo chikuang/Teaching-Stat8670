@@ -127,7 +127,7 @@ $$
 
 To generate a bootstrap random sample by resampling $x$, generate $n$ random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^\ast = (x_{i_1} ,\dots , x_{i_n} )$.
 
----
+------------------------------------------------------------------------
 
 Let $\theta$ be the parameter of interest ( $\theta$ could be a vector), and $\hat \theta$ be an estimator. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
 
@@ -351,9 +351,9 @@ If $|\mathbb b|/se \le 0.25$, it is not usually necessary to adjust for bias. Th
 
 ## Jackknife
 
-The jackknife is a resampling technique used to estimate the bias and variance of a statistic.
+The jackknife is another resampling technique used to estimate the bias and variance of a statistic.
 
-Jackknife is like a **leave-one-out cross-validation**. Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
+Jackknife is like a **leave-one-out cross-validation** (LOOCV). Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
 
 For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\hat \theta$ is computed on the full
 

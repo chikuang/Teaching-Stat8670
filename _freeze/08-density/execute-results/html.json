@@ -1,8 +1,8 @@
 {
-  "hash": "8db65d25c0710551716f8b7f9ee8b392",
+  "hash": "4a6a636bb6df4d507c05d339e9b1f3c3",
   "result": {
     "engine": "knitr",
-    "markdown": "# Resampling, Jackknife and Bootstrap\n\n\\newcommand{\\E}{\\mathbb E}\n\\newcommand{\\R}{\\mathbb{R}}\n\\newcommand{\\var}{\\mathbb{V}ar}\n\\newcommand{\\bx}{\\mathbf{x}}\n\\newcommand{\\bX}{\\mathbf{X}}\n\\newcommand{\\cov}{\\mathbb{C}ov}\n\\newcommand{\\mse}{\\mathrm{MSE}}\n\\newcommand{\\corr}{\\mathbb{C}orr}\n\\newcommand{\\unif}{\\operatorname{Unif}}\n\\newcommand{\\geom}{\\operatorname{Geom}}\n\\newcommand{\\bet}{\\operatorname{Beta}}\n\\newcommand{\\bern}{\\operatorname{Bern}}\n\\newcommand{\\iid}{\\overset{iid}{\\sim}}\n\\newcommand{\\ef}{\\operatorname{Eff}}\n\\newcommand{\\htt}{\\hat \\theta}\n\\newcommand{\\b}{\\mathbb b}\n\n\n\n",
+    "markdown": "# Density Estimation\n\n\\newcommand{\\E}{\\mathbb E}\n\\newcommand{\\R}{\\mathbb{R}}\n\\newcommand{\\var}{\\mathbb{V}ar}\n\\newcommand{\\bx}{\\mathbf{x}}\n\\newcommand{\\bX}{\\mathbf{X}}\n\\newcommand{\\cov}{\\mathbb{C}ov}\n\\newcommand{\\mse}{\\mathrm{MSE}}\n\\newcommand{\\corr}{\\mathbb{C}orr}\n\\newcommand{\\unif}{\\operatorname{Unif}}\n\\newcommand{\\geom}{\\operatorname{Geom}}\n\\newcommand{\\bet}{\\operatorname{Beta}}\n\\newcommand{\\bern}{\\operatorname{Bern}}\n\\newcommand{\\iid}{\\overset{iid}{\\sim}}\n\\newcommand{\\ef}{\\operatorname{Eff}}\n\\newcommand{\\htt}{\\hat \\theta}\n\\newcommand{\\b}{\\mathbb b}\n\n\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

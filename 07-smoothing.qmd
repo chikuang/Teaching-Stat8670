@@ -1,4 +1,4 @@
-# Resampling, Jackknife and Bootstrap
+# Smoothing Techniques in Statistics
 
 \newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb{R}}
