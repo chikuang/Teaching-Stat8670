@@ -6,7 +6,6 @@
 \newcommand{\bx}{\mathbf{x}}
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\cov}{\mathbb{C}ov}
-\newcommand{\corr}{\mathbb{C}orr}
 \newcommand{\mse}{\mathrm{MSE}}
 \newcommand{\corr}{\mathbb{C}orr}
 \newcommand{\unif}{\operatorname{Unif}}
@@ -62,52 +61,48 @@ Some commonly used resampling methods include:
 In statistics, the bias-variance tradeoff is the property of a model that the variance of the parameter estimated across samples can be reduced by increasing the bias in the estimated parameters. If we look at the Mean square error (MSE) of an estimator $\hat \theta$ for a parameter $\theta$:
 
 ::: {.callout-definition title="Mean Square Errors"}
-Suppose we have a parameter $\theta$ and an estimator $\hat \theta$. The mean square error (MSE) of the estimator is defined as $$\mathrm{MSE}_{\theta}(\hat \theta)=\mathbb E[(\hat \theta-\theta )^2 ]= \mathbb{V}ar(\hat \theta) + [\mathbb b(\hat \theta)]^2,$$ where $\b$ is the bias of the estimator.
-
+Suppose we have a parameter $\theta$ and an estimator $\hat \theta$. The mean square error (MSE) of the estimator is defined as $$\mathrm{MSE}_{\theta}(\hat \theta)=\mathbb E[(\hat \theta-\theta )^2 ]= \mathbb{V}ar(\hat \theta) + [\mathbb b(\hat \theta)]^2,$$ where $\mathbb b$ is the bias of the estimator.
 :::
 
-::: {.callout-note title="Derivation"} 
-
-We start with the definition of the mean squared error (MSE): 
+::: {.callout-note title="Derivation"}
+We start with the definition of the mean squared error (MSE):
 
 $$
 \mathrm{MSE}_\theta(\hat \theta)
 = \mathbb E\big[(\hat \theta- \theta)^2\big].
 $$
 
-Add and subtract $\E[\hat \theta]$ inside the square: $$
-\E\big[(\hat \theta- \theta)^2\big]
-= \E\big[(\hat \theta- \E[\hat \theta] + \E[\hat \theta] - \theta)^2\big].
+Add and subtract $\mathbb E[\hat \theta]$ inside the square: $$
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta] + \mathbb E[\hat \theta] - \theta)^2\big].
 $$
 
 Expand the square: $$
-\E\big[(\hat \theta- \E[\hat \theta])^2\big]
-+ 2\,\E\big[(\hat \theta- \E[\hat \theta])(\E[\hat \theta] - \theta)\big]
-+ (\E[\hat \theta] - \theta)^2.
+\mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
++ 2\,\mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])(\mathbb E[\hat \theta] - \theta)\big]
++ (\mathbb E[\hat \theta] - \theta)^2.
 $$
 
 The middle term vanishes because $$
-\E\big[\hat \theta- \E[\hat \theta]\big] = 0.
+\mathbb E\big[\hat \theta- \mathbb E[\hat \theta]\big] = 0.
 $$
 
 Hence, $$
-\E\big[(\hat \theta- \theta)^2\big]
-= \E\big[(\hat \theta- \E[\hat \theta])^2\big]
-+ (\E[\hat \theta] - \theta)^2.
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
++ (\mathbb E[\hat \theta] - \theta)^2.
 $$
 
 Recognizing that $$
-\var(\hat \theta) = \E\big[(\hat \theta- \E[\hat \theta])^2\big]
+\mathbb{V}ar(\hat \theta) = \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
 \quad \text{and} \quad
-b(\hat \theta) = \E[\hat \theta] - \theta,
+b(\hat \theta) = \mathbb E[\hat \theta] - \theta,
 $$ we obtain the bias–variance decomposition: $$
 \boxed{
-\E\big[(\hat \theta- \theta)^2\big]
-= \var(\hat \theta) + \b^2(\hat \theta)^2.}
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb{V}ar(\hat \theta) + \mathbb b^2(\hat \theta)^2.}
 $$
-
 :::
-
 
 **Questions**: Why do we care about the bias? Can we always find an unbiased estimator? What does it mean?
 
@@ -134,19 +129,19 @@ To generate a bootstrap random sample by resampling $x$, generate $n$ random int
 
 ---
 
-Let $\theta$ be the parameter of interest ( $\theta$ could be a vector), and $\htt$ be an estimator. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
+Let $\theta$ be the parameter of interest ( $\theta$ could be a vector), and $\hat \theta$ be an estimator. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
 
 ::: {.callout-algorithm title = "Procedure of Bootstrap"}
 
 1.  For each bootstrap replicate, indexed $b = 1, \dots, B$:
     (a) Generate sample $x^{\ast (b)} = x_1^\ast,\dots,x_n^\ast$ by sampling with replacement from the observed sample $x_1,\dots,x_n$.
-    (b) Compute the $b$th replicate $\htt^{(b)}$ from the $b$th bootstrap sample.
-2.  The bootstrap estimate of $F_{\htt}(\cdot)$ is the empirical distribution of the replicates $\htt^{(1)},\dots ,\htt^{(B)}$. 
+    (b) Compute the $b$th replicate $\hat \theta^{(b)}$ from the $b$th bootstrap sample.
+2.  The bootstrap estimate of $F_{\hat \theta}(\cdot)$ is the empirical distribution of the replicates $\hat \theta^{(1)},\dots ,\hat \theta^{(B)}$.
 
 :::
 
 ::: {.callout-example title="Empirical CDF and Bootstrap Distribution"}
-Suppose that we have observed the sample 
+Suppose that we have observed the sample
 
 $$x = \{2, 2, 1, 1, 5, 4, 4, 3, 1, 2\}.$$
 
@@ -169,12 +164,10 @@ $$ In the above formula, we refer
 -   $z_{1-\alpha/2}  \sigma/\sqrt{n}$: as the **margin of error**.
 
 ::: {.callout-definition title="Standard Error"}
-
 The standard error (SE) of a statistic is the standard deviation of its sampling distribution. The se is often used in calculations of confidence intervals.
-
 :::
 
-To estimate the se of an estimator $\htt$, we can use the bootstrap method. Let $\htt^{(1)},\dots,\htt^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\hat \theta$ is given by the sample standard deviation of the replicates:
+To estimate the se of an estimator $\hat \theta$, we can use the bootstrap method. Let $\hat \theta^{(1)},\dots,\hat \theta^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\hat \theta$ is given by the sample standard deviation of the replicates:
 
 $$
 \widehat{s e}\left(\hat{\theta}^*\right)=\sqrt{\frac{1}{B-1} \sum_{b=1}^B\left(\hat{\theta}^{(b)}-\overline{\hat{\theta}^*}\right)^2},
@@ -182,10 +175,9 @@ $$ where $\overline{\hat{\theta}^*}=\frac{1}{B} \sum_{b=1}^B \hat{\theta}^{(b)}$
 
 ::: {.callout-note title = "Remark for estimating se"}
 
-The number of replicates needed for good estimates of standard error is not large; $B = 50$ is usually large enough, and rarely is $B > 200$ necessary. 
+The number of replicates needed for good estimates of standard error is not large; $B = 50$ is usually large enough, and rarely is $B > 200$ necessary.
 
 :::
-
 
 ::: {.callout-example title="Bootstrap Estimate of Standard Error"}
 Example 8.2 (Bootstrap estimate of standard error). The law school data set law in the bootstrap \[286\] package is from Efron and Tibshirani \[91\]. The data frame contains LSAT (average score on law school admission test score) and GPA (average undergraduate grade point average) for 15 law schools.
@@ -250,7 +242,7 @@ The bootstrap estimate of se(R) is `r se.R`. The normal theory estimate for stan
 ::: {.callout-example title="Bootstrap Estimate of Standard Error using *boot* function"}
 We can also use the `boot(.)` function in the `boot` package to compute the bootstrap estimate of standard error.
 
-First, write a function that returns $\htt(b)$, where the first argument to the function is the sample data, and the second argument is the vector $\{i_1, \dots , i_n\}$ of indices. If the data is $x$ and the vector of indices is i, we need $x[i,1]$ to extract the first resampled variable, and x\[i,2\] to extract the second resampled variable. The code and output is shown below.
+First, write a function that returns $\hat \theta(b)$, where the first argument to the function is the sample data, and the second argument is the vector $\{i_1, \dots , i_n\}$ of indices. If the data is $x$ and the vector of indices is i, we need $x[i,1]$ to extract the first resampled variable, and x\[i,2\] to extract the second resampled variable. The code and output is shown below.
 
 ```{r}
 my_r <- function(x, i) {
@@ -268,7 +260,7 @@ set.seed(777)
 (obj <- boot(data = bootstrap::law, statistic = my_r, R = 2000))
 ```
 
-The observed value $\htt$ of the correlation statistic is labeled t1\*. The bootstrap estimate of standard error of the estimate is se(ˆθ) . = 0.13, based on 2000 replicates. To compare with formula (8.1), extract the replicates in \$t, so that the standard deviation of the replicates can be computed directly
+The observed value $\hat \theta$ of the correlation statistic is labeled t1\*. The bootstrap estimate of standard error of the estimate is se(ˆθ) . = 0.13, based on 2000 replicates. To compare with formula (8.1), extract the replicates in \$t, so that the standard deviation of the replicates can be computed directly
 
 ```{r}
 sd(obj$t)
@@ -277,18 +269,18 @@ sd(obj$t)
 
 ### Bootstrap Estimation of Bias
 
-Recall that a bias of an estimator $\htt$ is defined as $$
-\b(\htt) = \E[\htt] - \theta.
+Recall that a bias of an estimator $\hat \theta$ is defined as $$
+\mathbb b(\hat \theta) = \mathbb E[\hat \theta] - \theta.
 $$
 
 An example of a biased estimator is the MLE of variance, $\hat{\sigma}^2 = \sum (X_i-\bar{X}_n)^2/n$ of $\sigma^2 = \sum (X_i-\bar{X}_n)^2/(n-1)$, which has expected value $(1 − 1/n)\sigma^2$. Here, the bias is $−\sigma^2/n$.
 
-The bootstrap estimation of bias uses the bootstrap replicates of $\htt$ to estimate the sampling distribution of $\htt$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\htt(x)$ and there are $B$ i.i.d. estimators $\htt^{(b)}$. The sample mean of the replicates {ˆθ(b)} is unbiased for its expected value $\E[\htt^\ast]$, so the bootstrap estimate of bias is\
-$$bias(\htt) = \htt^\ast − \htt$$, where $\htt^\ast  = \sum_{b=1}^B \hat \theta^{(b)}$, and $\htt= \htt(x)$ is the estimate computed from the original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\htt$ to estimate the bias.)
+The bootstrap estimation of bias uses the bootstrap replicates of $\hat \theta$ to estimate the sampling distribution of $\hat \theta$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\hat \theta(x)$ and there are $B$ i.i.d. estimators $\hat \theta^{(b)}$. The sample mean of the replicates {ˆθ(b)} is unbiased for its expected value $\mathbb E[\hat \theta^\ast]$, so the bootstrap estimate of bias is\
+$$bias(\hat \theta) = \hat \theta^\ast − \hat \theta$$, where $\hat \theta^\ast  = \sum_{b=1}^B \hat \theta^{(b)}$, and $\hat \theta= \hat \theta(x)$ is the estimate computed from the original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\hat \theta$ to estimate the bias.)
 
 ::: {.callout-note title = "Remark for estimating bias"}
 
--   $\oplus$ Positive bias indicates that $\htt$ on average tends to overestimate $\theta$,
+-   $\oplus$ Positive bias indicates that $\hat \theta$ on average tends to overestimate $\theta$,
 
 -   $\ominus$ Negative bias is on average underestimate $\theta$
 
@@ -315,21 +307,19 @@ bias
 # [1] -0.005797944
 ```
 
-The estimate of bias is -0.005797944. Note that this is close to the estimate of bias returned by the boot function in Example 8.3. 
+The estimate of bias is -0.005797944. Note that this is close to the estimate of bias returned by the boot function in Example 8.3.
 :::
 
 ::: {.callout-example title="One more example of Bootstrap estimation of bias"}
-
-The `patch` (bootstrap) data contains measurements of a certain hormone in the bloodstream of 8 subjects after wearing
-a medical patch. The parameter of interest is
+The `patch` (bootstrap) data contains measurements of a certain hormone in the bloodstream of 8 subjects after wearing a medical patch. The parameter of interest is
 
 $$
-\theta\coloneqq\frac{\E(\text { new })-\E(\text { old })}{\E(\text { old })-\E(\text { placebo })}
+\theta\coloneqq\frac{\mathbb E(\text { new })-\mathbb E(\text { old })}{\mathbb E(\text { old })-\mathbb E(\text { placebo })}
 $$
 
 If $|\theta| \ge 0.20$, this indicates bioequivalence of the old and new patches. The statistic is $\bar{Y} /\bar{Z}$. Compute a bootstrap estimate of bias in the bioequivalence ratio statistic.
 
-``` {r }
+```{r }
 data(patch, package = "bootstrap")
 head(patch)
 
@@ -356,7 +346,7 @@ result <- data.frame(
 knitr::kable(result, digits = 3, caption = "Bootstrap results for correlation estimate")
 ```
 
-If $|\b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\b$ is small relative to standard error ( $\b/se < 0.08$), so in this example it is not necessary to adjust for bias. 
+If $|\mathbb b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\mathbb b$ is small relative to standard error ( $\mathbb b/se < 0.08$), so in this example it is not necessary to adjust for bias.
 :::
 
 ## Jackknife
@@ -371,7 +361,7 @@ For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\ha
 
 Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
 
----
+------------------------------------------------------------------------
 
 The jackknife is another resampling method, proposed by Quenouille \[225, 224\] for estimating bias, and by Tukey \[289\] for estimating standard error, a few decades earlier than the bootstrap. Efron \[88\] is a good introduction to the jackknife.
 
@@ -402,7 +392,6 @@ for (i in 1:n) {
 (bias <- (n - 1) * (mean(theta.jack) - theta.hat) )
 ```
 :::
-
 
 ## Others
 
@@ -463,7 +452,6 @@ Bootstrap estimates of a sampling distribution are analogous to the idea of dens
 The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
 
 To generate a bootstrap random sample by resampling $x$, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose $\theta$ is the parameter of interest ($\theta$ could be a vector), and $\hat \theta$ is an estimator of $\theta$. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
-
 
 ## Applications
 

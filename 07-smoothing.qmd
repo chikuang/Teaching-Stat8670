@@ -1,0 +1,29 @@
+# Resampling, Jackknife and Bootstrap
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\mse}{\mathrm{MSE}}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat \theta}
+\newcommand{\b}{\mathbb b}
+
+```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
+pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble, bootstrap, boot)
+# Set global theme
+theme_set(
+  theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5)  # center title
+    )
+)
+```

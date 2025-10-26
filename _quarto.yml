@@ -13,6 +13,8 @@ book:
     - 04-monte-carlo.qmd
     - 05-cv.qmd
     - 06-resample.qmd
+    - 07-smoothing.qmd
+    - 08-density.qmd
     - other-topics.qmd
     - 99-references.qmd
     - part: "Appendix"
