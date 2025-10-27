@@ -12,8 +12,10 @@
 |   6   |      Zhang, Yalin       |                  |  TBA  |
 |   7   | Rehman, Muhammad Aimal  |    Lu, Zhili     |  TBA  |
 |   8   |      Creary, Maya       | Alvarado, Alexus |  TBA  |
-|   9   |      Shamshad, Azka     | Khadka, Sushil |  TBA  |
-|   10   |      Wu, Yunxue     |  |  TBA  |
+|   9   |     Shamshad, Azka      |  Khadka, Sushil  |  TBA  |
+|  10   |       Wu, Yunxue        |                  |  TBA  |
+|  11   |       Jinnah, Kalen     |                  |  TBA  |
+|  12   |       Krause, Andrew    |                  |  TBA  |
 
 ## Format
 

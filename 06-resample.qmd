@@ -110,7 +110,7 @@ For most of the course, we focus on the *unbiased estimator*. This may often be 
 
 ## Bootstrap
 
-Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.
+Bootstrap estimates of a sampling distribution are analogous to the idea of *density estimation* (will be introduced in a later chapter). We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.
 
 Suppose we have an observed random sample $x=(x_1,\dots,x_n)$ from a distribution $F$. If $X^\ast$ is selected at random from $x$, then $$P(X^\ast=x_i)=1/n,\quad i=1,\dots,n.$$
 
@@ -129,7 +129,7 @@ To generate a bootstrap random sample by resampling $x$, generate $n$ random int
 
 ------------------------------------------------------------------------
 
-Let $\theta$ be the parameter of interest ( $\theta$ could be a vector), and $\hat \theta$ be an estimator. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
+Let $\theta$ be the parameter of interest (could be a vector), and $\htt$ be its estimator. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
 
 ::: {.callout-algorithm title = "Procedure of Bootstrap"}
 

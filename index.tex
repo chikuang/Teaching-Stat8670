@@ -146,6 +146,20 @@
  
 
 
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
@@ -223,7 +237,7 @@
 
 \title{STAT 8670 - Computational Methods in Statistics}
 \author{Chi-Kuang Yeh}
-\date{2025-10-17}
+\date{2025-10-27}
 \begin{document}
 \maketitle
 
@@ -276,7 +290,9 @@ University.
 
 \markright{Office Hour}
 
-14:00--15:00 on Tuesday and Wednesday.
+14:00--15:00 on Tuesday
+
+13:00 - 14:00 on Friday (online) Link Provided on \emph{iCollege}
 
 \section*{Grade Distribution}\label{grade-distribution}
 \addcontentsline{toc}{section}{Grade Distribution}
@@ -306,10 +322,12 @@ University.
   Assignment 1: Due on September 12, 2025
 \item[$\boxtimes$]
   Assignment 2: Due on September 22, 2025
-\item[$\square$]
+\item[$\boxtimes$]
   Assignment 3: Due on October 22, 2025
 \item[$\square$]
-  Assignment 4: TBA
+  Assignment 4: Due on November 05, 2025
+\item[$\square$]
+  Assignment 5: Due on November 05, 2025
 \end{itemize}
 
 \section*{Midterm}\label{midterm}
@@ -347,24 +365,24 @@ Lectures}\label{topics-and-corresponding-lectures}
 Those chapters are based on the lecture notes. This part will be updated
 frequently.
 
-\begin{longtable}[]{@{}lc@{}}
+\begin{longtable}[]{@{}ccc@{}}
 \toprule\noalign{}
-Topic & Lecture Covered \\
+Status & Topic & Lecture Covered \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-R Programming & 1--2 \\
-Numerical Approaches and Optimization in 1-D & 3--5 \\
-Review for Distribution & 6--7 \\
-Random Variable Generation & 8--10 \\
-Monte Carlo and Integration & 11--15 \\
-Exam 1 & 13 \\
-Bootstrap and Jackknife & 16-- \\
-Cross-validation & TBA \\
-Exam 2 & 23 \\
-Smoothing & TBA \\
-Density estimation & TBA \\
+✅ Complete & R Programming & 1--2 \\
+✅ Complete & Numerical Approaches and Optimization in 1-D & 3--5 \\
+✅ Complete & Review for Distribution & 6--7 \\
+✅ Complete & Random Variable Generation & 8--10 \\
+✅ Complete & Monte Carlo and Integration & 11--15 \\
+✅ Complete & Exam 1 & 13 \\
+✅ Complete & Resampling method: Cross-Validation & 16 -17 \\
+⏳ In Progress & Resampling methods: Bootstrap and Jackknife & 18-- \\
+🔜 Planned & Exam 2 & 23 \\
+🔜 Planned & Smoothing & TBA \\
+🔜 Planned & Density estimation & TBA \\
 \end{longtable}
 
 \section*{Recommended Textbooks}\label{recommended-textbooks}
@@ -2439,7 +2457,7 @@ order to generate rv \(X\), we can simulate
 \(U\sim \operatorname{Unif}(0,1)\) first, then apply the inverse
 \(F_X^{-1}(u)\).
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with inverse transformation method}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 Given a distribution function \(F_X(\cdot)\), we can simulate/generate a
 rv \(X\) using the ITM in \textbf{three} steps:
@@ -2557,7 +2575,7 @@ transformation is \(F_X^{-1}(u)=x_i\), where
 
 Then the procedure is:
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Procedure with ITM for discrete case}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -3002,7 +3020,7 @@ Suppose \(X\) and \(Y\) is a mixture of two normal distributions, where
 
 \pandocbounded{\includegraphics[keepaspectratio]{03-generating-rv_files/figure-pdf/mixture normal-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simulate for mixture}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 Pay attention how a mixture is simulated. In particular, we first
 simulate a vector \(U\sim\operatorname{Unif}(0,1)\), then use it to
@@ -3011,7 +3029,7 @@ select from which distribution/component we want to sample. It is
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Difference between convolution and mixture}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 Convolution is the sum of two independent rvs, while mixture is a
 weighted average of two rvs. Note: Mixture is \emph{non-normal!} but the
@@ -3167,7 +3185,7 @@ or \texttt{svd()} functions to compute the decomposition.
   of the fact that the matrix \(\Sigma\) is square symmetric.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Performance Comparison}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3438,7 +3456,7 @@ Way 2:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Mixture of multivariate normal}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 One interesting example is when
 \(\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
@@ -3486,7 +3504,7 @@ kurtosis (level of the peak).
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Higher dimensional case}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 It is difficult to visualize data in \(R^d\), for \(d\ge 4\), so we
 display only the histograms of the marginal distributions. All of the
@@ -3972,7 +3990,7 @@ In this example, compared with the previous example, it appears that we
 have better agreement with \texttt{pnorm()} in the upper tail, but worse
 agreement near the center.
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 Summarizing, if \(f (x)\) is a probability density function supported on
 a set A, (that is, \(f (x) \ge 0\) for all \(x\in\mathbb{R}\) and
@@ -4082,7 +4100,7 @@ CLT, \(\bar{g}(X)\) is approximately normal for large \(m\). Therefore,
 the variance of the MC estimator \(\hat{\theta}\) is approximately
 normal with mean \(\theta\) and variance \(\mathbb{V}ar\{g(X)\}/m\).
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Expectation, Variance and Distribution of theta hat}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 The expectation and the variance of the MC estimator \(\hat{\theta}\)
 are given by \begin{align*}
@@ -4574,27 +4592,28 @@ Reference used:
 
 \bookmarksetup{startatroot}
 
-\chapter{Resampling, Jackknife and
-Bootstrap}\label{resampling-jackknife-and-bootstrap}
+\chapter{Cross Validation}\label{cross-validation}
 
+\newcommand{\err}{\mathrm{err}}
+\newcommand{\Err}{\mathrm{Err}}
 \newcommand{\E}{\mathbb{E}}
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\D}{\mathcal{D}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\var}{\mathbb{V}ar}
-\newcommand{\cov}{\mathbb{C}ov}
-\newcommand{\corr}{\mathbb{C}orr}
-\newcommand{\unif}{\operatorname{Unif}}
-\newcommand{\geom}{\operatorname{Geom}}
-\newcommand{\bet}{\operatorname{Beta}}
-\newcommand{\bern}{\operatorname{Bern}}
-\newcommand{\iid}{\overset{iid}{\sim}}
-\newcommand{\ef}{\operatorname{Eff}}
-\newcommand{\htt}{\hat{\theta}}
-\newcommand{\b}{\mathbb b}
+\newcommand{\bias}{\mathbb{B}\mathrm{ias}}
+\newcommand{\mse}{\mathrm{MSE}}
 
 \section{Introduction}\label{introduction}
 
-This chapter covers resampling methods including the jackknife and
-bootstrap techniques.
+This chapter covers resampling technique called \emph{cross-validation}.
+
+Cross-validation (CV) is a statistical method used to estimate the
+\emph{skill} of machine learning (ML) models. It is commonly used in
+applied ML to compare and select a model for a given predictive modeling
+problem because it is easy to understand, easy to implement, and results
+in skill estimates that generally have a lower \emph{bias} than other
+methods.
 
 \section{Resampling methods}\label{resampling-methods}
 
@@ -4637,21 +4656,731 @@ Some commonly used resampling methods include:
   data.
 \end{itemize}
 
+\section{Machine Learning Models}\label{machine-learning-models}
+
+\begin{itemize}
+\item
+  \textbf{Left}: What machine learning can do
+\item
+  \textbf{Right}: Model/Methods
+\end{itemize}
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{fig/ML_gpt.png}
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{fig/ML_models.png}
+
+\section{Training and testing/validating
+sets}\label{training-and-testingvalidating-sets}
+
+\begin{center}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{fig/train_test.jpeg}
+\end{center}
+
+\textbf{Questions}\\
+How do we choose between different models \(f_1,\dots,f_m\)?
+
+\section{Setup}\label{setup}
+
+Suppose we have a \textbf{supervised learning} model \(f(X)\to Y\).
+
+Denote the training set by
+\(\mathcal{T}=\{(X_i,Y_i)\}_{i=1}^{N_{train}}\).
+
+How to choose between the models \(f_1,\dots,f_m\)?
+
+Ideal: \((X,Y)\sim F_{X,Y}\).
+
+Define the generalization error (Population error) as \[
+  \mathrm{Err}(f) = \mathbb{E}_{X,Y}[\{Y-f(X)\}^2] 
+\]
+
+Choose \(f\) by \[
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{Err}(f)
+\]
+
+But, \((X,Y)\sim F_{X,Y}\) is usally \textbf{unknown}!
+
+\textbf{Question}:
+
+What to do if we do not know about \(F_{X,Y}\)?
+
+Let \(V:=\{(X_i,Y_i)\}_{i=1}^{N_{Val}}\) be the validating/testing set.
+
+\[
+  \mathrm{Err}(f) = E[(Y-f(X))^2] \approx \frac{1}{N_{Val}}\sum_{i=1}^{N_{Val}}(Y_i-f(X_i))^2 =: \mathrm{err}_{Val}(f).
+\]
+
+When \(N_{Val}\to\infty\), \(\mathrm{err}_{Val}(f)\to \mathrm{Err}(f)\).
+
+We can then do \[
+  \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{Val}(f)
+\] If \(N_{val}\) is large, we can have good estimate of
+\(\mathrm{Err}(f)\).
+
+But actually, we may only have \emph{small} validating set.
+
+Problems with simple Train-Test Split:
+
+\begin{itemize}
+\item
+  Splitting 50-50 wastes data that could improve the model.
+\item
+  Splitting 80-20 may leave too little test data for reliable
+  evaluation.
+\end{itemize}
+
+What we can do? \textbf{Cross-validation}!
+
+Cross-validation uses \textbf{all} data efficiently for training and
+testing.
+
+\section{What is Cross-Validation?}\label{what-is-cross-validation}
+
+Suppose there are 5 folds (\(K=5\)).
+
+\pandocbounded{\includegraphics[keepaspectratio]{fig/yy/Training_ipad2.jpeg}}
+
+Put together, we have
+
+\[
+  \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^5 \sum_{i\in S_k}(y_i-\hat{f}^{[s_k^C]}(x_i))^2.
+\]
+
+Then cross-validation is to find \[
+  f^* = \arg\min_{f\in\{f_1,\dots,f_m\}} \mathrm{err}_{cv}(f).
+\]
+
+\section{K-Fold Cross-Validation}\label{k-fold-cross-validation}
+
+Let \(\mathcal{D}=\{X_i,Y_i\}_{i=1}^N\) be our data.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Split the data into K approximately equal sizes parts/fold \(K\)
+\item
+  For each \(k=1,2,\dots,K\), repeat the following steps:
+
+  \begin{enumerate}
+  \def\labelenumii{(\roman{enumii})}
+  \tightlist
+  \item
+    Leave the \(k\)th fold \(S_k\) from the data \(\mathcal{D}\), and
+    denote the remaining data as \(S_k^C\). We fit the model to
+    \(S_k^C\) and denote the corresponding model we obtained by
+    \(\hat{f}^{[S_k^C]}\)
+  \item
+    Calculate the total prediction error on the fitted model
+    \(\hat{f}^{[S_k^C]}\) on the left-out fold \(S_k\) \[
+      \mathrm{err}_{cv,k}(f) = \sum_{i\in S_k} L(Y_i, \hat{f}^{[S_k^C]}(X_i)).
+    \]
+  \end{enumerate}
+\item
+  The \textbf{CV estimate} of prediction error is \[
+    \mathrm{err}_{cv}(f) = \frac{1}{N}\sum_{k=1}^K \mathrm{err}_{cv,k}(f).
+  \]
+\end{enumerate}
+
+So if we have \(M\) models, \(f_1,f_2,\dots,f_M\), we can use
+cross-validation to select the best model by computing the
+cross-validation error for each model
+\(\mathrm{err}_{cv}(f_1), \mathrm{err}_{cv}(f_2),\dots \mathrm{err}_{cv}(f_M)\)
+
+Then the best model is \[
+  f^*=\arg\min_{f\in\{f_1,\dots,f_M\}} \mathrm{err}_{cv}(f).
+\]
+
+There are two many use of the K-fold CV
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Tune hyperparameters
+\end{enumerate}
+
+Suppose we have a family of models:
+
+\(y=\beta_0+\sum_{j=1}^L\beta_kx^k+\varepsilon\), \(L\) is the
+hyperparameter here.
+
+M1. \(y = \beta_0 + \beta_1 x_1 + \varepsilon\)
+
+M2. \(y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \varepsilon\)
+
+M3.
+\(y = \beta_0 + \beta_1 x_1 + \beta_2 x^2 + \beta_3 x^3+ \varepsilon\)
+
+We may use K-fold CV to choose the best \(L\).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  To better evaluate the performance of a model
+\end{enumerate}
+
+The number of folds depends on the data size.
+
+\section{Discussion}\label{discussion}
+
+\textbf{Question}:
+
+What would you consider when choosing \(K\)?**
+
+Answer: The Bias-Variance Decomposition!
+
+\begin{align*}
+\text{Generalization error} &~=~ \text{variance} &~+~& \text{bias} &~+~& \text{irreducible error} \\
+\mathbb{E}_\mathcal{T}[(y-f(x;\mathcal{T}))^2] &~=~ \mathbb{V}ar(x) &~+~& \mathbb{B}\mathrm{ias}^2(x) &~+~& \varepsilon^2.
+\end{align*}
+
+See Section 7.3, Equation (7.9) Hastie et al.~(2009).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Pop-up quiz}:
+
+Q: What are the characteristic a good model \(f\) should have?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Low bias, high variance
+\item
+  High bias, low variance
+\item
+  Low bias, low variance
+\item
+  High bias, high variance
+\item
+  None of above
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\pandocbounded{\includegraphics[keepaspectratio]{fig/bias-variance.png}}.
+
+\begin{itemize}
+\item
+  Bias (Systematic error): The difference between predicted values and
+  the true target.
+\item
+  Variance (Sensitivity to data changes): How much predictions change
+  with new data.
+\item
+  Goal: Minimize both bias and variance.
+\end{itemize}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{fig/b-v-tradeoff.pdf}}
+
+}
+
+\caption{Picture borrowed from \footnote{https://djsaunde.wordpress.com/2017/07/17/the-bias-variance-tradeoff/}.}
+
+\end{figure}%
+
+\pandocbounded{\includegraphics[keepaspectratio]{fig/fig2_crop.png}}
+
+With new data \((X,Y)\) from the same distribution:
+
+\pandocbounded{\includegraphics[keepaspectratio]{fig/fig3_crop.png}}
+
+\section{Choice of Fold K}\label{choice-of-fold-k}
+
+Bias-Variance Tradeoff in CV:
+
+The choice of K is a tradeoff between bias and variance.
+
+Q: What values of \(K, 2 \leq K \leq N\) should we use?
+
+\begin{itemize}
+\item
+  Large \(K\): \textbf{high variance}, but \textbf{small bias}.
+\item
+  Small \(K\): \textbf{low variance}, but \textbf{high bias}.
+\end{itemize}
+
+Bias decreases as \(K\) increases.
+
+\section{Example: Stock market}\label{example-stock-market}
+
+We look at the dataset in \textbf{Smarket} package in R.
+
+It contains the daily percentage returns for the S\&P 500 stock index
+between 2001 and 2005.
+
+\(N = 1250\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ISLR2)}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+
+\FunctionTok{attach}\NormalTok{(Smarket)}
+
+\CommentTok{\# Create the table and scale it to fit the page}
+\FunctionTok{head}\NormalTok{(Smarket) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable}\NormalTok{(}\StringTok{"latex"}\NormalTok{, }\AttributeTok{caption =}\StringTok{" First Few Rows of Smarket Dataset"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{full\_width =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{position =} \StringTok{"center"}\NormalTok{, }\AttributeTok{font\_size =} \DecValTok{8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}
+\centering
+\caption{\label{tab:unnamed-chunk-2} First Few Rows of Smarket Dataset}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{r|r|r|r|r|r|r|r|l}
+\hline
+Year & Lag1 & Lag2 & Lag3 & Lag4 & Lag5 & Volume & Today & Direction\\
+\hline
+2001 & 0.381 & -0.192 & -2.624 & -1.055 & 5.010 & 1.1913 & 0.959 & Up\\
+\hline
+2001 & 0.959 & 0.381 & -0.192 & -2.624 & -1.055 & 1.2965 & 1.032 & Up\\
+\hline
+2001 & 1.032 & 0.959 & 0.381 & -0.192 & -2.624 & 1.4112 & -0.623 & Down\\
+\hline
+2001 & -0.623 & 1.032 & 0.959 & 0.381 & -0.192 & 1.2760 & 0.614 & Up\\
+\hline
+2001 & 0.614 & -0.623 & 1.032 & 0.959 & 0.381 & 1.2057 & 0.213 & Up\\
+\hline
+2001 & 0.213 & 0.614 & -0.623 & 1.032 & 0.959 & 1.3491 & 1.392 & Up\\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Leave-One-Out Cross-Validation
+(LOOCV)}\label{leave-one-out-cross-validation-loocv}
+
+\begin{itemize}
+\item
+  When \(K=N\), the size of the training data, it is leave-one-out cross
+  validation.
+\item
+  Instead of creating two subsets of comparable size, a single
+  observation \((x_i, y_i)\) is used for the validation set and the
+  remaining observations make up the training set.
+\item
+  Repeat this for each observation and get the average.
+\end{itemize}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{fig/LOOCV.png}
+
+}
+
+\caption{Illustration for Leave one out CV.}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{fig/yeying/pic5.png}}
+
+}
+
+\caption{5 fold CV.}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{fig/yeying/pic10.png}}
+
+}
+
+\caption{Result of the 5-fold CV with 10 runs.}
+
+\end{figure}%
+
+\section{Take Home Messages}\label{take-home-messages}
+
+What is CV?
+
+\begin{itemize}
+\tightlist
+\item
+  A method to estimate prediction error using all data efficiently.
+\end{itemize}
+
+Why K-fold?:
+
+\begin{itemize}
+\tightlist
+\item
+  Balances bias and variance effectively.
+\end{itemize}
+
+LOOCV:
+
+\begin{itemize}
+\tightlist
+\item
+  Special case with K = N, unbiased but expensive.
+\end{itemize}
+
+Practical Tips:
+
+\begin{itemize}
+\item
+  K = 5 or K = 10 is common and (usually) works well.
+\item
+  Use CV to tune hyperparameters and compare models.
+\end{itemize}
+
+Note:
+
+\begin{itemize}
+\tightlist
+\item
+  Cross-validation can be applied in various contexts!
+\end{itemize}
+
+Each panel reproduces your model fit:
+
+\begin{itemize}
+\tightlist
+\item
+  Linear: \(y = \beta_0 + \beta_1 x\)
+\item
+  Quadratic: \(y = \beta_0 + \beta_1 x + \beta_2 x^2\)
+\item
+  Exponential: \(\log y = \beta_0 + \beta_1 x\)
+\item
+  Log--Log: \(\log y = \beta_0 + \beta_1 \log x\)
+\end{itemize}
+
+Once the model is estimated, we want to assess the fit. CV can be used
+to estimate the prediction errors.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(DAAG); }\FunctionTok{attach}\NormalTok{(ironslag)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+
+\CommentTok{\# {-}{-}{-} raw data {-}{-}{-}}
+\NormalTok{  df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(chemical, magnetic)}
+\NormalTok{a  }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{40}\NormalTok{, }\FloatTok{0.1}\NormalTok{)}
+
+\CommentTok{\# {-}{-}{-} fits (using coefficients explicitly) {-}{-}{-}}
+\NormalTok{L1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(magnetic }\SpecialCharTok{\textasciitilde{}}\NormalTok{ chemical, }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{yhat1 }\OtherTok{\textless{}{-}}\NormalTok{ L1}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ L1}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ a}
+
+\NormalTok{L2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(magnetic }\SpecialCharTok{\textasciitilde{}}\NormalTok{ chemical }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(chemical}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{), }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{yhat2 }\OtherTok{\textless{}{-}}\NormalTok{ L2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ L2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ a }\SpecialCharTok{+}\NormalTok{ L2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ a}\SpecialCharTok{\^{}}\DecValTok{2}
+
+\NormalTok{L3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(magnetic) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ chemical, }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{logyhat3 }\OtherTok{\textless{}{-}}\NormalTok{ L3}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ L3}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ a}
+\NormalTok{yhat3 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(logyhat3)}
+
+\NormalTok{L4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(magnetic) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(chemical), }\AttributeTok{data =}\NormalTok{ df)}
+\NormalTok{logyhat4 }\OtherTok{\textless{}{-}}\NormalTok{ L4}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ L4}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*} \FunctionTok{log}\NormalTok{(a)}
+
+\CommentTok{\# {-}{-}{-} assemble data for plotting {-}{-}{-}}
+\NormalTok{fits }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{a =}\NormalTok{ a,}
+  \AttributeTok{yhat1 =}\NormalTok{ yhat1,}
+  \AttributeTok{yhat2 =}\NormalTok{ yhat2,}
+  \AttributeTok{yhat3 =}\NormalTok{ yhat3,}
+  \AttributeTok{loga  =} \FunctionTok{log}\NormalTok{(a),}
+  \AttributeTok{logyhat4 =}\NormalTok{ logyhat4}
+\NormalTok{)}
+
+\CommentTok{\# {-}{-}{-} plots {-}{-}{-}}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ chemical, }\AttributeTok{y =}\NormalTok{ magnetic)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{16}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ a, }\AttributeTok{y =}\NormalTok{ yhat1), }\AttributeTok{linewidth =} \FloatTok{1.1}\NormalTok{, }\AttributeTok{color =} \StringTok{"steelblue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Linear"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{13}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{))}
+
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ chemical, }\AttributeTok{y =}\NormalTok{ magnetic)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{16}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ a, }\AttributeTok{y =}\NormalTok{ yhat2), }\AttributeTok{linewidth =} \FloatTok{1.1}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkgreen"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Quadratic"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{13}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{))}
+
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ chemical, }\AttributeTok{y =}\NormalTok{ magnetic)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{16}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ a, }\AttributeTok{y =}\NormalTok{ yhat3), }\AttributeTok{linewidth =} \FloatTok{1.1}\NormalTok{, }\AttributeTok{color =} \StringTok{"firebrick"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Exponential"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{13}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{))}
+
+\NormalTok{p4 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{log}\NormalTok{(chemical), }\AttributeTok{y =} \FunctionTok{log}\NormalTok{(magnetic))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{16}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fits, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ loga, }\AttributeTok{y =}\NormalTok{ logyhat4), }\AttributeTok{linewidth =} \FloatTok{1.1}\NormalTok{, }\AttributeTok{color =} \StringTok{"purple"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Log–Log"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{13}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{))}
+
+\CommentTok{\# {-}{-}{-} combine in 2×2 grid {-}{-}{-}}
+\NormalTok{(p1 }\SpecialCharTok{+}\NormalTok{ p2) }\SpecialCharTok{/}\NormalTok{ (p3 }\SpecialCharTok{+}\NormalTok{ p4)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{05-cv_files/figure-pdf/unnamed-chunk-3-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{attach}\NormalTok{(ironslag)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+The following objects are masked from ironslag (pos = 4):
+
+    chemical, magnetic
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(magnetic) }\CommentTok{\# in DAAG ironslag}
+\NormalTok{e1 }\OtherTok{\textless{}{-}}\NormalTok{ e2 }\OtherTok{\textless{}{-}}\NormalTok{ e3 }\OtherTok{\textless{}{-}}\NormalTok{ e4 }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n)}
+\CommentTok{\# for n{-}fold cross validation}
+\CommentTok{\# fit models on leave{-}one{-}out samples}
+\ControlFlowTok{for}\NormalTok{ (k }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
+\NormalTok{  y }\OtherTok{\textless{}{-}}\NormalTok{ magnetic[}\SpecialCharTok{{-}}\NormalTok{k]}
+\NormalTok{  x }\OtherTok{\textless{}{-}}\NormalTok{ chemical[}\SpecialCharTok{{-}}\NormalTok{k]}
+\NormalTok{  J1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x)}
+\NormalTok{  yhat1 }\OtherTok{\textless{}{-}}\NormalTok{ J1}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ J1}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ chemical[k]}
+\NormalTok{  e1[k] }\OtherTok{\textless{}{-}}\NormalTok{ magnetic[k] }\SpecialCharTok{{-}}\NormalTok{ yhat1}
+  
+\NormalTok{  J2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x }\SpecialCharTok{+} \FunctionTok{I}\NormalTok{(x}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{  yhat2 }\OtherTok{\textless{}{-}}\NormalTok{ J2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ J2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ chemical[k] }\SpecialCharTok{+}
+\NormalTok{    J2}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ chemical[k]}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{  e2[k] }\OtherTok{\textless{}{-}}\NormalTok{ magnetic[k] }\SpecialCharTok{{-}}\NormalTok{ yhat2}
+  
+\NormalTok{  J3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(y) }\SpecialCharTok{\textasciitilde{}}\NormalTok{ x)}
+\NormalTok{  logyhat3 }\OtherTok{\textless{}{-}}\NormalTok{ J3}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ J3}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ chemical[k]}
+\NormalTok{  yhat3 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(logyhat3)}
+\NormalTok{  e3[k] }\OtherTok{\textless{}{-}}\NormalTok{ magnetic[k] }\SpecialCharTok{{-}}\NormalTok{ yhat3}
+  
+\NormalTok{  J4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(}\FunctionTok{log}\NormalTok{(y) }\SpecialCharTok{\textasciitilde{}} \FunctionTok{log}\NormalTok{(x))}
+\NormalTok{  logyhat4 }\OtherTok{\textless{}{-}}\NormalTok{ J4}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ J4}\SpecialCharTok{$}\NormalTok{coef[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*} \FunctionTok{log}\NormalTok{(chemical[k])}
+\NormalTok{  yhat4 }\OtherTok{\textless{}{-}} \FunctionTok{exp}\NormalTok{(logyhat4)}
+\NormalTok{  e4[k] }\OtherTok{\textless{}{-}}\NormalTok{ magnetic[k] }\SpecialCharTok{{-}}\NormalTok{ yhat4}
+\NormalTok{\}}
+
+\CommentTok{\# compute MSEs}
+\NormalTok{mse }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FunctionTok{mean}\NormalTok{(e1}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{), }\FunctionTok{mean}\NormalTok{(e2}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{), }\FunctionTok{mean}\NormalTok{(e3}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{), }\FunctionTok{mean}\NormalTok{(e4}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{\# put into a tidy data frame}
+\NormalTok{results }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Model =} \FunctionTok{c}\NormalTok{(}\StringTok{"Linear"}\NormalTok{, }\StringTok{"Quadratic"}\NormalTok{, }\StringTok{"Exponential"}\NormalTok{, }\StringTok{"Log–Log"}\NormalTok{),}
+  \AttributeTok{MSE =} \FunctionTok{round}\NormalTok{(mse, }\DecValTok{4}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{\# display as a clean table}
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(results, }
+             \AttributeTok{caption =} \StringTok{"Model Comparison of Mean Squared Errors"}\NormalTok{, }\AttributeTok{align =} \FunctionTok{c}\NormalTok{(}\StringTok{"l"}\NormalTok{, }\StringTok{"c"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lc@{}}
+\caption{Model Comparison of Mean Squared Errors}\tabularnewline
+\toprule\noalign{}
+Model & MSE \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Model & MSE \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Linear & 19.5564 \\
+Quadratic & 17.8525 \\
+Exponential & 18.4419 \\
+Log--Log & 20.4542 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = magnetic ~ chemical + I(chemical^2), data = df)
+
+Coefficients:
+  (Intercept)       chemical  I(chemical^2)  
+     24.49262       -1.39334        0.05452  
+\end{verbatim}
+
+So the best fitted model is \[
+\hat{Y} = 
+24.493 +
+-1.393\,X +
+0.055\,X^2
+\]
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{)) }\CommentTok{\#layout for graphs}
+\FunctionTok{plot}\NormalTok{(L2}\SpecialCharTok{$}\NormalTok{fit, L2}\SpecialCharTok{$}\NormalTok{res) }\CommentTok{\#residuals vs fitted values}
+\FunctionTok{abline}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{) }\CommentTok{\#reference line}
+\FunctionTok{qqnorm}\NormalTok{(L2}\SpecialCharTok{$}\NormalTok{res) }\CommentTok{\#normal probability plot}
+\FunctionTok{qqline}\NormalTok{(L2}\SpecialCharTok{$}\NormalTok{res) }\CommentTok{\#reference line}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)) }\CommentTok{\#restore display}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{05-cv_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\begin{itemize}
+\item
+  Note: This lecture is based on the book by Hastie et al.~(2009), and
+  James et al.~(2013).
+\item
+  Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008).
+  \href{https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf}{The
+  Elements of Statistical Learning}. Springer, 2nd edition.
+\end{itemize}
+
+\bookmarksetup{startatroot}
+
+\chapter{Resampling, Jackknife and
+Bootstrap}\label{resampling-jackknife-and-bootstrap}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\mse}{\mathrm{MSE}}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat \theta}
+\newcommand{\b}{\mathbb b}
+
+\section{Introduction}\label{introduction-1}
+
+This chapter continues from the previous chapter, introducing more
+resampling methods; jackknife and bootstrap techniques.
+
+\section{Disclaimer}\label{disclaimer}
+
+Most of the contents of this chapter are mainly from the reference book,
+Chapter 8 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
+CRC Press, Roca Baton.
+
+\section{Resampling methods}\label{resampling-methods-1}
+
+\emph{Resampling methods} is a way to use the observed data to generate
+hypothetical samples. It treats an observed sample as a \emph{finite
+population}, and random samples are generated/resampled from it to
+estimate population characteristics and make inferences about the
+sampled population. It is useful when:
+
+\begin{itemize}
+\item
+  Do not know the underlying distribution of a population
+\item
+  The formula may be difficult to be calculated.
+\end{itemize}
+
+Some commonly used resampling methods include:
+
+\begin{itemize}
+\item
+  \textbf{Cross-validation}: Cross-validation is a model validation
+  technique for assessing how the results of a statistical analysis will
+  generalize to an independent data set. It is mainly used in settings
+  where the goal is prediction, and one wants to estimate how accurately
+  a predictive model will perform in practice.
+\item
+  \textbf{Bootstrap}: Bootstrap methods are often used when the
+  distribution of the target population is not specified; the sample is
+  the only information available.
+\item
+  \textbf{Jackknife}: The jackknife is a resampling technique used to
+  estimate the bias and variance of a statistic. It is like a
+  leave-one-out (LOO) cross-validation.
+\item
+  \textbf{Permutation tests}: Permutation tests are a type of
+  non-parametric statistical test that involves rearranging the data
+  points to test a hypothesis. They are used to determine whether the
+  observed effect is statistically significant by comparing it to the
+  distribution of effects obtained through random permutations of the
+  data.
+\end{itemize}
+
 \section{Estimators}\label{estimators}
 
-\subsection{Bias-Variance Tradeoff}\label{bias-variance-tradeoff}
+\subsection{Bias-Variance Tradeoff of an
+estimator}\label{bias-variance-tradeoff-of-an-estimator}
 
 In statistics, the bias-variance tradeoff is the property of a model
 that the variance of the parameter estimated across samples can be
 reduced by increasing the bias in the estimated parameters. If we look
-at the Mean square error (MSE) of an estimator \(\hat{\theta}\) for a
+at the Mean square error (MSE) of an estimator \(\hat \theta\) for a
 parameter \(\theta\):
 
-Suppose we have a parameter \(\theta\) and an estimator
-\(\hat{\theta}\). The mean square error (MSE) of the estimator is
-defined as
-\[\mathbb{E}[(\hat{\theta}-\theta )^2 ]= \mathbb{V}ar(\hat{\theta}) + [\mathbb b(\hat{\theta})]^2,\]
+Suppose we have a parameter \(\theta\) and an estimator \(\hat \theta\).
+The mean square error (MSE) of the estimator is defined as
+\[\mathrm{MSE}_{\theta}(\hat \theta)=\mathbb E[(\hat \theta-\theta )^2 ]= \mathbb{V}ar(\hat \theta) + [\mathbb b(\hat \theta)]^2,\]
 where \(\mathbb b\) is the bias of the estimator.
+
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Derivation}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
+
+We start with the definition of the mean squared error (MSE):
+
+\[
+\mathrm{MSE}_\theta(\hat \theta)
+= \mathbb E\big[(\hat \theta- \theta)^2\big].
+\]
+
+Add and subtract \(\mathbb E[\hat \theta]\) inside the square: \[
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta] + \mathbb E[\hat \theta] - \theta)^2\big].
+\]
+
+Expand the square: \[
+\mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
++ 2\,\mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])(\mathbb E[\hat \theta] - \theta)\big]
++ (\mathbb E[\hat \theta] - \theta)^2.
+\]
+
+The middle term vanishes because \[
+\mathbb E\big[\hat \theta- \mathbb E[\hat \theta]\big] = 0.
+\]
+
+Hence, \[
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
++ (\mathbb E[\hat \theta] - \theta)^2.
+\]
+
+Recognizing that \[
+\mathbb{V}ar(\hat \theta) = \mathbb E\big[(\hat \theta- \mathbb E[\hat \theta])^2\big]
+\quad \text{and} \quad
+b(\hat \theta) = \mathbb E[\hat \theta] - \theta,
+\] we obtain the bias--variance decomposition: \[
+\boxed{
+\mathbb E\big[(\hat \theta- \theta)^2\big]
+= \mathbb{V}ar(\hat \theta) + \mathbb b^2(\hat \theta)^2.}
+\]
+
+\end{tcolorbox}
 
 \textbf{Questions}: Why do we care about the bias? Can we always find an
 unbiased estimator? What does it mean?
@@ -4662,6 +5391,563 @@ Chapter, we can compare the (relative) efficiency between the
 estimators, and discuss about the variance reduction.
 
 \section{Bootstrap}\label{bootstrap}
+
+Bootstrap estimates of a sampling distribution are analogous to the idea
+of \emph{density estimation} (will be introduced in a later chapter). We
+construct a histogram of a sample to obtain an estimate of the shape of
+the density function. The histogram is not the density, but in a
+nonparametric problem, can be viewed as a reasonable estimate of the
+density. We have methods to generate random samples from completely
+specified densities; bootstrap generates random samples from the
+empirical distribution of the sample.
+
+Suppose we have an observed random sample \(x=(x_1,\dots,x_n)\) from a
+distribution \(F\). If \(X^\ast\) is selected at random from \(x\), then
+\[P(X^\ast=x_i)=1/n,\quad i=1,\dots,n.\]
+
+Resampling generates a random sample \(X^\ast_1,\dots,X_n^\ast\) by
+\emph{sampling with replacement} from the observed sample \(x\). Then
+the RVs \(X_i^\ast\) are i.i.d. and uniformly distributed on the
+observed data points \(\{x_1,\dots,x_n\}\).
+
+The empirical distribution function (ecdf) \(F_n(x)\) is an estimator of
+\(F(x)\). It can be shown that \(F_n(x)\) is a sufficient statistic for
+\(F(x)\); that is, all the information about \(F(x)\) that is contained
+in the sample is also contained in \(F_n(x)\). Moreover, \(F_n(x)\) is
+itself the distribution function of a random variable; namely the random
+variable that is uniformly distributed on the set
+\(\{x_1, \dots , x_n\}\). Hence the empirical cdf \(F_n\) is the cdf of
+\(X^\ast\). Thus in bootstrap, there are two approximations. The ecdf
+\(F_n\) is an approximation to the cdf \(F_X\). The ecdf \(F_m^\ast\) of
+the bootstrap replicates is an approximation to the ecdf \(F_n\).
+Resampling from the sample \(x\) is equivalent to generating random
+samples from the distribution \(F_n(x)\). The two approximations can be
+represented by the diagram
+
+\[
+\begin{aligned}
+F & \rightarrow X \rightarrow F_n \\
+F_n & \rightarrow X^* \rightarrow F_n^* .
+\end{aligned}
+\]
+
+To generate a bootstrap random sample by resampling \(x\), generate
+\(n\) random integers \(\{i_1,\dots, i_n\}\) uniformly distributed on
+\(\{1,\dots , n\}\) and select the bootstrap sample
+\(x^\ast = (x_{i_1} ,\dots , x_{i_n} )\).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Let \(\theta\) be the parameter of interest (could be a vector), and
+\(\hat{\theta}\) be its estimator. Then the bootstrap estimate of the
+distribution of \(\hat{\theta}\) is obtained as follows.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For each bootstrap replicate, indexed \(b = 1, \dots, B\):
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Generate sample \(x^{\ast (b)} = x_1^\ast,\dots,x_n^\ast\) by
+    sampling with replacement from the observed sample
+    \(x_1,\dots,x_n\).
+  \item
+    Compute the \(b\)th replicate \(\hat \theta^{(b)}\) from the \(b\)th
+    bootstrap sample.
+  \end{enumerate}
+\item
+  The bootstrap estimate of \(F_{\hat \theta}(\cdot)\) is the empirical
+  distribution of the replicates
+  \(\hat \theta^{(1)},\dots ,\hat \theta^{(B)}\).
+\end{enumerate}
+
+Suppose that we have observed the sample
+
+\[x = \{2, 2, 1, 1, 5, 4, 4, 3, 1, 2\}.\]
+
+Resampling from \(x\) we select \(1, 2, 3, 4\), or \(5\) with
+probabilities \(0.3, 0.3, 0.1, 0.2\), and \(0.1\), respectively, so the
+cdf \(F_{X^\ast}\) of a randomly selected replicate is exactly the ecdf
+\(F_n(x)\):
+
+\[
+F_{X *}(x)=F_n(x)= \begin{cases}0, & x<1 ; \\ 0.3, & 1 \leq x<2 ; \\ 0.6, & 2 \leq x<3 ; \\ 0.7, & 3 \leq x<4 ; \\ 0.9, & 4 \leq x<5 ; \\ 1, & x \geq 5 .\end{cases}
+\]
+
+Note that if \(F_n\) is not close to \(F_X\) then the distribution of
+the replicates will not be close to \(F_X\). The sample \(x\) above is
+actually a sample from a Poisson(2) distribution. Resampling from \(x\)
+a large number of replicates produces a good estimate of \(F_n\) but not
+a good estimate of \(F_X\) , because regardless of how many replicates
+are drawn, the bootstrap samples will never include \(0\).
+
+\subsection{Bootstrap Estimation of Standard
+Error}\label{bootstrap-estimation-of-standard-error}
+
+Recall that, in normal approximate, the \((100-\alpha)\)\% confidence
+interval (for \(\mu\)) is given as \[
+  \bar{x}_n \pm z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}}.
+\] In the above formula, we refer
+
+\begin{itemize}
+\tightlist
+\item
+  \(\sigma/\sqrt{n}\): as the \textbf{standard error} (se).
+\item
+  \(z_{1-\alpha/2}  \sigma/\sqrt{n}\): as the \textbf{margin of error}.
+\end{itemize}
+
+The standard error (SE) of a statistic is the standard deviation of its
+sampling distribution. The se is often used in calculations of
+confidence intervals.
+
+To estimate the se of an estimator \(\hat \theta\), we can use the
+bootstrap method. Let \(\hat \theta^{(1)},\dots,\hat \theta^{(B)}\) be
+the bootstrap replicates. The bootstrap estimate of the standard error
+of \(\hat \theta\) is given by the sample standard deviation of the
+replicates:
+
+\[
+\widehat{s e}\left(\hat{\theta}^*\right)=\sqrt{\frac{1}{B-1} \sum_{b=1}^B\left(\hat{\theta}^{(b)}-\overline{\hat{\theta}^*}\right)^2},
+\] where
+\(\overline{\hat{\theta}^*}=\frac{1}{B} \sum_{b=1}^B \hat{\theta}^{(b)}\).
+
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Remark for estimating se}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
+
+The number of replicates needed for good estimates of standard error is
+not large; \(B = 50\) is usually large enough, and rarely is \(B > 200\)
+necessary.
+
+\end{tcolorbox}
+
+Example 8.2 (Bootstrap estimate of standard error). The law school data
+set law in the bootstrap {[}286{]} package is from Efron and Tibshirani
+{[}91{]}. The data frame contains LSAT (average score on law school
+admission test score) and GPA (average undergraduate grade point
+average) for 15 law schools.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Observation & LSAT & GPA \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & 576 & 339 \\
+2 & 635 & 330 \\
+3 & 558 & 281 \\
+4 & 578 & 303 \\
+5 & 666 & 344 \\
+6 & 580 & 307 \\
+7 & 555 & 300 \\
+8 & 661 & 343 \\
+9 & 651 & 336 \\
+10 & 605 & 313 \\
+11 & 653 & 312 \\
+12 & 575 & 274 \\
+13 & 545 & 276 \\
+14 & 572 & 288 \\
+15 & 594 & 296 \\
+\end{longtable}
+
+This data set is a random sample from the universe of 82 law schools in
+law82 (bootstrap). Estimate the correlation between LSAT and GPA scores,
+and compute the bootstrap estimate of the standard error of the sample
+correlation.
+
+The bootstrap procedure is
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  For each bootstrap replicate, indexed \(b = 1,\dots , B\)
+
+  \begin{enumerate}
+  \def\labelenumii{(\alph{enumii})}
+  \tightlist
+  \item
+    Generate sample
+    \((\text{LSAT}^{\ast (b)}_i, \text{GPA}^{\ast (b)}_i), i = 1,\dots , n\)
+    by sampling with replacement from the observed sample.
+  \item
+    Compute the \(b\)th replicate of the correlation
+    \(\hat \theta^{(b)} = \cor(\text{LSAT}^{\ast (b)}, \text{GPA}^{\ast (b)})\)
+    from the \(b\)th bootstrap sample.
+  \end{enumerate}
+\item
+  The bootstrap estimate of the standard error of \(\hat \theta\) is the
+  sample standard deviation of the replicates
+  \(\hat \theta^{(1)},\dots ,\hat \theta^{(B)}\),
+  \(\{R^{(i)}\}_{i=1}^B\)
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(bootstrap) }\CommentTok{\#for the law data}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{cor}\NormalTok{(law}\SpecialCharTok{$}\NormalTok{LSAT, law}\SpecialCharTok{$}\NormalTok{GPA))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7763745
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# [1] 0.7763745}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{cor}\NormalTok{(law82}\SpecialCharTok{$}\NormalTok{LSAT, law82}\SpecialCharTok{$}\NormalTok{GPA))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7599979
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# [1] 0.7599979}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#set up the bootstrap}
+\NormalTok{B }\OtherTok{\textless{}{-}} \DecValTok{200} \CommentTok{\#number of replicates}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(law) }\CommentTok{\#sample size}
+\NormalTok{R }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(B) }\CommentTok{\#storage for replicates}
+\CommentTok{\#bootstrap estimate of standard error of R}
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{B) \{}
+  \CommentTok{\# randomly select the indices}
+\NormalTok{  i }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  LSAT }\OtherTok{\textless{}{-}}\NormalTok{ law}\SpecialCharTok{$}\NormalTok{LSAT[i] }\CommentTok{\# i is a vector of indices}
+\NormalTok{  GPA }\OtherTok{\textless{}{-}}\NormalTok{ law}\SpecialCharTok{$}\NormalTok{GPA[i]}
+\NormalTok{  R[b] }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(LSAT, GPA)}
+\NormalTok{\}}
+\CommentTok{\#output}
+\NormalTok{(se.R }\OtherTok{\textless{}{-}} \FunctionTok{sd}\NormalTok{(R))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.1335692
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# [1] 0.1358393}
+\FunctionTok{hist}\NormalTok{(R, }\AttributeTok{prob =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{06-resample_files/figure-pdf/unnamed-chunk-2-1.pdf}}
+
+The bootstrap estimate of se(R) is 0.1335692. The normal theory estimate
+for standard error of R is 0.115.
+
+We can also use the \texttt{boot(.)} function in the \texttt{boot}
+package to compute the bootstrap estimate of standard error.
+
+First, write a function that returns \(\hat \theta(b)\), where the first
+argument to the function is the sample data, and the second argument is
+the vector \(\{i_1, \dots , i_n\}\) of indices. If the data is \(x\) and
+the vector of indices is i, we need \(x[i,1]\) to extract the first
+resampled variable, and x{[}i,2{]} to extract the second resampled
+variable. The code and output is shown below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_r }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, i) \{}
+  \CommentTok{\# want correlation of columns 1 and 2}
+  \FunctionTok{cor}\NormalTok{(x[i, }\DecValTok{1}\NormalTok{], x[i, }\DecValTok{2}\NormalTok{])}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The printed summary of output from the boot function is obtained by the
+command boot or the result can be saved in an object for further
+analysis. Here we save the result in obj and print the summary.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(boot) }\CommentTok{\#for boot function}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{777}\NormalTok{)}
+\NormalTok{(obj }\OtherTok{\textless{}{-}} \FunctionTok{boot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ bootstrap}\SpecialCharTok{::}\NormalTok{law, }\AttributeTok{statistic =}\NormalTok{ my\_r, }\AttributeTok{R =} \DecValTok{2000}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = bootstrap::law, statistic = my_r, R = 2000)
+
+
+Bootstrap Statistics :
+     original      bias    std. error
+t1* 0.7763745 -0.01075929   0.1364617
+\end{verbatim}
+
+The observed value \(\hat \theta\) of the correlation statistic is
+labeled t1*. The bootstrap estimate of standard error of the estimate is
+se(ˆθ) . = 0.13, based on 2000 replicates. To compare with formula
+(8.1), extract the replicates in \$t, so that the standard deviation of
+the replicates can be computed directly
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(obj}\SpecialCharTok{$}\NormalTok{t)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.1364617
+\end{verbatim}
+
+\subsection{Bootstrap Estimation of
+Bias}\label{bootstrap-estimation-of-bias}
+
+Recall that a bias of an estimator \(\hat \theta\) is defined as \[
+\mathbb b(\hat \theta) = \mathbb E[\hat \theta] - \theta.
+\]
+
+An example of a biased estimator is the MLE of variance,
+\(\hat{\sigma}^2 = \sum (X_i-\bar{X}_n)^2/n\) of
+\(\sigma^2 = \sum (X_i-\bar{X}_n)^2/(n-1)\), which has expected value
+\((1 − 1/n)\sigma^2\). Here, the bias is \(−\sigma^2/n\).
+
+The bootstrap estimation of bias uses the bootstrap replicates of
+\(\hat \theta\) to estimate the sampling distribution of
+\(\hat \theta\). For the finite population \(x = (x_1,\dots , x_n)\),
+the parameter is \(\hat \theta(x)\) and there are \(B\) i.i.d.
+estimators \(\hat \theta^{(b)}\). The sample mean of the replicates
+\{ˆθ(b)\} is unbiased for its expected value
+\(\mathbb E[\hat \theta^\ast]\), so the bootstrap estimate of bias is\\
+\[bias(\hat \theta) = \hat \theta^\ast − \hat \theta\], where
+\(\hat \theta^\ast  = \sum_{b=1}^B \hat \theta^{(b)}\), and
+\(\hat \theta= \hat \theta(x)\) is the estimate computed from the
+original observed sample. (In bootstrap \(F_n\) is sampled in place of
+\(F_X\) , so we replace \(\theta\) with \(\hat \theta\) to estimate the
+bias.)
+
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Remark for estimating bias}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
+
+\begin{itemize}
+\item
+  \(\oplus\) Positive bias indicates that \(\hat \theta\) on average
+  tends to overestimate \(\theta\),
+\item
+  \(\ominus\) Negative bias is on average underestimate \(\theta\)
+\end{itemize}
+
+\end{tcolorbox}
+
+In the law data of Example 8.2, compute the bootstrap estimate of bias
+in the sample correlation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# sample estimate for n=15}
+\NormalTok{theta.hat }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(law}\SpecialCharTok{$}\NormalTok{LSAT, law}\SpecialCharTok{$}\NormalTok{GPA)}
+\CommentTok{\# bootstrap estimate of bias}
+\NormalTok{B }\OtherTok{\textless{}{-}} \DecValTok{2000} \CommentTok{\# larger for estimating bias}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(law)}
+\NormalTok{theta.b }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(B)}
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{B) \{}
+\NormalTok{  i }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  LSAT }\OtherTok{\textless{}{-}}\NormalTok{ law}\SpecialCharTok{$}\NormalTok{LSAT[i]}
+\NormalTok{  GPA }\OtherTok{\textless{}{-}}\NormalTok{ law}\SpecialCharTok{$}\NormalTok{GPA[i]}
+\NormalTok{  theta.b[b] }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(LSAT, GPA)}
+\NormalTok{\}}
+\NormalTok{bias }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta.b }\SpecialCharTok{{-}}\NormalTok{ theta.hat)}
+\NormalTok{bias}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.001063244
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# [1] {-}0.005797944}
+\end{Highlighting}
+\end{Shaded}
+
+The estimate of bias is -0.005797944. Note that this is close to the
+estimate of bias returned by the boot function in Example 8.3.
+
+The \texttt{patch} (bootstrap) data contains measurements of a certain
+hormone in the bloodstream of 8 subjects after wearing a medical patch.
+The parameter of interest is
+
+\[
+\theta\coloneqq\frac{\mathbb E(\text { new })-\mathbb E(\text { old })}{\mathbb E(\text { old })-\mathbb E(\text { placebo })}
+\]
+
+If \(|\theta| \ge 0.20\), this indicates bioequivalence of the old and
+new patches. The statistic is \(\bar{Y} /\bar{Z}\). Compute a bootstrap
+estimate of bias in the bioequivalence ratio statistic.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(patch, }\AttributeTok{package =} \StringTok{"bootstrap"}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(patch)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  subject placebo oldpatch newpatch    z     y
+1       1    9243    17649    16449 8406 -1200
+2       2    9671    12013    14614 2342  2601
+3       3   11792    19979    17274 8187 -2705
+4       4   13357    21816    23798 8459  1982
+5       5    9055    13850    12560 4795 -1290
+6       6    6290     9806    10157 3516   351
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(patch) }\CommentTok{\#in bootstrap package}
+\NormalTok{B }\OtherTok{\textless{}{-}} \DecValTok{2000}
+\NormalTok{theta.b }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(B)}
+\NormalTok{theta.hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(patch}\SpecialCharTok{$}\NormalTok{y) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(patch}\SpecialCharTok{$}\NormalTok{z)}
+
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{B) \{}
+\NormalTok{  i }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  y }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{y[i]}
+\NormalTok{  z }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{z[i]}
+\NormalTok{  theta.b[b] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z)}
+\NormalTok{\}}
+\NormalTok{bias }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(theta.b) }\SpecialCharTok{{-}}\NormalTok{ theta.hat}
+\NormalTok{se }\OtherTok{\textless{}{-}} \FunctionTok{sd}\NormalTok{(theta.b)}
+\NormalTok{result }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Estimate =}\NormalTok{ theta.hat,}
+  \AttributeTok{Bias =}\NormalTok{ bias,}
+  \AttributeTok{SE =}\NormalTok{ se,}
+  \AttributeTok{CV =}\NormalTok{ bias }\SpecialCharTok{/}\NormalTok{ se}
+\NormalTok{)}
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(result, }\AttributeTok{digits =} \DecValTok{3}\NormalTok{, }\AttributeTok{caption =} \StringTok{"Bootstrap results for correlation estimate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}rrrr@{}}
+\caption{Bootstrap results for correlation estimate}\tabularnewline
+\toprule\noalign{}
+Estimate & Bias & SE & CV \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Estimate & Bias & SE & CV \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+-0.071 & 0.006 & 0.101 & 0.061 \\
+\end{longtable}
+
+If \(|\mathbb b|/se \le 0.25\), it is not usually necessary to adjust
+for bias. The \(\mathbb b\) is small relative to standard error (
+\(\mathbb b/se < 0.08\)), so in this example it is not necessary to
+adjust for bias.
+
+\section{Jackknife}\label{jackknife}
+
+The jackknife is another resampling technique used to estimate the bias
+and variance of a statistic.
+
+Jackknife is like a \textbf{leave-one-out cross-validation} (LOOCV). Let
+\(\mathbf{x}= (x_1,\dots,x_n)\) be an observed random sample, and denote
+the \(i\)th jackknife sample by
+\(\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\), that is, a
+subset of \(\mathbf{x}\).
+
+For the parameter of interest \(\theta\), if the statistics is
+\(T(\mathbf{x})=:\hat \theta\) is computed on the full
+
+\subsection{When does jackknife not
+work?}\label{when-does-jackknife-not-work}
+
+Jackknife does not work when the function \(T(\cdot)\) is \textbf{not a
+smooth} functional!
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+The jackknife is another resampling method, proposed by Quenouille
+{[}225, 224{]} for estimating bias, and by Tukey {[}289{]} for
+estimating standard error, a few decades earlier than the bootstrap.
+Efron {[}88{]} is a good introduction to the jackknife.
+
+Jackknife is a special kind of \emph{Cross-validation} where we
+\emph{leave-one-out} (LOO) the observation, and calculate the quantities
+on the remaining data. To fix the idea, let \(x=(x_1,\dots,x_n)\) be the
+observed data of samele size \(n\). The \(i\)th jackknife sample is
+defined as \(x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\), that is,
+the sample with the \(i\)th observation removed. Let
+\(\hat \theta=T(x)\) be the estimator of the parameter of interest
+\(\theta\). The \(i\)th jackknife replicate is defined as
+\(\hat \theta_{-i}=T(x_{-i})\), that is, the estimate computed from the
+\(i\)th jackknife sample. The jackknife estimate of bias is defined as
+
+\subsection{Jackknife Estimate of
+Bias}\label{jackknife-estimate-of-bias}
+
+If ˆθ is a smooth (plug-in) statistic, then
+\(\hat \theta_{(\cdot)} = t\{F_{n−1}(x(i))\}\), and the jackknife
+estimate of bias is \[
+\hat{b}_{jack} = (n − 1)(\hat \theta_{(\cdot)} − \hat \theta), 
+\] where
+\(\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}\)
+is the average of the estimate from LOO samples, and
+\(\hat \theta=\hat \theta(x)\) is the estimate from the original
+observed sample.
+
+Compute the jackknife estimate of bias for the patch data in the
+\texttt{bootstrap} package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(patch, }\AttributeTok{package =} \StringTok{"bootstrap"}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(patch)}
+\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{y}
+\NormalTok{z }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{z}
+\NormalTok{theta.hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z)}
+\FunctionTok{print}\NormalTok{ (theta.hat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] -0.0713061
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#compute the jackknife replicates, leave{-}one{-}out estimates}
+\NormalTok{theta.jack }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n)}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
+\NormalTok{  theta.jack[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y[}\SpecialCharTok{{-}}\NormalTok{i]) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z[}\SpecialCharTok{{-}}\NormalTok{i])}
+\NormalTok{\}}
+\NormalTok{(bias }\OtherTok{\textless{}{-}}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ (}\FunctionTok{mean}\NormalTok{(theta.jack) }\SpecialCharTok{{-}}\NormalTok{ theta.hat) )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.008002488
+\end{verbatim}
+
+\section{Others}\label{others}
+
+The distribution of \(X^\ast\) is the empirical distribution \(F_n\) of
+the sample \(x\). The empirical distribution places mass \(1/n\) at each
+observed data point. The bootstrap uses the empirical distribution as an
+estimate of the true but unknown distribution \(F\).
 
 The bootstrap is a resampling method that allows estimation of the
 \emph{sampling distribution} of almost any statistic using random
@@ -4674,8 +5960,6 @@ sampling methods.
   Nonparametric bootstrap: In nonparametric bootstrap, the distribution
   is not specified.
 \end{itemize}
-
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Simple example of Bootstrap}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4704,7 +5988,7 @@ sampling methods.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{05-resample_files/figure-pdf/bootstrap-simple-example-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{06-resample_files/figure-pdf/bootstrap-simple-example-1.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -4741,9 +6025,14 @@ Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
 i Please use `after_stat(density)` instead.
 \end{verbatim}
 
-\pandocbounded{\includegraphics[keepaspectratio]{05-resample_files/figure-pdf/bootstrap-simple-example-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{06-resample_files/figure-pdf/bootstrap-simple-example-2.pdf}}
 
-\end{tcolorbox}
+The bootstrap is a general tool for assessing statistical accuracy.
+First we describe the bootstrap in general, and then show how it can be
+used to estimate extra-sample prediction error. As with
+cross-validation, the boot- strap seeks to estimate the conditional
+error ErrT , but typically estimates well only the expected prediction
+error Err.
 
 The distribution of the finite population represented by the sample can
 be regarded as a pseudo-population with similar characteristics as the
@@ -4767,128 +6056,143 @@ are sometimes called parametric bootstrap. Nonparametric bootstrap is
 the subject of this chapter. In nonparametric bootstrap, the
 distribution is not specified.
 
-To generate a bootstrap random sample by resampling x, generate n random
-integers \(\{i_1,\dots, i_n\}\) uniformly distributed on
+To generate a bootstrap random sample by resampling \(x\), generate n
+random integers \(\{i_1,\dots, i_n\}\) uniformly distributed on
 \(\{1,\dots , n\}\) and select the bootstrap sample
-\(x^∗ = (x_{i_1} ,\dots, x_{i_n} )\). Suppose θ is the parameter of
-interest (θ could be a vector), and ˆθ is an estimator of θ. Then the
-bootstrap estimate of the distribution of ˆθ is obtained as follows.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  For each bootstrap replicate, indexed \(b = 1, \dots, B\):
-
-  \begin{enumerate}
-  \def\labelenumii{(\alph{enumii})}
-  \tightlist
-  \item
-    Generate sample x∗(b) = x∗ 1, . . . , x∗ n by sampling with
-    replacement from the observed sample x1, . . . , xn.
-  \item
-    Compute the bth replicate ˆθ(b) from the bth bootstrap sample.
-  \end{enumerate}
-\item
-  The bootstrap estimate of Fˆθ (·) is the empirical distribution of the
-  repli- cates ˆθ(1), . . . , ˆθ(B).
-\end{enumerate}
-
-\section{Jackknife}\label{jackknife}
-
-The jackknife is a resampling technique used to estimate the bias and
-variance of a statistic.
-
-Jackknife is like a \textbf{leave-one-out cross-validation}. Let
-\(\mathbf{x}= (x_1,\dots,x_n)\) be an observed random sample, and denote
-the \(i\)th jackknife sample by
-\(\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\), that is, a
-subset of \(\mathbf{x}\).
-
-For the parameter of interest \(\theta\), if the statistics is
-\(T(\mathbf{x})=:\hat{\theta}\) is computed on the full
-
-\subsection{When does jackknife not
-work?}\label{when-does-jackknife-not-work}
-
-Jackknife does not work when the function \(T(\cdot)\) is \textbf{not a
-smooth} functional!
-
-\section{Jackknife}\label{jackknife-1}
-
-The jackknife is another resampling method, proposed by Quenouille
-{[}225, 224{]} for estimating bias, and by Tukey {[}289{]} for
-estimating standard error, a few decades earlier than the bootstrap.
-Efron {[}88{]} is a good introduction to the jackknife.
-
-Jackknife is a special kind of \emph{Cross-validation} where we
-\emph{leave-one-out} (LOO) the observation, and calculate the quantities
-on the remaining data. To fix the idea, let \(x=(x_1,\dots,x_n)\) be the
-observed data of samele size \(n\). The \(i\)th jackknife sample is
-defined as \(x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)\), that is,
-the sample with the \(i\)th observation removed. Let
-\(\hat{\theta}=T(x)\) be the estimator of the parameter of interest
-\(\theta\). The \(i\)th jackknife replicate is defined as
-\(\hat{\theta}_{-i}=T(x_{-i})\), that is, the estimate computed from the
-\(i\)th jackknife sample. The jackknife estimate of bias is defined as
-
-\subsection{Jackknife Estimate of
-Bias}\label{jackknife-estimate-of-bias}
-
-If ˆθ is a smooth (plug-in) statistic, then
-\(\hat{\theta}_{(\cdot)} = t\{F_{n−1}(x(i))\}\), and the jackknife
-estimate of bias is \[
-\hat{b}_{jack} = (n − 1)(\hat{\theta}_{(\cdot)} − \hat{\theta}), 
-\] where
-\(\overline{\hat{\theta}_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat{\theta}_{(i)}\)
-is the average of the estimate from LOO samples, and
-\(\hat{\theta}=\hat{\theta}(x)\) is the estimate from the original
-observed sample.
-
-Compute the jackknife estimate of bias for the patch data in the
-\texttt{bootstrap} package.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{data}\NormalTok{(patch, }\AttributeTok{package =} \StringTok{"bootstrap"}\NormalTok{)}
-\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(patch)}
-\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{y}
-\NormalTok{z }\OtherTok{\textless{}{-}}\NormalTok{ patch}\SpecialCharTok{$}\NormalTok{z}
-\NormalTok{theta.hat }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z)}
-\FunctionTok{print}\NormalTok{ (theta.hat)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] -0.0713061
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#compute the jackknife replicates, leave{-}one{-}out estimates}
-\NormalTok{theta.jack }\OtherTok{\textless{}{-}} \FunctionTok{numeric}\NormalTok{(n)}
-\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{n) \{}
-\NormalTok{  theta.jack[i] }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y[}\SpecialCharTok{{-}}\NormalTok{i]) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(z[}\SpecialCharTok{{-}}\NormalTok{i])}
-\NormalTok{\}}
-\NormalTok{bias }\OtherTok{\textless{}{-}}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*}\NormalTok{ (}\FunctionTok{mean}\NormalTok{(theta.jack) }\SpecialCharTok{{-}}\NormalTok{ theta.hat)  }
-\NormalTok{bias }\CommentTok{\#jackknife estimate of bias}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 0.008002488
-\end{verbatim}
+\(x^∗ = (x_{i_1} ,\dots, x_{i_n} )\). Suppose \(\theta\) is the
+parameter of interest (\(\theta\) could be a vector), and
+\(\hat \theta\) is an estimator of \(\theta\). Then the bootstrap
+estimate of the distribution of \(\hat \theta\) is obtained as follows.
 
 \section{Applications}\label{applications}
 
 These methods are widely used in statistical inference and have
 applications in various fields.
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\section{Side reading (Won't be on the
+exam)}\label{side-reading-wont-be-on-the-exam}
 
-Reference:
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Normal theory for SE (will not be on exam)}, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
+
+Normal Approximation for Correlation SE
+
+For a bivariate normal population, the sampling distribution of the
+sample correlation \(r\) is approximately normal with variance
+
+\[
+\operatorname{Var}(r) \approx \frac{(1 - \rho^2)^2}{n - 1}.
+\]
+
+Thus, the \textbf{standard error (SE)} under the normal approximation is
+
+\[
+\operatorname{se}_{\text{normal}}(r) = \sqrt{\frac{(1 - r^2)^2}{n - 1}}.
+\]
+
+In the Law school example
+
+Given: - \(r = 0.7763745\) - \(n = 15\)
+
+We can compute:
+
+\[
+1 - r^2 = 1 - (0.776)^2 = 1 - 0.602 = 0.398,
+\] \[
+\operatorname{Var}(r) \approx \frac{(0.398)^2}{14} = \frac{0.158}{14} = 0.0113,
+\] \[
+\operatorname{se}(r) = \sqrt{0.0113} = 0.106.
+\]
+
+This gives a rough normal-theory estimate of \textbf{0.106}.
 
 \begin{itemize}
+\tightlist
+\item
+  For Fisher z-Transformation Approximation
+\end{itemize}
+
+A more accurate approximation uses the \textbf{Fisher z-transform}:
+
+\[
+z = \frac{1}{2}\log\!\left(\frac{1 + r}{1 - r}\right),
+\]
+
+which is approximately normal with
+
+\[
+\operatorname{Var}(z) = \frac{1}{n - 3}.
+\]
+
+Applying the delta method:
+
+\[
+\operatorname{se}(r) \approx (1 - r^2)\sqrt{\frac{1}{n - 3}}.
+\]
+
+Plug in the values:
+
+\[
+\operatorname{se}(r) = (1 - 0.776^2)\sqrt{\frac{1}{12}} = 0.398 \times 0.289 = 0.115.
+\]
+
+✅ \textbf{Normal approximation (Fisher z) SE = 0.115}
+
+Alternatively, we may use the \textbf{Bootstrap Estimate} to compare
+with:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(bootstrap) }\CommentTok{\# for the law data}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# Sample data}
+\NormalTok{law }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{LSAT =} \FunctionTok{c}\NormalTok{(}\DecValTok{576}\NormalTok{, }\DecValTok{635}\NormalTok{, }\DecValTok{558}\NormalTok{, }\DecValTok{578}\NormalTok{, }\DecValTok{666}\NormalTok{, }\DecValTok{580}\NormalTok{, }\DecValTok{555}\NormalTok{, }\DecValTok{661}\NormalTok{, }\DecValTok{651}\NormalTok{, }\DecValTok{605}\NormalTok{, }\DecValTok{653}\NormalTok{, }\DecValTok{575}\NormalTok{, }\DecValTok{545}\NormalTok{, }\DecValTok{572}\NormalTok{, }\DecValTok{594}\NormalTok{),}
+  \AttributeTok{GPA  =} \FunctionTok{c}\NormalTok{(}\DecValTok{339}\NormalTok{, }\DecValTok{330}\NormalTok{, }\DecValTok{281}\NormalTok{, }\DecValTok{303}\NormalTok{, }\DecValTok{344}\NormalTok{, }\DecValTok{307}\NormalTok{, }\DecValTok{300}\NormalTok{, }\DecValTok{343}\NormalTok{, }\DecValTok{336}\NormalTok{, }\DecValTok{313}\NormalTok{, }\DecValTok{312}\NormalTok{, }\DecValTok{274}\NormalTok{, }\DecValTok{276}\NormalTok{, }\DecValTok{288}\NormalTok{, }\DecValTok{296}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{\# Sample correlation}
+\NormalTok{r }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(law}\SpecialCharTok{$}\NormalTok{LSAT, law}\SpecialCharTok{$}\NormalTok{GPA)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{nrow}\NormalTok{(law)}
+
+\CommentTok{\# Bootstrap estimate of SE}
+\NormalTok{B }\OtherTok{\textless{}{-}} \DecValTok{200}
+\NormalTok{R }\OtherTok{\textless{}{-}} \FunctionTok{replicate}\NormalTok{(B, \{}
+\NormalTok{  i }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{n, }\AttributeTok{size =}\NormalTok{ n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+  \FunctionTok{cor}\NormalTok{(law}\SpecialCharTok{$}\NormalTok{LSAT[i], law}\SpecialCharTok{$}\NormalTok{GPA[i])}
+\NormalTok{\})}
+\NormalTok{se\_boot }\OtherTok{\textless{}{-}} \FunctionTok{sd}\NormalTok{(R)}
+
+\CommentTok{\# Normal approximation}
+\NormalTok{se\_normal }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{((}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ r}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{/}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+\CommentTok{\# Fisher z{-}approximation}
+\NormalTok{se\_fisher }\OtherTok{\textless{}{-}}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ r}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Display results}
+\FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Method =} \FunctionTok{c}\NormalTok{(}\StringTok{"Bootstrap"}\NormalTok{, }\StringTok{"Normal theory"}\NormalTok{, }\StringTok{"Fisher z{-}approximation"}\NormalTok{),}
+  \AttributeTok{SE =} \FunctionTok{c}\NormalTok{(se\_boot, se\_normal, se\_fisher)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                  Method        SE
+1              Bootstrap 0.1200175
+2          Normal theory 0.1061676
+3 Fisher z-approximation 0.1146741
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Reference:}\label{reference}
+
+\begin{itemize}
+\item
+  Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008).
+  \href{https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf}{The
+  Elements of Statistical Learning}. Springer, 2nd edition.
 \item
   Chapter 8 of Rizzo, M.L. (2007). \emph{Statistical Computing with R}.
   CRC Press, Roca Baton.
@@ -4899,11 +6203,65 @@ Reference:
   of Statistics}.
 \end{itemize}
 
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{R Functions}\label{r-functions}
+
+Some useful R functions for resampling methods:
+
+\begin{itemize}
+\item
+  \texttt{sample()}: Generate random samples from a specified set of
+  data points.
+\item
+  \texttt{boot::boot()}: Perform bootstrap resampling and compute
+  statistics.
+\end{itemize}
+
+\end{tcolorbox}
+
 \bookmarksetup{startatroot}
 
-\chapter{Cross Validation}\label{cross-validation}
+\chapter{Smoothing Techniques in
+Statistics}\label{smoothing-techniques-in-statistics}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\mse}{\mathrm{MSE}}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat \theta}
+\newcommand{\b}{\mathbb b}
+
+\bookmarksetup{startatroot}
+
+\chapter{Density Estimation}\label{density-estimation}
+
+\newcommand{\E}{\mathbb E}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\var}{\mathbb{V}ar}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\cov}{\mathbb{C}ov}
+\newcommand{\mse}{\mathrm{MSE}}
+\newcommand{\corr}{\mathbb{C}orr}
+\newcommand{\unif}{\operatorname{Unif}}
+\newcommand{\geom}{\operatorname{Geom}}
+\newcommand{\bet}{\operatorname{Beta}}
+\newcommand{\bern}{\operatorname{Bern}}
+\newcommand{\iid}{\overset{iid}{\sim}}
+\newcommand{\ef}{\operatorname{Eff}}
+\newcommand{\htt}{\hat \theta}
+\newcommand{\b}{\mathbb b}
 
 \bookmarksetup{startatroot}
 
@@ -6097,21 +7455,9 @@ Package}\label{appendix-project-r-package}
 
 \section{Group}\label{group}
 
-\begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1250}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3750}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
-  >{\centering\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\begin{longtable}[]{@{}cccc@{}}
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\centering
-Group
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Member 1
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Member 2
-\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
-Topic
-\end{minipage} \\
+Group & Member 1 & Member 2 & Topic \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -6122,11 +7468,17 @@ Topic
 4 & Vu, Ha & & TBA \\
 5 & Zhang, Boshu & You, Sifan & TBA \\
 6 & Zhang, Yalin & & TBA \\
+7 & Rehman, Muhammad Aimal & Lu, Zhili & TBA \\
+8 & Creary, Maya & Alvarado, Alexus & TBA \\
+9 & Shamshad, Azka & Khadka, Sushil & TBA \\
+10 & Wu, Yunxue & & TBA \\
+11 & Jinnah, Kalen & & TBA \\
+11 & Krause, Andrew & & TBA \\
 \end{longtable}
 
 \section{Format}\label{format}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, breakable, colback=white, leftrule=.75mm, rightrule=.15mm, arc=.35mm, opacityback=0, left=2mm, toprule=.15mm, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, opacityback=0, breakable, colframe=quarto-callout-note-color-frame, toprule=.15mm, arc=.35mm, rightrule=.15mm, leftrule=.75mm, bottomrule=.15mm, left=2mm]
 \begin{minipage}[t]{5.5mm}
 \textcolor{quarto-callout-note-color}{\faInfo}
 \end{minipage}%
@@ -6261,12 +7613,46 @@ be written individually or with your groupmate if you decide to team up.
   Include installation instructions in the \texttt{README.md}.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, breakable, arc=.35mm, leftrule=.75mm, left=2mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, opacityback=0, colback=white, coltitle=black, rightrule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, toprule=.15mm, opacitybacktitle=0.6, bottomrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, title=\textcolor{quarto-callout-tip-color}{\faLightbulb}\hspace{0.5em}{Tip}, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, coltitle=black, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, opacityback=0, breakable, bottomtitle=1mm, toprule=.15mm, leftrule=.75mm, left=2mm, rightrule=.15mm, toptitle=1mm, arc=.35mm, colback=white]
 
 \textbf{Tip:} Start early --- the package structure, documentation, and
 testing usually take longer than expected!
 
 \end{tcolorbox}
+
+\section{Some useful functions}\label{some-useful-functions}
+
+\subsection{Create}\label{create}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{devtools::create()} function is used to create the basic
+  structure of an R package. It sets up the necessary directories and
+  files for package development.
+\end{itemize}
+
+\subsection{Build}\label{build}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{devtools::build()} function is used to build the R package
+  into a distributable format (e.g., a tar.gz file). This function
+  compiles the package and prepares it for installation.
+\end{itemize}
+
+\subsection{Documentation}\label{documentation}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{roxygen2::roxygenise()} function is used to generate
+  documentation for R packages. It processes specially formatted
+  comments in your R code and creates the necessary documentation files.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 \section{Good readings}\label{good-readings}
 
@@ -6282,8 +7668,6 @@ in writing a Rpackage written by \emph{Fong Chun Chan}.
   Another one by the MIT folks
   \href{https://web.mit.edu/insong/www/pdf/rpackage_instructions.pdf}{LINK}
 \end{itemize}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 Resources
 
