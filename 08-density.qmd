@@ -27,3 +27,18 @@ theme_set(
     )
 )
 ```
+
+Up to now, we have discussed various statistical methods for estimating parameters, testing hypotheses, and making predictions based on observed data. However, in many real-world applications, we often encounter situations where we need to estimate the underlying probability distribution of a dataset without assuming a specific parametric form. This is where density estimation comes into play. 
+
+
+Density estimation is a fundamental technique in statistics that allows us to estimate the probability density function (PDF). We know that, density does not always exist!
+
+--- 
+
+Reference
+
++ [Wikipedia](https://en.wikipedia.org/wiki/Density_estimation)
+
++ Silverman, B.W. (1986). [Density Estimation for Statistics and Data Analysis](https://www.amazon.com/Density-Estimation-Statistics-Data-Analysis/dp/0412246201), Springer.
+
++ University of Copenhagen, [Density Estimation](https://cswr.nrhstat.org/density)
