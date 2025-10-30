@@ -33,6 +33,8 @@ Up to now, we have discussed various statistical methods for estimating paramete
 
 Density estimation is a fundamental technique in statistics that allows us to estimate the probability density function (PDF). We know that, density does not always exist!
 
+
+
 --- 
 
 Reference

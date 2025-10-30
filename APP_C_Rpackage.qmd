@@ -6,16 +6,16 @@
 |:-----:|:-----------------------:|:----------------:|:-----:|
 |   1   | Akomanyi-Addo, Allswell |  Sarpong, Felix  |  TBA  |
 |   2   |      Zhang, Zilong      |                  |  TBA  |
-|   3   |      Stell, Tommy       |                  |  TBA  |
-|   4   |         Vu, Ha          |                  |  TBA  |
+|   3   |      Stell, Tommy       |                  |  Computational Statistical Algebraic Topology   |
+|   4   |         Vu, Ha          |                  |  Youden Index  |
 |   5   |      Zhang, Boshu       |    You, Sifan    |  TBA  |
-|   6   |      Zhang, Yalin       |                  |  TBA  |
-|   7   | Rehman, Muhammad Aimal  |    Lu, Zhili     |  TBA  |
+|   6   |      Zhang, Yalin       |                  |  MC methods on Retirement Planning  |
+|   7   | Rehman, Muhammad Aimal  |    Lu, Zhili     |  RAG and RAGAS in R  |
 |   8   |      Creary, Maya       | Alvarado, Alexus |  TBA  |
 |   9   |     Shamshad, Azka      |  Khadka, Sushil  |  TBA  |
-|  10   |       Wu, Yunxue        |                  |  TBA  |
-|  11   |       Jinnah, Kalen     |                  |  TBA  |
-|  12   |       Krause, Andrew    |                  |  TBA  |
+|  10   |       Wu, Yunxue        |                  |  MC methods on Gas Station Queues  |
+|  11   |      Jinnah, Kalen      |                  |  TBA  |
+|  12   |     Krause, Andrew      |                  |  TBA  |
 
 ## Format
 
