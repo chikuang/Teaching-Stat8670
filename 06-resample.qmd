@@ -361,16 +361,6 @@ Jackknife can be used to:
 For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full
 
 
-::: {.callout-note title="Jackknife does not always work"}
-Q: When does jackknife not work?
-
-
-Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
-
-:::
- 
-
-------------------------------------------------------------------------
 
 Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{(i)}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\htt=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
 
@@ -428,14 +418,139 @@ y <- patch$y
 z <- patch$z
 theta.hat <- mean(y) / mean(z)
 print (theta.hat)
-#compute the jackknife replicates, leave-one-out estimates
+
+#compute the jackknife replicates, LOO estimates
 theta.jack <- numeric(n)
 for (i in 1:n) {
   theta.jack[i] <- mean(y[-i]) / mean(z[-i])
 }
 (bias <- (n - 1) * (mean(theta.jack) - theta.hat) )
 ```
+
 :::
+
+### Jackknife Estimate of Standard Error
+
+The jackknife estimate of standard error (se) is given by
+$$
+\boxed{\widehat{s e}_{j a c k}=\sqrt{\frac{n-1}{n} \sum_{i=1}^n\left(\hat{\theta}_{(i)}-\overline{\hat{\theta}_{(\cdot)}}\right)^2}},
+$$
+for smooth statistics $\htt$.
+
+::: {.callout-note title="Where is the $(n-1)/n$ coming from?"}
+We can first see an example in the context of the population mean. Suppose our parameter of interest is $\theta=\mu$ and $\htt=\bar{x}_n$ is its estimator. Then the variance estimator of the $\htt$ is $\sqrt{\var(X)/n}$. Hence, the factor $(n-1)/n$ makes $\widehat{s e}_{j a c k}$ an unbiased eestimator of the se of the mean.
+
+
+The other way to look at this is that, we can consider a *plug-in estimate* of the se of the mean. For a continuous rv $X~F_X$, suppose we have the random samples from $F_X$ and obtain $\bx=(x_1,\dots,x_n)$. The plug-in estimate of
+the variance of a them is the variance of $Y$ , where $Y$ is uniformly distributed on the sample $x_1,\dots,x_n$. That is, 
+
+$$
+\begin{aligned}
+\widehat{\var}(Y) & =\frac{1}{n} \E[Y-\E[Y]]^2=\frac{1}{n} \E[Y-\bar{X}]^2 \\
+& =\frac{1}{n} \sum_{i=1}^n\left(X_i-\bar{X}\right)^2 \cdot \frac{1}{n} \\
+& =\frac{n-1}{n^2} S_X^2=\frac{n-1}{n}[\widehat{\operatorname{se}}(\bar{X})]^2 .
+\end{aligned}
+$$
+
+Thus, for the jackknife estimator of standard error, a factor of $\{(n − 1)/n\}/2$ gives the plug-in estimate of variance. The factors $\{(n−1)/n\}/2$ and $(n−1)/n$
+are approximately equal if $n$ is large. Researchers commented that the choice of the factor $(n − 1)/n$ instead of $\{(n − 1)/n\}/2$ is somewhat arbitrary.
+
+:::
+
+
+::: {.callout-example title="Jackknife Estimate of Standard Error"}
+
+``` {r}
+(se <- sqrt((n-1) * mean((theta.jack - mean(theta.jack))^2)) |> round(4))
+```
+
+
+The jackknife estimate of standard error is `r se` From the previous result for the bias, we have the estimated coefficient of variation
+
+``` {r }
+cv <- bias/se
+tbl <- data.frame(
+  bias = bias,
+  se   = se,
+  cv   = cv
+)
+
+# Create kable table
+kable(tbl, digits = 3, caption = "Bias, Standard Error, and Coefficient of Variation") %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+:::
+
+### Jackknife does not always work
+
+::: {.callout-note title="Jackknife does not always work"}
+Q: When does jackknife not work?
+
+
+Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional! Smoothness means that small changes in the data correspond to small changes in the statistic. For instance, median is a statisitics that is NOT smooth.
+:::
+
+::: {.callout-example title="Jackknife fails for Median"}
+Example 8.8 (Failure of jackknife). In this example the jackknife estimate of standard error of the median is computed for a random sample of 10 integers from $1,\dots, 100$.
+
+``` {r}
+set.seed(777)
+n <- 10
+x <- sample(1:100, size = n)
+# jackknife estimate of se
+M <- numeric(n)
+for (i in 1:n) { # leave one out
+  y <- x[-i]
+  M[i] <- median(y)
+}
+Mbar <- mean(M)
+
+# bootstrap estimate of se
+Mb <- replicate(1000, expr = {
+  y <- sample(x, size = n, replace = TRUE)
+  median(y)
+})
+
+est_jk <- sqrt((n - 1) / n * sum((M - Mbar)^2)) # jackknife estimate
+est_bs <- sd(Mb) # bootstrap estimate
+
+
+tbl <- data.frame(
+  Method = c("Jackknife", "Bootstrap"),
+  Estimate = c(est_jk, est_bs)
+)
+
+# Display table
+kable(tbl, digits = 4, caption = "Comparison of Jackknife and Bootstrap Estimates") %>%
+  kable_styling(full_width = FALSE, position = "center")
+```
+
+Something fishy here?
+
+Clearly something is wrong here, because the bootstrap estimate and the
+jackknife estimate are far apart. The jackknife fails because the median is *not smooth*.
+:::
+
+In this case, when the statistic is not smooth, the delete-d jackknife can be applied. If $\sqrt{n}/{d}\to 0$ and $n − d\to\infty$, then the delete-d jackknife
+is consistent for the median. The computing time increases because there are a large number of jackknife replicates when $n$ and $d$ are large.
+ 
+### Other variations of the Jackknife estimations
+
+* Jackknife ++
+* Weighted Jackknife
+* Block jackknife
+ 
+
+## Bootstrap Confidence Interval
+
+In this section, we introduce a several approaches to obtaining approximate confidence intervals (CIs) for the target parameter in a bootstrap. The methods include 
+
+1) standard normal bootstrap CI, 
+2) basic bootstrap CI
+3) bootstrap percentile CI 
+4) bootstrap t confidence interval
+
+ 
 
 ## Others
 
