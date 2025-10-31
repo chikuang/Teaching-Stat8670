@@ -129,7 +129,7 @@ To generate a bootstrap random sample by resampling $x$, generate $n$ random int
 
 ------------------------------------------------------------------------
 
-Let $\theta$ be the parameter of interest (could be a vector), and $\htt$ be its estimator. Then the bootstrap estimate of the distribution of $\htt$ is obtained as follows.
+Let $\theta$ be the parameter of interest (could be a vector), and $\hat \theta$ be its estimator. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
 
 ::: {.callout-algorithm title = "Procedure of Bootstrap"}
 
@@ -156,18 +156,18 @@ Note that if $F_n$ is not close to $F_X$ then the distribution of the replicates
 
 ### Bootstrap Estimation of Standard Error
 
-Recall that, in normal approximate, the $(100-\alpha)$% confidence interval (for $\mu$) is given as $$
+Recall that, in normal approximate, the $100(1-\alpha)$% confidence interval (for $\mu$) is given as $$
   \bar{x}_n \pm z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}}.
 $$ In the above formula, we refer
 
 -   $\sigma/\sqrt{n}$: as the **standard error** (se).
--   $z_{1-\alpha/2}  \sigma/\sqrt{n}$: as the **margin of error**.
+-   $z_{1-\alpha/2}\cdot \sigma/\sqrt{n}$: as the **margin of error**.
 
 ::: {.callout-definition title="Standard Error"}
 The standard error (SE) of a statistic is the standard deviation of its sampling distribution. The se is often used in calculations of confidence intervals.
 :::
 
-To estimate the se of an estimator $\hat \theta$, we can use the bootstrap method. Let $\hat \theta^{(1)},\dots,\hat \theta^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\hat \theta$ is given by the sample standard deviation of the replicates:
+To estimate the $se$ of an estimator $\htt$, we can use the bootstrap method. Let $\hat \theta^{(1)},\dots,\hat \theta^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\htt$ is given by the sample standard deviation of the replicates:
 
 $$
 \widehat{s e}\left(\hat{\theta}^*\right)=\sqrt{\frac{1}{B-1} \sum_{b=1}^B\left(\hat{\theta}^{(b)}-\overline{\hat{\theta}^*}\right)^2},
@@ -180,7 +180,7 @@ The number of replicates needed for good estimates of standard error is not larg
 :::
 
 ::: {.callout-example title="Bootstrap Estimate of Standard Error"}
-Example 8.2 (Bootstrap estimate of standard error). The law school data set law in the bootstrap \[286\] package is from Efron and Tibshirani \[91\]. The data frame contains LSAT (average score on law school admission test score) and GPA (average undergraduate grade point average) for 15 law schools.
+The law school data set law in the *bootstrap* package. The data frame contains LSAT (average score on law school admission test score) and GPA (average undergraduate grade point average) for 15 law schools.
 
 | Observation | LSAT | GPA |
 |-------------|------|-----|
@@ -206,7 +206,7 @@ The bootstrap procedure is
 
 1.  For each bootstrap replicate, indexed $b = 1,\dots , B$
     (a) Generate sample $(\text{LSAT}^{\ast (b)}_i, \text{GPA}^{\ast (b)}_i), i = 1,\dots , n$ by sampling with replacement from the observed sample.
-    (b) Compute the $b$th replicate of the correlation $\hat \theta^{(b)} = \cor(\text{LSAT}^{\ast (b)}, \text{GPA}^{\ast (b)})$ from the $b$th bootstrap sample.
+    (b) Compute the $b$th replicate of the correlation $\hat \theta^{(b)} = \mathbb{C}orr(\text{LSAT}^{\ast (b)}, \text{GPA}^{\ast (b)})$ from the $b$th bootstrap sample.
 2.  The bootstrap estimate of the standard error of $\hat \theta$ is the sample standard deviation of the replicates $\hat \theta^{(1)},\dots ,\hat \theta^{(B)}$, $\{R^{(i)}\}_{i=1}^B$
 
 ```{r}
@@ -232,11 +232,10 @@ for (b in 1:B) {
 }
 #output
 (se.R <- sd(R))
-# [1] 0.1358393
 hist(R, prob = TRUE)
 ```
 
-The bootstrap estimate of se(R) is `r se.R`. The normal theory estimate for standard error of R is 0.115.
+The bootstrap estimate of se(R) is `r round(se.R, 4)`. The normal theory estimate for standard error of R is 0.115.
 :::
 
 ::: {.callout-example title="Bootstrap Estimate of Standard Error using *boot* function"}
@@ -260,7 +259,7 @@ set.seed(777)
 (obj <- boot(data = bootstrap::law, statistic = my_r, R = 2000))
 ```
 
-The observed value $\hat \theta$ of the correlation statistic is labeled t1\*. The bootstrap estimate of standard error of the estimate is se(ˆθ) . = 0.13, based on 2000 replicates. To compare with formula (8.1), extract the replicates in \$t, so that the standard deviation of the replicates can be computed directly
+The observed value $\hat \theta$ of the correlation statistic is labeled t1\*. The bootstrap estimate of standard error of the estimate is $se(\hat \theta) =$ `r round(sd(obj$t),4)`, based on `r obj$R` replicates. Note that the standard deviation of the replicates can be computed directly.
 
 ```{r}
 sd(obj$t)
@@ -275,8 +274,8 @@ $$
 
 An example of a biased estimator is the MLE of variance, $\hat{\sigma}^2 = \sum (X_i-\bar{X}_n)^2/n$ of $\sigma^2 = \sum (X_i-\bar{X}_n)^2/(n-1)$, which has expected value $(1 − 1/n)\sigma^2$. Here, the bias is $−\sigma^2/n$.
 
-The bootstrap estimation of bias uses the bootstrap replicates of $\hat \theta$ to estimate the sampling distribution of $\hat \theta$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\hat \theta(x)$ and there are $B$ i.i.d. estimators $\hat \theta^{(b)}$. The sample mean of the replicates {ˆθ(b)} is unbiased for its expected value $\mathbb E[\hat \theta^\ast]$, so the bootstrap estimate of bias is\
-$$bias(\hat \theta) = \hat \theta^\ast − \hat \theta$$, where $\hat \theta^\ast  = \sum_{b=1}^B \hat \theta^{(b)}$, and $\hat \theta= \hat \theta(x)$ is the estimate computed from the original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\hat \theta$ to estimate the bias.)
+The bootstrap estimation of bias uses the bootstrap replicates of $\hat \theta$ to estimate the sampling distribution of $\hat \theta$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\hat \theta(x)$ and there are $B$ i.i.d. estimators $\hat \theta^{(b)}$. The sample mean of the replicates $\{\htt(b)\}$ is unbiased for its expected value $\mathbb E[\hat \theta^\ast]$, so the bootstrap estimate of bias is\
+$$\mathbb b(\hat \theta) = \hat \theta^\ast − \hat \theta,$$ where $\hat \theta^\ast  = \sum_{b=1}^B \hat \theta^{(b)}$, and $\hat \theta= \hat \theta(x)$ is the estimate computed from the original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\hat \theta$ to estimate the bias.)
 
 ::: {.callout-note title = "Remark for estimating bias"}
 
@@ -287,7 +286,7 @@ $$bias(\hat \theta) = \hat \theta^\ast − \hat \theta$$, where $\hat \theta^\as
 :::
 
 ::: {.callout-example title="Bootstrap Estimate of Bias"}
-In the law data of Example 8.2, compute the bootstrap estimate of bias in the sample correlation.
+In the law data example, compute the bootstrap estimate of bias in the sample correlation.
 
 ```{r}
 # sample estimate for n=15
@@ -302,16 +301,14 @@ for (b in 1:B) {
   GPA <- law$GPA[i]
   theta.b[b] <- cor(LSAT, GPA)
 }
-bias <- mean(theta.b - theta.hat)
-bias
-# [1] -0.005797944
+(bias <- mean(theta.b - theta.hat))
 ```
 
-The estimate of bias is -0.005797944. Note that this is close to the estimate of bias returned by the boot function in Example 8.3.
+The estimate of bias is `r round(bias, 4)`. Note that this is close to the estimate of bias returned by the boot function we used before.
 :::
 
 ::: {.callout-example title="One more example of Bootstrap estimation of bias"}
-The `patch` (bootstrap) data contains measurements of a certain hormone in the bloodstream of 8 subjects after wearing a medical patch. The parameter of interest is
+The `patch` data from the *bootstrap* package contains measurements of a certain hormone in the bloodstream of 8 subjects after wearing a medical patch. The parameter of interest is
 
 $$
 \theta\coloneqq\frac{\mathbb E(\text { new })-\mathbb E(\text { old })}{\mathbb E(\text { old })-\mathbb E(\text { placebo })}
@@ -346,20 +343,26 @@ result <- data.frame(
 knitr::kable(result, digits = 3, caption = "Bootstrap results for correlation estimate")
 ```
 
-If $|\mathbb b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\mathbb b$ is small relative to standard error ( $\mathbb b/se < 0.08$), so in this example it is not necessary to adjust for bias.
+If $|\b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\b$ is small relative to standard error ( $\b/se < 0.08$), so in this example it is not necessary to adjust for bias.
 :::
 
 ## Jackknife
 
 The jackknife is another resampling technique used to estimate the bias and variance of a statistic.
 
-Jackknife is like a **leave-one-out cross-validation** (LOOCV). Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$.
+Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\bx$.
 
-For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=:\hat \theta$ is computed on the full
+For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full
 
-### When does jackknife not work?
+
+::: {.callout-note title="Jackknife does not always work"}
+Q: When does jackknife not work?
+
 
 Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional!
+
+:::
+ 
 
 ------------------------------------------------------------------------
 
@@ -369,7 +372,7 @@ Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO)
 
 ### Jackknife Estimate of Bias
 
-If ˆθ is a smooth (plug-in) statistic, then $\hat \theta_{(\cdot)} = t\{F_{n−1}(x(i))\}$, and the jackknife estimate of bias is $$
+If $\htt$ is a smooth (plug-in) statistic, then $\htt_{(\cdot)} = t\{F_{n−1}(x(i))\}$, and the jackknife estimate of bias is $$
 \hat{b}_{jack} = (n − 1)(\hat \theta_{(\cdot)} − \hat \theta), 
 $$ where $\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}$ is the average of the estimate from LOO samples, and $\hat \theta=\hat \theta(x)$ is the estimate from the original observed sample.
 
