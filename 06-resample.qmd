@@ -211,10 +211,8 @@ The bootstrap procedure is
 
 ```{r}
 library(bootstrap) #for the law data
-print(cor(law$LSAT, law$GPA))
-# [1] 0.7763745
-print(cor(law82$LSAT, law82$GPA))
-# [1] 0.7599979
+print(cor(law$LSAT, law$GPA)) # 15 sampled schools in hand
+print(cor(law82$LSAT, law82$GPA)) # all total 82 schools
 ```
 
 ```{r}
@@ -352,6 +350,14 @@ The jackknife is another resampling technique used to estimate the bias and vari
 
 Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\bx$.
 
+Jackknife can be used to:
+
+* Estimating bias, 
+* Estimating standard error
+* Detecting influential observations
+* Many others
+
+
 For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full
 
 
@@ -366,15 +372,50 @@ Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functio
 
 ------------------------------------------------------------------------
 
-The jackknife is another resampling method, proposed by Quenouille \[225, 224\] for estimating bias, and by Tukey \[289\] for estimating standard error, a few decades earlier than the bootstrap. Efron \[88\] is a good introduction to the jackknife.
-
-Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{-i}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\hat \theta=T(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{-i}=T(x_{-i})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
+Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{(i)}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\htt=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
 
 ### Jackknife Estimate of Bias
 
-If $\htt$ is a smooth (plug-in) statistic, then $\htt_{(\cdot)} = t\{F_{n−1}(x(i))\}$, and the jackknife estimate of bias is $$
-\hat{b}_{jack} = (n − 1)(\hat \theta_{(\cdot)} − \hat \theta), 
-$$ where $\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}$ is the average of the estimate from LOO samples, and $\hat \theta=\hat \theta(x)$ is the estimate from the original observed sample.
+If $\htt$ is a smooth statistic, then $\htt_{(\cdot)} = t(F_{n−1}(x_{(i)}))$, and the jackknife estimate of bias is 
+$$
+\hat{\b}_{jack} = (n − 1)(\overline{\htt_{(\cdot)}} − \htt), 
+$$ where 
+$\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}$ is the average of the estimate from LOO samples, and $\hat \theta=\hat \theta(x)$ is the estimate from the original observed sample.
+
+::: {.callout-note title="Question: Where is $n-1$ coming from?"}
+For instance, in the case of $\theta$ is the population variance $\theta=\sigma^2$. Let $x_1,\dots,x_n$ be random samples from $F_X$, the variance is 
+$$
+\E[(X - \mu)^2] =: \theta,
+$$
+and the plug-in estimator is 
+$$
+\htt = \frac{1}{n} \sum_{i=1}^n (x_i - \bar x_n)^2.
+$$
+This estimator $\htt$ is biased, and the bias is 
+$$
+\b(\htt)=\E\left[\htt-\theta\right]=\frac{n-1}{n} \sigma^2-\sigma^2=-\frac{\sigma^2}{n}.
+$$
+Since Jackknife is a resampling method, we compute the jackknife replicates $\hat \theta_{(i)}$ by leaving one observation out for each of the $i$ on sample size $n-1$, so the bias in the jackknife replicates is $-\sigma^2/(n-1)$. Thus, for each $i,~i=1,\dots,n$, we have
+$$
+\begin{aligned}
+\E\left[\htt_{(i)}-\htt\right] & =\E\left[\htt_{(i)}-\theta\right]-\E[\htt-\theta] \\
+& =\b\left(\htt_{(i)}\right)-\b(\htt) \\
+& =-\frac{\sigma^2}{n-1}-\left(-\frac{\sigma^2}{n}\right) =-\frac{\sigma^2}{n(n-1)}=\frac{\b(\htt)}{n-1} .
+\end{aligned}
+$$
+Therefore, the $n-1$ factor appears in the jackknife estimate of bias formula results the unbiased estimate of the bias. 
+:::
+
+::: {.callout-note title="Leave one out (LOO) in R"}
+In R, we can use the `x[-i]` to perform LOO operation in a vector $x=(x_1,\dots,x_n)$.
+
+``` {r LOO-R}
+x <- c(2, 4, 6, 8, 10)
+x[-3] # leave the 3rd element out
+```
+
+:::
+
 
 ::: {.callout-example title="Jackknife Estimate of Bias"}
 Compute the jackknife estimate of bias for the patch data in the `bootstrap` package.
