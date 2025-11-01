@@ -550,7 +550,29 @@ In this section, we introduce a several approaches to obtaining approximate conf
 3) bootstrap percentile CI 
 4) bootstrap t confidence interval
 
- 
+### Standard Normal Bootstrap CI
+
+he standard normal bootstrap confidence interval is the simplest approach, but not necessarily the best. Suppose that $\htt$ is an estimator of parameter θ, and assume the standard error of the estimator is $se(\htt)$. If $\htt$ is a sample mean and the sample size is large, then the CLT implies that
+$$
+\frac{\hat{\theta}-\E\htt}{s e(\hat{\theta})} \approx N(0,1).
+$$
+Hence, if $\htt$ is unbiased of $\theta$, then an approximate $100(1-\alpha)$% CI for $\theta$ is given by
+$$
+\htt \pm z_{1-\alpha / 2} s e(\htt),
+$$
+Advantage: 
+
+* easy to compute
+
+Disadvantage: requires several assumptions. 
+
+1. $\htt\sim N$ or $\htt$ is a sample mean and $n$ is large. 
+2. $\E\htt=\theta$.
+
+
+Bias can be estimated and used to center the Z statistic, but the estimator is a rv, so the transformed variable is not normal.  Here we have treated $se(\htt)$ as a *known parameter*, but in the bootstrap $se(\htt)$ is estimated
+(the sample standard deviation of the replicates).
+
 
 ## Others
 
