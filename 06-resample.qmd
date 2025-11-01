@@ -554,7 +554,7 @@ In this section, we introduce a several approaches to obtaining approximate conf
 
 he standard normal bootstrap confidence interval is the simplest approach, but not necessarily the best. Suppose that $\htt$ is an estimator of parameter θ, and assume the standard error of the estimator is $se(\htt)$. If $\htt$ is a sample mean and the sample size is large, then the CLT implies that
 $$
-\frac{\hat{\theta}-\E\htt}{s e(\hat{\theta})} \approx N(0,1).
+\frac{\hat{\theta}-\E[\htt]}{s e(\hat{\theta})} \approx N(0,1)=Z.
 $$
 Hence, if $\htt$ is unbiased of $\theta$, then an approximate $100(1-\alpha)$% CI for $\theta$ is given by
 $$
@@ -567,76 +567,344 @@ Advantage:
 Disadvantage: requires several assumptions. 
 
 1. $\htt\sim N$ or $\htt$ is a sample mean and $n$ is large. 
-2. $\E\htt=\theta$.
+2. $\E[\htt]=\theta$.
 
 
 Bias can be estimated and used to center the Z statistic, but the estimator is a rv, so the transformed variable is not normal.  Here we have treated $se(\htt)$ as a *known parameter*, but in the bootstrap $se(\htt)$ is estimated
 (the sample standard deviation of the replicates).
 
+### Basic Bootstrap CI
 
-## Others
+The basic bootstrap CI interval transforms the distribution of the replicates by **subtracting the observed statistic**. The quantiles of the transformed sample $\htt^\ast-\htt$ are used to determine the confidence limits.
 
-The distribution of $X^\ast$ is the empirical distribution $F_n$ of the sample $x$. The empirical distribution places mass $1/n$ at each observed data point. The bootstrap uses the empirical distribution as an estimate of the true but unknown distribution $F$.
+The $100(1 − \alpha)$% confidence limits for the basic bootstrap confidence interval are
+$$
+\boxed{
+(2\htt - \htt^
+\ast_{1-\alpha/2},\quad 2\htt - \htt^
+\ast_{\alpha/2})}, 
+$$
+whee re $\htt^\ast_q$ is the $q$th quantile of the bootstrap replicates $\htt^{(1)},\dots ,\htt^{(B)}$.
 
-The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods.
+::: {.callout-note title="Derivation of the Basic Bootstrap CI"}
+Let $\bx = (x_1,\dots,x_n)$ be the observed sample, and a statistics $\htt = T_n(\bx)$ be the estimator of the parameter of interest $\theta$ of the sampling distribution. Assume that we have $B$ replicates $\htt^\ast$ from bootstrap.
 
--   Parametric bootstrap
-
--   Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified.
-
-::: {.callout-example title="Simple example of Bootstrap"}
-```{r bootstrap-simple-example}
-set.seed(333)
-n <- 1E4
-B <- 1E4
-x <- rnorm(n, mean = 5, sd = 2) #original sample
-
-
-boot_means <- pbapply::pbsapply(1:B, function(i){
-  indices <- sample(1:n, size = n, replace = TRUE) #resample
-  boot.sample <- x[indices]
-  mean(boot.sample)
-}) 
-mean(boot_means)
-hist(boot_means, breaks = 50, main = "Bootstrap distribution of the mean", xlab = "Mean")
-
-
-# Compute statistics
-true_mean <- 5
-boot_mean <- mean(boot_means)
-df <- tibble(x = boot_means)
-# Plot
-ggplot(df, aes(x = x)) +
-  geom_histogram(aes(y = ..density..), bins = 50, 
-                 fill = "lightgreen", color = "black", alpha = 0.7) +
-  geom_density(color = "darkgreen", size = 1) +
-  geom_vline(xintercept = true_mean, color = "red", linetype = "dashed", size = 1.1) +
-  geom_vline(xintercept = boot_mean, color = "blue", linetype = "solid", size = 1.1) +
-  labs(
-    title = "Bootstrap Distribution of the Sample Mean",
-    x = "Bootstrap Mean",
-    y = "Density"
-  ) +
-  annotate("text", x = true_mean, y = 0.3, label = "True mean = 5", color = "red", hjust = -0.1) +
-  annotate("text", x = boot_mean, y = 0.25, label = sprintf("Bootstrap mean = %.2f", boot_mean),
-           color = "blue", hjust = -0.1) +
-  theme_minimal(base_size = 14)
-```
+To obtain a **symmetric** $100(1-\alpha)$% CI for $\theta$, say $(L,U)$, we know that we need 
+$$
+P(U \le \theta)= P(\theta \le L)=\alpha/2.
+$$
+ Then, we have 
+ $$
+\alpha/2 = P(L \ge \theta) = P(L-\htt \ge \theta - \htt) = P(\htt - \theta \le \htt - L).
+ $$
+ 
+Now, we have to solve it, we need $L-\htt$ be the $1-\alpha/2$'s quantile of the distribution of $\htt - \theta$. However, the distribution of $\htt - \theta$ is *unknown*. In bootstrap, we approximate the distribution of $\htt - \theta$ by the distribution of $\htt^\ast - \htt$. Thus, we set $\htt - L$ to be the $1-\alpha/2$'s quantile of the distribution of $\htt^\ast - \htt$, denoted as $\htt^\ast_{1-\alpha/2}$, that is, $\htt^\ast_{1-\alpha/2}-\htt$. Then, we set $\htt-L$ to be $\htt^\ast_{1-\alpha/2}-\htt$.
+ 
+Similarly, for the upper limit $U$, we have 
+ $$
+\alpha/2 = P(\theta \ge U) = P(\theta - \htt \ge U - \htt) = P(\htt - \theta \le \htt - U),
+ $$
+ which leads to $\htt-U = \htt_{\alpha/2}^\ast - \htt$.
+ We *move $\htt$ to other side for both $L$ and $U$. As a result, we obtain
+$$
+(L,~U) = (2\htt - \htt^\ast_{1-\alpha/2},~2\htt - \htt^\ast_{\alpha/2}),
+$$
+which is the result of a basic bootstrap CI we state previously.
 :::
 
-The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates well only the expected prediction error Err.
 
-The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true population. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Properties of an estimator such as *bias* or *standard error* can be estimated by resampling.
+### Bootstrap Percentile CI
 
-Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample.
+This method use directly from the empirical distribution.
 
-The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified.
 
-To generate a bootstrap random sample by resampling $x$, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose $\theta$ is the parameter of interest ($\theta$ could be a vector), and $\hat \theta$ is an estimator of $\theta$. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows.
+A bootstrap percentile interval uses the empirical distribution of the bootstrap replicates as the reference distribution. The quantiles of the empirical
+distribution are estimators of the quantiles of the sampling distribution of $\htt$, so that these (random) quantiles may match the true distribution better when
+the distribution of $\htt$ is **not normal**. Suppose that $\{\htt^{(b)}\}_{b=1}^B$ are the bootstrap replicates of the statistic $\htt$. From the ecdf of the replicates, compute the $\alpha/2$ quantile $\htt_{\alpha/2}$, and the $1 − \alpha/2$ quantile $\htt_{1-\alpha/2}$.
 
-## Applications
+Researchers showed that this method some
+theoretical advantages over the standard normal interval and somewhat better
+coverage performance in practice.
 
-These methods are widely used in statistical inference and have applications in various fields.
+::: {.callout-note title="R command"}
+The `boot::boot.ci(.)` computes 5 types of bootstrap CI: 
+
+1. basic
+2. normal
+3. percentile 
+4. studentized
+5. BCa (bias-corrected and accelerated), which is an improved percentile intervals that aim to have better theoretical properties and better performance in practice.
+:::
+
+::: {.callout-example title="Bootstrap CIs on the patch ratio statistics"}
+
+``` {r bs CI-patch}
+library(boot)
+set.seed(8670)
+data(patch, package = "bootstrap")
+# function to compute the statistic
+theta.boot <- function(dat, ind) {
+  
+  y <- dat[ind, 1]
+  z <- dat[ind, 2]
+  mean(y) / mean(z)
+}
+
+
+
+
+y <- patch$y
+z <- patch$z
+dat <- cbind(y, z)
+boot.obj <- boot(dat, statistic = theta.boot, R = 2000)
+print(boot.obj)
+# 
+print(boot.ci(boot.obj,
+              type = c("basic", "norm", "perc")))
+```
+
+  Recall that the old and new patches are bioequivalent if |θ| ≤ 0.20. Hence, the
+interval estimates do not support bioequivalence of the old and new patches.
+Next we compute the bootstrap confidence intervals according to their defini-
+tions. Compare the following results with the boot.ci output.
+
+``` {r}
+library(knitr)
+
+alpha <- 0.05
+
+# normal
+CI_normal <- boot.obj$t0 + qnorm(c(alpha/2, 1 - alpha/2)) * sd(boot.obj$t)
+
+# basic
+CI_basic <- 2 * boot.obj$t0 - quantile(boot.obj$t, probs = c(1 - alpha/2, alpha/2), type = 1)
+
+# percentile
+CI_percentile <- quantile(boot.obj$t, probs = c(alpha/2, 1 - alpha/2), type = 6)
+
+# combine into data frame
+CI_table <- data.frame(
+  Method = c("Normal", "Basic", "Percentile"),
+  Lower = c(CI_normal[1], CI_basic[1], CI_percentile[1]),
+  Upper = c(CI_normal[2], CI_basic[2], CI_percentile[2])
+)
+
+# display as kable
+kable(CI_table, digits = 4, caption = "Bootstrap Confidence Intervals")
+```
+
+:::
+
+::: {.callout-note title = "Remark"}
+The normal interval computed by boot.ci corrects for bias. Notice
+that the boot.ci normal interval differs from our result by the bias
+estimate shown in the output from boot. This is confirmed by read-
+ing the source code for the function. To view the source code for
+this calculation, when the boot package is loaded, enter the command
+getAnywhere(norm.ci) at the console. Also see norm.inter and [68]
+for details of calculations of quantiles.
+:::
+
+::: {.callout-example title="Bootstrap CIs for correlation coefficients"}
+
+
+Example 8.10 (Bootstrap confidence intervals for the correlation statis-
+tic). Compute 95% bootstrap confidence interval estimates for the correlation
+statistic in the law data of Example 8.2.
+``` {r}
+library(boot)
+data(law, package = "bootstrap")
+boot.obj <- boot(law,
+  R = 2000,
+  statistic = function(x, i) {
+    cor(x[i, 1], x[i, 2])
+  }
+)
+print(boot.ci(boot.obj, 
+              type = c("basic", "norm", "perc")))
+```
+
+All three intervals cover the correlation $\rho=0.76$ of the universe of all law schools in law82. One reason for the difference in the percentile and normal
+confidence intervals could be that the sampling distribution of correlation statistic is not close to normal (see the histogram in Figure 8.1). When the sampling distribution of the statistic is approximately normal, the percentile interval will agree with the normal interval. 
+:::
+
+#### Bootstrap t CI
+
+Even if the distribution of $\htt$ is normal and $\E[\htt]=\theta$, the normal
+distribution is not exactly correct for the Z statistic, because we estimate $se(\htt)$. Nor can we claim that it is a Student t statistic, because the distribution
+of the bootstrap estimator $se(\htt)$ is unknown. **The bootstrap t interval does not use a Student t distribution as the reference distribution**. Instead, the sampling distribution of a *t type* statistic (a studentized statistic) is generated by resampling. Let $\bx = (x_1, \dots, x_n)$ be an observed sample. The $100(1 − \alpha)$% bootstrap t confidence interval is
+$$
+\boxed{
+\left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{s e}(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{s e}(\hat{\theta})\right)},
+$$
+
+where $se(\htt),~ t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ are computed as outlined below.
+
+::: {.callout-algorithm title = "Algorithm of Bootstrap t CI"}
+
+1. Compute the observed statistic $\htt$.
+2. For each replicate, indexed $b = 1, \dots,B$:
+  (a) Sample with replacement from x to get the bth sample $\bx^{(b)} = (x_1^{(b)}, \dots , x_n^{(b)})$ 
+  (b) Compute $\htt^{(b)}$ from the $b$th sample $x^{(b)}$.
+  (c) Compute or estimate the standard error $\widehat{se}(\htt^{(b)})$ (a separate estimate for each bootstrap sample; a bootstrap estimate will resample
+from the current bootstrap sample $\bx^{(b)}$, not $\bx$).
+  (d) Compute the $b$th replicate of the *t* statistic,
+  $$t(b) = \frac{\htt^{(b)}−\htt}{\widehat{se}(\htt^{(b)})}.$$ 
+3. The sample of replicates $t^{(1)},\dots t^{(B)}$ is the reference distribution for bootstrap $t$. Find the sample quantiles $t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ from the ordered sample of replicates $t^{(b)}$.
+4. Compute $\widehat{\htt}$, the sample standard deviation of the replicates $\htt^{(b)}$.
+5. Compute confidence limits
+$$
+\left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{\sec }(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{\operatorname{se}}(\hat{\theta})\right) .
+$$
+
+:::
+
+One disadvantage is the *computational time*!
+
+To the bootstrap $t$ interval, typically $\widehat{se}(\htt^{(b)})$ must be obtained by bootstrap. This is *a bootstrap nested inside a bootstrap*. If $B = 1000$, for example, the bootstrap t confidence interval method takes approximately $1000$ times longer than any of the other methods.
+
+---
+
+Here, we see how to compute the bootstrap $t$ confidence interval for a univariate or a
+multivariate sample $\bx$. The required arguments to the function are 
+
+* the sample data $\bx$,  and
+* the function statistic that computes the statistic $T_n(\bx)$. 
+
+The default values are:
+
+* significance level is $\alpha=0.05$
+* number of bootstrap replicates $B=500$,
+* number of replicates for estimating standard error is $100$.
+
+``` {r BS-t-CI-function}
+boot.t.ci <-
+  function(x, B = 500, R = 100, level = .95, statistic) {
+    # compute the bootstrap t CI
+    x <- as.matrix(x)
+    n <- nrow(x)
+    stat <- numeric(B)
+    se <- numeric(B)
+
+    boot.se <- function(x, R, f) {
+      # local function to compute the bootstrap
+      # estimate of standard error for statistic f(x)
+      x <- as.matrix(x)
+      m <- nrow(x)
+      th <- replicate(R, expr = {
+        i <- sample(1:m, size = m, replace = TRUE)
+        f(x[i, ])
+      })
+      return(sd(th))
+    }
+    for (b in 1:B) {
+      j <- sample(1:n, size = n, replace = TRUE)
+      y <- x[j, ]
+      stat[b] <- statistic(y)
+      se[b] <- boot.se(y, R = R, f = statistic)
+    }
+    stat0 <- statistic(x)
+    t.stats <- (stat - stat0) / se
+    se0 <- sd(stat)
+    alpha <- 1 - level
+    Qt <- quantile(t.stats, c(alpha / 2, 1 - alpha / 2), type = 1)
+    names(Qt) <- rev(names(Qt))
+    CI <- rev(stat0 - Qt * se0)
+  }
+```
+
+We then aim to apply this function to our problem in hand.
+
+
+::: {.callout-example title = "Bootstrap t CI for patch ratio statistics"}
+
+Now, we want to compute a 95% bootstrap $t$ confidence interval for the ratio statistic we discussed previously.
+
+
+``` {r BS-t-CI-patch}
+dat <- cbind(patch$y, patch$z)
+stat <- function(dat) {
+  mean(dat[, 1]) / mean(dat[, 2])
+}
+ci <- boot.t.ci(dat, statistic = stat, B = 2000, 
+                R = 200)
+print(ci)
+```
+
+The upper confidence limit of the bootstrap $t$ confidence interval is much
+larger than the three intervals in Example 9 and the bootstrap $t$ is the widest interval here. 
+
+:::
+
+  
+## Others
+
+There are other method to construct bootstrap CIs. Interested reader should read the reference book, Davison & Hinkley (1997).
+
+
+
+<!-- ---  -->
+<!-- The distribution of $X^\ast$ is the empirical distribution $F_n$ of the sample $x$. The empirical distribution places mass $1/n$ at each observed data point. The bootstrap uses the empirical distribution as an estimate of the true but unknown distribution $F$. -->
+
+<!-- The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods. -->
+
+<!-- -   Parametric bootstrap -->
+
+<!-- -   Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified. -->
+
+<!-- ::: {.callout-example title="Simple example of Bootstrap"} -->
+<!-- ```{r bootstrap-simple-example} -->
+<!-- set.seed(333) -->
+<!-- n <- 1E4 -->
+<!-- B <- 1E4 -->
+<!-- x <- rnorm(n, mean = 5, sd = 2) #original sample -->
+
+
+<!-- boot_means <- pbapply::pbsapply(1:B, function(i){ -->
+<!--   indices <- sample(1:n, size = n, replace = TRUE) #resample -->
+<!--   boot.sample <- x[indices] -->
+<!--   mean(boot.sample) -->
+<!-- }) -->
+<!-- mean(boot_means) -->
+<!-- hist(boot_means, breaks = 50, main = "Bootstrap distribution of the mean", xlab = "Mean") -->
+
+
+<!-- # Compute statistics -->
+<!-- true_mean <- 5 -->
+<!-- boot_mean <- mean(boot_means) -->
+<!-- df <- tibble(x = boot_means) -->
+<!-- # Plot -->
+<!-- ggplot(df, aes(x = x)) + -->
+<!--   geom_histogram(aes(y = ..density..), bins = 50, -->
+<!--                  fill = "lightgreen", color = "black", alpha = 0.7) + -->
+<!--   geom_density(color = "darkgreen", size = 1) + -->
+<!--   geom_vline(xintercept = true_mean, color = "red", linetype = "dashed", size = 1.1) + -->
+<!--   geom_vline(xintercept = boot_mean, color = "blue", linetype = "solid", size = 1.1) + -->
+<!--   labs( -->
+<!--     title = "Bootstrap Distribution of the Sample Mean", -->
+<!--     x = "Bootstrap Mean", -->
+<!--     y = "Density" -->
+<!--   ) + -->
+<!--   annotate("text", x = true_mean, y = 0.3, label = "True mean = 5", color = "red", hjust = -0.1) + -->
+<!--   annotate("text", x = boot_mean, y = 0.25, label = sprintf("Bootstrap mean = %.2f", boot_mean), -->
+<!--            color = "blue", hjust = -0.1) + -->
+<!--   theme_minimal(base_size = 14) -->
+<!-- ``` -->
+<!-- ::: -->
+
+<!-- The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates well only the expected prediction error Err. -->
+
+<!-- The distribution of the finite population represented by the sample can be regarded as a pseudo-population with similar characteristics as the true population. By repeatedly generating random samples from this pseudo-population (resampling), the sampling distribution of a statistic can be estimated. Properties of an estimator such as *bias* or *standard error* can be estimated by resampling. -->
+
+<!-- Bootstrap estimates of a sampling distribution are analogous to the idea of density estimation. We construct a histogram of a sample to obtain an estimate of the shape of the density function. The histogram is not the density, but in a nonparametric problem, can be viewed as a reasonable estimate of the density. We have methods to generate random samples from completely specified densities; bootstrap generates random samples from the empirical distribution of the sample. -->
+
+<!-- The term *bootstrap* can refer to nonparametric bootstrap or parametric bootstrap. Monte Carlo methods that involve sampling from a fully specified probability distribution, such as methods of Chapter 7 are sometimes called parametric bootstrap. Nonparametric bootstrap is the subject of this chapter. In nonparametric bootstrap, the distribution is not specified. -->
+
+<!-- To generate a bootstrap random sample by resampling $x$, generate n random integers $\{i_1,\dots, i_n\}$ uniformly distributed on $\{1,\dots , n\}$ and select the bootstrap sample $x^∗ = (x_{i_1} ,\dots, x_{i_n} )$. Suppose $\theta$ is the parameter of interest ($\theta$ could be a vector), and $\hat \theta$ is an estimator of $\theta$. Then the bootstrap estimate of the distribution of $\hat \theta$ is obtained as follows. -->
+
+<!-- ## Applications -->
+
+<!-- These methods are widely used in statistical inference and have applications in various fields. -->
 
 ## Side reading (Won't be on the exam)
 
@@ -740,6 +1008,8 @@ data.frame(
 
 ## Reference:
 
+- Davison, A.C. and Hinkley, D.V. (1997). [Bootstrap Methods and their Application](https://www.cambridge.org/core/books/bootstrap-methods-and-their-application/ED2FD043579F27952363566DC09CBD6A). Cambridge University Press.
+
 -   Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
 
 -   Chapter 8 of Rizzo, M.L. (2007). *Statistical Computing with R*. CRC Press, Roca Baton.
@@ -755,4 +1025,6 @@ Some useful R functions for resampling methods:
 -   `sample()`: Generate random samples from a specified set of data points.
 
 -   `boot::boot()`: Perform bootstrap resampling and compute statistics.
+
+- `bootstrap`: A package that is associated with the book by Efron and Tibshirani (1993). It contains variety of the functions for bootstrap and jackknife, and the dataset used in the book. 
 :::
