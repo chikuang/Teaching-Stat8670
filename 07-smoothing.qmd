@@ -27,3 +27,41 @@ theme_set(
     )
 )
 ```
+
+In statistics, we often deal with data. However, we know that there exist random noise when collecting the data. But what if the data contains too much noise, will we get any useful information?
+
+``` {r noise-smoothing}
+library(ggplot2)
+library(dplyr)
+
+set.seed(8670)
+n <- 100
+x <- seq(0, 10, length.out = n)
+y <- sin(x) + rnorm(n, sd = 0.5)
+
+# Moving average smoother
+smoothed_y <- stats::filter(y, rep(1/5, 5), sides = 2)
+
+# Data frame
+df <- data.frame(x = x, y = y, 
+                 smoothed_y = as.numeric(smoothed_y))
+
+# Plot
+ggplot(df, aes(x = x)) +
+  geom_line(aes(y = y, color = "Noisy Data"), linewidth = 0.6) +
+  geom_point(aes(y = y, color = "Noisy Data"), shape = 21, fill = "gray60", color = "gray40", size = 2) +
+  geom_line(aes(y = smoothed_y, color = "Smoothed Data"), linewidth = 1.2) +
+  scale_color_manual(values = c("Noisy Data" = "gray50",
+                                "Smoothed Data" = "red"),
+    name = NULL) +
+  labs(title = "Noisy Data with Smoothed Fit",
+        x = "X",y = "Y") +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "top"
+  )
+```
+
+Once the data is smoothed, we can see the underlying trend more clearly. Smoothing techniques are widely used in various fields such as signal processing, time series analysis, and machine learning to enhance data quality and extract meaningful patterns. In this chapter, we will see a few techniques for smoothing data.
+
+

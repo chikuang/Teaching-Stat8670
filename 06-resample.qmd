@@ -754,7 +754,7 @@ from the current bootstrap sample $\bx^{(b)}$, not $\bx$).
 4. Compute $\widehat{\htt}$, the sample standard deviation of the replicates $\htt^{(b)}$.
 5. Compute confidence limits
 $$
-\left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{\sec }(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{\operatorname{se}}(\hat{\theta})\right) .
+\left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{\operatorname{se }}(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{\operatorname{se}}(\hat{\theta})\right) .
 $$
 
 :::
