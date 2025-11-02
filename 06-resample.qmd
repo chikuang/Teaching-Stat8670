@@ -1003,8 +1003,9 @@ data.frame(
   SE = c(se_boot, se_normal, se_fisher)
 )
 ```
+:::
 
-------------------------------------------------------------------------
+---
 
 ## Reference:
 
@@ -1016,7 +1017,7 @@ data.frame(
 
 -   Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.
 
-------------------------------------------------------------------------
+---
 
 ## R Functions
 
@@ -1027,4 +1028,3 @@ Some useful R functions for resampling methods:
 -   `boot::boot()`: Perform bootstrap resampling and compute statistics.
 
 - `bootstrap`: A package that is associated with the book by Efron and Tibshirani (1993). It contains variety of the functions for bootstrap and jackknife, and the dataset used in the book. 
-:::
