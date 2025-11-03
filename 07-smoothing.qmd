@@ -18,7 +18,7 @@
 \newcommand{\b}{\mathbb b}
 
 ```{r setup, message =FALSE, warning = FALSE, include = FALSE, eval = TRUE}
-pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble, bootstrap, boot)
+pacman::p_load(MASS, microbenchmark, ggplot2, dplyr, tibble, bootstrap, boot, reshape2)
 # Set global theme
 theme_set(
   theme_minimal() +
@@ -64,4 +64,255 @@ ggplot(df, aes(x = x)) +
 
 Once the data is smoothed, we can see the underlying trend more clearly. Smoothing techniques are widely used in various fields such as signal processing, time series analysis, and machine learning to enhance data quality and extract meaningful patterns. In this chapter, we will see a few techniques for smoothing data.
 
+### Moving Average Smoothing
 
+One of the simplest smoothing techniques is the **moving average.** The moving average smooths data by averaging neighboring data points. The formula for a simple moving average with a window size of $k$ is given by:
+$$
+x_i^{\text{smoothed}} = \frac{1}{k} \sum_{j=i-\frac{k-1}{2}}^{i+\frac{k-1}{2}} x_j,
+$$
+where $x_i$ is the original data point, and $x_i^{\text{smoothed}}$ is the smoothed data point.
+
+::: {.callout-example title="Example: Moving Average Smoothing"}
+Suppose $\bx=(x_1,\dots,x_n)$ and $y_i=\sin(x_i)+N(0, 0.5^2)$ are the observed data points. We can apply a moving average smoother with a window size of $k$ to smooth the data, where $k=1,3,\dots,11$. The following R code demonstrates how to implement moving average smoothing with different window sizes and visualize the results.
+
+``` {r moving-average-smoothing}
+set.seed(8670)
+n <- 100
+x <- seq(0, 10, length.out = n)
+y <- sin(x) + rnorm(n, sd = 0.5)
+
+# Moving average smoother (use odd windows to align with your legend)
+k <- c(3, 5, 7, 9, 11)
+
+smoothed_y_list <- lapply(k, function(window_size) {
+  # centered moving average; edges will be NA (that’s expected)
+  stats::filter(y, rep(1 / window_size, window_size), sides = 2)
+})
+
+# Build data frame
+df <- data.frame(x = x, y = y)
+for (i in seq_along(k)) {
+  df[[paste0("smoothed_y_", k[i])]] <- as.numeric(smoothed_y_list[[i]])
+}
+
+# Long format for ggplot
+library(reshape2)
+library(ggplot2)
+
+df_melted <- melt(
+  df,
+  id.vars = "x",
+  variable.name = "Type",
+  value.name = "Value"
+)
+
+# Order legend nicely and provide clean labels
+wanted_levels <- c("y", paste0("smoothed_y_", k))
+labels_named <- c(
+  y = "Original Data",
+  "smoothed_y_3"  = "Window Size 3",
+  "smoothed_y_5"  = "Window Size 5",
+  "smoothed_y_7"  = "Window Size 7",
+  "smoothed_y_9"  = "Window Size 9",
+  "smoothed_y_11" = "Window Size 11"
+)
+
+colors_named <- c(
+  y = "gray50",
+  "smoothed_y_3"  = "blue",
+  "smoothed_y_5"  = "red",
+  "smoothed_y_7"  = "green",
+  "smoothed_y_9"  = "purple",
+  "smoothed_y_11" = "orange"
+)
+
+df_melted$Type <- factor(df_melted$Type, levels = wanted_levels)
+
+ggplot(df_melted, aes(x = x, y = Value, color = Type)) +
+  geom_line(na.rm = TRUE) +
+  labs(
+    title = "Moving Average Smoothing with Different Window Sizes",
+    x = "X", y = "Y"
+  ) +
+  scale_color_manual(values = colors_named, labels = labels_named, drop = FALSE) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+:::
+
+### Kernel Smoothing
+
+Another popular smoothing technique is **kernel smoothing.** Kernel smoothing uses a kernel function to weight neighboring data points when estimating the smoothed value at a given point. The formula for kernel smoothing is given by:
+$$
+x_i^{\text{smoothed}} = \frac{\sum_{j=1}^{n} K\left(\frac{x_i - x_j}{h}\right) x_j}{\sum_{j=1}^{n} K\left(\frac{x_i - x_j}{h}\right)},
+$$
+where $K$ is the kernel function, $h$ is the bandwidth parameter, and $x_i^{\text{smoothed}}$ is the smoothed data point.
+
+Some common kernel functions include the following:
+
+* Gaussian kernel: $K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}$ 
+* Epanechnikov kernel: $K(u) = \frac{3}{4}(1-u^2)$ for $|u| \leq 1$, and $0$ otherwise
+* uniform kernel: $K(u) = \frac{1}{2}$ for $|u| \leq 1$, and $0$ otherwise
+
+::: {.callout-note title="Choice of the kernel and the bandwidth"}
+The choice of the kernel function $K$ is often less critical than the choice of the bandwidth $h$. Common choices like the Gaussian kernel are widely used due to their smoothness and mathematical properties.
+
+The choice of bandwidth $h$ is crucial, as it determines the degree of smoothing. A smaller bandwidth results in less smoothing, while a larger bandwidth leads to more smoothing.
+:::
+
+::: {.callout-example title="Example: Kernel Smoothing"}
+Suppose $\bx=(x_1,\dots,x_n)$ and $y_i=\sin(x_i)+N(0, 0.5^2)$ are the observed data points. We can apply kernel smoothing with different bandwidths $h$ to smooth the data, where $h=0.1,0.3,0.5,0.7,1.0$. The following R code demonstrates how to implement kernel smoothing with different bandwidths and visualize the results.
+``` {r kernel-smoothing}
+set.seed(8670)
+n <- 100
+x <- seq(0, 10, length.out = n)
+y <- sin(x) + rnorm(n, sd = 0.5)
+# Kernel smoother function
+kernel_smooth <- function(x, y, h) {
+  n <- length(x)
+  smoothed_y <- numeric(n)
+  for (i in 1:n) {
+    weights <- dnorm((x[i] - x) / h)
+    smoothed_y[i] <- sum(weights * y) / sum(weights)
+  }
+  return(smoothed_y)
+}
+# Bandwidths
+h_values <- c(0.1, 0.3, 0.5, 0.7, 1.0)
+smoothed_y_list <- lapply(h_values, function(h) {
+  kernel_smooth(x, y, h)
+})
+# Build data frame
+df <- data.frame(x = x, y = y)
+for (i in seq_along(h_values)) {
+  df[[paste0("smoothed_y_h", h_values[i])]] <- smoothed_y_list[[i]]
+}
+# Long format for ggplot
+library(reshape2)
+library(ggplot2)
+df_melted <- melt(
+  df,
+  id.vars = "x",
+  variable.name = "Type",
+  value.name = "Value"
+)
+# Order legend nicely and provide clean labels
+wanted_levels <- c("y", paste0("smoothed_y_h", h_values))
+labels_named <- c(
+  y = "Original Data",
+  "smoothed_y_h0.1" = "Bandwidth 0.1",
+  "smoothed_y_h0.3" = "Bandwidth 0.3",
+  "smoothed_y_h0.5" = "Bandwidth 0.5",
+  "smoothed_y_h0.7" = "Bandwidth 0.7",
+  "smoothed_y_h1"   = "Bandwidth 1.0"
+)
+colors_named <- c(
+  y = "gray50",
+  "smoothed_y_h0.1" = "blue",
+  "smoothed_y_h0.3" = "red",
+  "smoothed_y_h0.5" = "green",
+  "smoothed_y_h0.7" = "purple",
+  "smoothed_y_h1"   = "orange"
+)
+df_melted$Type <- factor(df_melted$Type, levels = wanted_levels)
+ggplot(df_melted, aes(x = x, y = Value, color = Type)) +
+  geom_line() +
+  labs(
+    title = "Kernel Smoothing with Different Bandwidths",
+    x = "X", y = "Y"
+  ) +
+  scale_color_manual(values = colors_named, labels = labels_named, drop = FALSE) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+
+:::
+
+
+### Smoothing Splines
+
+Smoothing splines are a flexible method for smoothing data by fitting a piecewise polynomial function to the data points. The smoothing spline minimizes the following objective function: 
+$$
+\sum_{i=1}^{n} \{y_i - f(x_i)\}^2 + \lambda \int (f''(x))^2 dx,
+$$
+where $y_i$ are the observed data points, $f(x)$ is the smoothing spline, $\lambda$ is the smoothing parameter that controls the trade-off between fidelity to the data and smoothness of the spline, and $f''(x)$ is the second derivative of the spline function.
+
+::: {.callout-example title="Example: Smoothing Splines"}
+Suppose $\bx=(x_1,\dots,x_n)$ and $y_i=\sin(x_i)+N(0, 0.5^2)$ are the observed data points. We can apply smoothing splines with different smoothing parameters $\lambda$ to smooth the data, where $\lambda=0.01,0.1,1,10,100$. The following R code demonstrates how to implement smoothing splines with different smoothing parameters and visualize the results.
+``` {r smoothing-splines}
+set.seed(8670)
+n <- 100
+x <- seq(0, 10, length.out = n)
+y <- sin(x) + rnorm(n, sd = 0.5)
+
+# Smoothing spline using lambda (penalty on curvature)
+smoothing_spline <- function(x, y, lambda) {
+  fit <- smooth.spline(x, y, lambda = lambda)  # <-- use lambda, not spar
+  predict(fit, x)$y
+}
+
+# Smoothing parameters (penalty sizes)
+lambda_values <- c(0.01, 0.1, 1, 10, 100)
+
+smoothed_y_list <- lapply(lambda_values, function(lambda) {
+  smoothing_spline(x, y, lambda)
+})
+
+# Build data frame
+df <- data.frame(x = x, y = y)
+for (i in seq_along(lambda_values)) {
+  nm <- paste0("smoothed_y_lambda", lambda_values[i])
+  df[[nm]] <- smoothed_y_list[[i]]
+}
+
+# Long format for ggplot
+library(reshape2)
+library(ggplot2)
+
+df_melted <- melt(
+  df,
+  id.vars = "x",
+  variable.name = "Type",
+  value.name = "Value"
+)
+
+# Order legend & labels
+wanted_levels <- c("y", paste0("smoothed_y_lambda", lambda_values))
+labels_named <- c(
+  y = "Original Data",
+  "smoothed_y_lambda0.01" = "Lambda 0.01",
+  "smoothed_y_lambda0.1"  = "Lambda 0.1",
+  "smoothed_y_lambda1"    = "Lambda 1",
+  "smoothed_y_lambda10"   = "Lambda 10",
+  "smoothed_y_lambda100"  = "Lambda 100"
+)
+colors_named <- c(
+  y = "gray50",
+  "smoothed_y_lambda0.01" = "blue",
+  "smoothed_y_lambda0.1"  = "red",
+  "smoothed_y_lambda1"    = "green",
+  "smoothed_y_lambda10"   = "purple",
+  "smoothed_y_lambda100"  = "orange"
+)
+
+df_melted$Type <- factor(df_melted$Type, levels = wanted_levels)
+
+ggplot(df_melted, aes(x = x, y = Value, color = Type)) +
+  geom_line() +
+  labs(
+    title = "Smoothing Splines with Different Penalties (lambda)",
+    x = "X", y = "Y"
+  ) +
+  scale_color_manual(values = colors_named, labels = labels_named, drop = FALSE) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "top")
+```
+:::
+
+--- 
+
+## Reference:
+
++ Gu, C. (2013). [Smoothing Spline ANOVA Models](https://link.springer.com/book/10.1007/978-1-4757-3683-0). Springer, 2nd Edition.
+
++ Ramsay, J.O., Hooker, G. and Graves, S. (2009). [Functional Data Analysis with R and MATLAB](https://link.springer.com/book/10.1007/978-0-387-98185-7). Springer.
