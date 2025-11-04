@@ -348,7 +348,7 @@ If $|\b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\b$ 
 
 The jackknife is another resampling technique used to estimate the bias and variance of a statistic.
 
-Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{-i} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\bx$.
+Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{(i)} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\bx$, and the jackknife estimate is the quantity calculated on it. 
 
 Jackknife can be used to:
 
@@ -358,15 +358,13 @@ Jackknife can be used to:
 * Many others
 
 
-For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full
+For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full samples.
 
-
-
-Jackknife is a special kind of *Cross-validation* where we *leave-one-out* (LOO) the observation, and calculate the quantities on the remaining data. To fix the idea, let $x=(x_1,\dots,x_n)$ be the observed data of samele size $n$. The $i$th jackknife sample is defined as $x_{(i)}=(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, the sample with the $i$th observation removed. Let $\htt=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample. The jackknife estimate of bias is defined as
+TO fix the idea, the $i$th jackknife sample is written as $x_{(i)}$ given above, that is, the sample with the $i$th observation removed. Let $\htt=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample.
 
 ### Jackknife Estimate of Bias
 
-If $\htt$ is a smooth statistic, then $\htt_{(\cdot)} = t(F_{n−1}(x_{(i)}))$, and the jackknife estimate of bias is 
+If $\htt$ is a smooth statistic, then $\htt_{(i)} = t(F_{n−1}(x_{(i)}))$, and the jackknife estimate of bias is 
 $$
 \hat{\b}_{jack} = (n − 1)(\overline{\htt_{(\cdot)}} − \htt), 
 $$ where 
