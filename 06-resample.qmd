@@ -593,10 +593,16 @@ P(U \le \theta)= P(\theta \le L)=\alpha/2.
 $$
  Then, we have 
  $$
-\alpha/2 = P(L \ge \theta) = P(L-\htt \ge \theta - \htt) = P(\htt - \theta \le \htt - L).
+\alpha/2 = P(L \ge \theta) = P(L-\htt \ge \theta - \htt) =
+P(\htt - L \le \htt - \theta), 
  $$
- 
-Now, we have to solve it, we need $L-\htt$ be the $1-\alpha/2$'s quantile of the distribution of $\htt - \theta$. However, the distribution of $\htt - \theta$ is *unknown*. In bootstrap, we approximate the distribution of $\htt - \theta$ by the distribution of $\htt^\ast - \htt$. Thus, we set $\htt - L$ to be the $1-\alpha/2$'s quantile of the distribution of $\htt^\ast - \htt$, denoted as $\htt^\ast_{1-\alpha/2}$, that is, $\htt^\ast_{1-\alpha/2}-\htt$. Then, we set $\htt-L$ to be $\htt^\ast_{1-\alpha/2}-\htt$.
+ where the last equality is to multiply the both side by $-1$. Then
+$$
+1- \alpha/2 = 1- P(\htt - L \le \htt - \theta) = P(\htt - L \ge  \htt - \theta).
+$$
+Now, we have to solve it, we need $\htt-L$ be the $1-\alpha/2$'s quantile of the distribution of $\htt - \theta$. However, the distribution of $\htt - \theta$ is *unknown*. In bootstrap, we can approximate the quantile using the bootstrap replicates. 
+
+Therefore, we set the quantile, $\htt - L$ to be the $1-\alpha/2$'s quantile of the distribution of denoted as $\htt^\ast_{1-\alpha/2}$, that is, $\htt^\ast_{1-\alpha/2}-\htt$. This is approximately the $1-\alpha/2$ quantile of $\htt -\theta$. Then, we set $\htt-L$ to be $\htt^\ast_{1-\alpha/2}-\htt$. Hence, from here, we obtain $L = 2\htt - \htt^\ast_{1-\alpha/2}$.
  
 Similarly, for the upper limit $U$, we have 
  $$
