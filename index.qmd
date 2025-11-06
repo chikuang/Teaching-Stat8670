@@ -33,7 +33,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 -   [x] Assignment 1: Due on September 12, 2025
 -   [x] Assignment 2: Due on September 22, 2025
 -   [x] Assignment 3: Due on October 22, 2025
--   [ ] Assignment 4: Due on November 05, 2025
+-   [ ] Assignment 4: Due on November 07, 2025
 -   [ ] Assignment 5: TBA
 
 ## Midterm
@@ -43,8 +43,8 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Project
 
--   [ ] Report: Due Date TBA
--   [ ] Presentation: Date TBA
+-   [ ] Report: Due on December 8, 2025.
+-   [ ] Presentation: Dec 1 (May change), 3, and 8.
 
 ## Topics and Corresponding Lectures
 
@@ -58,8 +58,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | ✅ Complete | Random Variable Generation | 8–10 |
 | ✅ Complete | Monte Carlo and Integration | 11–15 |
 | ✅ Complete | Exam 1 | 13 |
-| ✅ Complete | Resampling method: Cross-Validation | 16-17 |
-| ✅ Complete | Resampling methods: Bootstrap and Jackknife | 18–21 |
+| ✅ Complete | Resampling: Cross-Validation | 16-17 |
+| ✅ Complete | Resampling: Bootstrap and Jackknife | 18–21 |
 | 🔜 Planned | Exam 2 | 23 |
 | ⏳ In Progress  | Smoothing | TBA |
 | 🔜 Planned | Density estimation | TBA |
