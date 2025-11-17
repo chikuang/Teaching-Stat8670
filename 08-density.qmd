@@ -38,6 +38,64 @@ There are two main types of density estimation methods:
 
 2. **Non-Parametric Density Estimation**: This approach does not assume any specific parametric form for the underlying distribution. Instead, it estimates the density directly from the data using techniques such as Kernel Density Estimation (KDE) or Histogram-based methods.
 
+## Kenel Density Estimation (KDE)
+
+Kernel Density Estimation (KDE) is a popular non-parametric method for estimating the probability density function of a random variable. The basic idea behind KDE is to place a smooth kernel function (e.g., Gaussian, Epanechnikov, etc.) at each data point and then sum these kernels to obtain a smooth estimate of the density.
+
+The KDE at a point $x$ is given by:
+$$\hat{f}(x) = \frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x - X_i}{h}\right),
+$$
+where:
+
+- $\hat{f}(x)$ is the estimated density at point $x$,
+- $n$ is the number of data points,
+- $h$ is the bandwidth (smoothing parameter),
+- $K$ is the kernel function,
+- $X_i$ are the observed data points.
+
+Properties of KDE:
+
+- The choice of kernel function $K$ affects the smoothness of the estimated density. Common choices include Gaussian, Epanechnikov, and Uniform kernels.
+
+- The bandwidth $h$ is a crucial parameter that controls the trade-off between bias and variance in the density estimate. A smaller bandwidth leads to a more detailed estimate (lower bias, higher variance), while a larger bandwidth results in a smoother estimate (higher bias, lower variance).
+
+### Example of KDE in R
+
+```{r}
+# Generate sample data
+set.seed(123)
+data <- rnorm(1000, mean = 0, sd = 1)
+# Perform Kernel Density Estimation
+kde <- density(data, bw = "nrd0")  # Using default bandwidth selection
+# Plot the results
+plot(kde, main = "Kernel Density Estimation", xlab = "Value", ylab = "Density")
+# compare with the histogram
+plot(kde, main = "Kernel Density Estimation", xlab = "Value", ylab = "Density", col = "blue", lwd = 2)
+hist(data, probability = TRUE, breaks = 30, col = rgb(0.8, 0.2, 0.2, 0.5), add = TRUE)
+legend("topright", legend = c("KDE", "Histogram"), col = c("blue", rgb(0.8, 0.2, 0.2, 0.5)), lty = c(1, NA), pch = c(NA, 15))
+```
+
+### Bandwidth Selection
+Choosing an appropriate bandwidth is critical for obtaining a good density estimate. Several methods exist for bandwidth selection, including:
+- **Rule of Thumb**: A simple method based on the standard deviation and sample size.
+- **Cross-Validation**: A data-driven approach that minimizes the integrated squared error.
+- **Plug-in Methods**: These methods estimate the optimal bandwidth based on the data's characteristics.
+
+### Example of Bandwidth Selection in R
+
+```{r}
+# Generate sample data
+set.seed(123)
+data <- rnorm(1000, mean = 0, sd = 1)
+# Perform KDE with different bandwidths
+kde_small_bw <- density(data, bw = 0.1)
+kde_large_bw <- density(data, bw = 1)
+# Plot the results
+plot(kde_small_bw, main = "KDE with Different Bandwidths", xlab = "Value", ylab = "Density", col = "red", lwd = 2)
+lines(kde_large_bw, col = "green", lwd = 2)
+legend("topright", legend = c("Small Bandwidth (0.1)", "Large Bandwidth (1)"), col = c("red", "green"), lty = 1)
+```
+
 ------------------------------------------------------------------------
 
 Reference
