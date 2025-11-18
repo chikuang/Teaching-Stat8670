@@ -61,51 +61,6 @@ Properties of KDE:
 - The bandwidth $h$ is a crucial parameter that controls the trade-off between bias and variance in the density estimate. A smaller bandwidth leads to a more detailed estimate (lower bias, higher variance), while a larger bandwidth results in a smoother estimate (higher bias, lower variance).
 
 
-## Properties of the Kernel 
-
-A kernel function $K$ must satisfy the following properties:
-
-1. **Non-negativity**: $K(u) \geq 0$ for all $u$.
-2. **Normalization**: The integral of the kernel function over its entire domain must equal 1:
-   $$
-   \int_{-\infty}^{\infty} K(u) \, du = 1.
-   $$
-3. **Symmetry**: The kernel function should be symmetric around zero:
-   $$
-   K(u) = K(-u).
-   $$
-###  Common Kernel Functions
-
-- **Gaussian Kernel**:
-  $$
-  K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}
-  $$
-``` {r}
-# Gaussian kernel function
-gaussian_kernel <- function(u) {
-  return((1 / sqrt(2 * pi)) * exp(-0.5 * u^2))
-}
-x <- seq(-4, 4, length.out = 100)
-y <- gaussian_kernel(x)
-plot(x, y, type = "l", main = "Gaussian Kernel", xlab = "u", ylab = "K(u)")
-
-## Epanechnikov kernel function
-epanechnikov_kernel <- function(u) {
-  return(ifelse(abs(u) <= 1, 0.75 * (1 -
- u^2), 0))
-}
-y_epa <- epanechnikov_kernel(x)
-plot(x, y_epa, type = "l", main = "Epanechnikov Kernel", xlab = "u", ylab = "K(u)")
-
-## uniform kernel function
-uniform_kernel <- function(u) {
-  return(ifelse(abs(u) <= 1, 0.5, 0))
-}
-y_uni <- uniform_kernel(x)
-plot(x, y_uni, type = "l", main = "Uniform Kernel", xlab = "u", ylab = "K(u)")
-```
-
-
 ### Example of using KDE in R
 
 ```{r}
@@ -121,6 +76,102 @@ plot(kde, main = "Kernel Density Estimation", xlab = "Value", ylab = "Density", 
 hist(data, probability = TRUE, breaks = 30, col = rgb(0.8, 0.2, 0.2, 0.5), add = TRUE)
 legend("topright", legend = c("KDE", "Histogram"), col = c("blue", rgb(0.8, 0.2, 0.2, 0.5)), lty = c(1, NA), pch = c(NA, 15))
 ```
+
+
+## Properties of the Kernel 
+
+A kernel function $K$ must satisfy the following properties:
+
+1. **Non-negativity**: $K(u) \geq 0$ for all $u$.
+2. **Normalization**: The integral of the kernel function over its entire domain must equal 1:
+   $$
+   \int_{-\infty}^{\infty} K(u) \, du = 1.
+   $$
+3. **Symmetry**: The kernel function should be symmetric around zero:
+   $$
+   K(u) = K(-u).
+   $$
+
+### Common Kernel Functions
+
+- **Gaussian Kernel**:
+  $$
+  K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}
+  $$
+- **Epanechnikov Kernel**:
+  $$
+  K(u) = \frac{3}{4}(1 - u^2) \text{ for } |u| \leq 1, \text{ and } 0 \text{ otherwise.}
+  $$
+- **Uniform Kernel**:
+  $$
+  K(u) = \frac{1}{2} \text{ for } |u| \leq 1, \text{ and } 0 \text{ otherwise.}  
+  $$
+  
+  
+``` {r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+# --- Kernel functions ---
+gaussian_kernel <- function(u) {
+  (1 / sqrt(2 * pi)) * exp(-0.5 * u^2)
+}
+
+epanechnikov_kernel <- function(u) {
+  ifelse(abs(u) <= 1, 0.75 * (1 - u^2), 0)
+}
+
+uniform_kernel <- function(u) {
+  ifelse(abs(u) <= 1, 0.5, 0)
+}
+
+# Grid of points for kernels
+x_kernel <- seq(-4, 4, length.out = 400)
+
+# Data frame for kernel functions
+df_kernel <- tibble(
+  x = x_kernel,
+  Gaussian = gaussian_kernel(x_kernel),
+  Epanechnikov = epanechnikov_kernel(x_kernel),
+  Uniform = uniform_kernel(x_kernel)
+) |>
+  pivot_longer(cols = -x, names_to = "Kernel", values_to = "value") |>
+  mutate(Type = "Kernel function")
+
+# --- Density estimation using different kernels ---
+
+set.seed(123)
+sample_data <- rnorm(300, mean = 0, sd = 1)  # some example data
+
+dens_gauss <- density(sample_data, kernel = "gaussian", n = 400)
+dens_epa   <- density(sample_data, kernel = "epanechnikov", n = 400)
+# 'Uniform' ≈ 'rectangular' kernel in base::density()
+dens_uni   <- density(sample_data, kernel = "rectangular", n = 400)
+
+df_dens <- bind_rows(
+  tibble(x = dens_gauss$x, value = dens_gauss$y, Kernel = "Gaussian"),
+  tibble(x = dens_epa$x,   value = dens_epa$y,   Kernel = "Epanechnikov"),
+  tibble(x = dens_uni$x,   value = dens_uni$y,   Kernel = "Uniform")
+) |>
+  mutate(Type = "Density estimate")
+
+# --- Combine and plot ---
+
+df_all <- bind_rows(df_kernel, df_dens)
+
+ggplot(df_all, aes(x = x, y = value)) +
+  geom_line(linewidth = 1) +
+  facet_grid(Type ~ Kernel, scales = "free_y") +
+  labs(
+    x = "x or u",
+    y = "",
+    title = "Kernel Functions and Corresponding Density Estimates"
+  ) +
+  theme_bw(base_size = 14)
+```
+
+
 
 ### Bandwidth Selection
 
@@ -194,11 +245,21 @@ lines(kde_gaussian_bw2, col = "green", lwd = 2)
 lines(kde_gaussian_bw3, col = "blue", lwd = 2)
 legend("topright", legend = c("Bandwidth = 0.1", "Bandwidth = 0.5", "Bandwidth = 1"), col = c("red", "green", "blue"), lty = 1)
 ```
+
+## Other ways
+
+Besides KDE, there are other methods for density estimation, including:
+
+- **Histogram-based Methods**: Dividing the data range into bins and counting the number of observations in each bin to estimate the density.
+- **Nearest Neighbor Methods**: Estimating the density based on the distance to the nearest neighbors.
+- **Spline-based Methods**: Using spline functions to create smooth density estimates.
+- **Mixture Models**: Modeling the data as a mixture of several distributions (e.g., Gaussian Mixture Models).
+
 ---
 
 Reference
 
--   [Wikipedia](https://en.wikipedia.org/wiki/Density_estimation)
+-   Wikipedia, [Density estimation](https://en.wikipedia.org/wiki/Density_estimation)
 
 -   Silverman, B.W. (1986). [Density Estimation for Statistics and Data Analysis](https://www.amazon.com/Density-Estimation-Statistics-Data-Analysis/dp/0412246201), Springer.
 
