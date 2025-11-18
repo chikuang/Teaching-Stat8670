@@ -43,7 +43,8 @@ There are two main types of density estimation methods:
 Kernel Density Estimation (KDE) is a popular non-parametric method for estimating the probability density function of a random variable. The basic idea behind KDE is to place a smooth kernel function (e.g., Gaussian, Epanechnikov, etc.) at each data point and then sum these kernels to obtain a smooth estimate of the density.
 
 The KDE at a point $x$ is given by:
-$$\hat{f}(x) = \frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x - X_i}{h}\right),
+$$
+\hat{f}(x) = \frac{1}{n h} \sum_{i=1}^{n} K\left(\frac{x - X_i}{h}\right),
 $$
 where:
 
@@ -59,7 +60,53 @@ Properties of KDE:
 
 - The bandwidth $h$ is a crucial parameter that controls the trade-off between bias and variance in the density estimate. A smaller bandwidth leads to a more detailed estimate (lower bias, higher variance), while a larger bandwidth results in a smoother estimate (higher bias, lower variance).
 
-### Example of KDE in R
+
+## Properties of the Kernel 
+
+A kernel function $K$ must satisfy the following properties:
+
+1. **Non-negativity**: $K(u) \geq 0$ for all $u$.
+2. **Normalization**: The integral of the kernel function over its entire domain must equal 1:
+   $$
+   \int_{-\infty}^{\infty} K(u) \, du = 1.
+   $$
+3. **Symmetry**: The kernel function should be symmetric around zero:
+   $$
+   K(u) = K(-u).
+   $$
+###  Common Kernel Functions
+
+- **Gaussian Kernel**:
+  $$
+  K(u) = \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}
+  $$
+``` {r}
+# Gaussian kernel function
+gaussian_kernel <- function(u) {
+  return((1 / sqrt(2 * pi)) * exp(-0.5 * u^2))
+}
+x <- seq(-4, 4, length.out = 100)
+y <- gaussian_kernel(x)
+plot(x, y, type = "l", main = "Gaussian Kernel", xlab = "u", ylab = "K(u)")
+
+## Epanechnikov kernel function
+epanechnikov_kernel <- function(u) {
+  return(ifelse(abs(u) <= 1, 0.75 * (1 -
+ u^2), 0))
+}
+y_epa <- epanechnikov_kernel(x)
+plot(x, y_epa, type = "l", main = "Epanechnikov Kernel", xlab = "u", ylab = "K(u)")
+
+## uniform kernel function
+uniform_kernel <- function(u) {
+  return(ifelse(abs(u) <= 1, 0.5, 0))
+}
+y_uni <- uniform_kernel(x)
+plot(x, y_uni, type = "l", main = "Uniform Kernel", xlab = "u", ylab = "K(u)")
+```
+
+
+### Example of using KDE in R
 
 ```{r}
 # Generate sample data
@@ -76,9 +123,13 @@ legend("topright", legend = c("KDE", "Histogram"), col = c("blue", rgb(0.8, 0.2,
 ```
 
 ### Bandwidth Selection
+
 Choosing an appropriate bandwidth is critical for obtaining a good density estimate. Several methods exist for bandwidth selection, including:
+
 - **Rule of Thumb**: A simple method based on the standard deviation and sample size.
+
 - **Cross-Validation**: A data-driven approach that minimizes the integrated squared error.
+
 - **Plug-in Methods**: These methods estimate the optimal bandwidth based on the data's characteristics.
 
 ### Example of Bandwidth Selection in R
@@ -96,7 +147,54 @@ lines(kde_large_bw, col = "green", lwd = 2)
 legend("topright", legend = c("Small Bandwidth (0.1)", "Large Bandwidth (1)"), col = c("red", "green"), lty = 1)
 ```
 
-------------------------------------------------------------------------
+Other Kernel Functions
+
+* Epanechnikov Kernel
+* Uniform Kernel
+* Triangular Kernel
+### Example of Different Kernel Functions in R
+
+```{r}
+# Generate sample data
+set.seed(123)
+data <- rnorm(1000, mean = 0, sd = 1)
+# Perform KDE with different kernel functions
+kde_gaussian <- density(data, kernel = "gaussian")
+kde_epanechnikov <- density(data, kernel = "epanechnikov")
+kde_triangular <- density(data, kernel = "triangular")
+# Plot the results
+plot(kde_gaussian, main = "KDE with Different Kernel Functions", xlab = "Value", ylab = "Density", col = "blue", lwd = 2)
+lines(kde_epanechnikov, col = "orange", lwd = 2)
+lines(kde_triangular, col = "purple", lwd = 2)
+legend("topright", legend = c("Gaussian Kernel", "Epanechnikov Kernel", "Triangular Kernel"), col = c("blue", "orange", "purple"), lty = 1)
+## choose different bandwidth
+kde_gaussian_bw <- density(data, kernel = "gaussian", bw = 0.2)
+kde_epanechnikov_bw <- density(data, kernel = "epanechnikov", bw = 0.2)
+kde_triangular_bw <- density(data, kernel = "triangular", bw = 0.2)
+# Plot the results
+plot(kde_gaussian_bw, main = "KDE with Different Kernel Functions (bw=0.2)", xlab = "Value", ylab = "Density", col = "blue", lwd = 2)
+lines(kde_epanechnikov_bw, col = "orange", lwd = 2)
+lines(kde_triangular_bw, col = "purple", lwd = 2)
+legend("topright", legend = c("Gaussian Kernel", "Epanechnikov Kernel", "Triangular Kernel"), col = c("blue", "orange", "purple"), lty = 1)
+
+## Show the difference of one kernel with three bandwidths
+kde_gaussian_bw1 <- density(data, kernel = "gaussian", bw = 0.1)
+kde_gaussian_bw2 <- density(data, kernel = "gaussian", bw = 0.5)
+kde_gaussian_bw3 <- density(data, kernel = "gaussian", bw = 1)
+# Plot the results
+plot(kde_gaussian_bw1, main = "Gaussian Kernel with Different Bandwidths", xlab = "Value", ylab = "Density", col = "red", lwd = 2)
+lines(kde_gaussian_bw2, col = "green", lwd = 2)
+lines(kde_gaussian_bw3, col = "blue", lwd = 2)
+legend("topright", legend = c("Bandwidth = 0.1", "Bandwidth = 0.5", "Bandwidth = 1"), col = c("red", "green", "blue"), lty = 1)
+
+## show the underlying data
+hist(data, probability = TRUE, breaks = 30, col = rgb(0.8, 0.2, 0.2, 0.5), main = "Histogram with KDE Overlay", xlab = "Value", ylab = "Density")
+lines(kde_gaussian_bw1, col = "red", lwd = 2)
+lines(kde_gaussian_bw2, col = "green", lwd = 2)
+lines(kde_gaussian_bw3, col = "blue", lwd = 2)
+legend("topright", legend = c("Bandwidth = 0.1", "Bandwidth = 0.5", "Bandwidth = 1"), col = c("red", "green", "blue"), lty = 1)
+```
+---
 
 Reference
 

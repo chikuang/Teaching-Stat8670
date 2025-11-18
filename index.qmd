@@ -61,8 +61,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | ✅ Complete | Resampling: Cross-Validation | 16-17 |
 | ✅ Complete | Resampling: Bootstrap and Jackknife | 18–21 |
 | ✅ Complete  | Exam 2 | 23 |
-| ⏳ In Progress | Smoothing | 24|
-| 🔜 Planned | Density estimation | 25 |
+| ✅ Complete  | Smoothing | 24|
+| ⏳ In Progress | Density estimation | 25 |
 
 ## Recommended Textbooks
 
