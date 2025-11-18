@@ -58,11 +58,12 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | ✅ Complete | Random Variable Generation | 8–10 |
 | ✅ Complete | Monte Carlo and Integration | 11–15 |
 | ✅ Complete | Exam 1 | 13 |
-| ✅ Complete | Resampling: Cross-Validation | 16-17 |
-| ✅ Complete | Resampling: Bootstrap and Jackknife | 18–21 |
+| ✅ Complete | Cross-Validation | 16-17 |
+| ✅ Complete | Bootstrap and Jackknife | 18–21 |
 | ✅ Complete  | Exam 2 | 23 |
 | ✅ Complete  | Smoothing | 24|
 | ⏳ In Progress | Density estimation | 25 |
+| 📆Planned | Presentation | 26-28 | 
 
 ## Recommended Textbooks
 

@@ -15,8 +15,6 @@ book:
     - 06-resample.qmd
     - 07-smoothing.qmd
     - 08-density.qmd
-    - other-topics.qmd
-    - 99-references.qmd
     - part: "Appendix"
       chapters:
         - App_A-intro-R.qmd

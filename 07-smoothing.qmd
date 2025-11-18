@@ -1,4 +1,4 @@
-# Smoothing Techniques in Statistics
+# Smoothing
 
 \newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb{R}}

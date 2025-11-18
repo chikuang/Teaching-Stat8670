@@ -1,4 +1,4 @@
-# Resampling, Jackknife and Bootstrap
+# Jackknife and Bootstrap
 
 \newcommand{\E}{\mathbb E}
 \newcommand{\R}{\mathbb{R}}
@@ -167,7 +167,7 @@ $$ In the above formula, we refer
 The standard error (SE) of a statistic is the standard deviation of its sampling distribution. The se is often used in calculations of confidence intervals.
 :::
 
-To estimate the $se$ of an estimator $\htt$, we can use the bootstrap method. Let $\hat \theta^{(1)},\dots,\hat \theta^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\htt$ is given by the sample standard deviation of the replicates:
+To estimate the $se$ of an estimator $\hat \theta$, we can use the bootstrap method. Let $\hat \theta^{(1)},\dots,\hat \theta^{(B)}$ be the bootstrap replicates. The bootstrap estimate of the standard error of $\hat \theta$ is given by the sample standard deviation of the replicates:
 
 $$
 \widehat{s e}\left(\hat{\theta}^*\right)=\sqrt{\frac{1}{B-1} \sum_{b=1}^B\left(\hat{\theta}^{(b)}-\overline{\hat{\theta}^*}\right)^2},
@@ -272,7 +272,7 @@ $$
 
 An example of a biased estimator is the MLE of variance, $\hat{\sigma}^2 = \sum (X_i-\bar{X}_n)^2/n$ of $\sigma^2 = \sum (X_i-\bar{X}_n)^2/(n-1)$, which has expected value $(1 − 1/n)\sigma^2$. Here, the bias is $−\sigma^2/n$.
 
-The bootstrap estimation of bias uses the bootstrap replicates of $\hat \theta$ to estimate the sampling distribution of $\hat \theta$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\hat \theta(x)$ and there are $B$ i.i.d. estimators $\hat \theta^{(b)}$. The sample mean of the replicates $\{\htt(b)\}$ is unbiased for its expected value $\mathbb E[\hat \theta^\ast]$, so the bootstrap estimate of bias is\
+The bootstrap estimation of bias uses the bootstrap replicates of $\hat \theta$ to estimate the sampling distribution of $\hat \theta$. For the finite population $x = (x_1,\dots , x_n)$, the parameter is $\hat \theta(x)$ and there are $B$ i.i.d. estimators $\hat \theta^{(b)}$. The sample mean of the replicates $\{\hat \theta(b)\}$ is unbiased for its expected value $\mathbb E[\hat \theta^\ast]$, so the bootstrap estimate of bias is\
 $$\mathbb b(\hat \theta) = \hat \theta^\ast − \hat \theta,$$ where $\hat \theta^\ast  = \sum_{b=1}^B \hat \theta^{(b)}$, and $\hat \theta= \hat \theta(x)$ is the estimate computed from the original observed sample. (In bootstrap $F_n$ is sampled in place of $F_X$ , so we replace $\theta$ with $\hat \theta$ to estimate the bias.)
 
 ::: {.callout-note title = "Remark for estimating bias"}
@@ -341,69 +341,56 @@ result <- data.frame(
 knitr::kable(result, digits = 3, caption = "Bootstrap results for correlation estimate")
 ```
 
-If $|\b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\b$ is small relative to standard error ( $\b/se < 0.08$), so in this example it is not necessary to adjust for bias.
+If $|\mathbb b|/se \le 0.25$, it is not usually necessary to adjust for bias. The $\mathbb b$ is small relative to standard error ( $\mathbb b/se < 0.08$), so in this example it is not necessary to adjust for bias.
 :::
 
 ## Jackknife
 
 The jackknife is another resampling technique used to estimate the bias and variance of a statistic.
 
-Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\bx= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\bx_{(i)} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\bx$, and the jackknife estimate is the quantity calculated on it. 
+Jackknife is similar to **leave-one-out cross-validation** (LOOCV). Let $\mathbf{x}= (x_1,\dots,x_n)$ be an observed random sample, and denote the $i$th jackknife sample by $\mathbf{x}_{(i)} = (x_1,\dots,x_{i-1},x_{i+1},\dots,x_n)$, that is, a subset of $\mathbf{x}$, and the jackknife estimate is the quantity calculated on it.
 
 Jackknife can be used to:
 
-* Estimating bias, 
-* Estimating standard error
-* Detecting influential observations
-* Many others
+-   Estimating bias,
+-   Estimating standard error
+-   Detecting influential observations
+-   Many others
 
+For the parameter of interest $\theta$, if the statistics is $T(\mathbf{x})=: \hat \theta$ is computed on the full samples.
 
-For the parameter of interest $\theta$, if the statistics is $T(\bx)=: \htt$ is computed on the full samples.
-
-TO fix the idea, the $i$th jackknife sample is written as $x_{(i)}$ given above, that is, the sample with the $i$th observation removed. Let $\htt=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample.
+TO fix the idea, the $i$th jackknife sample is written as $x_{(i)}$ given above, that is, the sample with the $i$th observation removed. Let $\hat \theta=T_n(x)$ be the estimator of the parameter of interest $\theta$. The $i$th jackknife replicate is defined as $\hat \theta_{(i)}=T(x_{(i)})$, that is, the estimate computed from the $i$th jackknife sample.
 
 ### Jackknife Estimate of Bias
 
-If $\htt$ is a smooth statistic, then $\htt_{(i)} = t(F_{n−1}(x_{(i)}))$, and the jackknife estimate of bias is 
-$$
-\hat{\b}_{jack} = (n − 1)(\overline{\htt_{(\cdot)}} − \htt), 
-$$ where 
-$\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}$ is the average of the estimate from LOO samples, and $\hat \theta=\hat \theta(x)$ is the estimate from the original observed sample.
+If $\hat \theta$ is a smooth statistic, then $\hat \theta_{(i)} = t(F_{n−1}(x_{(i)}))$, and the jackknife estimate of bias is $$
+\hat{\mathbb b}_{jack} = (n − 1)(\overline{\hat \theta_{(\cdot)}} − \hat \theta), 
+$$ where $\overline{\hat \theta_{(\cdot)}}=\frac{1}{n} \sum_{i=1}^n \hat \theta_{(i)}$ is the average of the estimate from LOO samples, and $\hat \theta=\hat \theta(x)$ is the estimate from the original observed sample.
 
 ::: {.callout-note title="Question: Where is $n-1$ coming from?"}
-For instance, in the case of $\theta$ is the population variance $\theta=\sigma^2$. Let $x_1,\dots,x_n$ be random samples from $F_X$, the variance is 
-$$
-\E[(X - \mu)^2] =: \theta,
-$$
-and the plug-in estimator is 
-$$
-\htt = \frac{1}{n} \sum_{i=1}^n (x_i - \bar x_n)^2.
-$$
-This estimator $\htt$ is biased, and the bias is 
-$$
-\b(\htt)=\E\left[\htt-\theta\right]=\frac{n-1}{n} \sigma^2-\sigma^2=-\frac{\sigma^2}{n}.
-$$
-Since Jackknife is a resampling method, we compute the jackknife replicates $\hat \theta_{(i)}$ by leaving one observation out for each of the $i$ on sample size $n-1$, so the bias in the jackknife replicates is $-\sigma^2/(n-1)$. Thus, for each $i,~i=1,\dots,n$, we have
-$$
+For instance, in the case of $\theta$ is the population variance $\theta=\sigma^2$. Let $x_1,\dots,x_n$ be random samples from $F_X$, the variance is $$
+\mathbb E[(X - \mu)^2] =: \theta,
+$$ and the plug-in estimator is $$
+\hat \theta= \frac{1}{n} \sum_{i=1}^n (x_i - \bar x_n)^2.
+$$ This estimator $\hat \theta$ is biased, and the bias is $$
+\mathbb b(\hat \theta)=\mathbb E\left[\hat \theta-\theta\right]=\frac{n-1}{n} \sigma^2-\sigma^2=-\frac{\sigma^2}{n}.
+$$ Since Jackknife is a resampling method, we compute the jackknife replicates $\hat \theta_{(i)}$ by leaving one observation out for each of the $i$ on sample size $n-1$, so the bias in the jackknife replicates is $-\sigma^2/(n-1)$. Thus, for each $i,~i=1,\dots,n$, we have $$
 \begin{aligned}
-\E\left[\htt_{(i)}-\htt\right] & =\E\left[\htt_{(i)}-\theta\right]-\E[\htt-\theta] \\
-& =\b\left(\htt_{(i)}\right)-\b(\htt) \\
-& =-\frac{\sigma^2}{n-1}-\left(-\frac{\sigma^2}{n}\right) =-\frac{\sigma^2}{n(n-1)}=\frac{\b(\htt)}{n-1} .
+\mathbb E\left[\hat \theta_{(i)}-\hat \theta\right] & =\mathbb E\left[\hat \theta_{(i)}-\theta\right]-\mathbb E[\hat \theta-\theta] \\
+& =\mathbb b\left(\hat \theta_{(i)}\right)-\mathbb b(\hat \theta) \\
+& =-\frac{\sigma^2}{n-1}-\left(-\frac{\sigma^2}{n}\right) =-\frac{\sigma^2}{n(n-1)}=\frac{\mathbb b(\hat \theta)}{n-1} .
 \end{aligned}
-$$
-Therefore, the $n-1$ factor appears in the jackknife estimate of bias formula results the unbiased estimate of the bias. 
+$$ Therefore, the $n-1$ factor appears in the jackknife estimate of bias formula results the unbiased estimate of the bias.
 :::
 
 ::: {.callout-note title="Leave one out (LOO) in R"}
 In R, we can use the `x[-i]` to perform LOO operation in a vector $x=(x_1,\dots,x_n)$.
 
-``` {r LOO-R}
+```{r LOO-R}
 x <- c(2, 4, 6, 8, 10)
 x[-3] # leave the 3rd element out
 ```
-
 :::
-
 
 ::: {.callout-example title="Jackknife Estimate of Bias"}
 Compute the jackknife estimate of bias for the patch data in the `bootstrap` package.
@@ -424,48 +411,38 @@ for (i in 1:n) {
 }
 (bias <- (n - 1) * (mean(theta.jack) - theta.hat) )
 ```
-
 :::
 
 ### Jackknife Estimate of Standard Error
 
-The jackknife estimate of standard error (se) is given by
-$$
+The jackknife estimate of standard error (se) is given by $$
 \boxed{\widehat{s e}_{j a c k}=\sqrt{\frac{n-1}{n} \sum_{i=1}^n\left(\hat{\theta}_{(i)}-\overline{\hat{\theta}_{(\cdot)}}\right)^2}},
-$$
-for smooth statistics $\htt$.
+$$ for smooth statistics $\hat \theta$.
 
 ::: {.callout-note title="Where is the $(n-1)/n$ coming from?"}
-We can first see an example in the context of the population mean. Suppose our parameter of interest is $\theta=\mu$ and $\htt=\bar{x}_n$ is its estimator. Then the variance estimator of the $\htt$ is $\sqrt{\var(X)/n}$. Hence, the factor $(n-1)/n$ makes $\widehat{s e}_{j a c k}$ an unbiased eestimator of the se of the mean.
+We can first see an example in the context of the population mean. Suppose our parameter of interest is $\theta=\mu$ and $\hat \theta=\bar{x}_n$ is its estimator. Then the variance estimator of the $\hat \theta$ is $\sqrt{\mathbb{V}ar(X)/n}$. Hence, the factor $(n-1)/n$ makes $\widehat{s e}_{j a c k}$ an unbiased eestimator of the se of the mean.
 
-
-The other way to look at this is that, we can consider a *plug-in estimate* of the se of the mean. For a continuous rv $X~F_X$, suppose we have the random samples from $F_X$ and obtain $\bx=(x_1,\dots,x_n)$. The plug-in estimate of
-the variance of a them is the variance of $Y$ , where $Y$ is uniformly distributed on the sample $x_1,\dots,x_n$. That is, 
+The other way to look at this is that, we can consider a *plug-in estimate* of the se of the mean. For a continuous rv $X~F_X$, suppose we have the random samples from $F_X$ and obtain $\mathbf{x}=(x_1,\dots,x_n)$. The plug-in estimate of the variance of a them is the variance of $Y$ , where $Y$ is uniformly distributed on the sample $x_1,\dots,x_n$. That is,
 
 $$
 \begin{aligned}
-\widehat{\var}(Y) & =\frac{1}{n} \E[Y-\E[Y]]^2=\frac{1}{n} \E[Y-\bar{X}]^2 \\
+\widehat{\mathbb{V}ar}(Y) & =\frac{1}{n} \mathbb E[Y-\mathbb E[Y]]^2=\frac{1}{n} \mathbb E[Y-\bar{X}]^2 \\
 & =\frac{1}{n} \sum_{i=1}^n\left(X_i-\bar{X}\right)^2 \cdot \frac{1}{n} \\
 & =\frac{n-1}{n^2} S_X^2=\frac{n-1}{n}[\widehat{\operatorname{se}}(\bar{X})]^2 .
 \end{aligned}
 $$
 
-Thus, for the jackknife estimator of standard error, a factor of $\{(n − 1)/n\}/2$ gives the plug-in estimate of variance. The factors $\{(n−1)/n\}/2$ and $(n−1)/n$
-are approximately equal if $n$ is large. Researchers commented that the choice of the factor $(n − 1)/n$ instead of $\{(n − 1)/n\}/2$ is somewhat arbitrary.
-
+Thus, for the jackknife estimator of standard error, a factor of $\{(n − 1)/n\}/2$ gives the plug-in estimate of variance. The factors $\{(n−1)/n\}/2$ and $(n−1)/n$ are approximately equal if $n$ is large. Researchers commented that the choice of the factor $(n − 1)/n$ instead of $\{(n − 1)/n\}/2$ is somewhat arbitrary.
 :::
 
-
 ::: {.callout-example title="Jackknife Estimate of Standard Error"}
-
-``` {r}
+```{r}
 (se <- sqrt((n-1) * mean((theta.jack - mean(theta.jack))^2)) |> round(4))
 ```
 
-
 The jackknife estimate of standard error is `r se` From the previous result for the bias, we have the estimated coefficient of variation
 
-``` {r }
+```{r }
 cv <- bias/se
 tbl <- data.frame(
   bias = bias,
@@ -484,14 +461,13 @@ kable(tbl, digits = 3, caption = "Bias, Standard Error, and Coefficient of Varia
 ::: {.callout-note title="Jackknife does not always work"}
 Q: When does jackknife not work?
 
-
 Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functional! Smoothness means that small changes in the data correspond to small changes in the statistic. For instance, median is a statisitics that is NOT smooth.
 :::
 
 ::: {.callout-example title="Jackknife fails for Median"}
 Example 8.8 (Failure of jackknife). In this example the jackknife estimate of standard error of the median is computed for a random sample of 10 integers from $1,\dots, 100$.
 
-``` {r}
+```{r}
 set.seed(777)
 n <- 10
 x <- sample(1:100, size = n)
@@ -525,124 +501,95 @@ kable(tbl, digits = 4, caption = "Comparison of Jackknife and Bootstrap Estimate
 
 Something fishy here?
 
-Clearly something is wrong here, because the bootstrap estimate and the
-jackknife estimate are far apart. The jackknife fails because the median is *not smooth*.
+Clearly something is wrong here, because the bootstrap estimate and the jackknife estimate are far apart. The jackknife fails because the median is *not smooth*.
 :::
 
-In this case, when the statistic is not smooth, the delete-d jackknife can be applied. If $\sqrt{n}/{d}\to 0$ and $n − d\to\infty$, then the delete-d jackknife
-is consistent for the median. The computing time increases because there are a large number of jackknife replicates when $n$ and $d$ are large.
- 
+In this case, when the statistic is not smooth, the delete-d jackknife can be applied. If $\sqrt{n}/{d}\to 0$ and $n − d\to\infty$, then the delete-d jackknife is consistent for the median. The computing time increases because there are a large number of jackknife replicates when $n$ and $d$ are large.
+
 ### Other variations of the Jackknife estimations
 
-* Jackknife ++
-* Weighted Jackknife
-* Block jackknife
- 
+-   Jackknife ++
+-   Weighted Jackknife
+-   Block jackknife
 
 ## Bootstrap Confidence Interval
 
-In this section, we introduce a several approaches to obtaining approximate confidence intervals (CIs) for the target parameter in a bootstrap. The methods include 
+In this section, we introduce a several approaches to obtaining approximate confidence intervals (CIs) for the target parameter in a bootstrap. The methods include
 
-1) standard normal bootstrap CI, 
-2) basic bootstrap CI
-3) bootstrap percentile CI 
-4) bootstrap t confidence interval
+1)  standard normal bootstrap CI,
+2)  basic bootstrap CI
+3)  bootstrap percentile CI
+4)  bootstrap t confidence interval
 
 ### Standard Normal Bootstrap CI
 
-he standard normal bootstrap confidence interval is the simplest approach, but not necessarily the best. Suppose that $\htt$ is an estimator of parameter θ, and assume the standard error of the estimator is $se(\htt)$. If $\htt$ is a sample mean and the sample size is large, then the CLT implies that
-$$
-\frac{\hat{\theta}-\E[\htt]}{s e(\hat{\theta})} \approx N(0,1)=Z.
-$$
-Hence, if $\htt$ is unbiased of $\theta$, then an approximate $100(1-\alpha)$% CI for $\theta$ is given by
-$$
-\htt \pm z_{1-\alpha / 2} s e(\htt),
-$$
-Advantage: 
+he standard normal bootstrap confidence interval is the simplest approach, but not necessarily the best. Suppose that $\hat \theta$ is an estimator of parameter θ, and assume the standard error of the estimator is $se(\hat \theta)$. If $\hat \theta$ is a sample mean and the sample size is large, then the CLT implies that $$
+\frac{\hat{\theta}-\mathbb E[\hat \theta]}{s e(\hat{\theta})} \approx N(0,1)=Z.
+$$ Hence, if $\hat \theta$ is unbiased of $\theta$, then an approximate $100(1-\alpha)$% CI for $\theta$ is given by $$
+\hat \theta\pm z_{1-\alpha / 2} s e(\hat \theta),
+$$ Advantage:
 
-* easy to compute
+-   easy to compute
 
-Disadvantage: requires several assumptions. 
+Disadvantage: requires several assumptions.
 
-1. $\htt\sim N$ or $\htt$ is a sample mean and $n$ is large. 
-2. $\E[\htt]=\theta$.
+1.  $\hat \theta\sim N$ or $\hat \theta$ is a sample mean and $n$ is large.
+2.  $\mathbb E[\hat \theta]=\theta$.
 
-
-Bias can be estimated and used to center the Z statistic, but the estimator is a rv, so the transformed variable is not normal.  Here we have treated $se(\htt)$ as a *known parameter*, but in the bootstrap $se(\htt)$ is estimated
-(the sample standard deviation of the replicates).
+Bias can be estimated and used to center the Z statistic, but the estimator is a rv, so the transformed variable is not normal. Here we have treated $se(\hat \theta)$ as a *known parameter*, but in the bootstrap $se(\hat \theta)$ is estimated (the sample standard deviation of the replicates).
 
 ### Basic Bootstrap CI
 
-The basic bootstrap CI interval transforms the distribution of the replicates by **subtracting the observed statistic**. The quantiles of the transformed sample $\htt^\ast-\htt$ are used to determine the confidence limits.
+The basic bootstrap CI interval transforms the distribution of the replicates by **subtracting the observed statistic**. The quantiles of the transformed sample $\hat \theta^\ast-\hat \theta$ are used to determine the confidence limits.
 
-The $100(1 − \alpha)$% confidence limits for the basic bootstrap confidence interval are
-$$
+The $100(1 − \alpha)$% confidence limits for the basic bootstrap confidence interval are $$
 \boxed{
-(2\htt - \htt^
-\ast_{1-\alpha/2},\quad 2\htt - \htt^
+(2\hat \theta- \hat \theta^
+\ast_{1-\alpha/2},\quad 2\hat \theta- \hat \theta^
 \ast_{\alpha/2})}, 
-$$
-whee re $\htt^\ast_q$ is the $q$th quantile of the bootstrap replicates $\htt^{(1)},\dots ,\htt^{(B)}$.
+$$ whee re $\hat \theta^\ast_q$ is the $q$th quantile of the bootstrap replicates $\hat \theta^{(1)},\dots ,\hat \theta^{(B)}$.
 
 ::: {.callout-note title="Derivation of the Basic Bootstrap CI"}
-Let $\bx = (x_1,\dots,x_n)$ be the observed sample, and a statistics $\htt = T_n(\bx)$ be the estimator of the parameter of interest $\theta$ of the sampling distribution. Assume that we have $B$ replicates $\htt^\ast$ from bootstrap.
+Let $\mathbf{x}= (x_1,\dots,x_n)$ be the observed sample, and a statistics $\hat \theta= T_n(\mathbf{x})$ be the estimator of the parameter of interest $\theta$ of the sampling distribution. Assume that we have $B$ replicates $\hat \theta^\ast$ from bootstrap.
 
-To obtain a **symmetric** $100(1-\alpha)$% CI for $\theta$, say $(L,U)$, we know that we need 
-$$
+To obtain a **symmetric** $100(1-\alpha)$% CI for $\theta$, say $(L,U)$, we know that we need $$
 P(U \le \theta)= P(\theta \le L)=\alpha/2.
-$$
- Then, we have 
- $$
-\alpha/2 = P(L \ge \theta) = P(L-\htt \ge \theta - \htt) =
-P(\htt - L \le \htt - \theta), 
- $$
- where the last equality is to multiply the both side by $-1$. Then
-$$
-1- \alpha/2 = 1- P(\htt - L \le \htt - \theta) = P(\htt - L \ge  \htt - \theta).
-$$
-Now, we have to solve it, we need $\htt-L$ be the $1-\alpha/2$'s quantile of the distribution of $\htt - \theta$. However, the distribution of $\htt - \theta$ is *unknown*. In bootstrap, we can approximate the quantile using the bootstrap replicates. 
+$$ Then, we have $$
+\alpha/2 = P(L \ge \theta) = P(L-\hat \theta\ge \theta - \hat \theta) =
+P(\hat \theta- L \le \hat \theta- \theta), 
+ $$ where the last equality is to multiply the both side by $-1$. Then $$
+1- \alpha/2 = 1- P(\hat \theta- L \le \hat \theta- \theta) = P(\hat \theta- L \ge  \hat \theta- \theta).
+$$ Now, we have to solve it, we need $\hat \theta-L$ be the $1-\alpha/2$'s quantile of the distribution of $\hat \theta- \theta$. However, the distribution of $\hat \theta- \theta$ is *unknown*. In bootstrap, we can approximate the quantile using the bootstrap replicates.
 
-Therefore, we set the quantile, $\htt - L$ to be the $1-\alpha/2$'s quantile of the distribution of denoted as $\htt^\ast_{1-\alpha/2}$, that is, $\htt^\ast_{1-\alpha/2}-\htt$. This is approximately the $1-\alpha/2$ quantile of $\htt -\theta$. Then, we set $\htt-L$ to be $\htt^\ast_{1-\alpha/2}-\htt$. Hence, from here, we obtain $L = 2\htt - \htt^\ast_{1-\alpha/2}$.
- 
-Similarly, for the upper limit $U$, we have 
- $$
-\alpha/2 = P(\theta \ge U) = P(\theta - \htt \ge U - \htt) = P(\htt - \theta \le \htt - U),
- $$
- which leads to $\htt-U = \htt_{\alpha/2}^\ast - \htt$.
- We *move $\htt$ to other side for both $L$ and $U$. As a result, we obtain
-$$
-(L,~U) = (2\htt - \htt^\ast_{1-\alpha/2},~2\htt - \htt^\ast_{\alpha/2}),
-$$
-which is the result of a basic bootstrap CI we state previously.
+Therefore, we set the quantile, $\hat \theta- L$ to be the $1-\alpha/2$'s quantile of the distribution of denoted as $\hat \theta^\ast_{1-\alpha/2}$, that is, $\hat \theta^\ast_{1-\alpha/2}-\hat \theta$. This is approximately the $1-\alpha/2$ quantile of $\hat \theta-\theta$. Then, we set $\hat \theta-L$ to be $\hat \theta^\ast_{1-\alpha/2}-\hat \theta$. Hence, from here, we obtain $L = 2\hat \theta- \hat \theta^\ast_{1-\alpha/2}$.
+
+Similarly, for the upper limit $U$, we have $$
+\alpha/2 = P(\theta \ge U) = P(\theta - \hat \theta\ge U - \hat \theta) = P(\hat \theta- \theta \le \hat \theta- U),
+ $$ which leads to $\hat \theta-U = \hat \theta_{\alpha/2}^\ast - \hat \theta$. We \*move $\hat \theta$ to other side for both $L$ and $U$. As a result, we obtain $$
+(L,~U) = (2\hat \theta- \hat \theta^\ast_{1-\alpha/2},~2\hat \theta- \hat \theta^\ast_{\alpha/2}),
+$$ which is the result of a basic bootstrap CI we state previously.
 :::
-
 
 ### Bootstrap Percentile CI
 
 This method use directly from the empirical distribution.
 
+A bootstrap percentile interval uses the empirical distribution of the bootstrap replicates as the reference distribution. The quantiles of the empirical distribution are estimators of the quantiles of the sampling distribution of $\hat \theta$, so that these (random) quantiles may match the true distribution better when the distribution of $\hat \theta$ is **not normal**. Suppose that $\{\hat \theta^{(b)}\}_{b=1}^B$ are the bootstrap replicates of the statistic $\hat \theta$. From the ecdf of the replicates, compute the $\alpha/2$ quantile $\hat \theta_{\alpha/2}$, and the $1 − \alpha/2$ quantile $\hat \theta_{1-\alpha/2}$.
 
-A bootstrap percentile interval uses the empirical distribution of the bootstrap replicates as the reference distribution. The quantiles of the empirical
-distribution are estimators of the quantiles of the sampling distribution of $\htt$, so that these (random) quantiles may match the true distribution better when
-the distribution of $\htt$ is **not normal**. Suppose that $\{\htt^{(b)}\}_{b=1}^B$ are the bootstrap replicates of the statistic $\htt$. From the ecdf of the replicates, compute the $\alpha/2$ quantile $\htt_{\alpha/2}$, and the $1 − \alpha/2$ quantile $\htt_{1-\alpha/2}$.
-
-Researchers showed that this method some
-theoretical advantages over the standard normal interval and somewhat better
-coverage performance in practice.
+Researchers showed that this method some theoretical advantages over the standard normal interval and somewhat better coverage performance in practice.
 
 ::: {.callout-note title="R command"}
-The `boot::boot.ci(.)` computes 5 types of bootstrap CI: 
+The `boot::boot.ci(.)` computes 5 types of bootstrap CI:
 
-1. basic
-2. normal
-3. percentile 
-4. studentized
-5. BCa (bias-corrected and accelerated), which is an improved percentile intervals that aim to have better theoretical properties and better performance in practice.
+1.  basic
+2.  normal
+3.  percentile
+4.  studentized
+5.  BCa (bias-corrected and accelerated), which is an improved percentile intervals that aim to have better theoretical properties and better performance in practice.
 :::
 
 ::: {.callout-example title="Bootstrap CIs on the patch ratio statistics"}
-
-``` {r bs CI-patch}
+```{r bs CI-patch}
 library(boot)
 set.seed(8670)
 data(patch, package = "bootstrap")
@@ -667,12 +614,9 @@ print(boot.ci(boot.obj,
               type = c("basic", "norm", "perc")))
 ```
 
-  Recall that the old and new patches are bioequivalent if |θ| ≤ 0.20. Hence, the
-interval estimates do not support bioequivalence of the old and new patches.
-Next we compute the bootstrap confidence intervals according to their defini-
-tions. Compare the following results with the boot.ci output.
+Recall that the old and new patches are bioequivalent if \|θ\| ≤ 0.20. Hence, the interval estimates do not support bioequivalence of the old and new patches. Next we compute the bootstrap confidence intervals according to their defini- tions. Compare the following results with the boot.ci output.
 
-``` {r}
+```{r}
 library(knitr)
 
 alpha <- 0.05
@@ -696,26 +640,14 @@ CI_table <- data.frame(
 # display as kable
 kable(CI_table, digits = 4, caption = "Bootstrap Confidence Intervals")
 ```
-
 :::
 
-::: {.callout-note title = "Remark"}
-The normal interval computed by boot.ci corrects for bias. Notice
-that the boot.ci normal interval differs from our result by the bias
-estimate shown in the output from boot. This is confirmed by read-
-ing the source code for the function. To view the source code for
-this calculation, when the boot package is loaded, enter the command
-getAnywhere(norm.ci) at the console. Also see norm.inter and [68]
-for details of calculations of quantiles.
-:::
+::: {.callout-note title = "Remark"} The normal interval computed by boot.ci corrects for bias. Notice that the boot.ci normal interval differs from our result by the bias estimate shown in the output from boot. This is confirmed by read- ing the source code for the function. To view the source code for this calculation, when the boot package is loaded, enter the command getAnywhere(norm.ci) at the console. Also see norm.inter and \[68\] for details of calculations of quantiles. :::
 
 ::: {.callout-example title="Bootstrap CIs for correlation coefficients"}
+Example 8.10 (Bootstrap confidence intervals for the correlation statis- tic). Compute 95% bootstrap confidence interval estimates for the correlation statistic in the law data of Example 8.2.
 
-
-Example 8.10 (Bootstrap confidence intervals for the correlation statis-
-tic). Compute 95% bootstrap confidence interval estimates for the correlation
-statistic in the law data of Example 8.2.
-``` {r}
+```{r}
 library(boot)
 data(law, package = "bootstrap")
 boot.obj <- boot(law,
@@ -728,60 +660,58 @@ print(boot.ci(boot.obj,
               type = c("basic", "norm", "perc")))
 ```
 
-All three intervals cover the correlation $\rho=0.76$ of the universe of all law schools in law82. One reason for the difference in the percentile and normal
-confidence intervals could be that the sampling distribution of correlation statistic is not close to normal (see the histogram in Figure 8.1). When the sampling distribution of the statistic is approximately normal, the percentile interval will agree with the normal interval. 
+All three intervals cover the correlation $\rho=0.76$ of the universe of all law schools in law82. One reason for the difference in the percentile and normal confidence intervals could be that the sampling distribution of correlation statistic is not close to normal (see the histogram in Figure 8.1). When the sampling distribution of the statistic is approximately normal, the percentile interval will agree with the normal interval.
 :::
 
 ### Bootstrap t CI
 
-Even if the distribution of $\htt$ is normal and $\E[\htt]=\theta$, the normal
-distribution is not exactly correct for the Z statistic, because we estimate $se(\htt)$. Nor can we claim that it is a Student t statistic, because the distribution
-of the bootstrap estimator $se(\htt)$ is unknown. **The bootstrap t interval does not use a Student t distribution as the reference distribution**. Instead, the sampling distribution of a *t type* statistic (a studentized statistic) is generated by resampling. Let $\bx = (x_1, \dots, x_n)$ be an observed sample. The $100(1 − \alpha)$% bootstrap t confidence interval is
-$$
+Even if the distribution of $\hat \theta$ is normal and $\mathbb E[\hat \theta]=\theta$, the normal distribution is not exactly correct for the Z statistic, because we estimate $se(\hat \theta)$. Nor can we claim that it is a Student t statistic, because the distribution of the bootstrap estimator $se(\hat \theta)$ is unknown. **The bootstrap t interval does not use a Student t distribution as the reference distribution**. Instead, the sampling distribution of a *t type* statistic (a studentized statistic) is generated by resampling. Let $\mathbf{x}= (x_1, \dots, x_n)$ be an observed sample. The $100(1 − \alpha)$% bootstrap t confidence interval is $$
 \boxed{
 \left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{s e}(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{s e}(\hat{\theta})\right)},
 $$
 
-where $se(\htt),~ t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ are computed as outlined below.
+where $se(\hat \theta),~ t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ are computed as outlined below.
 
 ::: {.callout-algorithm title = "Algorithm of Bootstrap t CI"}
 
-1. Compute the observed statistic $\htt$.
-2. For each replicate, indexed $b = 1, \dots,B$:
-  (a) Sample with replacement from x to get the bth sample $\bx^{(b)} = (x_1^{(b)}, \dots , x_n^{(b)})$ 
-  (b) Compute $\htt^{(b)}$ from the $b$th sample $x^{(b)}$.
-  (c) Compute or estimate the standard error $\widehat{se}(\htt^{(b)})$ (a separate estimate for each bootstrap sample; a bootstrap estimate will resample
-from the current bootstrap sample $\bx^{(b)}$, not $\bx$).
-  (d) Compute the $b$th replicate of the *t* statistic,
-  $$t(b) = \frac{\htt^{(b)}−\htt}{\widehat{se}(\htt^{(b)})}.$$ 
-3. The sample of replicates $t^{(1)},\dots t^{(B)}$ is the reference distribution for bootstrap $t$. Find the sample quantiles $t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ from the ordered sample of replicates $t^{(b)}$.
-4. Compute $\widehat{\htt}$, the sample standard deviation of the replicates $\htt^{(b)}$.
-5. Compute confidence limits
-$$
-\left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{\operatorname{se }}(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{\operatorname{se}}(\hat{\theta})\right) .
-$$
+1.  Compute the observed statistic $\hat \theta$.
+2.  For each replicate, indexed $b = 1, \dots,B$:
+
+<!-- -->
+
+(a) Sample with replacement from x to get the bth sample $\mathbf{x}^{(b)} = (x_1^{(b)}, \dots , x_n^{(b)})$
+(b) Compute $\hat \theta^{(b)}$ from the $b$th sample $x^{(b)}$.
+(c) Compute or estimate the standard error $\widehat{se}(\hat \theta^{(b)})$ (a separate estimate for each bootstrap sample; a bootstrap estimate will resample from the current bootstrap sample $\mathbf{x}^{(b)}$, not $\mathbf{x}$).
+(d) Compute the $b$th replicate of the *t* statistic, $$t(b) = \frac{\hat \theta^{(b)}−\hat \theta}{\widehat{se}(\hat \theta^{(b)})}.$$
+
+<!-- -->
+
+3.  The sample of replicates $t^{(1)},\dots t^{(B)}$ is the reference distribution for bootstrap $t$. Find the sample quantiles $t^\ast_{\alpha/2}$ and $t^\ast_{1-\alpha/2}$ from the ordered sample of replicates $t^{(b)}$.
+4.  Compute $\widehat{\hat \theta}$, the sample standard deviation of the replicates $\hat \theta^{(b)}$.
+5.  Compute confidence limits $$
+    \left(\hat{\theta}-t_{1-\alpha / 2}^* \widehat{\operatorname{se }}(\hat{\theta}), \quad \hat{\theta}-t_{\alpha / 2}^* \widehat{\operatorname{se}}(\hat{\theta})\right) .
+    $$
 
 :::
 
 One disadvantage is the *computational time*!
 
-To the bootstrap $t$ interval, typically $\widehat{se}(\htt^{(b)})$ must be obtained by bootstrap. This is *a bootstrap nested inside a bootstrap*. If $B = 1000$, for example, the bootstrap t confidence interval method takes approximately $1000$ times longer than any of the other methods.
+To the bootstrap $t$ interval, typically $\widehat{se}(\hat \theta^{(b)})$ must be obtained by bootstrap. This is *a bootstrap nested inside a bootstrap*. If $B = 1000$, for example, the bootstrap t confidence interval method takes approximately $1000$ times longer than any of the other methods.
 
----
+------------------------------------------------------------------------
 
-Here, we see how to compute the bootstrap $t$ confidence interval for a univariate or a
-multivariate sample $\bx$. The required arguments to the function are 
+Here, we see how to compute the bootstrap $t$ confidence interval for a univariate or a multivariate sample $\mathbf{x}$. The required arguments to the function are
 
-* the sample data $\bx$,  and
-* the function statistic that computes the statistic $T_n(\bx)$. 
+-   the sample data $\mathbf{x}$, and
+-   the function statistic that computes the statistic $T_n(\mathbf{x})$.
 
 The default values are:
 
-* significance level is $\alpha=0.05$
-* number of bootstrap replicates $B=500$,
-* number of replicates for estimating standard error is $100$.
+-   significance level is $\alpha=0.05$
+-   number of bootstrap replicates $B=500$,
+-   number of replicates for estimating standard error is $100$.
 
-``` {r BS-t-CI-function}
+```{r BS-t-CI-function}
 boot.t.ci <-
   function(x, B = 500, R = 100, level = .95, statistic) {
     # compute the bootstrap t CI
@@ -819,13 +749,11 @@ boot.t.ci <-
 
 We then aim to apply this function to our problem in hand.
 
-
 ::: {.callout-example title = "Bootstrap t CI for patch ratio statistics"}
 
 Now, we want to compute a 95% bootstrap $t$ confidence interval for the ratio statistic we discussed previously.
 
-
-``` {r BS-t-CI-patch}
+```{r BS-t-CI-patch}
 dat <- cbind(patch$y, patch$z)
 stat <- function(dat) {
   mean(dat[, 1]) / mean(dat[, 2])
@@ -835,19 +763,16 @@ ci <- boot.t.ci(dat, statistic = stat, B = 2000,
 print(ci)
 ```
 
-The upper confidence limit of the bootstrap $t$ confidence interval is much
-larger than the three intervals in Example 9 and the bootstrap $t$ is the widest interval here. 
+The upper confidence limit of the bootstrap $t$ confidence interval is much larger than the three intervals in Example 9 and the bootstrap $t$ is the widest interval here.
 
 :::
 
-  
 ## Others
 
 There are other method to construct bootstrap CIs. Interested reader should read the reference book, Davison & Hinkley (1997).
 
-
-
 <!-- ---  -->
+
 <!-- The distribution of $X^\ast$ is the empirical distribution $F_n$ of the sample $x$. The empirical distribution places mass $1/n$ at each observed data point. The bootstrap uses the empirical distribution as an estimate of the true but unknown distribution $F$. -->
 
 <!-- The bootstrap is a resampling method that allows estimation of the *sampling distribution* of almost any statistic using random sampling methods. -->
@@ -857,43 +782,73 @@ There are other method to construct bootstrap CIs. Interested reader should read
 <!-- -   Nonparametric bootstrap: In nonparametric bootstrap, the distribution is not specified. -->
 
 <!-- ::: {.callout-example title="Simple example of Bootstrap"} -->
+
 <!-- ```{r bootstrap-simple-example} -->
+
 <!-- set.seed(333) -->
+
 <!-- n <- 1E4 -->
+
 <!-- B <- 1E4 -->
+
 <!-- x <- rnorm(n, mean = 5, sd = 2) #original sample -->
 
-
 <!-- boot_means <- pbapply::pbsapply(1:B, function(i){ -->
+
 <!--   indices <- sample(1:n, size = n, replace = TRUE) #resample -->
+
 <!--   boot.sample <- x[indices] -->
+
 <!--   mean(boot.sample) -->
+
 <!-- }) -->
+
 <!-- mean(boot_means) -->
+
 <!-- hist(boot_means, breaks = 50, main = "Bootstrap distribution of the mean", xlab = "Mean") -->
 
-
 <!-- # Compute statistics -->
+
 <!-- true_mean <- 5 -->
+
 <!-- boot_mean <- mean(boot_means) -->
+
 <!-- df <- tibble(x = boot_means) -->
+
 <!-- # Plot -->
+
 <!-- ggplot(df, aes(x = x)) + -->
+
 <!--   geom_histogram(aes(y = ..density..), bins = 50, -->
+
 <!--                  fill = "lightgreen", color = "black", alpha = 0.7) + -->
+
 <!--   geom_density(color = "darkgreen", size = 1) + -->
+
 <!--   geom_vline(xintercept = true_mean, color = "red", linetype = "dashed", size = 1.1) + -->
+
 <!--   geom_vline(xintercept = boot_mean, color = "blue", linetype = "solid", size = 1.1) + -->
+
 <!--   labs( -->
+
 <!--     title = "Bootstrap Distribution of the Sample Mean", -->
+
 <!--     x = "Bootstrap Mean", -->
+
 <!--     y = "Density" -->
+
 <!--   ) + -->
+
 <!--   annotate("text", x = true_mean, y = 0.3, label = "True mean = 5", color = "red", hjust = -0.1) + -->
+
 <!--   annotate("text", x = boot_mean, y = 0.25, label = sprintf("Bootstrap mean = %.2f", boot_mean), -->
+
 <!--            color = "blue", hjust = -0.1) + -->
+
 <!--   theme_minimal(base_size = 14) -->
+
 <!-- ``` -->
+
 <!-- ::: -->
 
 <!-- The bootstrap is a general tool for assessing statistical accuracy. First we describe the bootstrap in general, and then show how it can be used to estimate extra-sample prediction error. As with cross-validation, the boot- strap seeks to estimate the conditional error ErrT , but typically estimates well only the expected prediction error Err. -->
@@ -1009,11 +964,11 @@ data.frame(
 ```
 :::
 
----
+------------------------------------------------------------------------
 
 ## Reference:
 
-- Davison, A.C. and Hinkley, D.V. (1997). [Bootstrap Methods and their Application](https://www.cambridge.org/core/books/bootstrap-methods-and-their-application/ED2FD043579F27952363566DC09CBD6A). Cambridge University Press.
+-   Davison, A.C. and Hinkley, D.V. (1997). [Bootstrap Methods and their Application](https://www.cambridge.org/core/books/bootstrap-methods-and-their-application/ED2FD043579F27952363566DC09CBD6A). Cambridge University Press.
 
 -   Section 7.11 in Hastie, T., Tibshirani R. and Friedman, J. (2008). [The Elements of Statistical Learning](https://www.sas.upenn.edu/~fdiebold/NoHesitations/BookAdvanced.pdf). Springer, 2nd edition.
 
@@ -1021,7 +976,7 @@ data.frame(
 
 -   Wu, C.F.J. (1986).[Bootstrap and Other Resampling Methods in Regression Analysis](https://projecteuclid.org/journals/annals-of-statistics/volume-14/issue-4/Jackknife-Bootstrap-and-Other-Resampling-Methods-in-Regression-Analysis/10.1214/aos/1176350142.full). *The Annals of Statistics*.
 
----
+------------------------------------------------------------------------
 
 ## R Functions
 
@@ -1031,4 +986,4 @@ Some useful R functions for resampling methods:
 
 -   `boot::boot()`: Perform bootstrap resampling and compute statistics.
 
-- `bootstrap`: A package that is associated with the book by Efron and Tibshirani (1993). It contains variety of the functions for bootstrap and jackknife, and the dataset used in the book. 
+-   `bootstrap`: A package that is associated with the book by Efron and Tibshirani (1993). It contains variety of the functions for bootstrap and jackknife, and the dataset used in the book.

@@ -148,7 +148,6 @@ Problems with simple Train-Test Split:
 
 -   Splitting 80-20 may leave too little test data for reliable evaluation.
 
-
 What we can do? **Cross-validation**!
 
 Cross-validation uses **all** data efficiently for training and testing.
