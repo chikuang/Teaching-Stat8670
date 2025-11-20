@@ -63,9 +63,9 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | ✅ Complete  | Exam 2 | 23 |
 | ✅ Complete  | Smoothing | 24|
 | ✅ Complete | Density estimation | 25 |
-<!-- ⏳ In Progress  -->
 | 📆Planned | Presentation | 26-28 | 
 
+<!-- ⏳ In Progress  -->
 ## Recommended Textbooks
 
 -   Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.
