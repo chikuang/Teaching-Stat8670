@@ -34,7 +34,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 -   [x] Assignment 2: Due on September 22, 2025
 -   [x] Assignment 3: Due on October 22, 2025
 -   [x] Assignment 4: Due on November 07, 2025
--   [ ] Assignment 5: Due on Dec 01, 2025
+-   [x] Assignment 5: Due on Dec 01, 2025
 
 ## Midterm
 
@@ -44,7 +44,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 ## Project
 
 -   [ ] Report: Due on December 8, 2025.
--   [ ] Presentation: Dec 1 (May change), 3, and 8.
+-   [ ] Presentation: Dec 1, 3, and 8.
 
 ## Topics and Corresponding Lectures
 
@@ -52,18 +52,18 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Status | Topic | Lecture Covered |
 |:--:|:--:|:--:|
-| ✅ Complete | R Programming | 1–2 |
-| ✅ Complete | Numerical Approaches and Optimization in 1-D | 3–5 |
-| ✅ Complete | Review for Distribution | 6–7 |
-| ✅ Complete | Random Variable Generation | 8–10 |
-| ✅ Complete | Monte Carlo and Integration | 11–15 |
-| ✅ Complete | Exam 1 | 13 |
-| ✅ Complete | Cross-Validation | 16-17 |
-| ✅ Complete | Bootstrap and Jackknife | 18–21 |
-| ✅ Complete  | Exam 2 | 23 |
-| ✅ Complete  | Smoothing | 24|
-| ✅ Complete | Density estimation | 25 |
-| 📆Planned | Presentation | 26-28 | 
+| ✅  | R Programming | 1–2 |
+| ✅  | Numerical Approaches and Optimization in 1-D | 3–5 |
+| ✅  | Review for Distribution | 6–7 |
+| ✅  | Random Variable Generation | 8–10 |
+| ✅  | Monte Carlo and Integration | 11–15 |
+| ✅  | Exam 1 | 13 |
+| ✅  | Cross-Validation | 16-17 |
+| ✅  | Bootstrap and Jackknife | 18–21 |
+| ✅   | Exam 2 | 23 |
+| ✅   | Smoothing | 24|
+| ✅  | Density estimation | 25 |
+| 🚧🛠️⏳ | Presentation | 26-28 | 
 
 <!-- ⏳ In Progress  -->
 ## Recommended Textbooks
