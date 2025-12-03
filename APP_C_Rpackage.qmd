@@ -2,20 +2,20 @@
 
 ## Group
 
-| | Group | Member 1 | Member 2 | Topic |
-|:----:|:------------:|:-------------------------:|:----------------:|:------------:|
-|| 1 | Akomanyi-Addo, Allswell | Sarpong, Felix | Resampling and Randomization Inference |
-|| 2 | Zhang, Zilong |  | A Hybrid Block Cross-Validation Bandwidth Selection based on Beta Divergence for Long-run Covariance |
-|| 3 | Stell, Tommy |  | Computational Statistical Algebraic Topology |
-|  ✅ |4 | Vu, Ha |  | Youden Index |
-| ✅ | 5 | Zhang, Boshu | You, Sifan | Bootstrap Methods for A/B Testing of Conversion Rates |
-|| 6 | Zhang, Yalin |  | MC methods on Retirement Planning |
-| ✅ | 7 | Rehman, Muhammad Aimal | Lu, Zhili | RAG and RAGAS |
-| | 8 | Creary, Maya | Alvarado, Alexus | Long term academic outcomes prediction through stratified random sampling. |
-| ✅ | 9 | Shamshad, Azka | Khadka, Sushil | PCA applications on Computer Vision |
-|| 10 | Wu, Yunxue |  | MC methods on Gas Station Queues |
-| |11 | Jinnah, Kalen |  | Sample and Population sizes Determination |
-| |12 | Krause, Andrew |  | Time Series in Healthcare |
+|   | Group | Member  | Topic |
+|:-:|:---:|:--------------:|:---------------------:|
+| ✅  | 1 | Akomanyi, Allswell & Sarpong, Felix | Resampling and Randomization Inference |
+|  | 2 | Zhang, Zilong | A Hybrid Block Cross-Validation Bandwidth Selection based on Beta Divergence for Long-run Covariance |
+|  | 3 | Stell, Tommy |  Computational Statistical Algebraic Topology |
+| ✅ | 4 | Vu, Ha |  Youden Index |
+| ✅ | 5 | Zhang, Boshu & You, Sifan | Bootstrap Methods for A/B Testing of Conversion Rates |
+| ✅ | 6 | Zhang, Yalin | MC methods on Retirement Planning |
+| ✅ | 7 | Rehman, Aimal & Lu, Zhili | RAG and RAGAS |
+|  | 8 | Creary, Maya & Alvarado, Alexus | Long term academic outcomes prediction through stratified random sampling. |
+| ✅ | 9 | Shamshad, Azka & Khadka, Sushil | PCA applications on Computer Vision |
+| ✅ | 10 | Wu, Yunxue |  MC methods on Gas Station Queues |
+| ✅   | 11 | Jinnah, Kalen | Sample and Population sizes Determination |
+|  ✅  | 12 | Krause, Andrew  | Time Series in Healthcare |
 
 ## Format
 
