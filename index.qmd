@@ -1,5 +1,9 @@
 # Preface {.unnumbered}
 
+## Thank you
+
+The course is finished, thank you everyone for your participation and attention. Hope you all have learned something from this course. Wish everyone has a good winter break!
+
 ## Description
 
 Topics included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
@@ -43,8 +47,8 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Project
 
--   [ ] Report: Due on December 8, 2025.
--   [ ] Presentation: December 1, 3, and 8.
+-   [x] Report: Due on December 8, 2025.
+-   [x] Presentation: December 1, 3, and 8.
 
 ## Topics and Corresponding Lectures
 
@@ -63,8 +67,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 |   ✅   |                    Exam 2                    |       23        |
 |   ✅   |                  Smoothing                   |       24        |
 |   ✅   |              Density estimation              |       25        |
-| 🚧🛠️⏳ |                 Presentation                 |      26-28      |
-
+|✅ |                 Presentation                 |      26-28      |
+ <!-- 🚧🛠️⏳  -->
 <!-- ⏳ In Progress  -->
 
 ## Recommended Textbooks
