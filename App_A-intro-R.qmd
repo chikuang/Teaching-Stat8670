@@ -1,125 +1,1185 @@
-# Appendix: Introduction to R? {.unnumbered}
+# Appendix: Introduction to R
 
-## R
 
-For conducting analyses with data sets of hundreds to thousands of observations, calculating by hand is not feasible and you will need a statistical software. **R** is one of those. **R** can also be thought of as a high-level programming language. In fact, **R** is [one of the top languages](https://statisticstimes.com/tech/top-computer-languages.php) to be used by data analysts and data scientists. There are a lot of analysis packages in **R** that are currently developed and maintained by researchers around the world to deal with different data problems. Most importantly, **R** is free! In this section, we will learn how to use **R** to conduct basic statistical analyses.
+## Why R?
 
-**Tiobi Index**: [https://www.tiobe.com/tiobe-index/](https://www.tiobe.com/tiobe-index/). This index is an indicator of the popularity of programming languages. The index is updated once a month. The ratings are based on the number of skilled engineers worldwide, courses, and third-party vendors. Popular search engines such as Google, Bing, Yahoo!, Wikipedia, Amazon, YouTube, and Baidu are used to calculate the ratings.
+Modern statistical analyses routinely involve hundreds, thousands, or millions of observations. The calculations are too numerous—and often too complex—to perform reliably by hand. We therefore need software that can manage data, implement statistical methods, automate repeated computations, and document the complete analysis.
 
-## IDE
+**R** is both a high-level programming language and an environment for statistical computing and graphics. It is especially useful for statistics because it is:
 
-### Rstudio
+- **free and open source**, so students and researchers can use the same tools;
+- **designed for data analysis**, with vectors, missing values, models, and graphics built into the language;
+- **extensible**, with a large ecosystem of packages developed by researchers and software developers;
+- **reproducible**, because an analysis can be saved as code and rerun from beginning to end;
+- **interoperable**, with interfaces to databases and languages such as C++, Python, and Julia.
 
-RStudio is an integrated development environment (IDE) designed specifically for working with the **R** programming language. It provides a user-friendly interface that includes a source editor, console, environment pane, and tools for plotting, debugging, version control, and package management. RStudio supports both **R** and Python and is widely used for data analysis, statistical modeling, and reproducible research. It also integrates seamlessly with tools like **R** Markdown, Shiny, and Quarto, making it popular among data scientists, statisticians, and educators.
+R is not a menu-driven statistics program. Learning R means learning to express an analysis as a sequence of precise, inspectable computations. That initial investment pays off when an analysis must be revised, repeated, validated, or shared.
 
-### Visual Studio Code (VS Code)
+::: {.callout-note title="R, RStudio, and Quarto are different tools"}
+**R** performs the computation. **RStudio** is an integrated development environment that helps us write and run code. **Quarto** turns source documents containing prose, code, and results into HTML, PDF, Word, or presentation output.
+:::
 
-VS Code is a versatile code editor that supports multiple programming languages, including **R**. With the **R** extension for VS Code, users can write and execute **R** code, access **R**'s console, and utilize features like syntax highlighting, code completion, and debugging. While not as specialized as RStudio for **R** development, VS Code offers a lightweight alternative with extensive customization options and support for various programming tasks.
+## The working environment
 
-### Positron
+### RStudio
 
-Positron IDE is the next-generation integrated development environment developed by Posit, the company behind RStudio. Designed to be a modern, extensible, and language-agnostic IDE, Positron builds on the strengths of RStudio while supporting a broader range of languages and workflows, including **R**, Python, and Quarto.
+RStudio is an integrated development environment (IDE) for R, Python, and reproducible publishing. Its default layout contains four panes:
 
-## RStudio Layout
+| Pane | Main purpose |
+|---|---|
+| **Source** | Write and edit scripts and Quarto documents. |
+| **Console** | Send expressions directly to R and view immediate results. |
+| **Environment/History** | Inspect names in the global environment and review console commands. |
+| **Files/Plots/Packages/Help/Viewer** | Navigate files, inspect graphics, manage packages, read documentation, and preview output. |
 
-RStudio consists of several panes: 
+Use the console for short experiments. Put any computation that matters in a script or Quarto document so it can be rerun.
 
-- **Source**: Where you write scripts and markdown documents. 
-- **Console**: Where you type and execute **R** commands. 
-- **Environment/History**: Shows your variables and command history. 
-- **Files/Plots/Packages/Help/Viewer**: For file management, viewing plots, managing packages, accessing help, and viewing web content.
+### R scripts and Quarto documents
 
-![Rstudio interface borrowed from Posit website](fig/appendix/R/rstudio-panes-labeled.jpeg){#fig-rstudio-panes width=80% fig-align="center"}
+An R script is a plain-text file with the extension `.R`. It contains R expressions that can be executed one line, one selection, or one file at a time.
 
-## R Scripts
+A Quarto document has the extension `.qmd`. It combines:
 
-**R** scripts are plain text files containing **R** code. You can create a new script in RStudio by clicking `File > New File > R Script`.
+- a YAML header describing the document;
+- prose written in Markdown;
+- executable code chunks;
+- tables, equations, figures, citations, and cross-references.
 
-## R Help
+For example, an executable R chunk begins with ```` ```{r} ```` and ends with ```` ``` ````. Rendering the document starts a computation, runs the enabled chunks in order, and places their results into the output. This makes the narrative and the computation part of the same reproducible record.
 
-Use `?function_name` or `help(function_name)` to access help for any **R** function. For example:
+### A project-oriented workflow
 
-``` r
-?mean
-help(mean)
+Create one RStudio Project for the course or for each substantial analysis. Use project-relative paths such as `data/survey.csv` rather than hard-coded paths tied to one computer. A simple project might contain:
+
+```text
+stat8670-project/
+├── data/          # original and processed data
+├── R/             # reusable functions
+├── figures/       # saved figures
+├── notes/         # Quarto lecture or analysis files
+└── stat8670-project.Rproj
 ```
 
-## R Packages
+Avoid using `setwd()` inside a reproducible document. When a project is opened, its root provides a stable reference point for relative paths.
 
+## Learning objectives
 
-Packages extend **R**'s functionality. There are thousands of packages available in **R** ecosystem. You may install them from different sources.
+By the end of this lecture, you should be able to:
 
-### With Comprehensive R Archive Network (CRAN)
+1. Describe how R reads, evaluates, and prints an expression.
+2. Distinguish an object from the name bound to that object.
+3. Predict how vectorization, coercion, recycling, and missing values affect a computation.
+4. Explain how function calls, environments, lexical scoping, and lazy evaluation work.
+5. Describe R's copy-on-modify memory model and its implications for performance.
+6. Create, inspect, subset, and transform data frames and tibbles.
+7. Choose appropriately among `apply()`, `lapply()`, `vapply()`, grouped operations, and vectorized functions.
+8. Use the tidyverse pipe and core `dplyr` verbs to express a data-analysis pipeline.
+9. Write small computations that are reproducible, testable, and numerically responsible.
 
-CRAN is the primary repository for **R** packages. It contains thousands of packages that can be easily installed and updated.
+## R as a computing environment
 
-Install a package with:
+R is both a programming language and an interactive environment for statistical computing. It provides:
 
-``` r
-install.packages("package_name")
-```
+- a parser that turns text into expressions;
+- an evaluator that computes the value of an expression;
+- a workspace containing objects and functions;
+- a package system for extending the language;
+- graphics, statistical models, simulation tools, and interfaces to compiled code.
 
+At the console, R follows a **read–evaluate–print loop** (REPL):
 
-### With Bioconductor
-
-Bioconductor is a repository for bioinformatics packages in **R**. It provides tools for the analysis and comprehension of high-throughput genomic data.
-
-Install Bioconductor packages using the `BiocManager` package:
-
-``` r
-BiocManager::install("package_name")
-```
-
-### From GitHub
-
-Many of the authors of **R** packages host their work on GitHub. You can install these packages using the `devtools` package:
-
-``` r
-devtools::install_github("username/package_name")
-```
-
-### Load a package 
-Once a package is installed, you need to load it into your **R** session to use its functions:
-
-``` r
-library(package_name)
-```
-
-Alternatively, you may use a function in the package with `package_name::function_name()` without loading the entire package.
-
-## R Markdown
-
-**R** Markdown allows you to combine text, code, and output in a single document. Create a new **R** Markdown file in RStudio via `File > New File > R Markdown...`.
-
-Recently, the posit team has developed a new version of the **R** Markdown called quarto document, with the file extension `.qmd`. It is still under rapid development.
-
-## Vectors
-
-Vectors are the most basic data structure in **R**.
+1. **Read:** parse the text entered by the user.
+2. **Evaluate:** compute the value of the expression in the current environment.
+3. **Print:** display the result when it is visible.
+4. **Loop:** wait for the next expression.
 
 ```{r}
+2 + 3 * 4
+```
 
-x <- c(1, 2, 3, 4, 5)
+R respects operator precedence, so multiplication is performed before addition. Parentheses make the intended order explicit.
+
+```{r}
+(2 + 3) * 4
+```
+
+Assignment usually returns its value invisibly, so the first line below does not print a result. Typing the name on the next line retrieves and prints the value.
+
+```{r}
+x <- 2 + 3 * 4
 x
 ```
 
-You can perform operations on vectors:
+::: {.callout-tip title="A useful mental model"}
+Most R code can be understood as **function calls that produce objects**. Even an operator such as `+` is a function.
+:::
 
 ```{r}
-x * 2
+`+`(2, 3)
 ```
 
-## Data Sets
+## Expressions, objects, and names
 
-Data frames are used for storing data tables. Create a data frame:
+R computes with **objects**. Numbers, character strings, vectors, data frames, fitted models, and functions are all objects. A **name** is a symbol bound to an object in an environment.
 
 ```{r}
-df <- data.frame(Name = c("Alice", "Bob"), Score = c(90, 85))
-df
+sample_size <- 100
+another_name <- sample_size
+
+sample_size
+another_name
 ```
 
-You can import data from files using `read.csv()` or `read.table()`.
+The assignment operator `<-` creates or changes a binding. It is read as “gets.” Although `=` can also assign in many contexts, using `<-` for ordinary assignment makes code easier to read because `=` is also used to match function arguments.
 
-------------------------------------------------------------------------
+Names are case-sensitive:
+
+```{r}
+n <- 10
+N <- 25
+c(n = n, N = N)
+```
+
+Use `ls()` to list names in the current environment and `rm()` to remove a binding.
+
+```{r}
+temporary_result <- 42
+"temporary_result" %in% ls()
+rm(temporary_result)
+"temporary_result" %in% ls()
+```
+
+Removing a name does not necessarily destroy an object immediately. R reclaims unreachable memory through **garbage collection**.
+
+## Atomic vectors: the basic unit of computation
+
+The fundamental data structure in R is the **vector**. An atomic vector contains zero or more elements of one type. Common atomic types include:
+
+| Type | Example | Typical use |
+|---|---|---|
+| logical | `TRUE`, `FALSE` | conditions and indicators |
+| integer | `2L` | counts and indices |
+| double | `2`, `3.14` | numerical computation |
+| character | `"R"` | text and labels |
+| complex | `1 + 2i` | complex arithmetic |
+| raw | `charToRaw("R")` | bytes |
+
+```{r}
+logical_vector <- c(TRUE, FALSE, TRUE)
+integer_vector <- c(1L, 2L, 3L)
+double_vector <- c(1, 2, 3)
+character_vector <- c("one", "two", "three")
+
+typeof(logical_vector)
+typeof(integer_vector)
+typeof(double_vector)
+typeof(character_vector)
+```
+
+### Vectorization
+
+Many R functions and operators act on an entire vector. This is called **vectorized computation**.
+
+```{r}
+x <- c(1, 2, 3, 4)
+x^2
+sqrt(x)
+sum(x)
+mean(x)
+```
+
+Vectorized code often expresses the statistical operation more directly than element-by-element code. It may also be faster because much of the work is implemented in compiled code.
+
+### Element-wise operations and recycling
+
+Arithmetic between vectors is usually element-wise.
+
+```{r}
+x <- c(10, 20, 30)
+y <- c(1, 2, 3)
+x + y
+```
+
+If one vector is shorter, R repeats—or **recycles**—its values.
+
+```{r}
+x + 5
+c(10, 20, 30, 40) + c(1, 2)
+```
+
+Recycling is useful when the shorter length divides the longer length exactly. Otherwise, R warns because the result may reflect a mistake.
+
+```{r}
+#| warning: true
+c(10, 20, 30, 40) + c(1, 2, 3)
+```
+
+### Coercion
+
+An atomic vector must have one type. When incompatible types are combined, R finds a common type and **coerces** the values.
+
+```{r}
+mixed_numeric <- c(TRUE, 2L, 3.5)
+mixed_character <- c(TRUE, 2L, 3.5, "four")
+
+mixed_numeric
+typeof(mixed_numeric)
+mixed_character
+typeof(mixed_character)
+```
+
+A simplified coercion hierarchy is:
+
+`logical → integer → double → complex → character`
+
+Implicit coercion is convenient, but accidental coercion can silently change a computation. Inspect unfamiliar objects with `typeof()`, `class()`, `length()`, and `str()`.
+
+## Missing and special numerical values
+
+R uses `NA` for a missing value. Because an unknown value usually makes a calculation unknown, `NA` propagates.
+
+```{r}
+scores <- c(88, NA, 91, 84)
+mean(scores)
+mean(scores, na.rm = TRUE)
+is.na(scores)
+```
+
+Do not test missingness with `x == NA`; use `is.na(x)`.
+
+Other special numerical values include positive and negative infinity and “not a number.”
+
+```{r}
+c(1 / 0, -1 / 0, 0 / 0)
+is.finite(c(1, Inf, NA, NaN))
+```
+
+`NaN` represents an undefined numerical result and is also treated as missing by `is.na()`.
+
+Three-valued logic matters when conditions contain missing values:
+
+```{r}
+c(TRUE & NA, FALSE & NA, TRUE | NA, FALSE | NA)
+```
+
+## Indexing and subsetting
+
+R offers several ways to select elements. For a vector `x`:
+
+- positive integers select positions;
+- negative integers exclude positions;
+- logical vectors retain positions that are `TRUE`;
+- character vectors select named elements.
+
+```{r}
+x <- c(first = 10, second = 20, third = 30, fourth = 40)
+
+x[c(1, 3)]
+x[-2]
+x[x >= 30]
+x[c("second", "fourth")]
+```
+
+Indices begin at 1, not 0. Mixing positive and negative indices in the same subscript is an error.
+
+::: {.callout-warning title="A common surprise"}
+`1:length(x)` behaves badly when `x` has length zero. Prefer `seq_along(x)` when iterating over positions and `seq_len(n)` when iterating to a known length.
+:::
+
+```{r}
+empty <- numeric(0)
+1:length(empty)
+seq_along(empty)
+```
+
+## Data structures are vectors plus attributes
+
+Many R data structures are constructed by attaching attributes to vectors.
+
+### Matrices
+
+A matrix is an atomic vector with a `dim` attribute. Its elements must have one common type.
+
+```{r}
+A <- matrix(1:6, nrow = 2, ncol = 3)
+A
+attributes(A)
+A[2, 3]
+```
+
+Matrix multiplication uses `%*%`; `*` performs element-wise multiplication.
+
+```{r}
+B <- matrix(c(1, 0, 0, 1, 1, 1), nrow = 3)
+A %*% B
+```
+
+### Lists
+
+A list is a vector whose elements may be objects of different types and lengths.
+
+```{r}
+fit_summary <- list(
+  method = "least squares",
+  coefficients = c(intercept = 1.2, slope = 0.8),
+  converged = TRUE
+)
+
+str(fit_summary)
+fit_summary[["coefficients"]]
+fit_summary$coefficients
+```
+
+For a list, `[` returns a sublist, whereas `[[` extracts a single element.
+
+```{r}
+fit_summary["coefficients"]
+fit_summary[["coefficients"]]
+```
+
+### Factors
+
+A factor represents categorical data using integer codes plus a `levels` attribute.
+
+```{r}
+group <- factor(c("control", "treatment", "control"))
+group
+unclass(group)
+levels(group)
+```
+
+The order of factor levels can affect model coefficients and printed summaries, so set levels deliberately when their order matters.
+
+## Data frames: R's rectangular data structure
+
+A **data frame** stores a rectangular data set. Conceptually, it is a named list of equal-length vectors:
+
+- each **row** represents an observational unit;
+- each **column** represents a variable;
+- every column has the same number of observations;
+- different columns may have different types.
+
+This last property distinguishes a data frame from a matrix. A matrix is one atomic vector with dimensions, so every entry must have the same type. A data frame is a list of columns, so numerical, character, logical, factor, and date variables can coexist.
+
+### Creating a data frame
+
+```{r}
+students <- data.frame(
+  id = 1:6,
+  name = c("Alice", "Bob", "Chen", "Divya", "Elena", "Farah"),
+  program = c("MS", "PhD", "MS", "PhD", "MS", "PhD"),
+  score = c(90, 85, NA, 94, 88, 91),
+  completed = c(TRUE, TRUE, FALSE, TRUE, TRUE, TRUE)
+)
+
+students
+```
+
+Each expression passed to `data.frame()` becomes a column. R recycles a length-one value, but other columns should normally have matching lengths.
+
+### Inspecting a data frame
+
+Never begin an analysis by assuming that an imported object has the expected structure. Inspect it.
+
+```{r}
+class(students)
+dim(students)       # number of rows and columns
+nrow(students)
+ncol(students)
+names(students)     # column names
+str(students)       # compact structural summary
+summary(students)   # variable-by-variable summary
+head(students, 3)
+```
+
+`str()` is especially valuable: it shows the object class, dimensions, column names, column types, and representative values in one compact display.
+
+### Extracting rows, columns, and elements
+
+The expression `students[rows, columns]` uses two-dimensional indexing.
+
+```{r}
+students[1, ]                       # first row, all columns
+students[, c("name", "score")]    # all rows, selected columns
+students[students$program == "PhD", ]
+students[1:3, c("name", "score")]
+students[2, "score"]               # one element
+```
+
+There are three common column-extraction operators:
+
+```{r}
+students["score"]       # a one-column data frame
+students[["score"]]     # the underlying vector
+students$score           # the underlying vector, convenient interactively
+```
+
+This distinction affects downstream code. `mean(students$score, na.rm = TRUE)` works on a numeric vector; `students["score"]` remains a data frame.
+
+Use `[[` inside functions when the column name is stored in another object.
+
+```{r}
+variable <- "score"
+mean(students[[variable]], na.rm = TRUE)
+```
+
+### Adding and modifying variables
+
+Because each column is a vector, vectorized calculations naturally create new variables.
+
+```{r}
+students$passed <- students$score >= 70
+students$centered_score <- students$score - mean(students$score, na.rm = TRUE)
+students
+```
+
+Missingness propagates: the student with an unknown score also has an unknown value of `passed`. This is different from `FALSE`; we do not know whether that student passed.
+
+### Importing rectangular data
+
+Base R provides `read.csv()` and `read.table()` for delimited text files.
+
+```{r}
+#| eval: false
+survey <- read.csv(
+  "data/survey.csv",
+  na.strings = c("", "NA", ".")
+)
+
+measurements <- read.table(
+  "data/measurements.txt",
+  header = TRUE,
+  sep = "\t"
+)
+```
+
+Use project-relative paths. Immediately after importing, check the dimensions, names, types, missingness, and several observations.
+
+```{r}
+#| eval: false
+dim(survey)
+names(survey)
+str(survey)
+head(survey)
+colSums(is.na(survey))
+```
+
+::: {.callout-note title="Data import is part of the analysis"}
+Import is not merely clerical. Delimiters, decimal marks, missing-value codes, encodings, date formats, and inferred column types can change the data R sees—and therefore the analysis.
+:::
+
+::: {.callout-warning title="Do not treat a data frame as a matrix"}
+`as.matrix()` and `apply()` may coerce an entire mixed-type data frame to a character matrix. Perform column-wise operations on the original columns with `lapply()`, `vapply()`, or `dplyr::across()` instead.
+:::
+
+## A first look at the tidyverse
+
+The **tidyverse** is a coordinated collection of R packages for data import, transformation, visualization, and programming. Its packages share conventions, but they do not replace base R. In this course, we will learn both because understanding base R explains how objects and functions behave, while tidyverse tools often make data-analysis workflows more readable.
+
+Install the tidyverse once on a computer, then load it in each new R session that uses it.
+
+```{r}
+#| eval: false
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+```
+
+Loading `tidyverse` attaches several core packages, including `dplyr`, `ggplot2`, `tidyr`, `readr`, `purrr`, `tibble`, `stringr`, and `forcats`. For a lighter dependency, load only the package you need or call a function explicitly, such as `dplyr::filter()`.
+
+### Data frames and tibbles
+
+A **tibble** is a modern data frame. It keeps the fundamental data-frame model—equal-length columns that may have different types—but prints compactly and applies stricter, more predictable subsetting rules.
+
+```{r}
+students_tbl <- as_tibble(students)
+students_tbl
+class(students_tbl)
+```
+
+Important differences include:
+
+| Operation | Base data frame | Tibble |
+|---|---|---|
+| Printing | May print many rows and columns | Prints a compact preview |
+| `x[, "score"]` | May simplify to a vector | Remains a one-column tibble |
+| Partial matching with `$` | Can occur in some base objects | Warns and returns `NULL` |
+| Row names | Supported | Discouraged; use an explicit column |
+
+Both satisfy `is.data.frame()`, so most functions written for data frames also accept tibbles.
+
+```{r}
+is.data.frame(students_tbl)
+students_tbl[, "score"]
+students_tbl[["score"]]
+```
+
+### Pipes and data verbs
+
+The native pipe `|>` sends the result on its left to the first argument of the function on its right. It lets us read a transformation in the order it occurs.
+
+```{r}
+students_tbl |>
+  filter(completed, !is.na(score)) |>
+  select(name, program, score) |>
+  arrange(desc(score))
+```
+
+Core `dplyr` verbs have a consistent grammar:
+
+| Verb | Purpose |
+|---|---|
+| `select()` | Choose, rename, or reorder columns |
+| `filter()` | Keep rows satisfying logical conditions |
+| `arrange()` | Sort rows |
+| `mutate()` | Create or modify columns |
+| `summarise()` | Reduce observations to summary values |
+| `group_by()` | Define groups for subsequent operations |
+
+For example, create variables and then compute group-specific summaries:
+
+```{r}
+students_tbl |>
+  mutate(
+    passed = score >= 70,
+    score_z = (score - mean(score, na.rm = TRUE)) /
+      sd(score, na.rm = TRUE)
+  ) |>
+  group_by(program) |>
+  summarise(
+    n = n(),
+    n_observed = sum(!is.na(score)),
+    mean_score = mean(score, na.rm = TRUE),
+    sd_score = sd(score, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+Grouping changes how later verbs operate. It does not rearrange the rows, and the grouping state can persist. Use `.groups = "drop"` in `summarise()` or `ungroup()` when subsequent operations should apply to the full data.
+
+### Operating across several columns
+
+Inside `mutate()` or `summarise()`, `across()` applies one or more functions to a selection of columns.
+
+```{r}
+students_tbl |>
+  summarise(
+    across(
+      where(is.numeric),
+      list(mean = ~ mean(.x, na.rm = TRUE),
+           sd = ~ sd(.x, na.rm = TRUE)),
+      .names = "{.col}_{.fn}"
+    )
+  )
+```
+
+`across()` is often the tidyverse counterpart to a column-wise `lapply()` or `vapply()`, with the additional advantage that it works inside grouped data operations.
+
+### Base R and tidyverse are complementary
+
+The same task can be expressed in more than one style.
+
+```{r}
+# Base R
+aggregate(score ~ program, data = students, FUN = mean, na.rm = TRUE)
+
+# tidyverse
+students_tbl |>
+  group_by(program) |>
+  summarise(mean_score = mean(score, na.rm = TRUE), .groups = "drop")
+```
+
+Choose a style that makes the operation clear and use it consistently within a pipeline. Regardless of syntax, the underlying questions remain the same: What object enters the function? What object comes out? How are missing values handled? Are types and groups preserved?
+
+## Functions and function calls
+
+A function packages a computation so it can be reused and tested.
+
+```{r}
+standardize <- function(x, remove_na = FALSE) {
+  center <- mean(x, na.rm = remove_na)
+  spread <- sd(x, na.rm = remove_na)
+  (x - center) / spread
+}
+
+standardize(c(2, 4, 6, 8))
+```
+
+A function has three main components:
+
+- **formals:** its arguments;
+- **body:** the expression it evaluates;
+- **environment:** where it was created.
+
+```{r}
+formals(standardize)
+body(standardize)
+environment(standardize)
+```
+
+When a function is called, R creates a new temporary environment, binds arguments to values, evaluates the body, and returns the value of the final evaluated expression unless `return()` is used earlier.
+
+### Argument matching
+
+Arguments can be matched by exact name or by position. Exact names are clearest in code that others will read.
+
+```{r}
+round(x = 3.14159, digits = 3)
+round(3.14159, 3)
+```
+
+Avoid partial argument names in durable code; they can be ambiguous and may break if a function changes.
+
+### Lazy evaluation
+
+R function arguments are evaluated only when they are needed. This is called **lazy evaluation**.
+
+```{r}
+choose_one <- function(x, y) {
+  x
+}
+
+choose_one(10, stop("This argument is never needed"))
+```
+
+Internally, an argument is represented by a *promise*: the expression supplied by the caller, together with the environment in which that expression should be evaluated. Lazy evaluation enables convenient interfaces, but code with side effects can become harder to reason about.
+
+## Environments and lexical scoping
+
+An environment stores name–object bindings and has a parent environment. When R evaluates a name, it looks in the current environment and then follows the chain of parent environments until it finds a binding or reaches the empty environment.
+
+R uses **lexical scoping**: a function looks for nonlocal names in the environment where the function was defined, not the environment from which it was called.
+
+```{r}
+make_power <- function(power) {
+  function(x) {
+    x^power
+  }
+}
+
+square <- make_power(2)
+cube <- make_power(3)
+
+square(5)
+cube(5)
+```
+
+Even after `make_power()` finishes, each returned function retains access to the environment containing its own value of `power`. A function bundled with its defining environment is often called a **closure**.
+
+Local assignment normally changes a binding in the current environment.
+
+```{r}
+x <- 100
+
+change_locally <- function() {
+  x <- 5
+  x
+}
+
+change_locally()
+x
+```
+
+The superassignment operator `<<-` searches parent environments and modifies an existing binding. Because this creates nonlocal side effects, use it sparingly and deliberately.
+
+## Memory: copy-on-modify
+
+R behaves as if objects are copied when modified. In practice, two names may initially share memory, and R copies only when a modification would otherwise affect another binding. This is commonly described as **copy-on-modify**.
+
+```{r}
+x <- c(10, 20, 30)
+y <- x
+y[1] <- 999
+
+x
+y
+```
+
+Changing `y` does not change `x`. This model makes ordinary R code easier to reason about, but repeatedly growing an object can allocate and copy memory many times.
+
+Avoid this pattern for large computations:
+
+```{r}
+#| eval: false
+result <- numeric(0)
+for (i in seq_len(100000)) {
+  result <- c(result, i^2)
+}
+```
+
+Preallocate the final size instead:
+
+```{r}
+n <- 100000
+result <- numeric(n)
+
+for (i in seq_len(n)) {
+  result[i] <- i^2
+}
+
+head(result)
+```
+
+`object.size()` gives an approximate size of an R object. `gc()` requests garbage collection and reports memory-use information, although R normally manages garbage collection automatically.
+
+```{r}
+object.size(result)
+```
+
+::: {.callout-note title="Implementation detail: ALTREP"}
+Modern R can represent some vectors compactly and materialize their elements only when necessary. This mechanism, called ALTREP, is one reason an object's conceptual size and its immediate memory cost need not be identical.
+:::
+
+## Iteration: vectorization, loops, and the apply family
+
+An iterative computation can often be expressed in several ways. None is universally best. Choose the form that clearly represents the algorithm and returns a predictable object.
+
+```{r}
+x <- c(2, 4, 6, 8)
+
+# Vectorized operation
+x^2
+
+# Explicit, preallocated loop
+squares <- numeric(length(x))
+for (i in seq_along(x)) {
+  squares[i] <- x[i]^2
+}
+squares
+
+# Function applied to each element
+vapply(x, function(value) value^2, numeric(1))
+```
+
+Use vectorization when a vectorized function already expresses the operation. Use a loop when the calculation depends on evolving state or complex indexing. Use an apply-family function when the same function is independently applied to many pieces of an object.
+
+::: {.callout-important title="The apply family is not magic vectorization"}
+`apply()` and `lapply()` usually perform iteration internally. They are not automatically faster than a well-written, preallocated `for` loop. Their main benefit is expressing “apply this function to each piece” concisely.
+:::
+
+### `apply()`: rows or columns of a matrix
+
+`apply(X, MARGIN, FUN, ...)` applies `FUN` over dimensions of an array or matrix:
+
+- `MARGIN = 1` operates on rows;
+- `MARGIN = 2` operates on columns;
+- `MARGIN = c(1, 2)` operates on individual cells.
+
+```{r}
+X <- matrix(1:12, nrow = 3, byrow = TRUE)
+colnames(X) <- c("x1", "x2", "x3", "x4")
+X
+
+apply(X, MARGIN = 1, FUN = mean)   # row means
+apply(X, MARGIN = 2, FUN = sd)     # column standard deviations
+```
+
+Additional arguments are passed to `FUN` through `...`.
+
+```{r}
+X_missing <- X
+X_missing[2, 3] <- NA
+apply(X_missing, 2, mean, na.rm = TRUE)
+```
+
+For common matrix summaries, specialized functions such as `rowMeans()`, `colMeans()`, `rowSums()`, and `colSums()` are clearer and generally faster.
+
+```{r}
+rowMeans(X)
+colSums(X)
+```
+
+### Why `apply()` can be dangerous for data frames
+
+`apply()` first converts a data frame to a matrix. If every column is numeric, this can be acceptable. If any column is character, the matrix may become entirely character, making numerical summaries fail or behave unexpectedly.
+
+```{r}
+mixed_df <- data.frame(
+  id = c("A", "B", "C"),
+  x = c(10, 20, 30),
+  y = c(2, 4, 6)
+)
+
+as.matrix(mixed_df)
+typeof(as.matrix(mixed_df))
+```
+
+Select the numeric columns explicitly before a matrix operation, or use a column-wise tool that preserves each column's type.
+
+```{r}
+numeric_columns <- vapply(mixed_df, is.numeric, logical(1))
+vapply(mixed_df[numeric_columns], mean, numeric(1))
+```
+
+### `lapply()`: apply a function and return a list
+
+`lapply(X, FUN, ...)` works naturally with lists and data frames because a data frame is a list of columns. It always returns a list of the same length as `X`.
+
+```{r}
+lapply(students, class)
+lapply(students[c("score", "centered_score")], mean, na.rm = TRUE)
+```
+
+The stable list return type makes `lapply()` predictable, even when the individual results have different lengths or types.
+
+```{r}
+lapply(students, function(column) {
+  c(type = typeof(column), length = length(column))
+})
+```
+
+### `sapply()` and `vapply()`: simplified output
+
+`sapply()` calls `lapply()` and then attempts to simplify the result to a vector, matrix, or array.
+
+```{r}
+sapply(students, class)
+sapply(students[c("score", "centered_score")], mean, na.rm = TRUE)
+```
+
+The convenience comes with a risk: the return type depends on the data. `vapply()` requires a template describing one result and therefore fails early if the function returns an unexpected type or length.
+
+```{r}
+vapply(students, typeof, character(1))
+vapply(students[c("score", "centered_score")],
+       mean,
+       numeric(1),
+       na.rm = TRUE)
+```
+
+Prefer `vapply()` when writing reusable functions or production analyses with a known output type.
+
+### `tapply()`: grouped operations on a vector
+
+`tapply(X, INDEX, FUN, ...)` splits a vector into groups and applies a function to each group.
+
+```{r}
+with(students, tapply(score, program, mean, na.rm = TRUE))
+```
+
+For multiple grouping variables, pass a list of group vectors.
+
+```{r}
+with(students, tapply(score,
+                      list(program = program, completed = completed),
+                      mean,
+                      na.rm = TRUE))
+```
+
+`aggregate()` extends the split–apply–combine idea to data frames, while `dplyr::group_by()` followed by `summarise()` expresses it through the tidyverse grammar.
+
+### `Map()` and `mapply()`: parallel iteration
+
+`Map()` applies a function to corresponding elements of two or more inputs and returns a list. `mapply()` attempts to simplify the result.
+
+```{r}
+Map(function(center, spread) rnorm(3, center, spread),
+    center = c(0, 10),
+    spread = c(1, 2))
+```
+
+The tidyverse package `purrr` provides related type-stable tools: `map()` returns a list, while `map_dbl()`, `map_int()`, `map_chr()`, and `map_lgl()` require a particular atomic return type.
+
+```{r}
+map_chr(students, ~ class(.x)[1])
+map_dbl(students[c("score", "centered_score")],
+        ~ mean(.x, na.rm = TRUE))
+```
+
+### Choosing an iteration tool
+
+| Goal | Recommended starting point |
+|---|---|
+| Element-wise arithmetic | A vectorized function or operator |
+| Standard row/column sums or means | `rowSums()`, `colSums()`, `rowMeans()`, `colMeans()` |
+| General operation on matrix rows/columns | `apply()` |
+| Operation on list or data-frame columns; list output | `lapply()` or `purrr::map()` |
+| Known scalar output for each element | `vapply()` or a typed `purrr::map_*()` |
+| One vector summarized by groups | `tapply()` |
+| Data-frame columns inside a tidy pipeline | `dplyr::across()` |
+| Computation with evolving state or complex indexing | A preallocated `for` loop |
+
+## Numerical computation is finite-precision computation
+
+Most real numbers cannot be stored exactly in binary floating-point arithmetic.
+
+```{r}
+0.1 + 0.2
+(0.1 + 0.2) == 0.3
+all.equal(0.1 + 0.2, 0.3)
+```
+
+Use tolerance-based comparisons, such as `all.equal()`, for computed floating-point values. Numerical algorithms must also consider overflow, underflow, cancellation, conditioning, and convergence—not only algebraic correctness.
+
+A simple example of overflow avoidance is computing a log-likelihood with `dbinom(..., log = TRUE)` rather than taking the logarithm after a tiny probability has already been rounded to zero.
+
+```{r}
+log(dbinom(500, size = 1000, prob = 0.01))
+dbinom(500, size = 1000, prob = 0.01, log = TRUE)
+```
+
+## Randomness and reproducibility
+
+Pseudo-random numbers are generated deterministically from an internal state. Setting the seed makes a simulation reproducible.
+
+```{r}
+set.seed(8670)
+rnorm(5)
+
+set.seed(8670)
+rnorm(5)
+```
+
+Set a seed at a meaningful boundary—usually once near the start of a simulation—not repeatedly inside the loop being studied. Record the code, data provenance, package versions, and R session information needed to reproduce an analysis.
+
+```{r}
+sessionInfo()
+```
+
+## Packages, help, and error messages
+
+Packages extend R with functions, data, and documentation.
+
+Most general-purpose packages are distributed through the Comprehensive R Archive Network (CRAN). Bioconductor distributes packages for bioinformatics and high-throughput biological data, and development versions of some packages are hosted on GitHub.
+
+```{r}
+#| eval: false
+# CRAN
+install.packages("packageName")
+
+# Bioconductor: install BiocManager from CRAN first
+BiocManager::install("packageName")
+
+# GitHub: install the remotes package from CRAN first
+remotes::install_github("username/repository")
+
+# Load an installed package in the current session
+library(packageName)
+
+# Or call one function without attaching the package
+packageName::function_name()
+```
+
+Installation changes the R library on the computer and normally happens once. `library()` makes an installed package available in the current session and must be repeated in each new session that uses it.
+
+Useful ways to investigate an unfamiliar function include:
+
+```{r}
+#| eval: false
+?mean
+help("mean")
+example(mean)
+args(mean)
+methods(mean)
+```
+
+When an error occurs:
+
+1. Read the entire message.
+2. Reduce the problem to the smallest input that still fails.
+3. Inspect object structures and dimensions with `str()`, `typeof()`, `class()`, and `dim()`.
+4. Check the most recent calls with `traceback()` after an error.
+5. Verify assumptions explicitly with `stopifnot()`.
+
+```{r}
+safe_mean <- function(x) {
+  stopifnot(is.numeric(x), length(x) > 0)
+  mean(x)
+}
+
+safe_mean(c(2, 4, 6))
+```
+
+## A computational workflow for this course
+
+A reliable statistical computation separates the following concerns:
+
+1. **Inputs:** raw data, constants, configuration, and seeds.
+2. **Transformation:** cleaning and construction of analysis variables.
+3. **Computation:** algorithms, models, optimization, or simulation.
+4. **Validation:** diagnostics, invariants, tests, and sensitivity checks.
+5. **Communication:** tables, graphics, interpretation, and limitations.
+
+Prefer scripts and Quarto documents over a sequence of unrecorded console commands. A clean R session should be able to run the analysis from beginning to end. Do not rely on objects left over from earlier experimentation.
+
+```{r}
+# A small, reproducible computation
+set.seed(8670)
+
+n <- 200
+x <- rnorm(n)
+y <- 1 + 2 * x + rnorm(n, sd = 0.75)
+simulated_data <- data.frame(x = x, y = y)
+
+fit <- lm(y ~ x, data = simulated_data)
+coef(fit)
+```
+
+The code states where the data came from, fixes the random seed, stores the data in an explicit object, and passes that object to the model.
+
+## In-class exercises
+
+
+::: {.callout-exercise title="Predict before running"}
+
+Predict the value and type of each expression. Then run it and explain the result.
+
+``` r
+c(TRUE, 2L, 3.5)
+c(1, 2, 3, 4) + c(10, 20)
+c(1, 2, NA) > 1
+TRUE | NA
+```
+
+:::
+
+
+::: {.callout-exercise title="Subsetting"}
+
+Using the vector below, write expressions that return:
+
+1. all nonmissing values;
+2. values greater than or equal to 10;
+3. the positions of values greater than or equal to 10;
+4. the mean of the observed values.
+
+```{r}
+x <- c(4, NA, 10, 15, 3, NA, 21)
+```
+
+:::
+
+
+
+::: {.callout-exercise title="Functions and scope"}
+
+
+
+Without running the code, determine the result of `f(5)`. Identify where each occurrence of `a` is found.
+
+``` r
+a <- 10
+
+f <- function(x) {
+  a <- 2
+  g <- function(y) a * y
+  g(x)
+}
+
+f(5)
+```
+
+:::
+
+
+::: {.callout-exercise title="Preallocation"}
+
+
+
+Write a function that takes a positive integer `n` and returns a vector whose $i$th element is
+
+$$
+\frac{(-1)^{i+1}}{i}.
+$$
+
+Preallocate the result and use `seq_len(n)`.
+
+:::
+
+::: {.callout-exercise title="A first simulation"}
+
+
+Estimate the probability that the mean of 20 independent standard normal variables exceeds 0.5. Use at least 10,000 Monte Carlo replications and set a seed. Then compare your estimate with the exact probability computed from the sampling distribution of the mean.
+
+:::
+
+
+::: {.callout-exercise title="Data frames and tibbles"}
+
+Using `students`, complete each task once with base R and once with `dplyr`:
+
+1. retain students with observed scores;
+2. select `name`, `program`, and `score`;
+3. create a variable equal to `score - 90`;
+4. sort from highest to lowest score;
+5. compute the number of observed scores and mean score within each program.
+
+Before running the code, predict whether each result is a vector, data frame, tibble, or grouped tibble.
+
+:::
+
+
+::: {.callout-exercise title="Choosing an apply function"}
+
+
+For each task, choose among a vectorized function, `apply()`, `lapply()`, `vapply()`, `tapply()`, `dplyr::across()`, or a loop. Justify the choice, then write the code.
+
+1. Compute the mean of every numeric column in `students`.
+2. Compute the row sums of a 10,000-by-50 numerical matrix.
+3. Record the class of every column in a data frame.
+4. Compute the mean score within each program.
+5. Fit the same model to each of 20 independently generated data sets and retain the complete fitted-model objects.
+
+### Exercise 8: Diagnose coercion
+
+Predict the type and contents of `result`. Explain why `apply()` is inappropriate here, and rewrite the computation using `vapply()` or `dplyr::across()`.
+
+```{r}
+#| eval: false
+dat <- data.frame(
+  subject = c("A", "B", "C"),
+  pre = c(10, 12, 9),
+  post = c(14, 13, 15)
+)
+
+result <- apply(dat, 2, mean)
+```
+
+:::
+
+
+
+
+## Takeaways
+
+- R evaluates expressions in environments and binds names to objects.
+- Atomic vectors are the foundation of R computation; vectorization, coercion, and recycling follow from this design.
+- Lists, matrices, factors, and data frames build on vectors and attributes.
+- A data frame is a named list of equal-length columns; a tibble is a stricter, modern data frame.
+- `dplyr` expresses row, column, transformation, and grouped-summary operations as a readable pipeline.
+- Functions are objects with arguments, a body, and a defining environment; R uses lexical scoping and lazy evaluation.
+- The apply family expresses repeated operations, but the input structure and promised output type determine which member is appropriate.
+- `apply()` is designed for arrays and matrices; using it on a mixed-type data frame can trigger unwanted coercion.
+- R's copy-on-modify behavior favors clear semantics, but allocation patterns still matter for performance.
+- Statistical computing requires attention to missing values, floating-point arithmetic, random-number state, and reproducibility.
+- Understanding R's computational model makes code easier to predict, debug, optimize, and trust.
+
+## Optional challenge
+
+Explain why the following two functions may have very different memory behavior even though they return the same values. Design a timing experiment for increasing values of `n`.
+
+```{r}
+#| eval: false
+grow <- function(n) {
+  out <- numeric(0)
+  for (i in seq_len(n)) {
+    out <- c(out, i^2)
+  }
+  out
+}
+
+preallocate <- function(n) {
+  out <- numeric(n)
+  for (i in seq_len(n)) {
+    out[i] <- i^2
+  }
+  out
+}
+```
+
+
+------
 
 This appendix is adapted from [Why R?](https://tqtbui.github.io/introbook/app-rintro.html).
