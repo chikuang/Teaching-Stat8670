@@ -74,7 +74,7 @@
     "href": "index.html#topics-and-corresponding-lectures",
     "title": "STAT 8670 - Computational Methods in Statistics",
     "section": "Topics and Corresponding Lectures",
-    "text": "Topics and Corresponding Lectures\nThose chapters are based on the lecture notes. This part will be updated frequently.\n\n\n\n\n\n\n\n\nStatus\nTopic\nLecture Covered\n\n\n\n\n️⏳\nR Programming\n1–2\n\n\n\nNumerical Approaches and Optimization\nTBA\n\n\n\nProbability Distribution\n\n\n\n\nRandom Variable Generation\n\n\n\n\nMonte Carlo and Integration\nTBA\n\n\n\nCross-Validation\nTBA\n\n\n\nBootstrap and Jackknife\n18–21\n\n\n\nSmoothing\n24\n\n\n\nDensity estimation\n25",
+    "text": "Topics and Corresponding Lectures\nThose chapters are based on the lecture notes. This part will be updated frequently.\n\n\n\n\n\n\n\n\nStatus\nTopic\nLecture Covered\n\n\n\n\n️⏳\nR Programming\n1–2\n\n\n\nNumerical Approaches and Optimization\nTBA\n\n\n\nProbability Distribution\n\n\n\n\nRandom Variable Generation\n\n\n\n\nMonte Carlo and Integration\nTBA\n\n\n\nCross-Validation\nTBA\n\n\n\nBootstrap and Jackknife\nTBA\n\n\n\nSelective topics\nTBA",
     "crumbs": [
       "Preface"
     ]
@@ -222,100 +222,100 @@
   {
     "objectID": "App_A-intro-R.html",
     "href": "App_A-intro-R.html",
-    "title": "2  Appendix: Introduction to R?",
+    "title": "Appendix: Introduction to R?",
     "section": "",
-    "text": "2.1 R\nFor conducting analyses with data sets of hundreds to thousands of observations, calculating by hand is not feasible and you will need a statistical software. R is one of those. R can also be thought of as a high-level programming language. In fact, R is one of the top languages to be used by data analysts and data scientists. There are a lot of analysis packages in R that are currently developed and maintained by researchers around the world to deal with different data problems. Most importantly, R is free! In this section, we will learn how to use R to conduct basic statistical analyses.",
+    "text": "R\nFor conducting analyses with data sets of hundreds to thousands of observations, calculating by hand is not feasible and you will need a statistical software. R is one of those. R can also be thought of as a high-level programming language. In fact, R is one of the top languages to be used by data analysts and data scientists. There are a lot of analysis packages in R that are currently developed and maintained by researchers around the world to deal with different data problems. Most importantly, R is free! In this section, we will learn how to use R to conduct basic statistical analyses.\nTiobi Index: https://www.tiobe.com/tiobe-index/. This index is an indicator of the popularity of programming languages. The index is updated once a month. The ratings are based on the number of skilled engineers worldwide, courses, and third-party vendors. Popular search engines such as Google, Bing, Yahoo!, Wikipedia, Amazon, YouTube, and Baidu are used to calculate the ratings.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#ide",
     "href": "App_A-intro-R.html#ide",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.2 IDE",
-    "text": "2.2 IDE\n\n2.2.1 Rstudio\nRStudio is an integrated development environment (IDE) designed specifically for working with the R programming language. It provides a user-friendly interface that includes a source editor, console, environment pane, and tools for plotting, debugging, version control, and package management. RStudio supports both R and Python and is widely used for data analysis, statistical modeling, and reproducible research. It also integrates seamlessly with tools like R Markdown, Shiny, and Quarto, making it popular among data scientists, statisticians, and educators.\n\n\n2.2.2 Visual Studio Code (VS Code)\nVS Code is a versatile code editor that supports multiple programming languages, including R. With the R extension for VS Code, users can write and execute R code, access R’s console, and utilize features like syntax highlighting, code completion, and debugging. While not as specialized as RStudio for R development, VS Code offers a lightweight alternative with extensive customization options and support for various programming tasks.\n\n\n2.2.3 Positron\nPositron IDE is the next-generation integrated development environment developed by Posit, the company behind RStudio. Designed to be a modern, extensible, and language-agnostic IDE, Positron builds on the strengths of RStudio while supporting a broader range of languages and workflows, including R, Python, and Quarto.",
+    "title": "Appendix: Introduction to R?",
+    "section": "IDE",
+    "text": "IDE\n\nRstudio\nRStudio is an integrated development environment (IDE) designed specifically for working with the R programming language. It provides a user-friendly interface that includes a source editor, console, environment pane, and tools for plotting, debugging, version control, and package management. RStudio supports both R and Python and is widely used for data analysis, statistical modeling, and reproducible research. It also integrates seamlessly with tools like R Markdown, Shiny, and Quarto, making it popular among data scientists, statisticians, and educators.\n\n\nVisual Studio Code (VS Code)\nVS Code is a versatile code editor that supports multiple programming languages, including R. With the R extension for VS Code, users can write and execute R code, access R’s console, and utilize features like syntax highlighting, code completion, and debugging. While not as specialized as RStudio for R development, VS Code offers a lightweight alternative with extensive customization options and support for various programming tasks.\n\n\nPositron\nPositron IDE is the next-generation integrated development environment developed by Posit, the company behind RStudio. Designed to be a modern, extensible, and language-agnostic IDE, Positron builds on the strengths of RStudio while supporting a broader range of languages and workflows, including R, Python, and Quarto.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#rstudio-layout",
     "href": "App_A-intro-R.html#rstudio-layout",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.3 RStudio Layout",
-    "text": "2.3 RStudio Layout\nRStudio consists of several panes: - Source: Where you write scripts and markdown documents. - Console: Where you type and execute R commands. - Environment/History: Shows your variables and command history. - Files/Plots/Packages/Help/Viewer: For file management, viewing plots, managing packages, accessing help, and viewing web content.",
+    "title": "Appendix: Introduction to R?",
+    "section": "RStudio Layout",
+    "text": "RStudio Layout\nRStudio consists of several panes:\n\nSource: Where you write scripts and markdown documents.\nConsole: Where you type and execute R commands.\nEnvironment/History: Shows your variables and command history.\nFiles/Plots/Packages/Help/Viewer: For file management, viewing plots, managing packages, accessing help, and viewing web content.\n\n\n\n\n\n\n\nFigure 1: Rstudio interface borrowed from Posit website",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#r-scripts",
     "href": "App_A-intro-R.html#r-scripts",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.4 R Scripts",
-    "text": "2.4 R Scripts\nR scripts are plain text files containing R code. You can create a new script in RStudio by clicking File &gt; New File &gt; R Script.",
+    "title": "Appendix: Introduction to R?",
+    "section": "R Scripts",
+    "text": "R Scripts\nR scripts are plain text files containing R code. You can create a new script in RStudio by clicking File &gt; New File &gt; R Script.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#r-help",
     "href": "App_A-intro-R.html#r-help",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.5 R Help",
-    "text": "2.5 R Help\nUse ?function_name or help(function_name) to access help for any R function. For example:\n?mean\nhelp(mean)",
+    "title": "Appendix: Introduction to R?",
+    "section": "R Help",
+    "text": "R Help\nUse ?function_name or help(function_name) to access help for any R function. For example:\n?mean\nhelp(mean)",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#r-packages",
     "href": "App_A-intro-R.html#r-packages",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.6 R Packages",
-    "text": "2.6 R Packages\nPackages extend R’s functionality. There are thousands of packages available in R ecosystem. You may install them from different sources.\n\n2.6.1 With Comprehensive R Archive Network (CRAN)\nCRAN is the primary repository for R packages. It contains thousands of packages that can be easily installed and updated.\nInstall a package with:\ninstall.packages(\"package_name\")\n\n\n2.6.2 With Bioconductor\nBioconductor is a repository for bioinformatics packages in R. It provides tools for the analysis and comprehension of high-throughput genomic data.\nInstall Bioconductor packages using the BiocManager package:\nBiocManager::install(\"package_name\")\n\n\n2.6.3 From GitHub\nMany of the authors of R packages host their work on GitHub. You can install these packages using the devtools package:\ndevtools::install_github(\"username/package_name\")\n\n\n2.6.4 Load a package\nOnce a package is installed, you need to load it into your R session to use its functions:\nlibrary(package_name)\nAlternatively, you may use a function in the package with package_name::function_name() without loading the entire package.",
+    "title": "Appendix: Introduction to R?",
+    "section": "R Packages",
+    "text": "R Packages\nPackages extend R’s functionality. There are thousands of packages available in R ecosystem. You may install them from different sources.\n\nWith Comprehensive R Archive Network (CRAN)\nCRAN is the primary repository for R packages. It contains thousands of packages that can be easily installed and updated.\nInstall a package with:\ninstall.packages(\"package_name\")\n\n\nWith Bioconductor\nBioconductor is a repository for bioinformatics packages in R. It provides tools for the analysis and comprehension of high-throughput genomic data.\nInstall Bioconductor packages using the BiocManager package:\nBiocManager::install(\"package_name\")\n\n\nFrom GitHub\nMany of the authors of R packages host their work on GitHub. You can install these packages using the devtools package:\ndevtools::install_github(\"username/package_name\")\n\n\nLoad a package\nOnce a package is installed, you need to load it into your R session to use its functions:\nlibrary(package_name)\nAlternatively, you may use a function in the package with package_name::function_name() without loading the entire package.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#r-markdown",
     "href": "App_A-intro-R.html#r-markdown",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.7 R Markdown",
-    "text": "2.7 R Markdown\nR Markdown allows you to combine text, code, and output in a single document. Create a new R Markdown file in RStudio via File &gt; New File &gt; R Markdown....\nRecently, the posit team has developed a new version of the R Markdown called quarto document, with the file extension .qmd. It is still under rapid development.",
+    "title": "Appendix: Introduction to R?",
+    "section": "R Markdown",
+    "text": "R Markdown\nR Markdown allows you to combine text, code, and output in a single document. Create a new R Markdown file in RStudio via File &gt; New File &gt; R Markdown....\nRecently, the posit team has developed a new version of the R Markdown called quarto document, with the file extension .qmd. It is still under rapid development.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#vectors",
     "href": "App_A-intro-R.html#vectors",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.8 Vectors",
-    "text": "2.8 Vectors\nVectors are the most basic data structure in R.\n\nx &lt;- c(1, 2, 3, 4, 5)\nx\n\n[1] 1 2 3 4 5\n\n\nYou can perform operations on vectors:\n\nx * 2\n\n[1]  2  4  6  8 10",
+    "title": "Appendix: Introduction to R?",
+    "section": "Vectors",
+    "text": "Vectors\nVectors are the most basic data structure in R.\n\nx &lt;- c(1, 2, 3, 4, 5)\nx\n\n[1] 1 2 3 4 5\n\n\nYou can perform operations on vectors:\n\nx * 2\n\n[1]  2  4  6  8 10",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   },
   {
     "objectID": "App_A-intro-R.html#data-sets",
     "href": "App_A-intro-R.html#data-sets",
-    "title": "2  Appendix: Introduction to R?",
-    "section": "2.9 Data Sets",
-    "text": "2.9 Data Sets\nData frames are used for storing data tables. Create a data frame:\n\ndf &lt;- data.frame(Name = c(\"Alice\", \"Bob\"), Score = c(90, 85))\ndf\n\n   Name Score\n1 Alice    90\n2   Bob    85\n\n\nYou can import data from files using read.csv() or read.table().\n\nThis appendix is adapted from Why R?.",
+    "title": "Appendix: Introduction to R?",
+    "section": "Data Sets",
+    "text": "Data Sets\nData frames are used for storing data tables. Create a data frame:\n\ndf &lt;- data.frame(Name = c(\"Alice\", \"Bob\"), Score = c(90, 85))\ndf\n\n   Name Score\n1 Alice    90\n2   Bob    85\n\n\nYou can import data from files using read.csv() or read.table().\n\nThis appendix is adapted from Why R?.",
     "crumbs": [
       "Appendix",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Appendix: Introduction to R?</span>"
+      "Appendix: Introduction to R?"
     ]
   }
 ]

@@ -1,8 +1,10 @@
-# Appendix: Introduction to R?
+# Appendix: Introduction to R? {.unnumbered}
 
 ## R
 
 For conducting analyses with data sets of hundreds to thousands of observations, calculating by hand is not feasible and you will need a statistical software. **R** is one of those. **R** can also be thought of as a high-level programming language. In fact, **R** is [one of the top languages](https://statisticstimes.com/tech/top-computer-languages.php) to be used by data analysts and data scientists. There are a lot of analysis packages in **R** that are currently developed and maintained by researchers around the world to deal with different data problems. Most importantly, **R** is free! In this section, we will learn how to use **R** to conduct basic statistical analyses.
+
+**Tiobi Index**: [https://www.tiobe.com/tiobe-index/](https://www.tiobe.com/tiobe-index/). This index is an indicator of the popularity of programming languages. The index is updated once a month. The ratings are based on the number of skilled engineers worldwide, courses, and third-party vendors. Popular search engines such as Google, Bing, Yahoo!, Wikipedia, Amazon, YouTube, and Baidu are used to calculate the ratings.
 
 ## IDE
 
@@ -20,7 +22,14 @@ Positron IDE is the next-generation integrated development environment developed
 
 ## RStudio Layout
 
-RStudio consists of several panes: - **Source**: Where you write scripts and markdown documents. - **Console**: Where you type and execute **R** commands. - **Environment/History**: Shows your variables and command history. - **Files/Plots/Packages/Help/Viewer**: For file management, viewing plots, managing packages, accessing help, and viewing web content.
+RStudio consists of several panes: 
+
+- **Source**: Where you write scripts and markdown documents. 
+- **Console**: Where you type and execute **R** commands. 
+- **Environment/History**: Shows your variables and command history. 
+- **Files/Plots/Packages/Help/Viewer**: For file management, viewing plots, managing packages, accessing help, and viewing web content.
+
+![Rstudio interface borrowed from Posit website](fig/appendix/R/rstudio-panes-labeled.jpeg){#fig-rstudio-panes width=80% fig-align="center"}
 
 ## R Scripts
 

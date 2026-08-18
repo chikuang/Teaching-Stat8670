@@ -1,6 +1,5 @@
 # Preface {.unnumbered}
 
-
 ## Description
 
 Topics included are optimization, numerical integration, bootstrapping, cross-validation and Jackknife, density estimation, smoothing, and use of the statistical computer package of S-plus/R.
@@ -52,9 +51,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 |    |          Random Variable Generation          |       |
 |     |         Monte Carlo and Integration          |      TBA    |
 |    |               Cross-Validation               |      TBA     |
-|   |           Bootstrap and Jackknife            |      18–21      |
-|   |                  Smoothing                   |       24        |
-|   |              Density estimation              |       25        |
+|   |           Bootstrap and Jackknife            |      TBA    |
+|   |                  Selective topics                   |       TBA        |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
