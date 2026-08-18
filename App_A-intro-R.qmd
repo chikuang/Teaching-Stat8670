@@ -34,6 +34,10 @@ RStudio is an integrated development environment (IDE) for R, Python, and reprod
 
 Use the console for short experiments. Put any computation that matters in a script or Quarto document so it can be rerun.
 
+
+![RStudio layout borrow from the Posit website](fig/appendix/R/rstudio-panes-labeled.jpeg){#fig-rstudio-panes width=80% fig-align="center"}
+
+
 ### R scripts and Quarto documents
 
 An R script is a plain-text file with the extension `.R`. It contains R expressions that can be executed one line, one selection, or one file at a time.
