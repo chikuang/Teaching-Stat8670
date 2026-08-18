@@ -1,8 +1,5 @@
 # Preface {.unnumbered}
 
-## Thank you
-
-The course is finished, thank you everyone for your participation and attention. Hope you all have learned something from this course. Wish everyone has a good winter break!
 
 ## Description
 
@@ -16,39 +13,32 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 [Chi-Kuang Yeh](https://chikuang.github.io/), I am an Assistant Professor in the Department of Mathematics and Statistics, Georgia State University.
 
--   Office: Suite 1407, 25 Park Place.
--   Email: [cyeh\@gsu.edu](mailto:cyeh@gsu.edu).
+- Office: Suite 1407, 25 Park Place.
+- Email: [cyeh\@gsu.edu](mailto:cyeh@gsu.edu).
 
 ## Office Hour
 
-14:00--15:00 on Tuesday
+Office hour is TBA.
 
-13:00 - 14:00 on Friday (online) Link Provided on *iCollege*
 
 ## Grade Distribution
 
--   Assignments: 40%
--   Exam 1: 15%
--   Exam 2: 15%
--   Project: 30%
+- Assignments: 40%
+- Exam: 30%
+- Project: 30%
 
 ## Assignment
 
--   [x] Assignment 1: Due on September 12, 2025
--   [x] Assignment 2: Due on September 22, 2025
--   [x] Assignment 3: Due on October 22, 2025
--   [x] Assignment 4: Due on November 7, 2025
--   [x] Assignment 5: Due on December 1, 2025
+- [ ] Assignment 1: TBA
 
 ## Midterm
 
--   [x] Midterm 1: October 8, 2025
--   [x] Midterm 2: November 12, 2025
+- [ ] Midterm: TBA
 
 ## Project
 
--   [x] Report: Due on December 8, 2025.
--   [x] Presentation: December 1, 3, and 8.
+- [ ] Report: TBA
+- [ ] Presentation: 
 
 ## Topics and Corresponding Lectures
 
@@ -56,29 +46,26 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Status |                    Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
-|   ✅   |                R Programming                 |       1–2       |
-|   ✅   | Numerical Approaches and Optimization in 1-D |       3–5       |
-|   ✅   |           Review for Distribution            |       6–7       |
-|   ✅   |          Random Variable Generation          |      8–10       |
-|   ✅   |         Monte Carlo and Integration          |      11–15      |
-|   ✅   |                    Exam 1                    |       13        |
-|   ✅   |               Cross-Validation               |      16-17      |
-|   ✅   |           Bootstrap and Jackknife            |      18–21      |
-|   ✅   |                    Exam 2                    |       23        |
-|   ✅   |                  Smoothing                   |       24        |
-|   ✅   |              Density estimation              |       25        |
-|✅ |                 Presentation                 |      26-28      |
- <!-- 🚧🛠️⏳  -->
-<!-- ⏳ In Progress  -->
+| ️⏳  |                R Programming                 |       1–2       |
+|   | Numerical Approaches and Optimization  |         TBA   |
+|   |           Probability Distribution            |           |
+|    |          Random Variable Generation          |       |
+|     |         Monte Carlo and Integration          |      TBA    |
+|    |               Cross-Validation               |      TBA     |
+|   |           Bootstrap and Jackknife            |      18–21      |
+|   |                  Smoothing                   |       24        |
+|   |              Density estimation              |       25        |
+
+<!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
 ## Recommended Textbooks
 
--   Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.
+- Givens, G.H. and Hoeting, J.A. (2012). [*Computational Statistics*](https://www.stat.colostate.edu/computationalstatistics/). Wiley, New York.
 
--   Rizzo, M.L. (2007) [*Statistical Computing with R*](https://a-roshani.ir/files/SC/%5B4%5D%20%5BMaria%20L.%20Rizzo%5D%5B2019%5D%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf). CRC Press, Roca Baton.
+- Rizzo, M.L. (2007) [*Statistical Computing with R*](https://a-roshani.ir/files/SC/%5B4%5D%20%5BMaria%20L.%20Rizzo%5D%5B2019%5D%20Statistical%20Computing%20%20with%20R,%20Second%20Edition.pdf). CRC Press, Roca Baton.
 
--   Hothorn, T. and Everitt, B.S. (2006). [*A Handbook of Statistical Analyses Using R*](https://digitallibrary.tsu.ge/book/2019/september/books/A-Handbook-of-Statistical-Analyses.pdf). CRC Press, Boca Raton.
+- Hothorn, T. and Everitt, B.S. (2006). [*A Handbook of Statistical Analyses Using R*](https://digitallibrary.tsu.ge/book/2019/september/books/A-Handbook-of-Statistical-Analyses.pdf). CRC Press, Boca Raton.
 
 ## Side Readings
 
--   Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023). [*R for Data Science*](https://r4ds.hadley.nz/). O'Reilly.
+- Wickham, H., Çetinkaya-Rundel, M. and Grolemund, G. (2023). [*R for Data Science*](https://r4ds.hadley.nz/). O'Reilly.

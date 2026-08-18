@@ -3,24 +3,25 @@ project:
 
 book:
   title: "STAT 8670 - Computational Methods in Statistics"
+  subtitle: "2026 Fall Course Notes"
   author: "Chi-Kuang Yeh"
   date: today
   chapters:
     - index.qmd
     - 01-intro.qmd
-    - 02-optimization.qmd
-    - 03-generating-rv.qmd
-    - 04-monte-carlo.qmd
-    - 05-cv.qmd
-    - 06-resample.qmd
-    - 07-smoothing.qmd
-    - 08-density.qmd
+    # - 02-optimization.qmd
+    # - 03-generating-rv.qmd
+    # - 04-monte-carlo.qmd
+    # - 05-cv.qmd
+    # - 06-resample.qmd
+    # - 07-smoothing.qmd
+    # - 08-density.qmd
     - part: "Appendix"
       chapters:
         - App_A-intro-R.qmd
-        - App_B-distribution.qmd
-        - App_C_Rpackage.qmd
-        - APP_D_integration.qmd
+    #     - App_B-distribution.qmd
+    #     - App_C_Rpackage.qmd
+    #     - APP_D_integration.qmd
   navbar:
     right:
       - icon: github
@@ -51,4 +52,4 @@ format:
       - addcalloutid.lua
     cache: true
 
-editor: visual
+editor: source
