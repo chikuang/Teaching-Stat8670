@@ -2,13 +2,13 @@ project:
   type: book
 
 book:
-  title: "STAT 8670 - Computational Methods in Statistics"
+  title: "STAT 8670 -- Computational Methods in Statistics"
   subtitle: "2026 Fall Course Notes"
   author: "Chi-Kuang Yeh"
   date: today
   chapters:
     - index.qmd
-    - 01-intro.qmd
+    - 01-R.qmd
     # - 02-optimization.qmd
     # - 03-generating-rv.qmd
     # - 04-monte-carlo.qmd
@@ -16,9 +16,9 @@ book:
     # - 06-resample.qmd
     # - 07-smoothing.qmd
     # - 08-density.qmd
-    - part: "Appendix"
-      chapters:
-        - App_A-intro-R.qmd
+    # - part: "Appendix"
+      # chapters:
+        # - App_A-intro-R.qmd
     #     - App_B-distribution.qmd
     #     - App_C_Rpackage.qmd
     #     - APP_D_integration.qmd

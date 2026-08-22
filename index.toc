@@ -1,0 +1,69 @@
+\contentsline {chapter}{Preface}{4}{chapter*.2}%
+\contentsline {section}{Description}{4}{chapter*.2}%
+\contentsline {subsection}{Prerequisites}{4}{chapter*.2}%
+\contentsline {subsection}{Instructor}{4}{chapter*.2}%
+\contentsline {section}{Office Hour}{4}{chapter*.2}%
+\contentsline {section}{Grade Distribution}{4}{chapter*.2}%
+\contentsline {section}{Assignment}{5}{chapter*.2}%
+\contentsline {section}{Midterm}{5}{chapter*.2}%
+\contentsline {section}{Project}{5}{chapter*.2}%
+\contentsline {section}{Topics and Corresponding Lectures}{5}{chapter*.2}%
+\contentsline {section}{Recommended Textbooks}{5}{none.1}%
+\contentsline {section}{Side Readings}{6}{none.1}%
+\contentsline {chapter}{\numberline {1}Introduction to R}{7}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Why R?}{7}{section.1.1}%
+\contentsline {section}{\numberline {1.2}The working environment}{8}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}RStudio}{9}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}R scripts and Quarto documents}{10}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}A project-oriented workflow}{10}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}R as a computing environment}{11}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Objects, data, and functions}{12}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Expressions, objects, and names}{12}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Data types}{13}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}Changing data types}{14}{subsection.1.6.1}%
+\contentsline {section}{\numberline {1.7}Operators}{15}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}Unary and binary operators}{15}{subsection.1.7.1}%
+\contentsline {subsection}{\numberline {1.7.2}Comparison operators}{15}{subsection.1.7.2}%
+\contentsline {subsection}{\numberline {1.7.3}Logical operators}{16}{subsection.1.7.3}%
+\contentsline {section}{\numberline {1.8}Vectorization}{16}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Recycling}{17}{section.1.9}%
+\contentsline {section}{\numberline {1.10}Coercion}{18}{section.1.10}%
+\contentsline {section}{\numberline {1.11}Missing and special values}{19}{section.1.11}%
+\contentsline {section}{\numberline {1.12}Indexing and subsetting}{20}{section.1.12}%
+\contentsline {section}{\numberline {1.13}Naming elements}{21}{section.1.13}%
+\contentsline {section}{\numberline {1.14}Arrays and matrices}{22}{section.1.14}%
+\contentsline {section}{\numberline {1.15}Lists and key-value pairs}{25}{section.1.15}%
+\contentsline {section}{\numberline {1.16}Factors}{26}{section.1.16}%
+\contentsline {section}{\numberline {1.17}Data frames}{27}{section.1.17}%
+\contentsline {subsection}{\numberline {1.17.1}Inspecting a data frame}{28}{subsection.1.17.1}%
+\contentsline {subsection}{\numberline {1.17.2}Subsetting a data frame}{30}{subsection.1.17.2}%
+\contentsline {subsection}{\numberline {1.17.3}Adding and modifying variables}{31}{subsection.1.17.3}%
+\contentsline {subsection}{\numberline {1.17.4}Importing rectangular data}{32}{subsection.1.17.4}%
+\contentsline {section}{\numberline {1.18}Functions}{33}{section.1.18}%
+\contentsline {subsection}{\numberline {1.18.1}Argument matching}{34}{subsection.1.18.1}%
+\contentsline {subsection}{\numberline {1.18.2}Lazy evaluation}{34}{subsection.1.18.2}%
+\contentsline {section}{\numberline {1.19}Environments and lexical scoping}{35}{section.1.19}%
+\contentsline {section}{\numberline {1.20}Memory and copy-on-modify}{36}{section.1.20}%
+\contentsline {section}{\numberline {1.21}Iteration: vectorization, loops, and the apply family}{37}{section.1.21}%
+\contentsline {subsection}{\numberline {1.21.1}\texttt {apply()}}{38}{subsection.1.21.1}%
+\contentsline {subsection}{\numberline {1.21.2}Why \texttt {apply()} can be dangerous for data frames}{39}{subsection.1.21.2}%
+\contentsline {subsection}{\numberline {1.21.3}\texttt {lapply()}}{40}{subsection.1.21.3}%
+\contentsline {subsection}{\numberline {1.21.4}\texttt {sapply()} and \texttt {vapply()}}{41}{subsection.1.21.4}%
+\contentsline {subsection}{\numberline {1.21.5}\texttt {tapply()}}{42}{subsection.1.21.5}%
+\contentsline {subsection}{\numberline {1.21.6}\texttt {Map()} and \texttt {mapply()}}{42}{subsection.1.21.6}%
+\contentsline {subsection}{\numberline {1.21.7}Choosing an iteration tool}{43}{subsection.1.21.7}%
+\contentsline {section}{\numberline {1.22}The tidyverse}{43}{section.1.22}%
+\contentsline {section}{\numberline {1.23}Data frames and tibbles}{44}{section.1.23}%
+\contentsline {section}{\numberline {1.24}Pipe operators}{45}{section.1.24}%
+\contentsline {section}{\numberline {1.25}Core \texttt {dplyr} verbs}{46}{section.1.25}%
+\contentsline {section}{\numberline {1.26}Applying functions across several columns}{47}{section.1.26}%
+\contentsline {section}{\numberline {1.27}Base R and tidyverse are complementary}{47}{section.1.27}%
+\contentsline {section}{\numberline {1.28}Numerical computation and finite precision}{48}{section.1.28}%
+\contentsline {section}{\numberline {1.29}Randomness and reproducibility}{49}{section.1.29}%
+\contentsline {section}{\numberline {1.30}Packages and help}{51}{section.1.30}%
+\contentsline {section}{\numberline {1.31}Debugging and error messages}{52}{section.1.31}%
+\contentsline {section}{\numberline {1.32}A computational workflow for this course}{52}{section.1.32}%
+\contentsline {section}{\numberline {1.33}In-class exercises}{53}{section.1.33}%
+\contentsline {section}{\numberline {1.34}Takeaways}{55}{section.1.34}%
+\contentsline {section}{\numberline {1.35}Optional challenge}{56}{section.1.35}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

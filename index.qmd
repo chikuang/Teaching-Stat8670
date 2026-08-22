@@ -45,7 +45,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Status |                    Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
-| ️⏳  |                R Programming                 |       1–2       |
+| ️⏳  |                [R Programming](01-R.qmd)                 |       1       |
 |   | Numerical Approaches and Optimization  |         TBA   |
 |   |           Probability Distribution            |           |
 |    |          Random Variable Generation          |       |
