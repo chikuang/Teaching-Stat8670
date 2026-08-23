@@ -94,6 +94,12 @@ A Quarto document has the extension `.qmd`. It combines:
 - executable code chunks;
 - tables, equations, figures, citations, and cross-references.
 
+![Quarto.](fig/appendix/R/quarto.png){#fig-quarto width=80% fig-align="center"} 
+
+![Quarto 2.](fig/appendix/R/quarto_2.png){#fig-quarto2 width=80% fig-align="center"} 
+
+In @fig-quarto2, the red box is the yaml, the yellow box is the executable code chunk and the green box is a figure.
+
 For example, an executable R chunk is written as
 
 
@@ -255,7 +261,7 @@ x_int <- as.integer(x)
 x_int
 ```
 
-Here, converting \(\pi\) to an integer removes its decimal component.
+Here, converting $\pi$ to an integer removes its decimal component.
 
 Common conversion functions include:
 
@@ -272,12 +278,12 @@ Common conversion functions include:
 - `as.complex()`
 
 ::: {.callout-warning title="Type conversion can lose information"}
+
 Always inspect the result after converting an object from one type to another.
+
 :::
 
 ## Operators
-
-### Unary and binary operators
 
 A **unary operator** operates on one object:
 
@@ -295,7 +301,7 @@ x * y
 x / y
 ```
 
-### Comparison operators
+**Comparison operators**
 
 Comparison operators return logical values:
 
@@ -308,7 +314,7 @@ x <= y
 x >= y
 ```
 
-### Logical operators
+**Logical operators**
 
 Logical operators combine logical values:
 
@@ -1070,7 +1076,7 @@ library(purrr)    # functional programming
 
 Base R and tidyverse tools are complementary rather than competing systems.
 
-## Data frames and tibbles
+### Data frames and tibbles
 
 A **tibble** is a modern data frame.
 
@@ -1096,7 +1102,7 @@ Both are still data frames:
 is.data.frame(students_tbl)
 ```
 
-## Pipe operators
+### Pipe operators
 
 The native R pipe is
 
@@ -1131,7 +1137,7 @@ The pipe makes the sequence of operations explicit.
 
 A useful formatting rule is that `|>` should have spaces around it and normally appear at the end of a line.
 
-## Core `dplyr` verbs
+### Core `dplyr` verbs
 
 | Verb | Purpose |
 | --- | --- |
@@ -1171,7 +1177,7 @@ students_tbl |>
   )
 ```
 
-## Applying functions across several columns
+### Applying functions across several columns
 
 Inside `mutate()` or `summarise()`, `across()` applies functions to selected columns.
 
