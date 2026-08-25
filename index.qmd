@@ -10,21 +10,21 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ### Instructor
 
-[Chi-Kuang Yeh](https://chikuang.github.io/), I am an Assistant Professor in the Department of Mathematics and Statistics, Georgia State University.
+[Chi-Kuang Yeh](https://chikuang.github.io/), I am an Assistant Professor in the Department of Mathematics and Statistics, [Georgia State University](https://www.gsu.edu/).
 
 - Office: Suite 1407, 25 Park Place.
 - Email: [cyeh\@gsu.edu](mailto:cyeh@gsu.edu).
 
 ## Office Hour
 
-Office hour is TBA.
-
+9:00 - 12:00 on Wednesday or by appointment
 
 ## Grade Distribution
 
 - Assignments: 40%
 - Exam: 30%
 - Project: 30%
+- Attendance: *7%
 
 ## Assignment
 
@@ -37,7 +37,7 @@ Office hour is TBA.
 ## Project
 
 - [ ] Report: TBA
-- [ ] Presentation: 
+- [ ] Presentation: TBA
 
 ## Topics and Corresponding Lectures
 
@@ -45,7 +45,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Status |                    Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
-| ️⏳  |                [R Programming](01-R.qmd)                 |       1       |
+| ️⏳  |                [R Programming](01-R.qmd)                 |       1--       |
 |   | Numerical Approaches and Optimization  |         TBA   |
 |   |           Probability Distribution            |           |
 |    |          Random Variable Generation          |       |
