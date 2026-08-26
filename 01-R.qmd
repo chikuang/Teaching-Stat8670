@@ -1050,6 +1050,50 @@ Map(
 | Data-frame columns in tidyverse | `dplyr::across()` |
 | Complex state-dependent computation | Preallocated `for` loop |
 
+
+## Packages and help
+
+Packages extend R with functions, data, documentation, and statistical methods. The historical package count can be found [https://www.datasciencemeta.com/rpackages](https://www.datasciencemeta.com/rpackages).
+
+```{r}
+#| eval: false
+
+# CRAN
+install.packages("packageName")
+
+# Bioconductor
+BiocManager::install("packageName")
+
+# GitHub
+remotes::install_github("username/repository")
+```
+
+Load an installed package:
+
+```r
+library(packageName)
+```
+
+or call one function explicitly:
+
+```r
+packageName::function_name()
+```
+
+Useful help tools include:
+
+```{r}
+#| eval: false
+
+?mean
+help("mean")
+example(mean)
+args(mean)
+methods(mean)
+```
+
+
+
 ## The tidyverse
 
 The **tidyverse** is a coordinated collection of R packages for data manipulation, visualization, importing, tidying, and programming.
@@ -1279,46 +1323,6 @@ Record the information necessary to reproduce the analysis:
 sessionInfo()
 ```
 
-## Packages and help
-
-Packages extend R with functions, data, documentation, and statistical methods.
-
-```{r}
-#| eval: false
-
-# CRAN
-install.packages("packageName")
-
-# Bioconductor
-BiocManager::install("packageName")
-
-# GitHub
-remotes::install_github("username/repository")
-```
-
-Load an installed package:
-
-```r
-library(packageName)
-```
-
-or call one function explicitly:
-
-```r
-packageName::function_name()
-```
-
-Useful help tools include:
-
-```{r}
-#| eval: false
-
-?mean
-help("mean")
-example(mean)
-args(mean)
-methods(mean)
-```
 
 ## Debugging and error messages
 
