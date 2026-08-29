@@ -1,6 +1,20 @@
 # What is Computational Approaches
 
-The optimization plays an important role in statistical computing, especially in the context of maximum likelihood estimation (MLE) and other statistical inference methods. This chapter will cover various optimization techniques used in statistical computing.
+
+> "Statistical computing is more than programming. It is the process of using computation to connect statistical theory with practical data analysis. Programming provides the tools, but the main goal is to understand how a statistical method can be implemented, approximated, validated, and interpreted. A good computational solution should therefore be not only correct in code, but also statistically meaningful, numerically stable, and reproducible."
+
+A computational approach is a systematic way to solve a statistical problem when an exact analytical solution is difficult, unavailable, or inefficient. Examples include using Monte Carlo methods to approximate expectations, numerical optimization to estimate parameters, bootstrap methods to approximate sampling distributions, and cross-validation to select tuning parameters. In this course, the emphasis is on understanding the connection  
+
+$$
+\text{Theory}
+\;\Longleftrightarrow\;
+\text{Computation}
+\;\Longleftrightarrow\;
+\text{Practice}.
+$$
+
+
+---
 
 There is a general principle that will be repeated in this chapter that Kenneth Lange calls *optimization transfer* in his 1999 paper. The basic idea applies to the problem of maximizing a function $f$.
 
@@ -90,7 +104,7 @@ The property of the multivariate normal are:
 -   mean vector: $E(\boldsymbol{X}) = \mu$
 -   variance: $Var(\boldsymbol{X}) = \boldsymbol{CZC}^\top = \boldsymbol{C} var(\boldsymbol{Z})\boldsymbol{C}^\top:=  \boldsymbol{\Sigma}$
 
-Notation: $\boldsymbol{X} \sim N(\mu, \boldsymbol{\Sigma})$.
+Notation: $\boldsymbol{X} \sim N_d(\mu, \boldsymbol{\Sigma})$.
 
 PDF: $$
 f(\boldsymbol{x} \mid \mu, \Sigma)=(2 \pi)^{-d / 2} \cdot \exp \left\{-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{\prime} \boldsymbol{\Sigma}^{-1}(\boldsymbol{x}-\boldsymbol{\mu})-\frac{1}{2} \log |\boldsymbol{\Sigma}|\right\}.
@@ -156,9 +170,12 @@ Unit: milliseconds
  26.15771 25.81678 26.89188 29.12045   100
 ```
 
-### Take home message:
+
+:::{.callout-tip title = "Take home message 1"}
 
 The take home here is that the issues arise from the finite precision of computer arithmetic and the limited memory available on computers. When implementing statistical methods on a computer, it is crucial to consider these limitations and choose algorithms and implementations that are robust to numerical issues.
+
+:::
 
 ### Multi-collinearity
 
@@ -300,11 +317,14 @@ autoplot(m2)
 
 Q: Why one is faster than the other?
 
-#### Take home message 2
+::: {.callout-tip title="Take home message 2"}
 
 The naive algorithm simply inverts the covariance matrix. The Cholesky-based approach, on the other hand, exploits the fact that covariance matrices are symmetric and positive definite. This results in an implementation that is both faster and numerically more stable—exactly the kind of optimization that makes a difference in real-world statistical computing.
 
+:::
+
 Thus, a knowledge of statistics and numerical analysis can often lead to better algorithms, often invaluable!
+
 
 
 

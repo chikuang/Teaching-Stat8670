@@ -1,5 +1,7 @@
 # Optimization
 
+The optimization plays an important role in statistical computing, especially in the context of maximum likelihood estimation (MLE) and other statistical inference methods. This chapter will cover various optimization techniques used in statistical computing.
+
 ## Nonlinear functions
 
 On the top, we have *linear functions*, such as $y=f(x) = ax + b$ or in the linear regression $y=X\beta +\epsilon$. It is a small class of the functions, and may be relatively limited.
