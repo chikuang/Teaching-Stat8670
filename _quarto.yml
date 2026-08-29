@@ -10,6 +10,8 @@ book:
   chapters:
     - index.qmd
     - 01-R.qmd
+    - 02-computation.qmd
+    - 02-optimization.qmd
     
   navbar:
     right:

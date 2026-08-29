@@ -46,13 +46,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | Status |                    Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
 | ️⏳  |                [R Programming](01-R.qmd)                 |       1--       |
-|   | Numerical Approaches and Optimization  |         TBA   |
-|   |           Probability Distribution            |           |
-|    |          Random Variable Generation          |       |
-|     |         Monte Carlo and Integration          |      TBA    |
-|    |               Cross-Validation               |      TBA     |
-|   |           Bootstrap and Jackknife            |      TBA    |
-|   |                  Selective topics                   |       TBA        |
+| ⏳   | [Numerical Approaches and Optimization](02-optimization.qmd) |         TBA   |      |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
