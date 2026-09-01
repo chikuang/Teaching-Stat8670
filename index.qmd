@@ -45,8 +45,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 
 | Status |                    Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
-| ️⏳  |                [R Programming](01-R.qmd)                 |       1--       |
-| ⏳   | [Numerical Approaches and Optimization](02-optimization.qmd) |         TBA   |      |
+|✅   ️|                [R Programming](01-R.qmd)                 |       1--3       |
+| ⏳   | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4--   |      |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
