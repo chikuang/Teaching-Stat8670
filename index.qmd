@@ -28,7 +28,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Assignment
 
-- [ ] Assignment 1: TBA
+- [ ] [Assignment 1](Assignment1.qmd): September 11, 2026
 
 ## Midterm
 
@@ -43,7 +43,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-| Status |                    Topic                     | Lecture Covered |
+| Status |                     Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
 |✅   ️|                [R Programming](01-R.qmd)                 |       1--3       |
 | ⏳   | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4--   |      |

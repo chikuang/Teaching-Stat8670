@@ -1,0 +1,652 @@
+---
+show-solutions: false
+---
+
+# Assignment 1 {.unnumbered}
+
+
+**Due date:** Friday, September 11, 2026  
+**Total:** 30 points
+
+::: {.callout-note title="Submission"}
+
+For this assignment, please use **R Markdown** or **Quarto**.
+
+Submit both:
+
+1. your source file (`.Rmd` or `.qmd`), and
+2. the corresponding rendered PDF.
+
+For multiple-choice questions, clearly indicate your selected answer.  
+For computational questions, include the R code used to obtain your answer.
+
+:::
+
+---
+
+## Question 1: R Programming and Statistical Computing [10]
+
+Select the **best answer**. Each question is worth **1 point**.
+
+### 1a)
+
+Which of the following creates a numeric vector in R?
+
+A. `x <- list(1, 2, 3)`  
+B. `x <- c(1, 2, 3)`  
+C. `x <- data.frame(1, 2, 3)`  
+D. `x <- matrix(1, 2, 3)`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** The function `c()` combines values into a vector.
+:::
+
+::::
+
+### 1b)
+
+Which expression correctly returns the mean of `x` after removing missing values?
+
+A. `mean(x, remove = TRUE)`  
+B. `mean(x, missing = FALSE)`  
+C. `mean(x, na.rm = TRUE)`  
+D. `mean(na.omit = x)`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**C.** Use the argument `na.rm = TRUE`.
+:::
+
+::::
+
+### 1c)
+
+Suppose
+
+$$
+x=(10,20,30,40).
+$$
+
+What does the following R expression return?
+
+```r
+x[c(1, 3)]
+```
+
+A. `10 20`  
+B. `10 30`  
+C. `20 40`  
+D. `30 40`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** R uses 1-based indexing, so positions 1 and 3 are selected.
+:::
+
+::::
+
+### 1d)
+
+Which statement about R indexing is correct?
+
+A. R indexing starts from 0.  
+B. R indexing starts from 1.  
+C. R indexing depends on the data type.  
+D. R indexing starts from $-1$.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** R uses 1-based indexing.
+:::
+
+::::
+
+### 1e)
+
+Which function is most appropriate for applying a function to the **columns of a numeric matrix**?
+
+A. `apply()`  
+B. `lm()`  
+C. `filter()`  
+D. `rbind()`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**A.**
+
+For example,
+
+```r
+apply(X, MARGIN = 2, FUN = mean)
+```
+
+applies `mean()` to the columns of `X`.
+:::
+
+::::
+
+### 1f)
+
+What is the main advantage of using `vapply()` instead of `sapply()`?
+
+A. It always runs in parallel.  
+B. It requires a prespecified output type.  
+C. It works only on matrices.  
+D. It automatically removes missing values.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** `vapply()` requires the expected output type, which makes the result more predictable.
+:::
+
+::::
+
+### 1g)
+
+Which of the following is the native R pipe operator?
+
+A. `%>%`  
+B. `->`  
+C. `|>`  
+D. `%*%`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**C.** The native R pipe operator is `|>`.
+:::
+
+::::
+
+### 1h)
+
+Which `dplyr` function is used to retain rows satisfying a condition?
+
+A. `select()`  
+B. `filter()`  
+C. `mutate()`  
+D. `summarise()`
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** `filter()` retains rows satisfying logical conditions.
+:::
+
+::::
+
+### 1i)
+
+Which statement concerning `apply()` and a `for` loop is most accurate?
+
+A. `apply()` is always faster than a `for` loop.  
+B. A `for` loop is always faster than `apply()`.  
+C. Neither is always faster; performance depends on the computation.  
+D. `apply()` performs computations in parallel by default.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**C.** Neither approach is universally faster. Performance depends on the computation and implementation.
+:::
+
+::::
+
+### 1j)
+
+Why is reproducibility important in statistical computing?
+
+A. It guarantees that every statistical model is correct.  
+B. It allows an analysis to be rerun and verified.  
+C. It eliminates sampling variability.  
+D. It eliminates numerical error.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.** Reproducibility allows an analysis to be rerun, checked, and verified.
+:::
+
+::::
+
+---
+
+## Question 2: Computational Results Using the Iris Data [10]
+
+Use the built-in `iris` dataset in R.
+
+For each computational question, include the R code used to obtain your answer.
+
+### 2a) [2]
+
+Report the sample mean of `Sepal.Length`, rounded to three decimal places.
+
+$$
+\boxed{\phantom{5.843}}
+$$
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+```r
+mean(iris$Sepal.Length)
+```
+
+The result is
+
+$$
+\boxed{5.843}.
+$$
+:::
+
+::::
+
+### 2b) [2]
+
+Report the sample standard deviation of `Sepal.Width`, rounded to three decimal places.
+
+$$
+\boxed{\phantom{0.436}}
+$$
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+```r
+sd(iris$Sepal.Width)
+```
+
+The result is
+
+$$
+\boxed{0.436}.
+$$
+:::
+
+::::
+
+### 2c) [2]
+
+How many observations in the `iris` dataset belong to the species `virginica`?
+
+A. 25  
+B. 40  
+C. 50  
+D. 75
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**C.** There are 50 observations from each species.
+
+For example,
+
+```r
+table(iris$Species)
+```
+:::
+
+::::
+
+### 2d) [2]
+
+Fit the linear regression model
+
+$$
+\texttt{Sepal.Length}
+=
+\beta_0
++
+\beta_1\texttt{Sepal.Width}
++
+\varepsilon.
+$$
+
+Report the estimated slope coefficient $\hat{\beta}_1$, rounded to three decimal places.
+
+$$
+\boxed{\phantom{-0.223}}
+$$
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+```r
+fit <- lm(Sepal.Length ~ Sepal.Width, data = iris)
+coef(fit)
+```
+
+The estimated coefficients are approximately
+
+$$
+\hat{\beta}_0=6.526,
+\qquad
+\hat{\beta}_1=-0.223.
+$$
+
+Therefore,
+
+$$
+\boxed{\hat{\beta}_1=-0.223}.
+$$
+:::
+
+::::
+
+### 2e) [2]
+
+Based on the fitted model in part (d), which statement is correct?
+
+A. Sepal length tends to increase as sepal width increases.  
+B. Sepal length tends to decrease as sepal width increases.  
+C. The estimated slope is exactly zero.  
+D. The model cannot be fitted because both variables are continuous.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.**
+
+The estimated slope is negative:
+
+$$
+\hat{\beta}_1=-0.223<0.
+$$
+:::
+
+::::
+
+---
+
+## Question 3: R Coding and Visualization [6]
+
+Use the `iris` dataset for both parts.
+
+### 3a) [3]
+
+Using `ggplot2`, construct a scatter plot with:
+
+- `Sepal.Width` on the $x$-axis,
+- `Sepal.Length` on the $y$-axis,
+- points coloured according to `Species`.
+
+Your figure must contain:
+
+1. appropriate axis labels,
+2. an informative title, and
+3. a readable legend.
+
+Include both your R code and the resulting figure.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+One possible solution is:
+
+```r
+library(ggplot2)
+
+ggplot(
+  iris,
+  aes(
+    x = Sepal.Width,
+    y = Sepal.Length,
+    colour = Species
+  )
+) +
+  geom_point() +
+  labs(
+    x = "Sepal Width",
+    y = "Sepal Length",
+    colour = "Species",
+    title = "Sepal Length versus Sepal Width"
+  ) +
+  theme_minimal()
+```
+
+**Grading**
+
+- **1 point:** Correct variables on the $x$ and $y$ axes.
+- **1 point:** Points correctly coloured by `Species`.
+- **1 point:** Appropriate title, labels, and readable figure.
+:::
+
+::::
+
+### 3b) [3]
+
+Add a linear regression line to the plot from part (a).
+
+Use
+
+```r
+geom_smooth(method = "lm", se = FALSE)
+```
+
+and include the final plot in your report.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+One possible solution is:
+
+```r
+ggplot(
+  iris,
+  aes(
+    x = Sepal.Width,
+    y = Sepal.Length,
+    colour = Species
+  )
+) +
+  geom_point() +
+  geom_smooth(
+    aes(group = 1),
+    method = "lm",
+    se = FALSE,
+    colour = "black"
+  ) +
+  labs(
+    x = "Sepal Width",
+    y = "Sepal Length",
+    colour = "Species",
+    title = "Sepal Length versus Sepal Width"
+  ) +
+  theme_minimal()
+```
+
+**Grading**
+
+- **1 point:** Correct regression line is added.
+- **1 point:** Uses `method = "lm"` and `se = FALSE`.
+- **1 point:** Final figure and code are both included.
+:::
+
+::::
+
+---
+
+## Question 4: Numerical Linear Algebra [4]
+
+### 4a) [2]
+
+Suppose $\Sigma$ is a positive-definite covariance matrix with Cholesky decomposition
+
+$$
+\Sigma=R^\mathsf{T}R,
+$$
+
+where $R$ is upper triangular.
+
+Which expression correctly computes $\log\det(\Sigma)$?
+
+A.
+
+$$
+\sum_i \log(R_{ii})
+$$
+
+B.
+
+$$
+2\sum_i \log(R_{ii})
+$$
+
+C.
+
+$$
+\sum_i R_{ii}^2
+$$
+
+D.
+
+$$
+2\log\left(\sum_i R_{ii}\right)
+$$
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**B.**
+
+Since
+
+$$
+\Sigma=R^\mathsf{T}R,
+$$
+
+we have
+
+$$
+\det(\Sigma)
+=
+\det(R^\mathsf{T})\det(R)
+=
+\det(R)^2.
+$$
+
+Because $R$ is triangular,
+
+$$
+\det(R)=\prod_iR_{ii}.
+$$
+
+Therefore,
+
+$$
+\log\det(\Sigma)
+=
+2\log\left(\prod_iR_{ii}\right)
+=
+2\sum_i\log(R_{ii}).
+$$
+:::
+
+::::
+
+### 4b) [2]
+
+Let
+
+$$
+R=
+\begin{pmatrix}
+2 & 1\\
+0 & 3
+\end{pmatrix},
+\qquad
+\Sigma=R^\mathsf{T}R.
+$$
+
+Compute $\log\det(\Sigma)$.
+
+A. $\log(6)$  
+B. $\log(12)$  
+C. $2\log(6)$  
+D. $6$
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+**C.**
+
+Since
+
+$$
+\det(R)=2(3)=6,
+$$
+
+we have
+
+$$
+\det(\Sigma)=\det(R)^2=36.
+$$
+
+Hence,
+
+$$
+\log\det(\Sigma)
+=
+\log(36)
+=
+2\log(6).
+$$
+:::
+
+::::
+
+---
+
+:::: {.content-visible when-meta="show-solutions"}
+
+## Quick Answer Key
+
+::: {.callout-important collapse="true" title="Instructor Answer Key"}
+
+### Question 1
+
+| Part | Answer |
+|:---:|:---:|
+| 1a | B |
+| 1b | C |
+| 1c | B |
+| 1d | B |
+| 1e | A |
+| 1f | B |
+| 1g | C |
+| 1h | B |
+| 1i | C |
+| 1j | B |
+
+### Question 2
+
+| Part | Answer |
+|:---:|:---:|
+| 2a | 5.843 |
+| 2b | 0.436 |
+| 2c | C |
+| 2d | -0.223 |
+| 2e | B |
+
+### Question 4
+
+| Part | Answer |
+|:---:|:---:|
+| 4a | B |
+| 4b | C |
+
+:::
+
+::::
