@@ -87,7 +87,10 @@ qr(B)$rank
 
 In many statistical analyses, such as linear regression and specify the distribution (such as normal distribution), matrix inversion plays a central role.
 
-### Example 1: Normal distribution
+
+::: {#exm-1-normal}
+
+## Normal distribution
 
 We know that, a normal density with the parameters mean $\mu$ and standard deviation $\sigma$ is $$
 f\left(x \mid \mu, \sigma^2\right)=\frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{-\frac{1}{2 \sigma^2}(x-\mu)^2\right\}
@@ -110,7 +113,11 @@ PDF: $$
 f(\boldsymbol{x} \mid \mu, \Sigma)=(2 \pi)^{-d / 2} \cdot \exp \left\{-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{\prime} \boldsymbol{\Sigma}^{-1}(\boldsymbol{x}-\boldsymbol{\mu})-\frac{1}{2} \log |\boldsymbol{\Sigma}|\right\}.
 $$ Some of the potential ways to do this is to take logarithm of the PDF (Think about why).
 
-### Example 2: Linear regression
+
+:::
+
+
+::: {#exm2-linear-regression}
 
 Recall the linear regression model . The OLE for $\boldsymbol{\beta}$ is given by $\hat{\boldsymbol{\beta}}=(X^\top X)^{-1} X^\top y$.
 
@@ -241,7 +248,12 @@ Compared with the approaches discussed above, this method performs similarly to 
 
 In practice, we rarely call functions such as `qr()` or `qr.coef()` directly, since higher-level functions like lm() handle these computations automatically. However, in certain specialized and performance-critical settings, it can be advantageous to use alternative matrix decompositions to compute regression coefficients, especially when the computation must be repeated many times in a loop (i.e., *Vectorization*)
 
-### Multivariate Normal revisit
+
+:::
+
+::: {#exm-1-revisit}
+
+## Multivariate Normal revisit
 
 Computing the multivariate normal (MVN) density is a common task, for example, when fitting spatial models or Gaussian process models. Because maximum likelihood estimation(MLE) and likelihood ratio tests (LRT) often require evaluating the likelihood many times, efficiency is crucial.
 
@@ -252,7 +264,7 @@ $$
 = -\frac{d}{2}\log(2\pi) - \frac{1}{2}\log|\Sigma| - \frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^\top \Sigma^{-1}(\boldsymbol{x}-\boldsymbol{\mu}).
 $$ On the right hand side, the first term is a constant, the second term is linear, and the last term is quadratic, which requires much more computational power.
 
-#### A Naive Implementation
+**A Naive Implementation**
 
 We first center the data $\boldsymbol{z}:=\boldsymbol{x}- \mu$. Then we have $\boldsymbol{z}^\top \Sigma^{-1} \boldsymbol{z}$. This simiplified the question for a bit.
 
@@ -281,7 +293,7 @@ library(dplyr)
 quad.naive(z, S) %>% summary()
 ```
 
-#### A Better Way: Cholesky Decomposition
+**A Better Way: Cholesky Decomposition**
 
 Because the covariance matrix \Sigma is symmetric and positive definite, we can exploit its **Cholesky decomposition**. That is, we write $\Sigma = R^\top R$, where $R$ is a upper triangular matrix. Then, $$
 \boldsymbol{z}^\top \Sigma^{-1} \boldsymbol{z}= \boldsymbol{z}^\top (R^\top R)^{-1} \boldsymbol{z}= \boldsymbol{z}^\top R^{-1}R^{-\top} \boldsymbol{z}= (R^{-\top}\boldsymbol{z})^\top (R^{-\top} \boldsymbol{z}) := \boldsymbol{v}^\top \boldsymbol{v}.
@@ -299,11 +311,11 @@ quad.chol <- function(z, S) {
 quad.chol(z, S) %>% summary()
 ```
 
-#### By product
+**By product**
 
 Another benefit of the Cholesky decomposition is that it gives us a simple way to compute the log-determinant of $\Sigma$. The log-determinant of $\Sigma$ is simply two times the sum of the log of the diagonal elements of R. (Why?)
 
-#### Performance comparison
+**Performance comparison**
 
 ```{r}
 library(microbenchmark)
@@ -315,6 +327,9 @@ m2 <- microbenchmark(
 autoplot(m2)
 ```
 
+:::
+
+
 Q: Why one is faster than the other?
 
 ::: {.callout-tip title="Take home message 2"}
@@ -324,8 +339,6 @@ The naive algorithm simply inverts the covariance matrix. The Cholesky-based app
 :::
 
 Thus, a knowledge of statistics and numerical analysis can often lead to better algorithms, often invaluable!
-
-
 
 
 ----
