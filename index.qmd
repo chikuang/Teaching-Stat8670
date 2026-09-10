@@ -33,7 +33,8 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 
 ## Midterm
 
-- [ ] Midterm: TBA
+- [ ] Exam 1: October 7, 2026
+- [ ] Exam 2: TBA
 
 ## Project
 
@@ -47,7 +48,9 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | Status |                     Topic                     | Lecture Covered |
 |:------:|:--------------------------------------------:|:---------------:|
 |✅   ️|                [R Programming](01-R.qmd)                 |       1--3       |
-| ⏳   | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4--   |      |
+|✅    | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4-- 5  |      |
+| ⏳   | [Optimalization](02-optimization.qmd)  | 6-- |      |
+
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 

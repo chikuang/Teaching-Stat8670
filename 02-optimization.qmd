@@ -16,9 +16,9 @@ From now on, we will be talking about the numerical approaches to solve these pr
 
 There are in general two types of the optimization algorithms: (1). **deterministic** and (2). **metaheuristic**. Deterministic and metaheuristic algorithms represent two distinct paradigms in optimization.
 
-\*. **Deterministic methods**: such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum.
++ **Deterministic methods**: such as gradient descent, produce the same solution for a given input and follow a predictable path toward an optimum.
 
-\*. In contrast, **metaheuristic approaches**: incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
++ In contrast, **metaheuristic approaches**: incorporate randomness and do not guarantee the best possible solution. However, they are often more effective at avoiding local optima and exploring complex search spaces.
 
 ## Deterministic Algorithms
 
