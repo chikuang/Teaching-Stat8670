@@ -1,0 +1,2254 @@
+# Optimization
+
+```{r}
+library(ggplot2)
+
+theme_set(
+  theme_minimal(base_size = 14)
+)
+```
+
+Optimization plays an important role in statistical computing. Many statistical estimators can be written as
+
+$$
+\hat{\theta}
+=
+\arg\min_{\theta} Q(\theta)
+\qquad\text{or}\qquad
+\hat{\theta}
+=
+\arg\max_{\theta} \ell(\theta),
+$$
+
+where $Q(\theta)$ is an objective function and $\ell(\theta)$ may be a likelihood.
+
+For simple problems, a closed-form solution may exist. For many statistical models, however, the solution must be obtained numerically.
+
+Examples include maximum likelihood estimation, nonlinear regression, mixture models, machine learning, smoothing, and regularization.
+
+The central idea is
+
+$$
+\boxed{
+\text{Statistical Problem}
+\Longleftrightarrow
+\text{Optimization Problem}
+\Longleftrightarrow
+\text{Numerical Algorithm}
+\Longleftrightarrow
+\text{R Implementation}
+}.
+$$
+
+## Why Numerical Optimization?
+
+Consider
+
+$$
+X_1,\ldots,X_n
+\stackrel{iid}{\sim}
+N(\mu,1).
+$$
+
+From mathematical statistics,
+
+$$
+\hat{\mu}_{MLE}
+=
+\bar X.
+$$
+
+We already know the closed-form solution. However, we can also obtain the estimator computationally by minimizing the negative log-likelihood.
+
+```{r}
+set.seed(8670)
+
+x <- rnorm(
+  n = 50,
+  mean = 2,
+  sd = 1
+)
+
+nll <- function(mu) {
+  -sum(
+    dnorm(
+      x,
+      mean = mu,
+      sd = 1,
+      log = TRUE
+    )
+  )
+}
+
+fit <- optimize(
+  nll,
+  interval = c(-1, 5)
+)
+
+c(
+  numerical = fit$minimum,
+  theoretical = mean(x)
+)
+```
+
+### Visualizing the Objective Function
+
+Rather than treating an optimizer as a black box, we can evaluate the objective function over a grid.
+
+```{r}
+mu_grid <- seq(
+  -1,
+  5,
+  length.out = 400
+)
+
+nll_data <- data.frame(
+  mu = mu_grid,
+  nll = vapply(
+    mu_grid,
+    nll,
+    numeric(1)
+  )
+)
+
+ggplot(
+  nll_data,
+  aes(
+    x = mu,
+    y = nll
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_vline(
+    xintercept = mean(x),
+    linetype = "dashed"
+  ) +
+  labs(
+    x = expression(mu),
+    y = "Negative log-likelihood",
+    title = "MLE as Numerical Optimization"
+  )
+```
+
+::: {.callout-question title="In-Class Question"}
+
+Why is numerical optimization useful here if we already know that
+
+$$
+\hat{\mu}_{MLE}=\bar X?
+$$
+
+:::
+
+The closed-form solution gives us a way to **validate the numerical algorithm**.
+
+When a closed-form solution is unavailable, numerical optimization becomes essential.
+
+## When There Is No Closed-Form Solution
+
+Consider the nonlinear regression model
+
+$$
+Y_i
+=
+\exp(\theta X_i)
++
+\varepsilon_i.
+$$
+
+Suppose we estimate $\theta$ by minimizing
+
+$$
+Q(\theta)
+=
+\sum_{i=1}^n
+\left[
+Y_i-\exp(\theta X_i)
+\right]^2.
+$$
+
+Unlike ordinary linear regression, there is no convenient closed-form least-squares estimator.
+
+```{r}
+set.seed(8670)
+
+x <- seq(
+  0,
+  1,
+  length.out = 50
+)
+
+y <- exp(1.5 * x) +
+  rnorm(
+    50,
+    sd = 0.15
+  )
+
+sse <- function(theta) {
+  sum(
+    (y - exp(theta * x))^2
+  )
+}
+
+fit_nonlinear <- optimize(
+  sse,
+  interval = c(0, 3)
+)
+
+fit_nonlinear$minimum
+```
+
+```{r}
+theta_grid <- seq(
+  0,
+  3,
+  length.out = 400
+)
+
+sse_data <- data.frame(
+  theta = theta_grid,
+  SSE = vapply(
+    theta_grid,
+    sse,
+    numeric(1)
+  )
+)
+
+ggplot(
+  sse_data,
+  aes(
+    x = theta,
+    y = SSE
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_vline(
+    xintercept = fit_nonlinear$minimum,
+    linetype = "dashed"
+  ) +
+  labs(
+    x = expression(theta),
+    y = "Sum of squared errors",
+    title = "Optimization for Nonlinear Regression"
+  )
+```
+
+The important distinction is
+
+$$
+\boxed{
+\text{Theory tells us what to optimize;}
+\qquad
+\text{computation tells us how to find it.}
+}
+$$
+
+## Two Families of Optimization Methods
+
+Computational optimization methods can be broadly divided into two families:
+
+$$
+\boxed{
+\text{Deterministic Methods}
+\qquad\text{and}\qquad
+\text{Metaheuristic Methods}.
+}
+$$
+
+### Deterministic Methods
+
+A deterministic algorithm follows a predictable sequence of updates once the starting value is fixed.
+
+Examples include:
+
+- Newton's method;
+- gradient descent;
+- quasi-Newton methods such as BFGS;
+- deterministic root-finding methods.
+
+Advantages:
+
+- usually efficient for smooth and well-behaved problems;
+- mathematically well understood;
+- convergence can often be studied theoretically;
+- reproducible for a fixed starting value.
+
+Limitations:
+
+- may converge to a local rather than global optimum;
+- can be sensitive to the starting value;
+- some methods require derivatives;
+- poor scaling can substantially slow convergence.
+
+### Metaheuristic Methods
+
+Metaheuristic methods introduce randomness or population-based search to explore the parameter space more broadly.
+
+Examples include:
+
+- simulated annealing;
+- genetic algorithms;
+- particle swarm optimization.
+
+Advantages:
+
+- can escape local optima;
+- usually do not require derivatives;
+- useful for multimodal or irregular objectives;
+- can be applied to complicated search spaces.
+
+Limitations:
+
+- often computationally expensive;
+- results can vary between runs;
+- tuning parameters can strongly affect performance;
+- global optimality is generally not guaranteed.
+
+The basic trade-off is
+
+$$
+\boxed{
+\begin{array}{c}
+\text{Deterministic}\\
+\text{efficient local search}
+\end{array}
+\qquad\Longleftrightarrow\qquad
+\begin{array}{c}
+\text{Metaheuristic}\\
+\text{broader stochastic search}.
+\end{array}
+}
+$$
+
+## Local and Global Optima
+
+Consider
+
+$$
+Q(x)
+=
+0.05x^2
++
+\sin^2(x)
++
+0.2\sin(5x).
+$$
+
+```{r}
+objective <- function(x) {
+  0.05 * x^2 +
+    sin(x)^2 +
+    0.2 * sin(5 * x)
+}
+
+x_grid <- seq(
+  -7,
+  7,
+  length.out = 1000
+)
+
+objective_data <- data.frame(
+  x = x_grid,
+  objective = objective(x_grid)
+)
+
+ggplot(
+  objective_data,
+  aes(
+    x = x,
+    y = objective
+  )
+) +
+  geom_line(linewidth = 1) +
+  labs(
+    x = "x",
+    y = "Objective function",
+    title = "Local and Global Optima"
+  )
+```
+
+The objective contains several local minima.
+
+A deterministic local optimizer may converge to different solutions depending on its starting value.
+
+```{r}
+starts <- c(
+  -6,
+  -2,
+  2,
+  6
+)
+
+solutions <- vapply(
+  starts,
+  function(x0) {
+    optim(
+      par = x0,
+      fn = objective,
+      method = "BFGS"
+    )$par
+  },
+  numeric(1)
+)
+
+local_results <- data.frame(
+  start = starts,
+  solution = solutions,
+  objective = objective(solutions)
+)
+
+local_results
+```
+
+```{r}
+ggplot(
+  objective_data,
+  aes(
+    x = x,
+    y = objective
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(
+    data = local_results,
+    col = "red",
+    aes(
+      x = solution,
+      y = objective
+    ),
+    size = 3
+  ) +
+  labs(
+    x = "x",
+    y = "Objective function",
+    title = "Different Starting Values Can Give Different Solutions"
+  )
+```
+
+::: {.callout-question title="In-Class Question"}
+
+If the algorithm is deterministic, why can different starting values still produce different answers?
+
+:::
+
+The important distinction is
+
+$$
+\boxed{
+\text{Local Optimum}
+\neq
+\text{Global Optimum}.
+}
+$$
+
+## Deterministic Numerical Methods
+
+We first study several deterministic numerical methods.
+
+### Root Finding
+
+Root finding solves
+
+$$
+f(x)=0.
+$$
+
+Why is root finding relevant to optimization?
+
+If $Q(x)$ is differentiable and $x^*$ is an interior optimum, then typically
+
+$$
+Q'(x^*)=0.
+$$
+
+Therefore, optimization can sometimes be converted into
+
+$$
+f(x)
+=
+Q'(x)
+=
+0.
+$$
+
+A root of $Q'(x)$ is only a candidate optimum. It may correspond to a minimum, maximum, or another stationary point.
+
+### A Statistical Example: Normal Quantiles
+
+Suppose we want the 97.5th percentile of a standard normal distribution.
+
+We seek $z$ such that
+
+$$
+P(Z\le z)
+=
+0.975.
+$$
+
+Equivalently,
+
+$$
+\Phi(z)-0.975=0.
+$$
+
+```{r}
+f_root <- function(z) {
+  pnorm(z) - 0.975
+}
+
+z_grid <- seq(
+  0,
+  4,
+  length.out = 400
+)
+
+root_data <- data.frame(
+  z = z_grid,
+  f = f_root(z_grid)
+)
+
+ggplot(
+  root_data,
+  aes(
+    x = z,
+    y = f
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed"
+  ) +
+  labs(
+    x = "z",
+    y = expression(Phi(z) - 0.975),
+    title = "A Quantile as a Root-Finding Problem"
+  )
+```
+
+R can solve the root directly:
+
+```{r}
+root_R <- uniroot(
+  f_root,
+  interval = c(0, 4)
+)$root
+
+c(
+  root_finding = root_R,
+  qnorm = qnorm(0.975)
+)
+```
+
+Thus,
+
+$$
+\boxed{
+\text{Quantile Calculation}
+\Longleftrightarrow
+\text{Root Finding}.
+}
+$$
+
+::: {.callout-question title="In-Class Question"}
+
+Why do `uniroot()` and `qnorm()` give essentially the same answer?
+
+:::
+
+### Bisection Method
+
+The bisection method is similar to a binary search.
+
+Suppose $f$ is continuous and
+
+$$
+f(a)f(b)<0.
+$$
+
+Then there must be at least one root between $a$ and $b$.
+
+::: {.callout-algorithm title="Bisection Method"}
+
+1. Choose $a$ and $b$ such that $f(a)f(b)<0$.
+
+2. Compute
+
+$$
+c=\frac{a+b}{2}.
+$$
+
+3. Keep the half containing the sign change.
+
+4. Repeat until the interval is sufficiently small.
+
+:::
+
+The main intuition is
+
+$$
+\boxed{
+\text{Each iteration cuts the search interval approximately in half}.
+}
+$$
+
+```{r}
+bisect_trace <- function(
+    f,
+    a,
+    b,
+    tol = 1e-6,
+    maxit = 100
+) {
+
+  if (f(a) * f(b) > 0) {
+    stop("f(a) and f(b) must have opposite signs.")
+  }
+
+  history <- data.frame()
+
+  for (k in 0:maxit) {
+
+    midpoint <- (a + b) / 2
+
+    history <- rbind(
+      history,
+      data.frame(
+        iteration = k,
+        a = a,
+        b = b,
+        midpoint = midpoint,
+        f_midpoint = f(midpoint)
+      )
+    )
+
+    if (
+      abs(f(midpoint)) < tol ||
+      (b - a) / 2 < tol
+    ) {
+      break
+    }
+
+    if (f(a) * f(midpoint) <= 0) {
+      b <- midpoint
+    } else {
+      a <- midpoint
+    }
+  }
+
+  history
+}
+
+bisect_history <- bisect_trace(
+  f_root,
+  a = 0,
+  b = 4
+)
+
+tail(bisect_history)
+```
+
+### Visualizing Bisection
+
+```{r}
+ggplot(
+  bisect_history,
+  aes(y = iteration)
+) +
+  geom_segment(
+    aes(
+      x = a,
+      xend = b,
+      yend = iteration
+    ),
+    linewidth = 2
+  ) +
+  geom_point(
+    aes(x = midpoint),
+    size = 2
+  ) +
+  scale_y_reverse() +
+  labs(
+    x = "Search interval",
+    y = "Iteration",
+    title = "Bisection Shrinks the Search Space"
+  )
+```
+
+Bisection requires continuity and a sign change, but does not require derivatives.
+
+::: {.callout-question title="In-Class Question"}
+
+What information does bisection use about the function?
+
+What information does it ignore?
+
+:::
+
+### Newton-Raphson Method
+
+Newton's method uses local derivative information.
+
+Around the current estimate $x_k$,
+
+$$
+f(x)
+\approx
+f(x_k)
++
+f'(x_k)(x-x_k).
+$$
+
+Set the approximation equal to zero:
+
+$$
+0
+=
+f(x_k)
++
+f'(x_k)(x_{k+1}-x_k).
+$$
+
+Therefore,
+
+$$
+\boxed{
+x_{k+1}
+=
+x_k
+-
+\frac{f(x_k)}
+{f'(x_k)}
+}.
+$$
+
+The intuition is:
+
+> Approximate the function locally by a straight line and use the root of that line as the next guess.
+
+For
+
+$$
+f(z)
+=
+\Phi(z)-0.975,
+$$
+
+we have
+
+$$
+f'(z)
+=
+\phi(z).
+$$
+
+```{r}
+f <- function(z) {
+  pnorm(z) - 0.975
+}
+
+df <- function(z) {
+  dnorm(z)
+}
+```
+
+```{r}
+newton_trace <- function(
+    f,
+    df,
+    x0,
+    tol = 1e-8,
+    maxit = 100
+) {
+
+  x <- x0
+
+  history <- data.frame(
+    iteration = 0,
+    x = x,
+    fx = f(x)
+  )
+
+  for (k in seq_len(maxit)) {
+
+    dfx <- df(x)
+
+    if (abs(dfx) < 1e-12) {
+      stop("Derivative is too close to zero.")
+    }
+
+    x_new <- x - f(x) / dfx
+
+    history <- rbind(
+      history,
+      data.frame(
+        iteration = k,
+        x = x_new,
+        fx = f(x_new)
+      )
+    )
+
+    if (abs(x_new - x) < tol) {
+      break
+    }
+
+    x <- x_new
+  }
+
+  history
+}
+
+newton_history <- newton_trace(
+  f,
+  df,
+  x0 = 1
+)
+
+newton_history
+```
+
+### Visualizing Newton's Method
+
+```{r}
+tangent_data <- data.frame(
+  x = head(newton_history$x, -1),
+  y = head(newton_history$fx, -1),
+  xend = tail(newton_history$x, -1),
+  yend = 0
+)
+
+z_grid <- seq(
+  0.5,
+  3,
+  length.out = 400
+)
+
+newton_function_data <- data.frame(
+  z = z_grid,
+  f = f(z_grid)
+)
+
+ggplot(
+  newton_function_data,
+  aes(
+    x = z,
+    y = f
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_hline(
+    yintercept = 0,
+    linetype = "dashed"
+  ) +
+  geom_segment(
+    data = tangent_data,
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend
+    ),
+    inherit.aes = FALSE,
+    linetype = "dashed"
+  ) +
+  geom_point(
+    data = newton_history,
+    aes(
+      x = x,
+      y = fx
+    ),
+    inherit.aes = FALSE,
+    size = 3
+  ) +
+  labs(
+    x = "z",
+    y = "f(z)",
+    title = "Newton's Method: Follow the Local Tangent"
+  )
+```
+
+Newton's method can converge very quickly near the root.
+
+However, if
+
+$$
+f'(x_k)\approx0,
+$$
+
+then the update may become very large and unstable.
+
+::: {.callout-question title="In-Class Question"}
+
+What happens to Newton's update when $f'(x_k)$ is close to zero?
+
+:::
+
+### Secant Method
+
+Newton's method requires the derivative $f'(x)$.
+
+If the derivative is unavailable or expensive, we can approximate it using two previous points:
+
+$$
+f'(x_k)
+\approx
+\frac{
+f(x_k)-f(x_{k-1})
+}{
+x_k-x_{k-1}
+}.
+$$
+
+Substituting this into Newton's update gives
+
+$$
+\boxed{
+x_{k+1}
+=
+x_k
+-
+f(x_k)
+\frac{
+x_k-x_{k-1}
+}{
+f(x_k)-f(x_{k-1})
+}
+}.
+$$
+
+```{r}
+secant_trace <- function(
+    f,
+    x0,
+    x1,
+    tol = 1e-8,
+    maxit = 100
+) {
+
+  history <- data.frame(
+    iteration = c(0, 1),
+    x = c(x0, x1),
+    fx = c(
+      f(x0),
+      f(x1)
+    )
+  )
+
+  for (k in 2:maxit) {
+
+    f0 <- f(x0)
+    f1 <- f(x1)
+
+    denominator <- f1 - f0
+
+    if (abs(denominator) < 1e-12) {
+      stop("Secant denominator is too close to zero.")
+    }
+
+    x2 <- x1 -
+      f1 * (x1 - x0) /
+      denominator
+
+    history <- rbind(
+      history,
+      data.frame(
+        iteration = k,
+        x = x2,
+        fx = f(x2)
+      )
+    )
+
+    if (abs(x2 - x1) < tol) {
+      break
+    }
+
+    x0 <- x1
+    x1 <- x2
+  }
+
+  history
+}
+
+secant_history <- secant_trace(
+  f,
+  x0 = 1,
+  x1 = 2.5
+)
+
+secant_history
+```
+
+The three methods illustrate different computational trade-offs.
+
+| Method | Derivative? | Starting information | Main advantage | Main limitation |
+|---|:---:|:---:|---|---|
+| Bisection | No | $[a,b]$ | Very reliable | Slower |
+| Newton | Yes | $x_0$ | Very fast near root | Can fail |
+| Secant | No | $x_0,x_1$ | Fast without derivative | Less reliable |
+
+## Convergence
+
+Suppose an iterative algorithm produces
+
+$$
+x_0,x_1,x_2,\ldots
+$$
+
+and converges to a solution $x^*$.
+
+Define
+
+$$
+e_k
+=
+|x_k-x^*|.
+$$
+
+A common description of convergence is
+
+$$
+e_{k+1}
+\approx
+C e_k^q.
+$$
+
+The value $q$ describes how quickly the error decreases.
+
+- **Linear convergence:** $q=1$.
+- **Superlinear convergence:** faster than linear.
+- **Quadratic convergence:** $q=2$.
+
+Under suitable conditions:
+
+- bisection converges linearly;
+- the secant method converges superlinearly;
+- Newton's method converges quadratically near the root.
+
+### Comparing Convergence in R
+
+```{r}
+true_root <- qnorm(0.975)
+
+bisection_error <- data.frame(
+  iteration = bisect_history$iteration,
+  error = abs(
+    bisect_history$midpoint -
+      true_root
+  ),
+  method = "Bisection"
+)
+
+newton_error <- data.frame(
+  iteration = newton_history$iteration,
+  error = abs(
+    newton_history$x -
+      true_root
+  ),
+  method = "Newton"
+)
+
+secant_error <- data.frame(
+  iteration = secant_history$iteration,
+  error = abs(
+    secant_history$x -
+      true_root
+  ),
+  method = "Secant"
+)
+
+convergence_data <- rbind(
+  bisection_error,
+  newton_error,
+  secant_error
+)
+
+convergence_data <- subset(
+  convergence_data,
+  error > .Machine$double.eps
+)
+```
+
+```{r}
+ggplot(
+  convergence_data,
+  aes(
+    x = iteration,
+    y = error,
+    linetype = method,
+    shape = method
+  )
+) +
+  geom_line() +
+  geom_point(size = 2) +
+  scale_y_log10() +
+  labs(
+    x = "Iteration",
+    y = "Absolute error",
+    title = "Convergence of Root-Finding Methods",
+    linetype = "Method",
+    shape = "Method"
+  )
+```
+
+::: {.callout-question title="In-Class Question"}
+
+Which method appears to converge fastest?
+
+Does fewer iterations necessarily mean less computation?
+
+:::
+
+A useful computational perspective is
+
+$$
+\boxed{
+\text{Total Computational Cost}
+\approx
+\text{Cost per Iteration}
+\times
+\text{Number of Iterations}.
+}
+$$
+
+## From One Dimension to Multiple Dimensions
+
+Most statistical problems involve more than one parameter.
+
+Instead of
+
+$$
+x\in\mathbb R,
+$$
+
+we now consider
+
+$$
+\boldsymbol{\theta}
+=
+(\theta_1,\ldots,\theta_p)^\top
+\in
+\mathbb R^p.
+$$
+
+The one-dimensional concepts generalize naturally:
+
+$$
+Q'(x)
+\quad\Longrightarrow\quad
+\nabla Q(\boldsymbol{\theta}),
+$$
+
+and
+
+$$
+Q''(x)
+\quad\Longrightarrow\quad
+H(\boldsymbol{\theta}).
+$$
+
+The **gradient** is
+
+$$
+\nabla Q(\boldsymbol{\theta})
+=
+\begin{pmatrix}
+\partial Q/\partial\theta_1\\
+\vdots\\
+\partial Q/\partial\theta_p
+\end{pmatrix},
+$$
+
+and the **Hessian** is the matrix of second derivatives,
+
+$$
+H(\boldsymbol{\theta})
+=
+\left[
+\frac{
+\partial^2 Q
+}{
+\partial\theta_j\partial\theta_k
+}
+\right].
+$$
+
+### Visualizing a Two-Dimensional Objective
+
+Consider
+
+$$
+Q(\theta_1,\theta_2)
+=
+(\theta_1-2)^2
++
+4(\theta_2+1)^2.
+$$
+
+```{r}
+objective_2d <- function(theta1, theta2) {
+  (theta1 - 2)^2 +
+    4 * (theta2 + 1)^2
+}
+
+theta1_grid <- seq(
+  -2,
+  6,
+  length.out = 150
+)
+
+theta2_grid <- seq(
+  -4,
+  2,
+  length.out = 150
+)
+
+objective_grid <- expand.grid(
+  theta1 = theta1_grid,
+  theta2 = theta2_grid
+)
+
+objective_grid$value <- with(
+  objective_grid,
+  objective_2d(theta1, theta2)
+)
+
+ggplot(
+  objective_grid,
+  aes(
+    x = theta1,
+    y = theta2,
+    z = value
+  )
+) +
+  geom_contour(
+    bins = 15
+  ) +
+  geom_point(
+    data = data.frame(
+      theta1 = 2,
+      theta2 = -1
+    ),
+    aes(
+      x = theta1,
+      y = theta2
+    ),
+    inherit.aes = FALSE,
+    size = 3
+  ) +
+  labs(
+    x = expression(theta[1]),
+    y = expression(theta[2]),
+    title = "Contour Plot of a Two-Dimensional Objective"
+  )
+```
+
+The minimum occurs at
+
+$$
+\boldsymbol{\theta}^*
+=
+\begin{pmatrix}
+2\\
+-1
+\end{pmatrix}.
+$$
+
+## Gradient Descent
+
+The gradient points in the direction of greatest increase.
+
+Therefore,
+
+$$
+-\nabla Q(\boldsymbol{\theta})
+$$
+
+is a natural direction for decreasing the objective.
+
+Gradient descent updates
+
+$$
+\boxed{
+\boldsymbol{\theta}_{k+1}
+=
+\boldsymbol{\theta}_k
+-
+\alpha_k
+\nabla Q(\boldsymbol{\theta}_k),
+}
+$$
+
+where $\alpha_k>0$ is the **step size** or **learning rate**.
+
+For the quadratic example,
+
+$$
+\nabla Q(\theta_1,\theta_2)
+=
+\begin{pmatrix}
+2(\theta_1-2)\\
+8(\theta_2+1)
+\end{pmatrix}.
+$$
+
+```{r}
+gradient_2d <- function(theta) {
+  c(
+    2 * (theta[1] - 2),
+    8 * (theta[2] + 1)
+  )
+}
+
+gradient_descent <- function(
+    start,
+    alpha = 0.1,
+    maxit = 30
+) {
+
+  theta <- start
+
+  history <- data.frame(
+    iteration = 0,
+    theta1 = theta[1],
+    theta2 = theta[2]
+  )
+
+  for (k in seq_len(maxit)) {
+
+    theta <-
+      theta -
+      alpha * gradient_2d(theta)
+
+    history <- rbind(
+      history,
+      data.frame(
+        iteration = k,
+        theta1 = theta[1],
+        theta2 = theta[2]
+      )
+    )
+  }
+
+  history
+}
+
+gd_path <- gradient_descent(
+  start = c(-1, 1),
+  alpha = 0.1,
+  maxit = 20
+)
+```
+
+### Visualizing the Optimization Path
+
+```{r}
+ggplot(
+  objective_grid,
+  aes(
+    x = theta1,
+    y = theta2,
+    z = value
+  )
+) +
+  geom_contour(
+    bins = 15
+  ) +
+  geom_path(
+    data = gd_path,
+    aes(
+      x = theta1,
+      y = theta2
+    ),
+    inherit.aes = FALSE
+  ) +
+  geom_point(
+    data = gd_path,
+    aes(
+      x = theta1,
+      y = theta2
+    ),
+    inherit.aes = FALSE,
+    size = 2
+  ) +
+  labs(
+    x = expression(theta[1]),
+    y = expression(theta[2]),
+    title = "Gradient Descent Path"
+  )
+```
+
+::: {.callout-question title="In-Class Question"}
+
+What happens if the step size $\alpha$ is too small?
+
+What happens if it is too large?
+
+:::
+
+### Step Size Matters
+
+```{r}
+gd_small <- gradient_descent(
+  start = c(-1, 1),
+  alpha = 0.02,
+  maxit = 30
+)
+
+gd_medium <- gradient_descent(
+  start = c(-1, 1),
+  alpha = 0.1,
+  maxit = 30
+)
+
+gd_large <- gradient_descent(
+  start = c(-1, 1),
+  alpha = 0.24,
+  maxit = 30
+)
+
+gd_compare <- rbind(
+  transform(
+    gd_small,
+    step = "alpha = 0.02"
+  ),
+  transform(
+    gd_medium,
+    step = "alpha = 0.10"
+  ),
+  transform(
+    gd_large,
+    step = "alpha = 0.24"
+  )
+)
+
+gd_compare$error <-
+  sqrt(
+    (gd_compare$theta1 - 2)^2 +
+      (gd_compare$theta2 + 1)^2
+  )
+
+ggplot(
+  gd_compare,
+  aes(
+    x = iteration,
+    y = error,
+    linetype = step
+  )
+) +
+  geom_line(linewidth = 1) +
+  labs(
+    x = "Iteration",
+    y = "Distance to optimum",
+    linetype = "Step size",
+    title = "Step Size Changes the Convergence Behaviour"
+  )
+```
+
+## Multivariate Newton's Method
+
+In one dimension,
+
+$$
+x_{k+1}
+=
+x_k
+-
+\frac{Q'(x_k)}{Q''(x_k)}.
+$$
+
+In multiple dimensions, this becomes
+
+$$
+\boxed{
+\boldsymbol{\theta}_{k+1}
+=
+\boldsymbol{\theta}_k
+-
+H(\boldsymbol{\theta}_k)^{-1}
+\nabla Q(\boldsymbol{\theta}_k).
+}
+$$
+
+However, computationally we usually do **not** calculate the inverse explicitly.
+
+Instead, solve
+
+$$
+H(\boldsymbol{\theta}_k)
+\boldsymbol{d}_k
+=
+-\nabla Q(\boldsymbol{\theta}_k),
+$$
+
+and update
+
+$$
+\boldsymbol{\theta}_{k+1}
+=
+\boldsymbol{\theta}_k
++
+\boldsymbol{d}_k.
+$$
+
+::: {.callout-question title="In-Class Question"}
+
+Why do we solve a linear system instead of explicitly computing
+
+$$
+H^{-1}?
+$$
+
+:::
+
+This connects directly to the earlier discussion of numerical stability and matrix inversion.
+
+## Quasi-Newton Methods
+
+Newton's method requires the Hessian.
+
+For high-dimensional statistical models, computing the Hessian can be expensive.
+
+Quasi-Newton methods approximate curvature information rather than calculating the Hessian directly.
+
+One of the most widely used methods is **BFGS**.
+
+In R:
+
+```r
+optim(
+  par = start,
+  fn = objective,
+  method = "BFGS"
+)
+```
+
+The main computational idea is
+
+$$
+\boxed{
+\text{Use curvature information}
+\quad\text{without repeatedly computing the full Hessian}.
+}
+$$
+
+## Statistical Example: Logistic Regression
+
+Consider
+
+$$
+Y_i
+\sim
+\operatorname{Bernoulli}(p_i),
+$$
+
+with
+
+$$
+\log
+\left(
+\frac{p_i}{1-p_i}
+\right)
+=
+\beta_0+\beta_1x_i.
+$$
+
+The parameter is now a vector
+
+$$
+\boldsymbol{\beta}
+=
+(\beta_0,\beta_1)^\top.
+$$
+
+There is no closed-form MLE, so logistic regression requires numerical optimization.
+
+```{r}
+set.seed(8670)
+
+n <- 200
+
+x_logit <- rnorm(n)
+
+beta_true <- c(
+  -0.5,
+  1.5
+)
+
+eta <-
+  beta_true[1] +
+  beta_true[2] * x_logit
+
+p <- plogis(eta)
+
+y_logit <- rbinom(
+  n,
+  size = 1,
+  prob = p
+)
+```
+
+Define the negative log-likelihood:
+
+```{r}
+logistic_nll <- function(beta) {
+
+  eta <-
+    beta[1] +
+    beta[2] * x_logit
+
+  p <- plogis(eta)
+
+  -sum(
+    dbinom(
+      y_logit,
+      size = 1,
+      prob = p,
+      log = TRUE
+    )
+  )
+}
+```
+
+Estimate the coefficients using BFGS:
+
+```{r}
+fit_optim <- optim(
+  par = c(0, 0),
+  fn = logistic_nll,
+  method = "BFGS"
+)
+
+fit_optim$par
+```
+
+Compare with `glm()`:
+
+```{r}
+fit_glm <- glm(
+  y_logit ~ x_logit,
+  family = binomial()
+)
+
+coef(fit_glm)
+
+fit_optim$par
+```
+
+::: {.callout-question title="In-Class Question"}
+
+Why is comparing `optim()` with `glm()` useful?
+
+:::
+
+This illustrates the complete computational-statistics workflow:
+
+$$
+\boxed{
+\text{Statistical Model}
+\rightarrow
+\text{Likelihood}
+\rightarrow
+\text{Optimization}
+\rightarrow
+\text{Algorithm}
+\rightarrow
+\text{Validation}.
+}
+$$
+
+## Scaling and Conditioning
+
+Optimization can behave very differently when parameters operate on different scales.
+
+Consider
+
+$$
+Q(\theta_1,\theta_2)
+=
+(\theta_1-1)^2
++
+100(\theta_2-1)^2.
+$$
+
+```{r}
+scaled_objective <- function(theta1, theta2) {
+  (theta1 - 1)^2 +
+    100 * (theta2 - 1)^2
+}
+
+scale_grid <- expand.grid(
+  theta1 = seq(
+    -2,
+    4,
+    length.out = 150
+  ),
+  theta2 = seq(
+    -1,
+    3,
+    length.out = 150
+  )
+)
+
+scale_grid$value <- with(
+  scale_grid,
+  scaled_objective(
+    theta1,
+    theta2
+  )
+)
+
+ggplot(
+  scale_grid,
+  aes(
+    x = theta1,
+    y = theta2,
+    z = value
+  )
+) +
+  geom_contour(
+    bins = 15
+  ) +
+  labs(
+    x = expression(theta[1]),
+    y = expression(theta[2]),
+    title = "Poor Scaling Produces an Elongated Objective"
+  )
+```
+
+A highly elongated objective can cause gradient-based algorithms to zig-zag and converge slowly.
+
+This illustrates another important principle:
+
+$$
+\boxed{
+\text{Same mathematical problem}
++
+\text{different scaling}
+\Longrightarrow
+\text{different computational behaviour}.
+}
+$$
+
+## Metaheuristic Methods
+
+Deterministic optimization methods can work extremely well for smooth and well-behaved objectives.
+
+However, they may struggle when the objective:
+
+- contains many local optima;
+- is not differentiable;
+- is discontinuous;
+- has a complicated search space.
+
+Metaheuristic methods use broader stochastic exploration.
+
+The key idea is
+
+$$
+\boxed{
+\text{Explore broadly}
+\quad\longrightarrow\quad
+\text{search more locally later}.
+}
+$$
+
+### Why Accept a Worse Solution?
+
+A local deterministic method usually attempts to improve the objective at every step.
+
+A stochastic method may deliberately accept a worse solution.
+
+::: {.callout-question title="In-Class Question"}
+
+Why would an optimization algorithm ever accept a worse solution?
+
+:::
+
+Temporarily moving to a worse location can allow the algorithm to escape a local optimum and later reach a better region.
+
+## Simulated Annealing
+
+Simulated annealing is a stochastic optimization method inspired by the physical process of heating and slowly cooling a material.
+
+Suppose the current solution is $x_k$ and a candidate solution $x'$ is generated.
+
+For a minimization problem, if
+
+$$
+Q(x')<Q(x_k),
+$$
+
+the new solution is accepted.
+
+If
+
+$$
+Q(x')>Q(x_k),
+$$
+
+the worse solution may still be accepted with probability
+
+$$
+\boxed{
+P(\text{accept})
+=
+\exp
+\left(
+-\frac{\Delta Q}{T}
+\right),
+}
+$$
+
+where
+
+$$
+\Delta Q
+=
+Q(x')-Q(x_k)>0.
+$$
+
+The parameter $T$ is called the **temperature**.
+
+When
+
+$$
+T
+\quad\text{is large},
+$$
+
+the algorithm explores more broadly.
+
+When
+
+$$
+T
+\quad\text{is small},
+$$
+
+the algorithm becomes more selective.
+
+### Visualizing the Acceptance Probability
+
+```{r}
+delta_grid <- seq(
+  0,
+  5,
+  length.out = 300
+)
+
+temperature <- c(
+  0.1,
+  0.5,
+  2
+)
+
+sa_probability <- expand.grid(
+  delta = delta_grid,
+  temperature = temperature
+)
+
+sa_probability$probability <-
+  exp(
+    -sa_probability$delta /
+      sa_probability$temperature
+  )
+
+sa_probability$temperature <-
+  factor(
+    sa_probability$temperature
+  )
+
+ggplot(
+  sa_probability,
+  aes(
+    x = delta,
+    y = probability,
+    linetype = temperature
+  )
+) +
+  geom_line(linewidth = 1) +
+  labs(
+    x = expression(Delta * Q),
+    y = "Probability of accepting a worse solution",
+    linetype = "Temperature",
+    title = "Temperature Controls Exploration"
+  )
+```
+
+::: {.callout-question title="In-Class Question"}
+
+At high temperature, why is the algorithm more willing to accept a poor move?
+
+What happens as the temperature approaches zero?
+
+:::
+
+### Simulated Annealing in R
+
+R provides simulated annealing through
+
+```r
+optim(
+  ...,
+  method = "SANN"
+)
+```
+
+Using the earlier multimodal objective:
+
+```{r}
+set.seed(8670)
+
+sa_fit <- optim(
+  par = 5,
+  fn = objective,
+  method = "SANN",
+  control = list(
+    maxit = 3000
+  )
+)
+
+sa_fit$par
+sa_fit$value
+```
+
+Because simulated annealing is stochastic, different seeds may produce different results.
+
+```{r}
+seeds <- 1:20
+
+sa_solution <- vapply(
+  seeds,
+  function(seed) {
+
+    set.seed(seed)
+
+    optim(
+      par = 5,
+      fn = objective,
+      method = "SANN",
+      control = list(
+        maxit = 3000
+      )
+    )$par
+
+  },
+  numeric(1)
+)
+
+sa_data <- data.frame(
+  seed = seeds,
+  solution = sa_solution,
+  objective = objective(sa_solution)
+)
+
+ggplot(
+  sa_data,
+  aes(
+    x = factor(seed),
+    y = objective
+  )
+) +
+  geom_point(size = 3) +
+  labs(
+    x = "Random seed",
+    y = "Final objective value",
+    title = "Variation Across Simulated Annealing Runs"
+  )
+```
+
+### Advantages of Simulated Annealing
+
+- Can escape local optima.
+- Does not require derivatives.
+- Easy to adapt to many objective functions.
+- Useful for multimodal problems.
+
+### Limitations of Simulated Annealing
+
+- Can require many function evaluations.
+- Results vary across runs.
+- Performance depends on the cooling schedule.
+- Does not guarantee the global optimum.
+
+## Genetic Algorithm
+
+A genetic algorithm uses a **population of candidate solutions** rather than one current solution.
+
+The basic cycle is
+
+$$
+\boxed{
+\text{Selection}
+\rightarrow
+\text{Crossover}
+\rightarrow
+\text{Mutation}
+\rightarrow
+\text{New Generation}.
+}
+$$
+
+### Selection
+
+Better candidate solutions are more likely to remain in the population.
+
+### Crossover
+
+Information from two candidate solutions is combined to create new candidates.
+
+### Mutation
+
+Random changes are introduced to preserve diversity and explore new regions.
+
+The key difference from simulated annealing is:
+
+$$
+\boxed{
+\text{SA: one evolving solution}
+\qquad
+\text{GA: a population of solutions}.
+}
+$$
+
+### Advantages
+
+- Explores several regions simultaneously.
+- Does not require gradients.
+- Flexible for continuous and discrete problems.
+
+### Limitations
+
+- Can require many objective evaluations.
+- Requires tuning of population size and mutation rate.
+- Can converge slowly.
+- Does not guarantee a global optimum.
+
+## Particle Swarm Optimization
+
+Particle swarm optimization also maintains a population of candidate solutions called **particles**.
+
+Each particle uses information about:
+
+- its current location;
+- its previous velocity;
+- its own best location;
+- the best location found by the group.
+
+A simplified velocity update is
+
+$$
+v_{i,k+1}
+=
+w v_{i,k}
++
+c_1r_1(p_i-x_{i,k})
++
+c_2r_2(g-x_{i,k}),
+$$
+
+followed by
+
+$$
+x_{i,k+1}
+=
+x_{i,k}
++
+v_{i,k+1}.
+$$
+
+The intuition is
+
+$$
+\boxed{
+\text{Momentum}
++
+\text{Individual Experience}
++
+\text{Group Experience}
++
+\text{Randomness}.
+}
+$$
+
+### Advantages
+
+- Does not require derivatives.
+- Explores multiple regions simultaneously.
+- Relatively intuitive and flexible.
+
+### Limitations
+
+- May require many function evaluations.
+- Sensitive to tuning parameters.
+- Can converge prematurely.
+- Global optimality is not guaranteed.
+
+## Deterministic versus Metaheuristic Methods
+
+The two families search very differently.
+
+| Method | Type | Derivatives | Search | Main Advantage | Main Limitation |
+|---|---|:---:|---|---|---|
+| Bisection | Deterministic | No | Root finding | Very reliable | Slow |
+| Newton | Deterministic | Yes | Local | Very fast near solution | Sensitive to derivative and start |
+| Secant | Deterministic | No | Local | Fast without derivative | Less reliable |
+| Gradient Descent | Deterministic | Gradient | Local | Simple and scalable | Step size matters |
+| BFGS | Deterministic | Usually gradient | Local | Efficient for smooth problems | Can reach local optimum |
+| Simulated Annealing | Metaheuristic | No | Global exploration | Can escape local optima | Slow and stochastic |
+| Genetic Algorithm | Metaheuristic | No | Population | Flexible search | Computationally expensive |
+| Particle Swarm | Metaheuristic | No | Population | Cooperative exploration | Requires tuning |
+
+The important question is not
+
+> Which algorithm is the best?
+
+Instead, ask
+
+> Which algorithm is appropriate for the structure of the statistical problem?
+
+For a smooth and well-behaved objective,
+
+$$
+\text{deterministic methods}
+$$
+
+are usually preferable.
+
+For a highly multimodal, irregular, or derivative-free objective,
+
+$$
+\text{metaheuristic methods}
+$$
+
+may become useful.
+
+::: {.callout-question title="In-Class Question"}
+
+Suppose the objective is smooth, convex, and easy to differentiate.
+
+Would you choose BFGS or simulated annealing?
+
+What changes if the objective has many local minima and no useful derivatives?
+
+:::
+
+## Optimization Transfer
+
+Sometimes the original objective is difficult to optimize directly.
+
+Instead, we construct an easier **surrogate function** and repeatedly optimize the surrogate.
+
+The general idea is
+
+$$
+\boxed{
+\text{Difficult Objective}
+\rightarrow
+\text{Easier Surrogate}
+\rightarrow
+\text{Update}
+\rightarrow
+\text{Repeat}.
+}
+$$
+
+This principle is often called **optimization transfer**.
+
+The surrogate should be easier to optimize while still guiding the algorithm toward improvement of the original objective.
+
+We will encounter this idea again in later statistical algorithms.
+
+## Computational Perspective
+
+The goal is not simply to memorize optimization algorithms.
+
+For a statistical problem, ask:
+
+1. What is the statistical quantity we want?
+2. Can it be written as an optimization or root-finding problem?
+3. Is there a closed-form solution?
+4. Is the parameter scalar or multivariate?
+5. Is the objective smooth?
+6. Are derivatives available?
+7. Are there many local optima?
+8. How sensitive is the method to the starting value?
+9. Is the computation numerically stable?
+10. How can we validate the result?
+
+This brings us back to the central idea of statistical computing:
+
+$$
+\boxed{
+\text{Theory}
+\Longleftrightarrow
+\text{Computation}
+\Longleftrightarrow
+\text{Practice}.
+}
+$$
+
+## Questions to Think at Home
+
+1. Why can a mathematically correct optimization formula still lead to a poor computational implementation?
+
+2. Why is a closed-form solution useful even when numerical optimization will eventually be used?
+
+3. Why is bisection more reliable than Newton's method, and what is the computational cost of that reliability?
+
+4. What additional information does Newton's method use compared with bisection?
+
+5. Why can different starting values lead to different solutions for the same objective function?
+
+6. What role does the step size play in gradient descent?
+
+7. Why might poor scaling make optimization difficult?
+
+8. Why is solving
+
+$$
+H\boldsymbol{d}
+=
+-\nabla Q
+$$
+
+usually preferable to explicitly computing $H^{-1}$?
+
+9. Why can BFGS be useful when the Hessian is expensive to compute?
+
+10. Why might a metaheuristic algorithm deliberately accept a worse solution?
+
+11. When would you prefer simulated annealing over a deterministic local optimizer?
+
+12. What is the main difference between simulated annealing, genetic algorithms, and particle swarm optimization?
+
+13. Why does fewer iterations not necessarily imply lower computational cost?
+
+14. How are optimization, likelihood estimation, and statistical inference connected?
+
+## Takeaways
+
+- Many statistical estimators are solutions to optimization problems.
+- Closed-form solutions are convenient but often unavailable.
+- Numerical optimization connects statistical theory with practical computation.
+- Root finding is closely related to optimization.
+- Bisection is reliable but relatively slow.
+- Newton's method is fast near a solution but uses derivative information.
+- The secant method approximates derivative information numerically.
+- Multivariate optimization replaces derivatives with gradients and Hessians.
+- Gradient descent uses local first-order information.
+- Newton's method uses curvature information through the Hessian.
+- BFGS approximates curvature without repeatedly computing the full Hessian.
+- Scaling can strongly affect computational performance.
+- Deterministic methods are usually efficient for smooth, well-behaved objectives.
+- Metaheuristic methods trade speed and predictability for broader exploration.
+- Simulated annealing can escape local optima by occasionally accepting worse solutions.
+- Genetic algorithms and particle swarm optimization use populations of candidate solutions.
+- There is no universally best optimization algorithm.
+- A good computational method balances accuracy, stability, speed, and exploration.
+
+---
+
+Examples are adapted from the following sources:
+
+- Peng, R.D. [Advanced Statistical Computing](https://bookdown.org/rdpeng/advstatcomp/).

@@ -11,7 +11,7 @@ book:
     - index.qmd
     - 01-R.qmd
     - 02-computation.qmd
-    - 02-optimization.qmd
+    - 03-optimization.qmd
     - part: "Assignment"
       chapters:
         - Assignment1.qmd

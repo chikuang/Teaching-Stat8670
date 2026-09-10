@@ -49,7 +49,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 |:------:|:--------------------------------------------:|:---------------:|
 |✅   ️|                [R Programming](01-R.qmd)                 |       1--3       |
 |✅    | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4-- 5  |      |
-| ⏳   | [Optimalization](02-optimization.qmd)  | 6-- |      |
+| ⏳   | [Optimalization](03-optimization.qmd)  | 5-- |      |
 
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
