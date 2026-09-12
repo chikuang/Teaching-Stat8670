@@ -1,5 +1,5 @@
 ---
-show-solutions: false
+show-solutions: true
 ---
 
 # Assignment 1 {.unnumbered}
