@@ -1,6 +1,6 @@
 # Optimization
 
-```{r}
+```{r, echo = FALSE}
 library(ggplot2)
 
 theme_set(
@@ -593,6 +593,7 @@ $$
 $$
 
 ```{r}
+#| code-fold: true
 bisect_trace <- function(
     f,
     a,
@@ -648,9 +649,11 @@ bisect_history <- bisect_trace(
 tail(bisect_history)
 ```
 
-### Visualizing Bisection
+**Visualizing**
 
 ```{r}
+#| code-fold: true
+#| 
 ggplot(
   bisect_history,
   aes(y = iteration)
@@ -743,6 +746,7 @@ f'(z)
 $$
 
 ```{r}
+#| code-fold: true
 f <- function(z) {
   pnorm(z) - 0.975
 }
@@ -753,6 +757,7 @@ df <- function(z) {
 ```
 
 ```{r}
+#| code-fold: true
 newton_trace <- function(
     f,
     df,
@@ -810,6 +815,7 @@ newton_history
 ### Visualizing Newton's Method
 
 ```{r}
+#| code-fold: true
 tangent_data <- data.frame(
   x = head(newton_history$x, -1),
   y = head(newton_history$fx, -1),
@@ -917,6 +923,7 @@ f(x_k)-f(x_{k-1})
 $$
 
 ```{r}
+#| code-fold: true
 secant_trace <- function(
     f,
     x0,
@@ -1027,6 +1034,7 @@ Under suitable conditions:
 ### Comparing Convergence in R
 
 ```{r}
+#| code-fold: true
 true_root <- qnorm(0.975)
 
 bisection_error <- data.frame(
@@ -1069,6 +1077,7 @@ convergence_data <- subset(
 ```
 
 ```{r}
+#| code-fold: true
 ggplot(
   convergence_data,
   aes(
@@ -1172,7 +1181,9 @@ H(\boldsymbol{\theta})
 \right].
 $$
 
-### Visualizing a Two-Dimensional Objective
+
+::: {.callout-example, title="Visualizing a Two-Dimensional Objective" }
+
 
 Consider
 
@@ -1185,6 +1196,7 @@ Q(\theta_1,\theta_2)
 $$
 
 ```{r}
+#| code-fold: true
 objective_2d <- function(theta1, theta2) {
   (theta1 - 2)^2 +
     4 * (theta2 + 1)^2
@@ -1252,6 +1264,11 @@ $$
 -1
 \end{pmatrix}.
 $$
+
+
+:::
+
+
 
 ## Gradient Descent
 
