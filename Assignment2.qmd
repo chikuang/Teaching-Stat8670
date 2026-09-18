@@ -1,0 +1,804 @@
+---
+show-solutions: false
+---
+
+# Assignment 2 {.unnumbered}
+
+**Due date:** TBA  
+**Total:** 30 points  
+**Coverage:** Chapter 2 (Computational Approaches) and Chapter 3 (Optimization).
+
+::: {.callout-note title="Submission"}
+
+Use **R Markdown** or **Quarto**. Submit both your **source file** (`.Rmd` or `.qmd`) and its **rendered PDF**.
+
+Begin the PDF with an answer table for Questions 1-3, followed by Question 4. Use the supplied response template, or make your own table with the same part labels.
+
+- **Questions 1-2:** Select one best answer, A, B, C, or D.
+- **Question 3:** Write **True** or **False**.
+- **Question 4:** Explain your reasoning in your own words, using one or two sentences per numbered prompt.
+
+Only Question 4 requires explanations. R code and figures are optional. If you use R to check your work, include the code in your source file.
+
+:::
+
+| Question | Format | Points |
+|---|---|---:|
+| 1 | 8 multiple-choice questions on Chapter 2 | 8 |
+| 2 | 8 multiple-choice questions on Chapter 3 | 8 |
+| 3 | 6 true/false questions | 6 |
+| 4 | 2 short explanations with four prompts each | 8 |
+| **Total** | | **30** |
+
+The questions use the main material in both chapters; the optional real-world applications at the end of Chapter 3 are not required.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-important title="Instructor Version"}
+
+Model answers follow each question. The final page provides a compact grading key.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 1: Computational Approaches [8]
+
+Select the **best answer**. Each question is worth **1 point**.
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1a)
+
+Two formulas are mathematically equivalent in exact arithmetic. Which statement about their computer implementations is most accurate?
+
+A. They can produce different numerical results because computers use finite-precision arithmetic.  
+B. They must produce exactly the same result in every decimal place.  
+C. They must use the same amount of memory.  
+D. They must take the same amount of time.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**A.** Floating-point operations involve rounding. Algebraically equivalent expressions can accumulate different rounding errors.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1b)
+
+Let $A$ be a nonsingular square matrix and $b$ a compatible vector. Which R expression solves $Ax=b$ **without explicitly forming** $A^{-1}$?
+
+A. `solve(A) %*% b`  
+B. `solve(A, b)`  
+C. `crossprod(A, b)`  
+D. `A %*% b`
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**B.** `solve(A, b)` solves the linear system directly. `solve(A)` explicitly computes the inverse.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1c)
+
+For a numeric matrix `X`, which expression is mathematically equivalent to `crossprod(X)`?
+
+A. `X %*% t(X)`  
+B. `X * X`  
+C. `sum(X * X)`  
+D. `t(X) %*% X`
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**D.** `crossprod(X)` computes $X^\top X$; it does not mean element-by-element multiplication.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1d)
+
+A regression design matrix has one column that is almost a copy of another. What is the main numerical concern?
+
+A. The number of observations must have changed.  
+B. The response variable must contain missing values.  
+C. The normal-equation system can be ill-conditioned, making coefficient estimates sensitive to small perturbations.  
+D. The residual sum of squares must be exactly zero.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**C.** Near collinearity can make small changes in the data or rounding errors cause large changes in the estimated coefficients.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1e)
+
+Suppose a full-column-rank design matrix has the thin QR decomposition $X=QR$, with $Q^\top Q=I$. Which triangular system gives the least-squares coefficients?
+
+A. $R\hat\beta=Qy$  
+B. $R\hat\beta=Q^\top y$  
+C. $Q\hat\beta=R^\top y$  
+D. $R^\top\hat\beta=Q^\top y$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**B.** The least-squares equations reduce to $R\hat\beta=Q^\top y$. We can solve this triangular system without forming $X^\top X$.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1f)
+
+Suppose $\Sigma=R^\top R$ is positive definite, with $R$ upper triangular, and $z=x-\mu$. Which computation gives $z^\top\Sigma^{-1}z$ without explicitly forming an inverse?
+
+A. Solve $R^\top v=z$, then compute $v^\top v$.  
+B. Solve $Rv=z$, then compute $v^\top v$.  
+C. Compute $v=Rz$, then compute $v^\top v$.  
+D. Compute $z^\top z$ without using $R$.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**A.** Since $\Sigma^{-1}=R^{-1}R^{-\top}$, the quadratic form is $(R^{-\top}z)^\top(R^{-\top}z)$. Thus solve $R^\top v=z$.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1g)
+
+Use the same Cholesky convention, with
+
+$$
+R=\begin{pmatrix}4&1\\0&2\end{pmatrix},
+\qquad z=\begin{pmatrix}4\\5\end{pmatrix},
+\qquad \Sigma=R^\top R.
+$$
+
+What is $z^\top\Sigma^{-1}z$?
+
+A. 29  
+B. 25  
+C. 5  
+D. 3
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**C.** Solving $R^\top v=z$ gives $4v_1=4$ and $v_1+2v_2=5$. Hence $v=(1,2)^\top$, and $v^\top v=1^2+2^2=5$.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 1h)
+
+You evaluate multivariate normal log-densities at many different observations, using the **same positive-definite covariance matrix** $\Sigma$. Which work can be reused?
+
+A. The centered vector $z=x-\mu$ for every observation.  
+B. The complete log-density value for every observation.  
+C. The quadratic form $z^\top\Sigma^{-1}z$ for every observation.  
+D. The Cholesky factor of $\Sigma$ and its log-determinant.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**D.** The factorization and log-determinant depend only on the fixed covariance matrix. Centered vectors and quadratic forms generally change with the observation.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 2: Optimization [8]
+
+Select the **best answer**. Each question is worth **1 point**.
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2a)
+
+You want to maximize a log-likelihood $\ell(\theta)$ using an optimizer that **minimizes** its objective. Which objective should you supply?
+
+A. $\ell(\theta)$  
+B. $[\ell(\theta)]^2$  
+C. $-\ell(\theta)$  
+D. $|\ell(\theta)|$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**C.** Maximizing $\ell(\theta)$ is equivalent to minimizing $-\ell(\theta)$. Squaring or taking an absolute value generally changes the problem.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2b)
+
+Which conditions give the usual root-bracketing guarantee for bisection on an interval $[a,b]$?
+
+A. $f(a)$ and $f(b)$ are both positive.  
+B. $f$ is differentiable at $a$, regardless of its behavior elsewhere.  
+C. The midpoint is smaller than both endpoints.  
+D. $f$ is continuous on $[a,b]$ and $f(a)f(b)<0$.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**D.** Continuity and opposite endpoint signs ensure at least one root in the interval. Bisection keeps a subinterval with the sign change.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2c)
+
+Apply **one Newton root-finding update** to $f(x)=x^2-3$, starting at $x_0=2$. What is $x_1$?
+
+Use $x_1=x_0-f(x_0)/f'(x_0)$.
+
+A. 1.75  
+B. 1.50  
+C. 2.25  
+D. 3.00
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**A.** $f(2)=1$ and $f'(2)=4$, so $x_1=2-1/4=1.75$.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2d)
+
+Minimize $Q(x)=(x-3)^2$ using gradient descent. Starting at $x_0=0$ with step size $\alpha=0.25$, what is the next iterate?
+
+Use $x_1=x_0-\alpha Q'(x_0)$.
+
+A. -1.50  
+B. 1.50  
+C. 0.75  
+D. 3.00
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**B.** $Q'(0)=2(0-3)=-6$, so $x_1=0-0.25(-6)=1.5$.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2e)
+
+What is the main computational idea behind BFGS?
+
+A. Enumerate every feasible parameter value.  
+B. Use the exact Hessian inverse at every iteration.  
+C. Guarantee a global optimum by adding random noise.  
+D. Update an approximation to curvature information instead of repeatedly computing the exact Hessian.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**D.** BFGS is a quasi-Newton method. It updates a curvature approximation using information from successive iterates and gradients.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2f)
+
+Consider $Q(\theta_1,\theta_2)=(\theta_1-1)^2+100(\theta_2-1)^2$. Why can a single fixed step size be difficult for gradient descent?
+
+A. The much larger curvature in one direction can cause zig-zagging or force a small step size.  
+B. The function is not differentiable.  
+C. The function has infinitely many local minima.  
+D. The gradient is zero at every point.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**A.** The two directions have different curvature. A step size that works well in the flatter direction may be too large in the steeper direction.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2g)
+
+In simulated annealing for a minimization problem, a proposed move increases the objective by $\Delta Q=2$. At temperature $T=1$, what is its acceptance probability?
+
+Use $P(\text{accept})=\exp(-\Delta Q/T)$.
+
+A. 0  
+B. $e^{-2}\approx0.1353$  
+C. 0.5  
+D. 1
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**B.** The probability is $\exp(-2/1)=e^{-2}\approx0.1353$. A worse move can be accepted, allowing exploration beyond the current local basin.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 2h)
+
+A smooth, nonconvex objective is minimized with BFGS from several starting values. The returned objective values differ. What is the most appropriate next step?
+
+A. Always keep the run with the fewest iterations.  
+B. Average all parameter vectors without evaluating the objective there.  
+C. Compare feasible returned objective values, examine diagnostics, and consider additional starts.  
+D. Declare the first converged result globally optimal.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**C.** For minimization, smaller feasible objective values are preferable. Diagnostics and additional starts help assess the result, but do not by themselves certify global optimality.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 3: True or False [6]
+
+Write **True** or **False** for each statement. Each statement is worth **1 point**. No explanation is required.
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3a)
+
+For a full-column-rank regression design matrix, a normal-equation implementation and a QR implementation must return coefficients that agree in every floating-point digit.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**False.** Algebraic equivalence does not imply identical floating-point results. The implementations can accumulate different rounding errors.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3b)
+
+When optimizing a multivariate normal log-likelihood over $\mu$ and $\Sigma$ with fixed dimension $d$ and sample size, dropping an additive term that is constant in these parameters does not change the maximizer.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**True.** Adding or subtracting a parameter-independent constant leaves the ordering of objective values unchanged. For example, the normalizing contribution involving $\log(2\pi)$ is constant when the dimension and sample size are fixed.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3c)
+
+Replacing an explicit matrix inverse with a direct linear-system solve guarantees accurate coefficients even when the matrix is arbitrarily ill-conditioned.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**False.** A direct solve avoids explicitly computing an inverse, but cannot remove the underlying sensitivity of an ill-conditioned problem.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3d)
+
+A solution of $Q'(x)=0$ can be a local maximum rather than a local minimum.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**True.** A zero derivative identifies a stationary point. Additional information is needed to classify it; for example, $Q(x)=-x^2$ has a stationary maximum at zero.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3e)
+
+Under suitable smoothness conditions and with a starting point sufficiently close to a simple root, Newton's method has quadratic convergence.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**True.** This is a local convergence result; it is not a guarantee for every starting value. At a simple root, the derivative is nonzero.
+
+:::
+
+::::
+
+```{=latex}
+\par\noindent
+\begin{minipage}{\linewidth}
+```
+
+### 3f)
+
+A genetic algorithm uses one evolving candidate solution, whereas simulated annealing maintains a population of candidate solutions.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**False.** The roles are reversed: the genetic algorithm uses a population, while the standard simulated annealing algorithm follows one evolving current solution.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 4: Explain What the Results Mean [8]
+
+Each part is worth **4 points**: **1 point for each numbered prompt**. Use one or two sentences per prompt. We grade the statistical and computational reasoning, not the exact wording of your response.
+
+### 4a) Rank deficiency is not missing data [4]
+
+Suppose a regression design matrix contains an intercept and two predictors, with $x_2=2x_1$ exactly and $x_1$ nonconstant. There are no missing values. You try
+
+```r
+solve(crossprod(X), crossprod(X, y))
+```
+
+and receive a computationally singular system error. A QR-based fit instead reports the numerical rank and returns `NA` for one redundant coefficient.
+
+Explain:
+
+1. What feature of the design matrix causes the normal-equation solve to fail?
+2. What does the `NA` coefficient mean in this situation?
+3. Can a QR-based approach still provide ordinary least-squares fitted values? Explain how.
+4. What is one sensible way to remove the redundancy while retaining the same ordinary least-squares fitted values?
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**One possible response**
+
+1. Because $x_2=2x_1$, the columns are linearly dependent and $X^\top X$ is singular.
+2. The two slopes cannot be separately identified from these data: only $\beta_1+2\beta_2$ is identified. The `NA` flags a redundant coefficient, not a missing observation.
+3. QR can detect the deficient rank and fit using independent columns; the least-squares fitted values are still uniquely determined, even though the full coefficient vector is not.
+4. Drop either redundant predictor, or replace the two slope terms by a single term involving $x_1$. This preserves the column space and hence the ordinary least-squares fitted values.
+
+**Grading: 1 point for each item**
+
+| Prompt | Full-credit idea |
+|:---:|---|
+| (1) | Identifies exact linear dependence and its connection to singularity. |
+| (2) | Explains non-identifiability or a redundant coefficient; does not treat `NA` as missing input data. |
+| (3) | States that QR can obtain least-squares fitted values using the independent columns. An equivalent description of the reduced fit is acceptable. |
+| (4) | Drops a redundant column or gives an equivalent reparameterization preserving the fitted values. |
+
+Accept equivalent explanations. QR does not create a unique full coefficient vector when the model is not identifiable. Adding a ridge penalty changes the estimation problem and is not a way to retain the same ordinary least-squares fit in general.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+### 4b) A converged result still needs interpretation [4]
+
+You are minimizing
+
+$$
+Q(x)=(x^2-1)^2+0.2x+1,
+\qquad x\in\mathbb{R}.
+$$
+
+Two BFGS runs give the following results, rounded to four decimal places:
+
+| Run | Starting value | Returned value | Objective value $Q(x)$ | Convergence code |
+|:---:|---:|---:|---:|:---:|
+| A | 1 | 0.9740 | 1.1974 | 0 |
+| B | -1 | -1.0241 | 0.7976 | 0 |
+
+Here, code `0` means the optimizer reports successful completion according to its convergence criteria. You do not need to run the optimizer or prove global optimality.
+
+Explain:
+
+1. Which returned point would you retain as the **best found so far**, and why?
+2. How can a deterministic method return different answers for the same objective?
+3. Do these convergence codes alone establish that either point is a global minimum? Explain.
+4. Describe one additional check or search you would perform, and explain what it would tell you.
+
+:::: {.content-visible when-meta="show-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**One possible response**
+
+1. Retain Run B because $0.7976<1.1974$ and the objective is being minimized.
+2. A deterministic method follows a fixed procedure once its starting value is fixed. Different starts can lead to different local minima of this nonconvex objective.
+3. No. Successful numerical convergence is not a certificate that no point elsewhere has a smaller objective value.
+4. Run BFGS from additional starting values and compare the returned objective values. This can reveal a better candidate or increase confidence in the best found value, but it is not by itself a global-optimality proof.
+
+**Grading: 1 point for each item**
+
+| Prompt | Full-credit idea |
+|:---:|---|
+| (1) | Chooses B **and** explains that its objective value is smaller. |
+| (2) | Connects different starts to different local minima or search paths. |
+| (3) | Says no and distinguishes algorithmic convergence from global optimality. |
+| (4) | Proposes a relevant check **and** explains what the check can establish. |
+
+For (4), accept additional starts, examining a graph or grid over a stated range, an independent search method, checking stationarity and curvature, or analyzing all stationary points and the tails. Checking $Q'(x)\approx0$ alone confirms approximate stationarity, not a minimum or global optimality; checking positive curvature can support a local minimum. Do not require a global proof.
+
+For an optional exact check, $Q'(x)=4x(x^2-1)+0.2$ and $Q''(x)=12x^2-4$. Comparing all stationary points together with $Q(x)\to\infty$ as $|x|\to\infty$ establishes the global minimum near $-1.0241$.
+
+:::
+
+::::
+
+:::: {.content-visible when-meta="show-solutions"}
+
+{{< pagebreak >}}
+
+## Quick Answer Key
+
+::: {.callout-important collapse="true" title="Instructor Answer Key"}
+
+### Questions 1-3: 22 points
+
+Award **1 point per correct selection**. Explanations are not required for these items.
+
+| Chapter 2 | Answer | Chapter 3 | Answer | True/False | Answer |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1a | A | 2a | C | 3a | False |
+| 1b | B | 2b | D | 3b | True |
+| 1c | D | 2c | A | 3c | False |
+| 1d | C | 2d | B | 3d | True |
+| 1e | B | 2e | D | 3e | True |
+| 1f | A | 2f | A | 3f | False |
+| 1g | C | 2g | B |  |  |
+| 1h | D | 2h | C |  |  |
+
+### Question 4: 8 points
+
+**4a: 1 point each.** (1) Dependence causes singularity. (2) `NA` marks a non-identifiable coefficient. (3) QR fits using independent columns. (4) Drop or reparameterize a redundant predictor.
+
+**4b: 1 point each.** (1) B has the smaller objective. (2) Different starts can reach different local minima. (3) Convergence is not a global guarantee. (4) A relevant additional check and its interpretation.
+
+Award 0.5 for a substantially correct but incomplete idea, and 0 for an incorrect or missing idea. Accept equivalent reasoning. The detailed rubrics appear with the model answers.
+
+**Deduction format:** `Q4b(3) [-1] Convergence alone does not establish a global minimum.`
+
+**Coverage:** 15 points per chapter. Chapter 2: Q1, 3a-3c, 4a. Chapter 3: Q2, 3d-3f, 4b.
+
+:::
+
+::::

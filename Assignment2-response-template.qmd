@@ -1,0 +1,41 @@
+---
+title: "Assignment 2: Responses"
+author: "Your name"
+format: pdf
+---
+
+**Due date:** TBA  
+**Total:** 30 points
+
+Submit this completed source file and its rendered PDF. For Questions 1 and 2, enter one letter. For Question 3, enter True or False. For Question 4, answer each numbered prompt in one or two sentences. Consult the assignment for the complete questions.
+
+## Questions 1-3: Answer Table
+
+| Chapter 2 | Answer | Chapter 3 | Answer | True/False | Answer |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1a |  | 2a |  | 3a |  |
+| 1b |  | 2b |  | 3b |  |
+| 1c |  | 2c |  | 3c |  |
+| 1d |  | 2d |  | 3d |  |
+| 1e |  | 2e |  | 3e |  |
+| 1f |  | 2f |  | 3f |  |
+| 1g |  | 2g |  |  |  |
+| 1h |  | 2h |  |  |  |
+
+## Question 4a: Rank Deficiency [4]
+
+1. **Cause of the failure:** [Your response.]
+2. **Meaning of the NA coefficient:** [Your response.]
+3. **What QR can still provide:** [Your response.]
+4. **A remedy that preserves the fitted values:** [Your response.]
+
+## Question 4b: Interpreting Optimization Results [4]
+
+1. **Best found point and reason:** [Your response.]
+2. **Why the runs differ:** [Your response.]
+3. **What convergence does and does not establish:** [Your response.]
+4. **An additional check and what it would tell you:** [Your response.]
+
+## Optional R Code
+
+If you use R to check your answers, include your code here. Otherwise, remove this section.
