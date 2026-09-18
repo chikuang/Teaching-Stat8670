@@ -29,7 +29,7 @@ MATH 4752/6752 -- Mathematical Statistics II, and the ability to program in a hi
 ## Assignment
 
 - [x] [Assignment 1](Assignment1.qmd): September 11, 2026
-- [ ] Assignment 2: TBA
+- [ ] [Assignment 2](Assignment2.qmd): TBA
 
 ## Midterm
 
