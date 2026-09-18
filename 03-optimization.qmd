@@ -1,6 +1,7 @@
 # Optimization
 
 ```{r, echo = FALSE}
+#| code-fold: true
 library(ggplot2)
 
 theme_set(
@@ -40,6 +41,8 @@ $$
 }.
 $$
 
+The applications in this chapter illustrate two uses of optimization: **estimating unknown parameters from data** and **choosing an action under practical constraints**. We will connect these ideas to drug development, investment portfolios, factory scheduling, and advertising budgets. The examples use simplified models of these real applications.
+
 ## Why Numerical Optimization?
 
 Consider
@@ -61,6 +64,7 @@ $$
 We already know the closed-form solution. However, we can also obtain the estimator computationally by minimizing the negative log-likelihood.
 
 ```{r}
+#| code-fold: true
 set.seed(8670)
 
 x <- rnorm(
@@ -91,11 +95,12 @@ c(
 )
 ```
 
-### Visualizing the Objective Function
+**Visualizing the Objective Function**
 
 Rather than treating an optimizer as a black box, we can evaluate the objective function over a grid.
 
 ```{r}
+#| code-fold: true
 mu_grid <- seq(
   -1,
   5,
@@ -170,6 +175,7 @@ $$
 Unlike ordinary linear regression, there is no convenient closed-form least-squares estimator.
 
 ```{r}
+#| code-fold: true
 set.seed(8670)
 
 x <- seq(
@@ -199,6 +205,7 @@ fit_nonlinear$minimum
 ```
 
 ```{r}
+#| code-fold: true
 theta_grid <- seq(
   0,
   3,
@@ -242,6 +249,7 @@ $$
 \text{computation tells us how to find it.}
 }
 $$
+
 
 ## Two Families of Optimization Methods
 
@@ -335,6 +343,7 @@ Q(x)
 $$
 
 ```{r}
+#| code-fold: true
 objective <- function(x) {
   0.05 * x^2 +
     sin(x)^2 +
@@ -372,6 +381,7 @@ The objective contains several local minima.
 A deterministic local optimizer may converge to different solutions depending on its starting value.
 
 ```{r}
+#| code-fold: true
 starts <- c(
   -6,
   -2,
@@ -401,6 +411,7 @@ local_results
 ```
 
 ```{r}
+#| code-fold: true
 ggplot(
   objective_data,
   aes(
@@ -473,7 +484,7 @@ $$
 
 A root of $Q'(x)$ is only a candidate optimum. It may correspond to a minimum, maximum, or another stationary point.
 
-### A Statistical Example: Normal Quantiles
+::: {.callout-example title="Normal Quantiles"}
 
 Suppose we want the 97.5th percentile of a standard normal distribution.
 
@@ -492,6 +503,7 @@ $$
 $$
 
 ```{r}
+#| code-fold: true
 f_root <- function(z) {
   pnorm(z) - 0.975
 }
@@ -529,6 +541,7 @@ ggplot(
 R can solve the root directly:
 
 ```{r}
+#| code-fold: true
 root_R <- uniroot(
   f_root,
   interval = c(0, 4)
@@ -549,6 +562,8 @@ $$
 \text{Root Finding}.
 }
 $$
+
+:::
 
 ::: {.callout-question title="In-Class Question"}
 
@@ -1182,8 +1197,7 @@ H(\boldsymbol{\theta})
 $$
 
 
-::: {.callout-example, title="Visualizing a Two-Dimensional Objective" }
-
+::: {.callout-example title="Visualizing a Two-Dimensional Objective"}
 
 Consider
 
@@ -1270,6 +1284,111 @@ $$
 
 
 
+:::: {.callout-example title="Finance: Splitting Money Between Two Funds"}
+
+::: {.content-visible when-format="pdf"}
+
+**Finance: Splitting Money Between Two Funds**
+
+:::
+
+**The situation.** Suppose a fund manager has \$10,000 to invest. Begin with just two funds and the following illustrative annual estimates:
+
+| Choice | Expected return | Volatility (standard deviation) |
+|---|---:|---:|
+| Fund A | 8% | 20% |
+| Fund B | 4% | 6% |
+
+Fund A offers more expected return, but its returns vary more. Assume a return correlation of 0.10. The manager wants **the highest expected return while keeping portfolio volatility at or below 10%**. Volatility measures variation; a 10% limit does not cap possible losses at 10%.
+
+```{r}
+#| label: fig-finance-choice
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.6
+#| fig-height: 4.7
+#| fig-pos: H
+#| fig-cap: "Left: three ways to split the same $10,000. Right: each point on the curve is a possible split. The selected mix has the highest expected return among points at or left of the 10% volatility limit. All inputs are illustrative."
+#| fig-alt: "A stacked bar chart compares all Fund A, the chosen mix, and all Fund B. A risk-return curve highlights a chosen mix of 45.7 percent A and 54.3 percent B at 10 percent volatility and 5.83 percent expected return. Higher-volatility points lie in a shaded excluded region."
+finance_risk <- function(w) {
+  sqrt((0.20 * w)^2 + (0.06 * (1 - w))^2 +
+         2 * 0.10 * 0.20 * 0.06 * w * (1 - w))
+}
+finance_return <- function(w) 0.08 * w + 0.04 * (1 - w)
+# Expected return increases with w; find the largest permitted weight.
+finance_weight <- uniroot(function(w) finance_risk(w) - 0.10,
+                          c(0, 1), tol = 1e-10)$root
+finance_choices <- data.frame(
+  Choice = factor(c("All Fund A", "Chosen mix", "All Fund B"),
+                  levels = c("All Fund B", "Chosen mix", "All Fund A")),
+  A = c(1, finance_weight, 0)
+)
+finance_bars <- rbind(
+  data.frame(Choice = finance_choices$Choice, Fund = "Fund A",
+             Amount = 10 * finance_choices$A),
+  data.frame(Choice = finance_choices$Choice, Fund = "Fund B",
+             Amount = 10 * (1 - finance_choices$A))
+)
+finance_bars$Label <- ifelse(finance_bars$Amount == 0, "",
+                             sprintf("$%s", formatC(
+                               1000 * finance_bars$Amount,
+                               format = "f", digits = 0, big.mark = ",")))
+finance_allocation_plot <- ggplot(finance_bars, aes(Amount, Choice, fill = Fund)) +
+  geom_col(width = 0.6, position = position_stack(reverse = TRUE)) +
+  geom_text(aes(label = Label), size = 3,
+            position = position_stack(vjust = 0.5, reverse = TRUE)) +
+  scale_fill_manual(values = c("Fund A" = "#79BADD", "Fund B" = "#F0C77C")) +
+  scale_x_continuous(limits = c(0, 10), breaks = c(0, 5, 10)) +
+  labs(title = "1. Split the $10,000", x = "Thousands of dollars", y = NULL,
+       fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+finance_grid <- data.frame(Weight = seq(0, 1, length.out = 501))
+finance_grid$Risk <- 100 * finance_risk(finance_grid$Weight)
+finance_grid$Return <- 100 * finance_return(finance_grid$Weight)
+finance_risk_plot <- ggplot(finance_grid, aes(Risk, Return)) +
+  annotate("rect", xmin = 10, xmax = 22, ymin = -Inf, ymax = Inf,
+           fill = "#FCE6E1") +
+  geom_path(linewidth = 1, colour = "#0072B2") +
+  geom_vline(xintercept = 10, linetype = "dashed", colour = "#A33A2B") +
+  annotate("point", x = 10, y = 100 * finance_return(finance_weight),
+           size = 3, colour = "#0072B2") +
+  annotate("text", x = 16, y = 4.4, label = "Above the\nrisk limit", size = 3.2) +
+  annotate("text", x = 1, y = 7.3, hjust = 0,
+           label = "Chosen mix\n5.83% return", size = 3.1) +
+  annotate("segment", x = 6, xend = 9.8, y = 6.85, yend = 5.9,
+           arrow = grid::arrow(length = grid::unit(0.07, "inches"))) +
+  coord_cartesian(xlim = c(0, 22), ylim = c(3.7, 8.5)) +
+  labs(title = "2. Respect the risk limit", x = "Volatility (%)",
+       y = "Expected annual return (%)") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank())
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
+print(finance_allocation_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(finance_risk_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+grid::popViewport()
+```
+
+**Read the picture.** Moving more money to Fund A moves us toward higher expected return, but eventually crosses the dashed risk limit. The chosen mix puts about **\$4,567 in A and \$5,433 in B**, for an expected return of **5.83%** under these assumptions. All-A has a higher expected return, but is outside the allowed region.
+
+**Connect the picture to the mathematics.** Let $w$ be the fraction invested in Fund A. The remaining fraction, $1-w$, goes to B:
+
+$$
+\max_{0\leq w\leq1}\;0.08w+0.04(1-w)
+\quad\text{subject to}\quad\sigma(w)\leq0.10,
+$$
+
+where $\sigma(w)$ is the portfolio standard deviation, calculated from both funds' volatilities and their correlation.
+
+**Why an algorithm?** In this two-fund example, `uniroot()` locates the boundary $\sigma(w)=0.10$. With 20 funds, sector limits, and holding limits, many weights must be chosen together. Constrained portfolio solvers handle those interacting choices. [Application context: MOSEK portfolio optimization cookbook](https://docs.mosek.com/portfolio-cookbook/markowitz.html).
+
+**Try explaining it:** If the dashed risk limit moved to the right, would the best allowed mix contain more or less of Fund A?
+
+::::
+
 ## Gradient Descent
 
 The gradient points in the direction of greatest increase.
@@ -1309,6 +1428,7 @@ $$
 $$
 
 ```{r}
+#| code-fold: true
 gradient_2d <- function(theta) {
   c(
     2 * (theta[1] - 2),
@@ -1359,6 +1479,7 @@ gd_path <- gradient_descent(
 ### Visualizing the Optimization Path
 
 ```{r}
+#| code-fold: true
 ggplot(
   objective_grid,
   aes(
@@ -1405,6 +1526,7 @@ What happens if it is too large?
 ### Step Size Matters
 
 ```{r}
+#| code-fold: true
 gd_small <- gradient_descent(
   start = c(-1, 1),
   alpha = 0.02,
@@ -1548,7 +1670,8 @@ $$
 }
 $$
 
-## Statistical Example: Logistic Regression
+
+::: {.callout-example title="Logistic Regression"}
 
 Consider
 
@@ -1580,6 +1703,7 @@ $$
 There is no closed-form MLE, so logistic regression requires numerical optimization.
 
 ```{r}
+#| code-fold: true
 set.seed(8670)
 
 n <- 200
@@ -1607,6 +1731,7 @@ y_logit <- rbinom(
 Define the negative log-likelihood:
 
 ```{r}
+#| code-fold: true
 logistic_nll <- function(beta) {
 
   eta <-
@@ -1629,6 +1754,7 @@ logistic_nll <- function(beta) {
 Estimate the coefficients using BFGS:
 
 ```{r}
+#| code-fold: true
 fit_optim <- optim(
   par = c(0, 0),
   fn = logistic_nll,
@@ -1641,6 +1767,7 @@ fit_optim$par
 Compare with `glm()`:
 
 ```{r}
+#| code-fold: true
 fit_glm <- glm(
   y_logit ~ x_logit,
   family = binomial()
@@ -1650,6 +1777,8 @@ coef(fit_glm)
 
 fit_optim$par
 ```
+
+:::
 
 ::: {.callout-question title="In-Class Question"}
 
@@ -1688,6 +1817,7 @@ Q(\theta_1,\theta_2)
 $$
 
 ```{r}
+#| code-fold: true
 scaled_objective <- function(theta1, theta2) {
   (theta1 - 1)^2 +
     100 * (theta2 - 1)^2
@@ -1769,7 +1899,7 @@ $$
 }
 $$
 
-### Why Accept a Worse Solution?
+**Why Accept a Worse Solution?**
 
 A local deterministic method usually attempts to improve the objective at every step.
 
@@ -1844,9 +1974,10 @@ $$
 
 the algorithm becomes more selective.
 
-### Visualizing the Acceptance Probability
+**Visualizing the Acceptance Probability**
 
 ```{r}
+#| code-fold: true
 delta_grid <- seq(
   0,
   5,
@@ -1914,6 +2045,7 @@ optim(
 Using the earlier multimodal objective:
 
 ```{r}
+#| code-fold: true
 set.seed(8670)
 
 sa_fit <- optim(
@@ -1932,6 +2064,7 @@ sa_fit$value
 Because simulated annealing is stochastic, different seeds may produce different results.
 
 ```{r}
+#| code-fold: true
 seeds <- 1:20
 
 sa_solution <- vapply(
@@ -1974,14 +2107,14 @@ ggplot(
   )
 ```
 
-### Advantages of Simulated Annealing
+**Advantages of Simulated Annealing**
 
 - Can escape local optima.
 - Does not require derivatives.
 - Easy to adapt to many objective functions.
 - Useful for multimodal problems.
 
-### Limitations of Simulated Annealing
+**Limitations of Simulated Annealing**
 
 - Can require many function evaluations.
 - Results vary across runs.
@@ -2028,18 +2161,104 @@ $$
 }
 $$
 
-### Advantages
+**Advantages**
 
 - Explores several regions simultaneously.
 - Does not require gradients.
 - Flexible for continuous and discrete problems.
 
-### Limitations
+**Limitations**
 
 - Can require many objective evaluations.
 - Requires tuning of population size and mutation rate.
 - Can converge slowly.
 - Does not guarantee a global optimum.
+
+:::: {.callout-example title="Industry: Finish the Same Orders Earlier"}
+
+::: {.content-visible when-format="pdf"}
+
+**Industry: Finish the Same Orders Earlier**
+
+:::
+
+**The situation.** A small factory has three orders, A, B, and C. Every order must go through **Cutting, then Finishing**. Each machine handles one order at a time. These illustrative processing times stay the same in both schedules:
+
+| Order | Cutting | Finishing |
+|---|---:|---:|
+| A | 4 hours | 1 hour |
+| B | 1 hour | 4 hours |
+| C | 2 hours | 2 hours |
+
+**The computer's job:** choose the order of work so that all three orders finish as early as possible.
+
+```{r}
+#| label: fig-factory-schedules
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.4
+#| fig-height: 4.8
+#| fig-pos: H
+#| fig-cap: "Same orders, same machines, same processing times. Changing the sequence reduces the last completion time from 11 to 8 hours. Empty horizontal space is idle time."
+#| fig-alt: "Two Gantt charts compare A-B-C with B-C-A. In the original schedule, finishing starts at hour 4 and ends at hour 11. In the improved schedule, finishing starts at hour 1 and ends at hour 8. Each bar is labeled A, B, or C."
+factory_times <- data.frame(Job = c("A", "B", "C"),
+                            Cutting = c(4, 1, 2), Finishing = c(1, 4, 2))
+factory_schedule <- function(order, label) {
+  cutting_free <- finishing_free <- 0
+  tasks <- list()
+  for (job in order) {
+    duration <- factory_times[factory_times$Job == job, ]
+    cut_start <- cutting_free
+    cut_end <- cut_start + duration$Cutting
+    finish_start <- max(cut_end, finishing_free)
+    finish_end <- finish_start + duration$Finishing
+    tasks[[job]] <- data.frame(
+      Job = job, Machine = c("Cutting", "Finishing"),
+      Start = c(cut_start, finish_start), End = c(cut_end, finish_end),
+      Schedule = label
+    )
+    cutting_free <- cut_end
+    finishing_free <- finish_end
+  }
+  do.call(rbind, tasks)
+}
+factory_tasks <- rbind(
+  factory_schedule(c("A", "B", "C"), "1. Original: A-B-C | All done at hour 11"),
+  factory_schedule(c("B", "C", "A"), "2. Improved: B-C-A | All done at hour 8")
+)
+factory_tasks$Machine <- factor(factory_tasks$Machine,
+                                levels = c("Finishing", "Cutting"))
+factory_ends <- aggregate(End ~ Schedule, factory_tasks, max)
+ggplot(factory_tasks, aes(y = Machine, colour = Job)) +
+  geom_segment(aes(x = Start, xend = End, yend = Machine),
+               linewidth = 13, lineend = "butt") +
+  geom_text(aes(x = (Start + End) / 2, label = Job),
+            colour = "black", fontface = "bold", size = 4) +
+  geom_vline(data = factory_ends, aes(xintercept = End),
+             inherit.aes = FALSE, linetype = "dashed", colour = "grey40") +
+  facet_wrap(~Schedule, ncol = 1) +
+  scale_colour_manual(values = c(A = "#79BADD", B = "#F0C77C", C = "#A4D4B4")) +
+  scale_x_continuous(breaks = 0:11, limits = c(0, 11.3)) +
+  scale_y_discrete(expand = expansion(add = 0.7)) +
+  labs(x = "Hours since work begins", y = NULL,
+       title = "A Better Sequence Saves 3 Hours",
+       subtitle = "Follow the same letter from Cutting to Finishing") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none", panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank())
+```
+
+**Read the picture.** In the top schedule, Finishing waits four hours for A. In the bottom schedule, the short cutting step for B lets Finishing start after just one hour. The machines then overlap useful work more effectively. **No machine runs faster; the sequence is better.**
+
+**Connect the picture to the mathematics.** Let $C_{\max}$ be the time when the last order finishes. We minimize $C_{\max}$ while respecting two rules: each order finishes cutting before it starts finishing, and operations never overlap on the same machine.
+
+For these three orders, all six possible common orderings can be checked. The 8-hour schedule is optimal: Finishing needs 7 hours of work and cannot start before hour 1. Larger factories require more systematic search; 20 jobs already give $20!\approx2.43\times10^{18}$ possible orderings on one machine.
+
+**Why an algorithm?** Constraint programming and mixed-integer optimization search subject to the rules. Simulated annealing and genetic algorithms can also explore valid schedules, though they do not certify the best possible result. This is a discrete choice problem: swapping two jobs is not a gradient step. [Application context: OR-Tools job-shop scheduling](https://developers.google.com/optimization/scheduling/job_shop).
+
+**Try explaining it:** Find B in both panels. Why does doing its short cutting step early help the whole factory?
+
+::::
 
 ## Particle Swarm Optimization
 
@@ -2150,31 +2369,179 @@ What changes if the objective has many local minima and no useful derivatives?
 
 :::
 
-## Optimization Transfer
+## Business Analytics: Getting More Orders From the Same Budget
 
-Sometimes the original objective is difficult to optimize directly.
+An online retailer has **\$100,000** for search advertising and social media. Start with a familiar decision: should it spend \$50,000 on each, or split the money differently?
 
-Instead, we construct an easier **surrogate function** and repeatedly optimize the surrogate.
+:::: {.callout-example title="Business Analytics: Same Budget, More Orders"}
 
-The general idea is
+::: {.content-visible when-format="pdf"}
 
-$$
-\boxed{
-\text{Difficult Objective}
-\rightarrow
-\text{Easier Surrogate}
-\rightarrow
-\text{Update}
-\rightarrow
-\text{Repeat}.
+**Business Analytics: Same Budget, More Orders**
+
+:::
+
+**The situation.** The first dollars spent on search work well, but that channel soon reaches many of the customers it can reach. Social media responds more gradually. We use two invented response curves to make the allocation problem visible; these are not measured campaign results.
+
+```{r}
+#| label: marketing-budget-allocation
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+marketing_budget <- 100  # Thousands of dollars.
+marketing_search <- function(spend) 900 * (1 - exp(-spend / 8))
+marketing_social <- function(spend) 1600 * spend / (70 + spend)
+marketing_orders <- function(search_spend) {
+  marketing_search(search_spend) +
+    marketing_social(marketing_budget - search_spend)
 }
+marketing_fit <- optimize(marketing_orders, c(0, marketing_budget),
+                          maximum = TRUE)
+marketing_comparison <- data.frame(
+  Strategy = factor(c("Equal split", "Optimized"),
+                    levels = c("Optimized", "Equal split")),
+  Search = c(50, marketing_fit$maximum)
+)
+marketing_comparison$Social <- marketing_budget - marketing_comparison$Search
+marketing_comparison$Orders <- marketing_orders(marketing_comparison$Search)
+```
+
+**First, look at how each channel responds to spending.** A steep curve means that another dollar produces a relatively large gain. A flat curve means that another dollar adds little.
+
+```{r}
+#| label: fig-marketing-response
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.4
+#| fig-height: 4.3
+#| fig-pos: H
+#| fig-cap: "Illustrative response curves. Circles mark equal spending; triangles mark the optimized allocation. Arrows show the change: reduce search spending where the curve is flat and increase social spending where more gains remain."
+#| fig-alt: "Two response curves show diminishing returns. Search rises sharply and levels off, while social rises more gradually. An arrow moves search spending from 50 to 24.46 thousand dollars, and another moves social from 50 to 75.54 thousand dollars."
+marketing_curves <- rbind(
+  data.frame(Spend = seq(0, 100, length.out = 301),
+             Channel = "Search: levels off quickly"),
+  data.frame(Spend = seq(0, 100, length.out = 301),
+             Channel = "Social: more room to grow")
+)
+marketing_curves$Orders <- ifelse(
+  grepl("^Search", marketing_curves$Channel),
+  marketing_search(marketing_curves$Spend),
+  marketing_social(marketing_curves$Spend)
+)
+marketing_points <- rbind(
+  data.frame(Spend = marketing_comparison$Search,
+             Orders = marketing_search(marketing_comparison$Search),
+             Strategy = marketing_comparison$Strategy,
+             Channel = "Search: levels off quickly"),
+  data.frame(Spend = marketing_comparison$Social,
+             Orders = marketing_social(marketing_comparison$Social),
+             Strategy = marketing_comparison$Strategy,
+             Channel = "Social: more room to grow")
+)
+marketing_moves <- data.frame(
+  Channel = c("Search: levels off quickly", "Social: more room to grow"),
+  Spend = 50,
+  Orders = c(marketing_search(50), marketing_social(50)),
+  NewSpend = c(marketing_fit$maximum, 100 - marketing_fit$maximum),
+  NewOrders = c(marketing_search(marketing_fit$maximum),
+                marketing_social(100 - marketing_fit$maximum))
+)
+ggplot(marketing_curves, aes(Spend, Orders, colour = Channel)) +
+  geom_line(linewidth = 1) +
+  geom_segment(data = marketing_moves,
+               aes(xend = NewSpend, yend = NewOrders),
+               colour = "grey30", linewidth = 0.5,
+               arrow = grid::arrow(length = grid::unit(0.1, "inches"))) +
+  geom_point(data = marketing_points, aes(shape = Strategy),
+             size = 3.5, colour = "black") +
+  facet_wrap(~Channel, nrow = 1) +
+  scale_colour_manual(values = c("#0072B2", "#D55E00")) +
+  scale_shape_manual(values = c("Equal split" = 16, "Optimized" = 17)) +
+  scale_y_continuous(limits = c(0, 1000)) +
+  labs(x = "Channel spending (thousands of dollars)",
+       y = "Expected additional orders", shape = NULL,
+       title = "Where Does the Next Dollar Help Most?") +
+  guides(colour = "none") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+```
+
+**Read the picture.** At the equal split, search is already nearly flat. Moving some of that money to social loses relatively few search orders and gains more social orders. The optimizer keeps reallocating until the next dollar has the same marginal benefit in both channels.
+
+**Now compare the decisions.** The total budget stays at \$100,000 in both rows. Only its allocation changes.
+
+```{r}
+#| label: fig-marketing-budget
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.6
+#| fig-height: 3.8
+#| fig-pos: H
+#| fig-cap: "A visual before-and-after comparison. The optimized split spends about $24,461 on search and $75,539 on social, producing about 123 more expected orders with the same budget under the illustrative model."
+#| fig-alt: "Two equally long stacked budget bars compare 50-50 spending with 24.5-75.5 spending. Beside them, order bars increase from 1565 for the equal split to 1688 for the optimized allocation, a 7.9 percent increase."
+marketing_spending <- rbind(
+  data.frame(Strategy = marketing_comparison$Strategy, Channel = "Search",
+             Spend = marketing_comparison$Search),
+  data.frame(Strategy = marketing_comparison$Strategy, Channel = "Social",
+             Spend = marketing_comparison$Social)
+)
+marketing_spending$Label <- sprintf("%s\n$%.1fk",
+                                   marketing_spending$Channel,
+                                   marketing_spending$Spend)
+marketing_budget_plot <- ggplot(marketing_spending,
+                                aes(Spend, Strategy, fill = Channel)) +
+  geom_col(width = 0.6, position = position_stack(reverse = TRUE)) +
+  geom_text(aes(label = Label), size = 3.2,
+            position = position_stack(vjust = 0.5, reverse = TRUE)) +
+  scale_fill_manual(values = c(Search = "#79BADD", Social = "#F0C77C")) +
+  scale_x_continuous(limits = c(0, 100), breaks = c(0, 50, 100)) +
+  labs(title = "1. Move the budget", subtitle = "Same total: $100,000",
+       x = "Spending (thousands of dollars)",
+       y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none", panel.grid.minor = element_blank())
+marketing_orders_plot <- ggplot(marketing_comparison,
+                                aes(Orders, Strategy, fill = Strategy)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.0f", Orders)), hjust = -0.15, size = 3.5) +
+  scale_fill_manual(values = c("Equal split" = "#C9CED5", "Optimized" = "#79BADD")) +
+  scale_x_continuous(limits = c(0, 2000), breaks = c(0, 1000, 2000)) +
+  labs(title = "2. Gain more orders", subtitle = "+7.9% with the same budget",
+       x = "Expected additional orders", y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "none", panel.grid.minor = element_blank())
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
+print(marketing_budget_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(marketing_orders_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+grid::popViewport()
+```
+
+The change is from about **1,565 to 1,688 expected additional orders**: approximately **123 extra orders, or 7.9%**, without increasing spending.
+
+**Connect the pictures to the mathematics.** Let $s$ and $u$ be search and social spending in thousands of dollars. The curves above use
+
+$$
+r_{\mathrm{search}}(s)=900(1-e^{-s/8}),
+\qquad r_{\mathrm{social}}(u)=1600\frac{u}{70+u}.
 $$
 
-This principle is often called **optimization transfer**.
+We assume the channel contributions add without overlap and all orders have the same value. The goal is
 
-The surrogate should be easier to optimize while still guiding the algorithm toward improvement of the original objective.
+$$
+\max_{s,u\geq0}\;
+r_{\mathrm{search}}(s)+r_{\mathrm{social}}(u)
+\quad\text{subject to}\quad s+u=100.
+$$
 
-We will encounter this idea again in later statistical algorithms.
+**Why an algorithm?** Setting $u=100-s$ leaves one adjustable number. `optimize()` searches for its best value. Here the total-response curve is strictly concave, so there is a unique maximum. With many channels and spending limits, this becomes a multivariate constrained problem.
+
+Marketing tools such as Google's Meridian apply this response-curve idea to budget allocation. In practice, the curves must be estimated and validated; the optimizer's result depends on their accuracy. [Application context: Meridian budget optimization](https://developers.google.com/meridian/docs/user-guide/budget-optimization-scenarios).
+
+**Try explaining it:** Point to the two equal-length budget bars. Where do the extra orders come from if no extra money is spent?
+
+::::
 
 ## Computational Perspective
 
