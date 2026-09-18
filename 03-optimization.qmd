@@ -41,8 +41,6 @@ $$
 }.
 $$
 
-The applications in this chapter illustrate two uses of optimization: **estimating unknown parameters from data** and **choosing an action under practical constraints**. We will connect these ideas to drug development, investment portfolios, factory scheduling, and advertising budgets. The examples use simplified models of these real applications.
-
 ## Why Numerical Optimization?
 
 Consider
@@ -1284,110 +1282,6 @@ $$
 
 
 
-:::: {.callout-example title="Finance: Splitting Money Between Two Funds"}
-
-::: {.content-visible when-format="pdf"}
-
-**Finance: Splitting Money Between Two Funds**
-
-:::
-
-**The situation.** Suppose a fund manager has \$10,000 to invest. Begin with just two funds and the following illustrative annual estimates:
-
-| Choice | Expected return | Volatility (standard deviation) |
-|---|---:|---:|
-| Fund A | 8% | 20% |
-| Fund B | 4% | 6% |
-
-Fund A offers more expected return, but its returns vary more. Assume a return correlation of 0.10. The manager wants **the highest expected return while keeping portfolio volatility at or below 10%**. Volatility measures variation; a 10% limit does not cap possible losses at 10%.
-
-```{r}
-#| label: fig-finance-choice
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-width: 7.6
-#| fig-height: 4.7
-#| fig-pos: H
-#| fig-cap: "Left: three ways to split the same $10,000. Right: each point on the curve is a possible split. The selected mix has the highest expected return among points at or left of the 10% volatility limit. All inputs are illustrative."
-#| fig-alt: "A stacked bar chart compares all Fund A, the chosen mix, and all Fund B. A risk-return curve highlights a chosen mix of 45.7 percent A and 54.3 percent B at 10 percent volatility and 5.83 percent expected return. Higher-volatility points lie in a shaded excluded region."
-finance_risk <- function(w) {
-  sqrt((0.20 * w)^2 + (0.06 * (1 - w))^2 +
-         2 * 0.10 * 0.20 * 0.06 * w * (1 - w))
-}
-finance_return <- function(w) 0.08 * w + 0.04 * (1 - w)
-# Expected return increases with w; find the largest permitted weight.
-finance_weight <- uniroot(function(w) finance_risk(w) - 0.10,
-                          c(0, 1), tol = 1e-10)$root
-finance_choices <- data.frame(
-  Choice = factor(c("All Fund A", "Chosen mix", "All Fund B"),
-                  levels = c("All Fund B", "Chosen mix", "All Fund A")),
-  A = c(1, finance_weight, 0)
-)
-finance_bars <- rbind(
-  data.frame(Choice = finance_choices$Choice, Fund = "Fund A",
-             Amount = 10 * finance_choices$A),
-  data.frame(Choice = finance_choices$Choice, Fund = "Fund B",
-             Amount = 10 * (1 - finance_choices$A))
-)
-finance_bars$Label <- ifelse(finance_bars$Amount == 0, "",
-                             sprintf("$%s", formatC(
-                               1000 * finance_bars$Amount,
-                               format = "f", digits = 0, big.mark = ",")))
-finance_allocation_plot <- ggplot(finance_bars, aes(Amount, Choice, fill = Fund)) +
-  geom_col(width = 0.6, position = position_stack(reverse = TRUE)) +
-  geom_text(aes(label = Label), size = 3,
-            position = position_stack(vjust = 0.5, reverse = TRUE)) +
-  scale_fill_manual(values = c("Fund A" = "#79BADD", "Fund B" = "#F0C77C")) +
-  scale_x_continuous(limits = c(0, 10), breaks = c(0, 5, 10)) +
-  labs(title = "1. Split the $10,000", x = "Thousands of dollars", y = NULL,
-       fill = NULL) +
-  theme_minimal(base_size = 11) +
-  theme(legend.position = "bottom", panel.grid.minor = element_blank())
-finance_grid <- data.frame(Weight = seq(0, 1, length.out = 501))
-finance_grid$Risk <- 100 * finance_risk(finance_grid$Weight)
-finance_grid$Return <- 100 * finance_return(finance_grid$Weight)
-finance_risk_plot <- ggplot(finance_grid, aes(Risk, Return)) +
-  annotate("rect", xmin = 10, xmax = 22, ymin = -Inf, ymax = Inf,
-           fill = "#FCE6E1") +
-  geom_path(linewidth = 1, colour = "#0072B2") +
-  geom_vline(xintercept = 10, linetype = "dashed", colour = "#A33A2B") +
-  annotate("point", x = 10, y = 100 * finance_return(finance_weight),
-           size = 3, colour = "#0072B2") +
-  annotate("text", x = 16, y = 4.4, label = "Above the\nrisk limit", size = 3.2) +
-  annotate("text", x = 1, y = 7.3, hjust = 0,
-           label = "Chosen mix\n5.83% return", size = 3.1) +
-  annotate("segment", x = 6, xend = 9.8, y = 6.85, yend = 5.9,
-           arrow = grid::arrow(length = grid::unit(0.07, "inches"))) +
-  coord_cartesian(xlim = c(0, 22), ylim = c(3.7, 8.5)) +
-  labs(title = "2. Respect the risk limit", x = "Volatility (%)",
-       y = "Expected annual return (%)") +
-  theme_minimal(base_size = 11) +
-  theme(panel.grid.minor = element_blank())
-grid::grid.newpage()
-grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
-print(finance_allocation_plot,
-      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
-print(finance_risk_plot,
-      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
-grid::popViewport()
-```
-
-**Read the picture.** Moving more money to Fund A moves us toward higher expected return, but eventually crosses the dashed risk limit. The chosen mix puts about **\$4,567 in A and \$5,433 in B**, for an expected return of **5.83%** under these assumptions. All-A has a higher expected return, but is outside the allowed region.
-
-**Connect the picture to the mathematics.** Let $w$ be the fraction invested in Fund A. The remaining fraction, $1-w$, goes to B:
-
-$$
-\max_{0\leq w\leq1}\;0.08w+0.04(1-w)
-\quad\text{subject to}\quad\sigma(w)\leq0.10,
-$$
-
-where $\sigma(w)$ is the portfolio standard deviation, calculated from both funds' volatilities and their correlation.
-
-**Why an algorithm?** In this two-fund example, `uniroot()` locates the boundary $\sigma(w)=0.10$. With 20 funds, sector limits, and holding limits, many weights must be chosen together. Constrained portfolio solvers handle those interacting choices. [Application context: MOSEK portfolio optimization cookbook](https://docs.mosek.com/portfolio-cookbook/markowitz.html).
-
-**Try explaining it:** If the dashed risk limit moved to the right, would the best allowed mix contain more or less of Fund A?
-
-::::
 
 ## Gradient Descent
 
@@ -2174,91 +2068,6 @@ $$
 - Can converge slowly.
 - Does not guarantee a global optimum.
 
-:::: {.callout-example title="Industry: Finish the Same Orders Earlier"}
-
-::: {.content-visible when-format="pdf"}
-
-**Industry: Finish the Same Orders Earlier**
-
-:::
-
-**The situation.** A small factory has three orders, A, B, and C. Every order must go through **Cutting, then Finishing**. Each machine handles one order at a time. These illustrative processing times stay the same in both schedules:
-
-| Order | Cutting | Finishing |
-|---|---:|---:|
-| A | 4 hours | 1 hour |
-| B | 1 hour | 4 hours |
-| C | 2 hours | 2 hours |
-
-**The computer's job:** choose the order of work so that all three orders finish as early as possible.
-
-```{r}
-#| label: fig-factory-schedules
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-width: 7.4
-#| fig-height: 4.8
-#| fig-pos: H
-#| fig-cap: "Same orders, same machines, same processing times. Changing the sequence reduces the last completion time from 11 to 8 hours. Empty horizontal space is idle time."
-#| fig-alt: "Two Gantt charts compare A-B-C with B-C-A. In the original schedule, finishing starts at hour 4 and ends at hour 11. In the improved schedule, finishing starts at hour 1 and ends at hour 8. Each bar is labeled A, B, or C."
-factory_times <- data.frame(Job = c("A", "B", "C"),
-                            Cutting = c(4, 1, 2), Finishing = c(1, 4, 2))
-factory_schedule <- function(order, label) {
-  cutting_free <- finishing_free <- 0
-  tasks <- list()
-  for (job in order) {
-    duration <- factory_times[factory_times$Job == job, ]
-    cut_start <- cutting_free
-    cut_end <- cut_start + duration$Cutting
-    finish_start <- max(cut_end, finishing_free)
-    finish_end <- finish_start + duration$Finishing
-    tasks[[job]] <- data.frame(
-      Job = job, Machine = c("Cutting", "Finishing"),
-      Start = c(cut_start, finish_start), End = c(cut_end, finish_end),
-      Schedule = label
-    )
-    cutting_free <- cut_end
-    finishing_free <- finish_end
-  }
-  do.call(rbind, tasks)
-}
-factory_tasks <- rbind(
-  factory_schedule(c("A", "B", "C"), "1. Original: A-B-C | All done at hour 11"),
-  factory_schedule(c("B", "C", "A"), "2. Improved: B-C-A | All done at hour 8")
-)
-factory_tasks$Machine <- factor(factory_tasks$Machine,
-                                levels = c("Finishing", "Cutting"))
-factory_ends <- aggregate(End ~ Schedule, factory_tasks, max)
-ggplot(factory_tasks, aes(y = Machine, colour = Job)) +
-  geom_segment(aes(x = Start, xend = End, yend = Machine),
-               linewidth = 13, lineend = "butt") +
-  geom_text(aes(x = (Start + End) / 2, label = Job),
-            colour = "black", fontface = "bold", size = 4) +
-  geom_vline(data = factory_ends, aes(xintercept = End),
-             inherit.aes = FALSE, linetype = "dashed", colour = "grey40") +
-  facet_wrap(~Schedule, ncol = 1) +
-  scale_colour_manual(values = c(A = "#79BADD", B = "#F0C77C", C = "#A4D4B4")) +
-  scale_x_continuous(breaks = 0:11, limits = c(0, 11.3)) +
-  scale_y_discrete(expand = expansion(add = 0.7)) +
-  labs(x = "Hours since work begins", y = NULL,
-       title = "A Better Sequence Saves 3 Hours",
-       subtitle = "Follow the same letter from Cutting to Finishing") +
-  theme_minimal(base_size = 12) +
-  theme(legend.position = "none", panel.grid.minor = element_blank(),
-        panel.grid.major.y = element_blank())
-```
-
-**Read the picture.** In the top schedule, Finishing waits four hours for A. In the bottom schedule, the short cutting step for B lets Finishing start after just one hour. The machines then overlap useful work more effectively. **No machine runs faster; the sequence is better.**
-
-**Connect the picture to the mathematics.** Let $C_{\max}$ be the time when the last order finishes. We minimize $C_{\max}$ while respecting two rules: each order finishes cutting before it starts finishing, and operations never overlap on the same machine.
-
-For these three orders, all six possible common orderings can be checked. The 8-hour schedule is optimal: Finishing needs 7 hours of work and cannot start before hour 1. Larger factories require more systematic search; 20 jobs already give $20!\approx2.43\times10^{18}$ possible orderings on one machine.
-
-**Why an algorithm?** Constraint programming and mixed-integer optimization search subject to the rules. Simulated annealing and genetic algorithms can also explore valid schedules, though they do not certify the best possible result. This is a discrete choice problem: swapping two jobs is not a gradient step. [Application context: OR-Tools job-shop scheduling](https://developers.google.com/optimization/scheduling/job_shop).
-
-**Try explaining it:** Find B in both panels. Why does doing its short cutting step early help the whole factory?
-
-::::
 
 ## Particle Swarm Optimization
 
@@ -2369,7 +2178,506 @@ What changes if the objective has many local minima and no useful derivatives?
 
 :::
 
-## Business Analytics: Getting More Orders From the Same Budget
+
+## Computational Perspective
+
+The goal is not simply to memorize optimization algorithms.
+
+For a statistical problem, ask:
+
+1. What is the statistical quantity we want?
+2. Can it be written as an optimization or root-finding problem?
+3. Is there a closed-form solution?
+4. Is the parameter scalar or multivariate?
+5. Is the objective smooth?
+6. Are derivatives available?
+7. Are there many local optima?
+8. How sensitive is the method to the starting value?
+9. Is the computation numerically stable?
+10. How can we validate the result?
+
+This brings us back to the central idea of statistical computing:
+
+$$
+\boxed{
+\text{Theory}
+\Longleftrightarrow
+\text{Computation}
+\Longleftrightarrow
+\text{Practice}.
+}
+$$
+
+## Questions to Think at Home
+
+1. Why can a mathematically correct optimization formula still lead to a poor computational implementation?
+
+2. Why is a closed-form solution useful even when numerical optimization will eventually be used?
+
+3. Why is bisection more reliable than Newton's method, and what is the computational cost of that reliability?
+
+4. What additional information does Newton's method use compared with bisection?
+
+5. Why can different starting values lead to different solutions for the same objective function?
+
+6. What role does the step size play in gradient descent?
+
+7. Why might poor scaling make optimization difficult?
+
+8. Why is solving
+
+$$
+H\boldsymbol{d}
+=
+-\nabla Q
+$$
+
+usually preferable to explicitly computing $H^{-1}$?
+
+9. Why can BFGS be useful when the Hessian is expensive to compute?
+
+10. Why might a metaheuristic algorithm deliberately accept a worse solution?
+
+11. When would you prefer simulated annealing over a deterministic local optimizer?
+
+12. What is the main difference between simulated annealing, genetic algorithms, and particle swarm optimization?
+
+13. Why does fewer iterations not necessarily imply lower computational cost?
+
+14. How are optimization, likelihood estimation, and statistical inference connected?
+
+## Takeaways
+
+- Many statistical estimators are solutions to optimization problems.
+- Closed-form solutions are convenient but often unavailable.
+- Numerical optimization connects statistical theory with practical computation.
+- Root finding is closely related to optimization.
+- Bisection is reliable but relatively slow.
+- Newton's method is fast near a solution but uses derivative information.
+- The secant method approximates derivative information numerically.
+- Multivariate optimization replaces derivatives with gradients and Hessians.
+- Gradient descent uses local first-order information.
+- Newton's method uses curvature information through the Hessian.
+- BFGS approximates curvature without repeatedly computing the full Hessian.
+- Scaling can strongly affect computational performance.
+- Deterministic methods are usually efficient for smooth, well-behaved objectives.
+- Metaheuristic methods trade speed and predictability for broader exploration.
+- Simulated annealing can escape local optima by occasionally accepting worse solutions.
+- Genetic algorithms and particle swarm optimization use populations of candidate solutions.
+- There is no universally best optimization algorithm.
+- A good computational method balances accuracy, stability, speed, and exploration.
+
+
+
+## Optimal topic: Real-World Applications
+
+The applications in this chapter illustrate two uses of optimization: **estimating unknown parameters from data** and **choosing an action under practical constraints**. We will connect these ideas to drug development, investment portfolios, factory scheduling, and advertising budgets. The examples use simplified models of these real applications.
+
+:::: {.callout-example title="Biomedical: Finding a Curve That Fits the Measurements"}
+
+::: {.content-visible when-format="pdf"}
+
+**Biomedical: Finding a Curve That Fits the Measurements**
+
+:::
+
+**The situation.** A research team measures drug concentration and the improvement in a biomarker. At low concentrations, more drug may produce a much larger response. At high concentrations, the response may level off. The team wants a curve that describes this pattern.
+
+**The computer's job:** adjust the curve until its predictions are close to the observed dots. The following measurements are invented for illustration.
+
+```{r}
+#| label: fig-biomedical-fit
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.4
+#| fig-height: 4.3
+#| fig-pos: H
+#| fig-cap: "The same illustrative measurements, before and after fitting. Vertical gaps show prediction errors. Optimization reduces the sum of their squares from about 1382 to 29."
+#| fig-alt: "Two panels share the same measured dots. An initial orange curve lies far from most dots. The fitted blue curve follows the dots closely, leaving much smaller vertical prediction errors."
+bio_data <- data.frame(Concentration = c(0, 1, 2, 4, 8, 12, 20, 32))
+bio_data$Response <- 5 + 70 * bio_data$Concentration /
+  (6 + bio_data$Concentration) + c(0, 1, -2, 3, -3, 1, 2, -1)
+
+# Log parameters keep Emax and EC50 positive during the search.
+bio_curve <- function(theta, concentration) {
+  theta[1] + exp(theta[2]) * concentration /
+    (exp(theta[3]) + concentration)
+}
+bio_error <- function(theta) {
+  sum((bio_data$Response - bio_curve(theta, bio_data$Concentration))^2)
+}
+bio_start <- c(15, log(45), log(15))
+bio_fit <- optim(
+  bio_start, bio_error, method = "BFGS",
+  control = list(maxit = 2000, reltol = 1e-12)
+)
+bio_stages <- c("1. Start with a guess\nSquared gaps: 1382",
+                "2. Adjust the curve\nSquared gaps: 29")
+bio_lines <- do.call(rbind, lapply(1:2, function(i) {
+  concentration <- seq(0, 32, length.out = 250)
+  theta <- if (i == 1) bio_start else bio_fit$par
+  data.frame(Concentration = concentration,
+             Response = bio_curve(theta, concentration),
+             Stage = bio_stages[i])
+}))
+bio_points <- do.call(rbind, lapply(1:2, function(i) {
+  theta <- if (i == 1) bio_start else bio_fit$par
+  transform(bio_data, Predicted = bio_curve(theta, Concentration),
+            Stage = bio_stages[i])
+}))
+ggplot(bio_lines, aes(Concentration, Response)) +
+  geom_segment(
+    data = bio_points,
+    aes(xend = Concentration, yend = Predicted),
+    colour = "grey55", linewidth = 0.7
+  ) +
+  geom_line(aes(colour = Stage), linewidth = 1) +
+  geom_point(data = bio_points, size = 2) +
+  facet_wrap(~Stage, nrow = 1) +
+  scale_colour_manual(values = c("#D55E00", "#0072B2")) +
+  scale_y_continuous(limits = c(0, 75)) +
+  labs(x = "Drug concentration (illustrative units)",
+       y = "Biomarker improvement",
+       title = "Make the Vertical Gaps Smaller",
+       subtitle = "Dots = measurements    Lines = model predictions") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none", panel.grid.minor = element_blank())
+```
+
+**Read the picture.** The dots stay fixed. The optimizer changes the curve's starting height, upper level, and how quickly it bends. Shorter vertical gaps mean better predictions of these measurements.
+
+**Decision variables.** Choose the three parameters of the curve
+
+$$
+m(c;E_0,E_{\max},EC_{50})
+=E_0+\frac{E_{\max}c}{EC_{50}+c}.
+$$
+
+- $E_0$ is the starting height (response at concentration zero).
+- $E_{\max}$ is the largest increase above that starting height.
+- $EC_{50}$ is the concentration at which half of that increase is reached.
+
+The eight concentrations $c_i$ and measured responses $y_i$ in the figure are **fixed data**, not quantities the optimizer can change.
+
+**Objective function.** Minimize the sum of squared prediction errors:
+
+$$
+\min_{E_0,E_{\max},EC_{50}}\;
+Q(E_0,E_{\max},EC_{50})
+=\sum_{i=1}^{8}
+\left[y_i-E_0-\frac{E_{\max}c_i}{EC_{50}+c_i}\right]^2.
+$$
+
+**Constraints.** For this increasing, saturating response curve, require
+
+$$
+E_0\in\mathbb{R},\qquad E_{\max}>0,\qquad EC_{50}>0.
+$$
+
+We impose no sign restriction on the baseline $E_0$. In the R code, setting $E_{\max}=e^{\theta_2}$ and $EC_{50}=e^{\theta_3}$ enforces positivity automatically, while $E_0=\theta_1$ remains unrestricted.
+
+**Optimal solution (numerical).** For the illustrative measurements, the fitted parameters are approximately
+
+$$
+(\widehat E_0,\widehat E_{\max},\widehat {EC}_{50})
+=(5.0815,\;70.0297,\;5.9845).
+$$
+
+Thus, the fitted curve and its objective value are
+
+$$
+\widehat m(c)=5.0815+\frac{70.0297c}{5.9845+c},
+\qquad Q(\widehat E_0,\widehat E_{\max},\widehat {EC}_{50})\approx28.8719.
+$$
+
+The minimum found numerically corresponds to the small squared gaps in the right panel. Because this is a nonlinear fitting problem, BFGS convergence alone does not certify a global minimum; different starting values can lead to different results.
+
+**Why an algorithm?** Moving one parameter changes many predictions at once. The parameters enter nonlinearly, so ordinary linear regression cannot estimate all three together. BFGS, used above, repeatedly proposes changes that reduce the total squared gap.
+
+Exposure-response models help researchers plan further drug studies; dose selection also requires safety information and uncertainty estimates. [Application context: FDA exposure-response guidance](https://www.fda.gov/media/71277/download).
+
+**Try explaining it:** In the right panel, what has changed: the measurements, the model parameters, or both?
+
+::::
+
+:::: {.callout-example title="Finance: Splitting Money Between Two Funds"}
+
+::: {.content-visible when-format="pdf"}
+
+**Finance: Splitting Money Between Two Funds**
+
+:::
+
+**The situation.** Suppose a fund manager has \$10,000 to invest. Begin with just two funds and the following illustrative annual estimates:
+
+| Choice | Expected return | Volatility (standard deviation) |
+|---|---:|---:|
+| Fund A | 8% | 20% |
+| Fund B | 4% | 6% |
+
+Fund A offers more expected return, but its returns vary more. Assume a return correlation of 0.10. The manager wants **the highest expected return while keeping portfolio volatility at or below 10%**. Volatility measures variation; a 10% limit does not cap possible losses at 10%.
+
+```{r}
+#| label: fig-finance-choice
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.6
+#| fig-height: 4.7
+#| fig-pos: H
+#| fig-cap: "Left: three ways to split the same $10,000. Right: each point on the curve is a possible split. The selected mix has the highest expected return among points at or left of the 10% volatility limit. All inputs are illustrative."
+#| fig-alt: "A stacked bar chart compares all Fund A, the chosen mix, and all Fund B. A risk-return curve highlights a chosen mix of 45.7 percent A and 54.3 percent B at 10 percent volatility and 5.83 percent expected return. Higher-volatility points lie in a shaded excluded region."
+finance_risk <- function(w) {
+  sqrt((0.20 * w)^2 + (0.06 * (1 - w))^2 +
+         2 * 0.10 * 0.20 * 0.06 * w * (1 - w))
+}
+finance_return <- function(w) 0.08 * w + 0.04 * (1 - w)
+# Expected return increases with w; find the largest permitted weight.
+finance_weight <- uniroot(function(w) finance_risk(w) - 0.10,
+                          c(0, 1), tol = 1e-10)$root
+finance_choices <- data.frame(
+  Choice = factor(c("All Fund A", "Chosen mix", "All Fund B"),
+                  levels = c("All Fund B", "Chosen mix", "All Fund A")),
+  A = c(1, finance_weight, 0)
+)
+finance_bars <- rbind(
+  data.frame(Choice = finance_choices$Choice, Fund = "Fund A",
+             Amount = 10 * finance_choices$A),
+  data.frame(Choice = finance_choices$Choice, Fund = "Fund B",
+             Amount = 10 * (1 - finance_choices$A))
+)
+finance_bars$Label <- ifelse(finance_bars$Amount == 0, "",
+                             sprintf("$%s", formatC(
+                               1000 * finance_bars$Amount,
+                               format = "f", digits = 0, big.mark = ",")))
+finance_allocation_plot <- ggplot(finance_bars, aes(Amount, Choice, fill = Fund)) +
+  geom_col(width = 0.6, position = position_stack(reverse = TRUE)) +
+  geom_text(aes(label = Label), size = 3,
+            position = position_stack(vjust = 0.5, reverse = TRUE)) +
+  scale_fill_manual(values = c("Fund A" = "#79BADD", "Fund B" = "#F0C77C")) +
+  scale_x_continuous(limits = c(0, 10), breaks = c(0, 5, 10)) +
+  labs(title = "1. Split the $10,000", x = "Thousands of dollars", y = NULL,
+       fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom", panel.grid.minor = element_blank())
+finance_grid <- data.frame(Weight = seq(0, 1, length.out = 501))
+finance_grid$Risk <- 100 * finance_risk(finance_grid$Weight)
+finance_grid$Return <- 100 * finance_return(finance_grid$Weight)
+finance_risk_plot <- ggplot(finance_grid, aes(Risk, Return)) +
+  annotate("rect", xmin = 10, xmax = 22, ymin = -Inf, ymax = Inf,
+           fill = "#FCE6E1") +
+  geom_path(linewidth = 1, colour = "#0072B2") +
+  geom_vline(xintercept = 10, linetype = "dashed", colour = "#A33A2B") +
+  annotate("point", x = 10, y = 100 * finance_return(finance_weight),
+           size = 3, colour = "#0072B2") +
+  annotate("text", x = 16, y = 4.4, label = "Above the\nrisk limit", size = 3.2) +
+  annotate("text", x = 1, y = 7.3, hjust = 0,
+           label = "Chosen mix\n5.83% return", size = 3.1) +
+  annotate("segment", x = 6, xend = 9.8, y = 6.85, yend = 5.9,
+           arrow = grid::arrow(length = grid::unit(0.07, "inches"))) +
+  coord_cartesian(xlim = c(0, 22), ylim = c(3.7, 8.5)) +
+  labs(title = "2. Respect the risk limit", x = "Volatility (%)",
+       y = "Expected annual return (%)") +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank())
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
+print(finance_allocation_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(finance_risk_plot,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+grid::popViewport()
+```
+
+**Read the picture.** Moving more money to Fund A moves us toward higher expected return, but eventually crosses the dashed risk limit. The chosen mix puts about **\$4,567 in A and \$5,433 in B**, for an expected return of **5.83%** under these assumptions. All-A has a higher expected return, but is outside the allowed region.
+
+**Decision variable.** Let $w$ be the fraction of the \$10,000 invested in Fund A. The remaining fraction, $1-w$, is invested in Fund B.
+
+**Objective function.** Maximize the expected annual return rate:
+
+$$
+\max_w\;R(w)=0.08w+0.04(1-w)=0.04+0.04w.
+$$
+
+**Constraints.** All money is invested, with no borrowing or short selling, and portfolio volatility must not exceed 10%:
+
+$$
+0\leq w\leq1,\qquad \sigma^2(w)\leq0.10^2=0.01.
+$$
+
+The weights $w$ and $1-w$ already sum to one, so they enforce the \$10,000 budget. Using the two standard deviations and the correlation of 0.10, the variance is explicitly
+
+$$
+\begin{aligned}
+\sigma^2(w)
+&=(0.20w)^2+[0.06(1-w)]^2\\
+&\quad+2(0.10)(0.20)(0.06)w(1-w)\\
+&=0.0412w^2-0.0048w+0.0036.
+\end{aligned}
+$$
+
+**Optimal solution.** Expected return increases with $w$, so choose the largest feasible weight. It lies on the risk boundary:
+
+$$
+0.0412w^2-0.0048w+0.0036=0.01.
+$$
+
+The positive root gives
+
+$$
+w^*\approx0.4566657,\qquad 1-w^*\approx0.5433343.
+$$
+
+Invest approximately **\$4,566.66 in Fund A and \$5,433.34 in Fund B**. At the optimum,
+
+$$
+R(w^*)\approx0.0582666=5.82666\%,\qquad \sigma(w^*)=10\%.
+$$
+
+Equivalently, this return corresponds to an expected annual gain of about **\$582.67** on the \$10,000 investment. This is the unique global maximum: within $0\leq w\leq1$, every feasible weight lies between zero and $w^*$, and $R(w)$ is strictly increasing.
+
+**Why an algorithm?** In this two-fund example, `uniroot()` locates the boundary $\sigma(w)=0.10$. With 20 funds, sector limits, and holding limits, many weights must be chosen together. Constrained portfolio solvers handle those interacting choices. [Application context: MOSEK portfolio optimization cookbook](https://docs.mosek.com/portfolio-cookbook/markowitz.html).
+
+**Try explaining it:** If the dashed risk limit moved to the right, would the best allowed mix contain more or less of Fund A?
+
+::::
+
+:::: {.callout-example title="Industry: Finish the Same Orders Earlier"}
+
+::: {.content-visible when-format="pdf"}
+
+**Industry: Finish the Same Orders Earlier**
+
+:::
+
+**The situation.** A small factory has three orders, A, B, and C. Every order must go through **Cutting, then Finishing**. Each machine handles one order at a time. These illustrative processing times stay the same in both schedules:
+
+| Order | Cutting | Finishing |
+|---|---:|---:|
+| A | 4 hours | 1 hour |
+| B | 1 hour | 4 hours |
+| C | 2 hours | 2 hours |
+
+**The computer's job:** choose the order of work so that all three orders finish as early as possible.
+
+```{r}
+#| label: fig-factory-schedules
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 7.4
+#| fig-height: 4.8
+#| fig-pos: H
+#| fig-cap: "Same orders, same machines, same processing times. Changing the sequence reduces the last completion time from 11 to 8 hours. Empty horizontal space is idle time."
+#| fig-alt: "Two Gantt charts compare A-B-C with B-C-A. In the original schedule, finishing starts at hour 4 and ends at hour 11. In the improved schedule, finishing starts at hour 1 and ends at hour 8. Each bar is labeled A, B, or C."
+factory_times <- data.frame(Job = c("A", "B", "C"),
+                            Cutting = c(4, 1, 2), Finishing = c(1, 4, 2))
+factory_schedule <- function(order, label) {
+  cutting_free <- finishing_free <- 0
+  tasks <- list()
+  for (job in order) {
+    duration <- factory_times[factory_times$Job == job, ]
+    cut_start <- cutting_free
+    cut_end <- cut_start + duration$Cutting
+    finish_start <- max(cut_end, finishing_free)
+    finish_end <- finish_start + duration$Finishing
+    tasks[[job]] <- data.frame(
+      Job = job, Machine = c("Cutting", "Finishing"),
+      Start = c(cut_start, finish_start), End = c(cut_end, finish_end),
+      Schedule = label
+    )
+    cutting_free <- cut_end
+    finishing_free <- finish_end
+  }
+  do.call(rbind, tasks)
+}
+factory_tasks <- rbind(
+  factory_schedule(c("A", "B", "C"), "1. Original: A-B-C | All done at hour 11"),
+  factory_schedule(c("B", "C", "A"), "2. Improved: B-C-A | All done at hour 8")
+)
+factory_tasks$Machine <- factor(factory_tasks$Machine,
+                                levels = c("Finishing", "Cutting"))
+factory_ends <- aggregate(End ~ Schedule, factory_tasks, max)
+ggplot(factory_tasks, aes(y = Machine, colour = Job)) +
+  geom_segment(aes(x = Start, xend = End, yend = Machine),
+               linewidth = 13, lineend = "butt") +
+  geom_text(aes(x = (Start + End) / 2, label = Job),
+            colour = "black", fontface = "bold", size = 4) +
+  geom_vline(data = factory_ends, aes(xintercept = End),
+             inherit.aes = FALSE, linetype = "dashed", colour = "grey40") +
+  facet_wrap(~Schedule, ncol = 1) +
+  scale_colour_manual(values = c(A = "#79BADD", B = "#F0C77C", C = "#A4D4B4")) +
+  scale_x_continuous(breaks = 0:11, limits = c(0, 11.3)) +
+  scale_y_discrete(expand = expansion(add = 0.7)) +
+  labs(x = "Hours since work begins", y = NULL,
+       title = "A Better Sequence Saves 3 Hours",
+       subtitle = "Follow the same letter from Cutting to Finishing") +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = "none", panel.grid.minor = element_blank(),
+        panel.grid.major.y = element_blank())
+```
+
+**Read the picture.** In the top schedule, Finishing waits four hours for A. In the bottom schedule, the short cutting step for B lets Finishing start after just one hour. The machines then overlap useful work more effectively. **No machine runs faster; the sequence is better.**
+
+**Decision variables.** Choose a start time $S_{jm}$ for each order $j\in\{A,B,C\}$ on each machine $m\in\{C,F\}$, where $C$ means Cutting and $F$ means Finishing. Also choose $C_{\max}$, the time by which all orders must be complete. Let $p_{jm}$ denote the fixed processing times in the table. All orders are available at time zero, and each operation runs without interruption once it starts.
+
+**Objective function.** Minimize the last completion time (the makespan):
+
+$$
+\min_{\{S_{jm}\},\,C_{\max}}\;C_{\max}.
+$$
+
+**Constraints.** The start times must satisfy four rules:
+
+1. **Work cannot start before time zero:** for every order $j$ and machine $m$,
+
+   $$
+   S_{jm}\geq0.
+   $$
+
+2. **Cutting precedes Finishing:** for each order $j$,
+
+   $$
+   S_{jF}\geq S_{jC}+p_{jC}.
+   $$
+
+3. **A machine cannot process two orders at once:** for every pair of different orders $j,k$ and each machine $m$,
+
+   $$
+   S_{jm}+p_{jm}\leq S_{km}
+   \quad\text{or}\quad
+   S_{km}+p_{km}\leq S_{jm}.
+   $$
+
+   In words, either $j$ finishes before $k$ starts, or $k$ finishes before $j$ starts. Choosing between these alternatives determines the job sequence.
+
+4. **Every order finishes by $C_{\max}$:** for each order $j$,
+
+   $$
+   S_{jF}+p_{jF}\leq C_{\max}.
+   $$
+
+**Optimal solution.** One optimal sequence is **B, then C, then A** on both machines, with the following start and end times:
+
+| Order | Cutting: start to end | Finishing: start to end |
+|---|---:|---:|
+| B | 0 to 1 | 1 to 5 |
+| C | 1 to 3 | 5 to 7 |
+| A | 3 to 7 | 7 to 8 |
+
+All times are in hours. This feasible schedule achieves
+
+$$
+C_{\max}^*=8\text{ hours}.
+$$
+
+**Why is 8 hours globally optimal?** Finishing requires $1+4+2=7$ hours of work on a single machine. It cannot begin before hour 1, because even the shortest cutting operation takes 1 hour. Therefore every feasible schedule satisfies $C_{\max}\geq1+7=8$. The schedule above reaches that lower bound, so no schedule can finish earlier. The original A-B-C schedule takes 11 hours.
+
+For three orders, all six common orderings can also be checked. Larger factories require more systematic search; 20 jobs already give $20!\approx2.43\times10^{18}$ possible orderings on one machine.
+
+**Why an algorithm?** Constraint programming and mixed-integer optimization search subject to the rules. Simulated annealing and genetic algorithms can also explore valid schedules, though they do not certify the best possible result. This is a discrete choice problem: swapping two jobs is not a gradient step. [Application context: OR-Tools job-shop scheduling](https://developers.google.com/optimization/scheduling/job_shop).
+
+**Try explaining it:** Find B in both panels. Why does doing its short cutting step early help the whole factory?
+
+::::
 
 An online retailer has **\$100,000** for search advertising and social media. Start with a familiar decision: should it spend \$50,000 on each, or split the money differently?
 
@@ -2520,20 +2828,51 @@ grid::popViewport()
 
 The change is from about **1,565 to 1,688 expected additional orders**: approximately **123 extra orders, or 7.9%**, without increasing spending.
 
-**Connect the pictures to the mathematics.** Let $s$ and $u$ be search and social spending in thousands of dollars. The curves above use
+**Decision variables.** Let $s$ and $u$ be spending on search and social advertising, respectively, **in thousands of dollars**. For example, $s=25$ means \$25,000 spent on search.
+
+**Objective function.** Maximize the expected number of additional orders:
 
 $$
-r_{\mathrm{search}}(s)=900(1-e^{-s/8}),
-\qquad r_{\mathrm{social}}(u)=1600\frac{u}{70+u}.
+\max_{s,u}\;F(s,u)
+=900(1-e^{-s/8})+1600\frac{u}{70+u}.
 $$
 
-We assume the channel contributions add without overlap and all orders have the same value. The goal is
+The first term is the search contribution and the second is the social contribution. We assume these contributions add without overlap and that all orders have the same value.
+
+**Constraints.** Spend the full \$100,000 budget, with neither channel receiving a negative amount:
 
 $$
-\max_{s,u\geq0}\;
-r_{\mathrm{search}}(s)+r_{\mathrm{social}}(u)
-\quad\text{subject to}\quad s+u=100.
+s\geq0,\qquad u\geq0,\qquad s+u=100.
 $$
+
+There are no additional channel spending limits in this example. Substituting $u=100-s$ gives the equivalent problem used by `optimize()`:
+
+$$
+\max_{0\leq s\leq100}\;f(s)
+=900(1-e^{-s/8})+1600\frac{100-s}{170-s}.
+$$
+
+**Optimal solution.** The best allocation is approximately
+
+$$
+s^*=24.46073,\qquad u^*=75.53927,
+$$
+
+or **\$24,460.73 on search and \$75,539.27 on social**. Its objective value is
+
+$$
+F(s^*,u^*)\approx1688.1476\text{ expected additional orders}.
+$$
+
+For comparison, equal spending gives $F(50,50)\approx1564.9293$. The optimal allocation therefore adds about **123.2183 expected orders**, a **7.87%** increase with the same budget.
+
+**Why is this allocation optimal?** Both response curves are strictly concave, so the feasible problem has a unique global maximum. The optimum lies inside $0<s<100$ and solves
+
+$$
+f'(s)=112.5e^{-s/8}-\frac{112000}{(170-s)^2}=0.
+$$
+
+At $s^*$, both channels have the same marginal gain: approximately 5.2876 additional orders per \$1,000 of spending. Shifting a small amount of money from one channel to the other can no longer improve the total.
 
 **Why an algorithm?** Setting $u=100-s$ leaves one adjustable number. `optimize()` searches for its best value. Here the total-response curve is strictly concave, so there is a unique maximum. With many channels and spending limits, this becomes a multivariate constrained problem.
 
@@ -2543,93 +2882,6 @@ Marketing tools such as Google's Meridian apply this response-curve idea to budg
 
 ::::
 
-## Computational Perspective
-
-The goal is not simply to memorize optimization algorithms.
-
-For a statistical problem, ask:
-
-1. What is the statistical quantity we want?
-2. Can it be written as an optimization or root-finding problem?
-3. Is there a closed-form solution?
-4. Is the parameter scalar or multivariate?
-5. Is the objective smooth?
-6. Are derivatives available?
-7. Are there many local optima?
-8. How sensitive is the method to the starting value?
-9. Is the computation numerically stable?
-10. How can we validate the result?
-
-This brings us back to the central idea of statistical computing:
-
-$$
-\boxed{
-\text{Theory}
-\Longleftrightarrow
-\text{Computation}
-\Longleftrightarrow
-\text{Practice}.
-}
-$$
-
-## Questions to Think at Home
-
-1. Why can a mathematically correct optimization formula still lead to a poor computational implementation?
-
-2. Why is a closed-form solution useful even when numerical optimization will eventually be used?
-
-3. Why is bisection more reliable than Newton's method, and what is the computational cost of that reliability?
-
-4. What additional information does Newton's method use compared with bisection?
-
-5. Why can different starting values lead to different solutions for the same objective function?
-
-6. What role does the step size play in gradient descent?
-
-7. Why might poor scaling make optimization difficult?
-
-8. Why is solving
-
-$$
-H\boldsymbol{d}
-=
--\nabla Q
-$$
-
-usually preferable to explicitly computing $H^{-1}$?
-
-9. Why can BFGS be useful when the Hessian is expensive to compute?
-
-10. Why might a metaheuristic algorithm deliberately accept a worse solution?
-
-11. When would you prefer simulated annealing over a deterministic local optimizer?
-
-12. What is the main difference between simulated annealing, genetic algorithms, and particle swarm optimization?
-
-13. Why does fewer iterations not necessarily imply lower computational cost?
-
-14. How are optimization, likelihood estimation, and statistical inference connected?
-
-## Takeaways
-
-- Many statistical estimators are solutions to optimization problems.
-- Closed-form solutions are convenient but often unavailable.
-- Numerical optimization connects statistical theory with practical computation.
-- Root finding is closely related to optimization.
-- Bisection is reliable but relatively slow.
-- Newton's method is fast near a solution but uses derivative information.
-- The secant method approximates derivative information numerically.
-- Multivariate optimization replaces derivatives with gradients and Hessians.
-- Gradient descent uses local first-order information.
-- Newton's method uses curvature information through the Hessian.
-- BFGS approximates curvature without repeatedly computing the full Hessian.
-- Scaling can strongly affect computational performance.
-- Deterministic methods are usually efficient for smooth, well-behaved objectives.
-- Metaheuristic methods trade speed and predictability for broader exploration.
-- Simulated annealing can escape local optima by occasionally accepting worse solutions.
-- Genetic algorithms and particle swarm optimization use populations of candidate solutions.
-- There is no universally best optimization algorithm.
-- A good computational method balances accuracy, stability, speed, and exploration.
 
 ---
 
