@@ -29,12 +29,12 @@ Wednesday 9:00 - 12:00 or by appointment
 ## Assignment
 
 - [x] [Assignment 1](Assignment1.qmd): September 11, 2026
-- [ ] [Assignment 2](Assignment2.qmd): TBA
+- [ ] [Assignment 2](Assignment2.qmd): September 30, 2026
 
 ## Midterm
 
 - [ ] Exam 1: October 7, 2026
-- [ ] Exam 2: TBA
+- [ ] Exam 2: November 16, 2026
 
 ## Project
 
