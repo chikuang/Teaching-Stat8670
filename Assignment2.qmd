@@ -4,7 +4,7 @@ show-solutions: false
 
 # Assignment 2 {.unnumbered}
 
-**Due date:** TBA  
+**Due date:** October 2, 2026, 23:59.  
 **Total:** 30 points  
 **Coverage:** Chapter 2 (Computational Approaches) and Chapter 3 (Optimization).
 
