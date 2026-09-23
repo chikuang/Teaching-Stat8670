@@ -1,7 +1,23 @@
-/.quarto/
-.Rproj.user
+# Quarto and knitr execution caches (at any directory depth)
+.quarto/
+_freeze/
+*_cache/
+cache/
+.cache/
+*.quarto_ipynb
 
-**/*.quarto_ipynb
+# RStudio project state and Python bytecode caches
+.Rproj.user/
+__pycache__/
 
-
+# macOS metadata
 .DS_Store
+
+# LaTeX build intermediates
+*.aux
+*.toc
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+/index.log
