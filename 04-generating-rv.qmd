@@ -1,12 +1,11 @@
 # Generating Random Variables {#sec-generating-rv}
 
-<!-- Adapted and expanded from 03-generating-rv.qmd in the master branch of
-     chikuang/Teaching-Stat8670 for the 2026F course. -->
-
+<!-- Adapted from the 2025 chapter and reorganized for the 2026F course. -->
 
 ```{r}
 #| label: rv-setup
 #| include: false
+#| cache: false
 #| code-fold: true
 library(ggplot2)
 theme_set(theme_minimal(base_size = 14))
@@ -16,52 +15,28 @@ knitr::opts_chunk$set(
 )
 ```
 
-In the previous chapter, we used optimization to find a parameter value that fits observed data. In this chapter, we move in the other direction: **given a probability model, how can we generate data that behave according to that model?**
+In the previous chapter, we used computation to estimate parameters from data. Here we go in the other direction: **given a probability model, how do we generate observations from it?**
 
-These two directions work together. We can fit a model to observations, generate new data from the fitted model, and ask whether the simulated data reproduce important features of the observations.
+We start with uniform random numbers, use them to construct one-dimensional distributions, and then build mixtures and random vectors. At each step, we ask the same three questions: **What is the construction? Why does it have the desired distribution? How can we check it?**
 
-The central idea is
+## Overview
 
-$$
-\text{Probability Model}
-\;\Longrightarrow\;
-\text{Random Data}
-\;\Longrightarrow\;
-\text{Statistical Procedure}
-\;\Longrightarrow\;
-\text{Operating Characteristics}.
-$$
+Generating random variables is the first step in a simulation study. Once we can generate data with a known truth, we can study an estimator's bias, a confidence interval's coverage, or a test's power.
 
-Here, *operating characteristics* include bias, variability, confidence interval coverage, and the probability of rejecting a hypothesis.
+The main methods in this chapter follow a common pattern:
 
-## Why Generate Random Variables?
-
-Suppose we propose an estimator $\hat\theta$ for an unknown parameter $\theta$. For one observed dataset, we cannot see the estimator's entire sampling distribution. Under a specified model, however, we can repeatedly generate datasets with a known value of $\theta$ and recompute $\hat\theta$.
-
-This lets us investigate questions that may be difficult to answer analytically.
-
-| Statistical question | What must be generated? | Why the generator matters |
+| Available building block | Construction | Target |
 |---|---|---|
-| How variable is an estimator? | Repeated datasets from a specified model | The simulated sampling distribution depends on that model. |
-| Does a 95% confidence interval cover 95% of the time? | Data with a known true parameter | We can count intervals that contain the truth. |
-| How much data does an experiment need? | Data under meaningful alternatives | The fraction of rejections estimates power. |
-| How uncertain is a fitted prediction? | New observations, possibly with uncertain parameters | Both observation noise and parameter uncertainty can matter. |
-| What does a bootstrap approximate? | Samples from an empirical or fitted distribution | Resampling defines the distribution used to approximate uncertainty. |
-| How does dependence affect a joint event? | Entire random vectors | Correct marginal distributions alone do not specify joint probabilities. |
+| Uniform probability levels | Apply a quantile function | A specified univariate distribution |
+| An easy proposal distribution | Accept or reject proposals | A distribution with a known density |
+| Familiar independent variables | Transform or combine them | Related distributions, sums, and mixtures |
+| Independent standard normals | Apply a matrix or normalize lengths | Correlated vectors and random directions |
 
-**Statistical intuition.** Simulation gives us a laboratory in which the truth is known. We control the data-generating mechanism and observe how a method behaves. The conclusions apply to the mechanisms we examine; simulating one convenient model does not establish that a procedure works under every model.
-
-::: {.callout-question title="In-Class Question"}
-
-An estimator performs well when data are normal. What additional simulations would you want before using it with skewed data, outliers, or dependent observations?
-
-:::
-
-## Uniform Random Numbers as Building Blocks
-
-### Pseudorandomness and Reproducibility
+We develop these constructions first. The final **optional applications** use them in complete statistical experiments.
 
 A pseudorandom number generator produces a deterministic sequence from an initial state. A well-designed generator makes that sequence useful as an approximation to independent random draws. In the mathematical arguments below, we work with ideal independent uniforms; software approximates them with finite precision.
+
+::: {#rv-block-1 .callout-note title="Reproducibility"}
 
 In R, use `set.seed()` to reproduce an example. The same seed, generator settings, software environment, and sequence of calls reproduce the same simulation. The seed identifies a computation; it does not certify the probability model.
 
@@ -82,7 +57,16 @@ Set the seed **before a simulation experiment**, then let the generator advance.
 
 For a reproducible analysis, also record `RNGkind()` and `sessionInfo()`. For parallel work, use a framework that manages separate random-number streams, such as the streams supported by R's `parallel` package. See the [R documentation on random-number generation](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Random.html).
 
-### Sampling from a Finite Population
+:::
+
+:::: {#rv-block-2 .callout-example title="Sampling from a Finite Population"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 1. Sampling from a Finite Population**
+
+:::
+
 
 Sampling with replacement allows an observation to appear more than once. Sampling without replacement makes later draws depend on which observations have already been selected.
 
@@ -96,11 +80,17 @@ sample(observed_waits, size = 6, replace = TRUE)
 sample(observed_waits, size = 6, replace = FALSE)
 ```
 
+::::
+
+::: {#rv-block-3 .callout-note title="Connection to the Bootstrap"}
+
 The empirical distribution places probability $1/n$ on each of the $n$ observed records, counting repeated values separately. Drawing $n$ times independently from this distribution is the basic **nonparametric bootstrap** resampling step. Sampling all $n$ records without replacement only permutes them, so the sample mean cannot change.
 
 This is our first example of an important principle: **the sampling rule is part of the statistical model.**
 
-### R's Distribution Functions
+:::
+
+::: {#rv-block-4 .callout-note title="R Distribution Functions: A Reference" collapse="true"}
 
 R uses four related prefixes. For example, `dnorm()` evaluates a normal density, `pnorm()` evaluates its CDF, `qnorm()` evaluates its quantile function, and `rnorm()` generates draws.
 
@@ -122,7 +112,9 @@ R uses four related prefixes. For example, `dnorm()` evaluates a normal density,
 
 See [R's distribution reference](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Distributions.html) for the available families.
 
-::: {.callout-note title="Parameters Have Statistical Meaning"}
+:::
+
+::: {#rv-block-5 .callout-caution title="Check the Parameterization"}
 
 `rnorm(n, sd = 4)` has variance $16$. An exponential rate of $4$ gives mean $1/4$. In the gamma family, `scale = 1 / rate`. A lognormal `meanlog` is the mean of $\log X$, not the mean of $X$.
 
@@ -132,26 +124,42 @@ A generator can run without errors while representing the wrong model if its par
 
 ## Inverse Transformation Method
 
-### Turning Probability Levels into Observations
-
 Imagine dividing the interval $(0,1)$ into probability levels. A uniform draw selects a level without favoring one part of that interval. The quantile function converts that probability level into a value on the scale of the target distribution.
 
-::: {.callout-theorem title="Inverse Transformation"}
+:::: {#rv-block-6 .callout-definition title="Generalized Inverse CDF"}
 
-For any CDF $F$, define its generalized inverse by
+::: {.content-visible when-format="pdf"}
+
+**Definition 1. Generalized Inverse CDF**
+
+:::
+
+
+For any CDF $F$, define
 
 $$
 F^{-1}(u)=\inf\{x\in\mathbb{R}:F(x)\geq u\},
 \qquad 0<u<1.
 $$
 
-If $U\sim\operatorname{Unif}(0,1)$, then $X=F^{-1}(U)$ has CDF $F$.
+It is the first value of $x$ at which accumulated probability reaches the level $u$.
+
+::::
+
+:::: {#rv-block-7 .callout-theorem title="Inverse Transformation"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 1. Inverse Transformation**
 
 :::
 
-The inequality **$F(x)\geq u$** matters. For a discrete distribution, the CDF jumps and may never equal a particular value of $u$.
 
-To understand why the method works, observe that
+If $U\sim\operatorname{Unif}(0,1)$, then $X=F^{-1}(U)$ has CDF $F$. Independent uniforms transformed separately give independent observations from $F$.
+
+::::
+
+**Proof.** The generalized inverse satisfies
 
 $$
 \begin{aligned}
@@ -161,21 +169,66 @@ P\{F^{-1}(U)\leq x\}
 \end{aligned}
 $$
 
-Thus the transformation produces exactly the required probabilities in ideal arithmetic.
+Thus the generated values have the required CDF.
 
-The reverse statement is the **probability integral transform**: if $X$ has a continuous CDF $F$, then $F(X)\sim\operatorname{Unif}(0,1)$. This gives a connection to model checking. Under a correctly specified continuous predictive distribution, transformed observations should have a uniform marginal distribution. Dependence must be checked separately, and estimating $F$ from the same observations changes the reference distribution of formal tests.
+::: {#rv-block-8 .callout-caution title="Use an Inequality in the Definition"}
 
-::: {.callout-algorithm title="Inverse Transformation"}
+The condition is $F(x)\geq u$, not $F(x)=u$. A discrete CDF jumps over some probability levels. The generalized inverse still assigns every $0<u<1$ to an outcome.
+
+:::
+
+:::: {#rv-block-9 .callout-theorem title="Probability Integral Transform"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 2. Probability Integral Transform**
+
+:::
+
+
+If $X$ has a **continuous** CDF $F$, then $F(X)\sim\operatorname{Unif}(0,1)$. This is the reverse direction of the inverse-transform construction.
+
+::::
+
+::: {#rv-block-10 .callout-note title="A Connection to Model Checking"}
+
+Under a correctly specified continuous predictive distribution, transformed observations have a uniform marginal distribution. Dependence must be checked separately. If $F$ is estimated from the same observations, formal tests need to account for that estimation.
+
+For discrete $X$, $F(X)$ is not uniform. An optional randomized version spreads each probability mass over its corresponding interval:
+
+$$
+U=F(X^-)+V\{F(X)-F(X^-)\},
+$$
+
+where $V$ is an independent uniform and $F(X^-)$ is the CDF just below $X$.
+
+:::
+
+:::: {#rv-block-11 .callout-algorithm title="Inverse Transformation"}
+
+::: {.content-visible when-format="pdf"}
+
+**Algorithm 1. Inverse Transformation**
+
+:::
+
 
 1. Obtain the quantile function $F^{-1}$ analytically or numerically.
 2. Generate independent $U_1,\ldots,U_n\sim\operatorname{Unif}(0,1)$.
 3. Return $X_i=F^{-1}(U_i)$ for each $i$.
 
+::::
+
+### Continuous Distributions
+
+:::: {#rv-block-12 .callout-example title="An Increasing Density on the Unit Interval"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 2. An Increasing Density on the Unit Interval**
+
 :::
 
-### Continuous Example: A Density That Increases
-
-::: {.callout-example title="An Increasing Density on the Unit Interval"}
 
 Consider
 
@@ -190,6 +243,51 @@ X=U^{1/3}.
 $$
 
 Why do the observations concentrate near 1? Equal-width intervals near 1 contain more probability because the CDF rises faster there. The inverse maps more uniform probability levels into those intervals.
+
+The arrows in @fig-rv-quantile-map show what the inverse does: choose a height $u$, move across to the CDF, then read the corresponding $x$ on the horizontal axis.
+
+```{r}
+#| label: fig-rv-quantile-map
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-cap: "The inverse CDF converts a probability level into an observation. Each horizontal arrow starts at u; the downward arrow lands at x = u^(1/3). The dashed guides are a construction, not additional random draws."
+#| fig-alt: "Three colored paths move from probability levels 0.125, 0.5, and 0.875 across to the curve F(x)=x cubed and then down to the corresponding quantiles."
+#| fig-width: 7
+#| fig-height: 4.8
+quantile_paths <- data.frame(
+  u = c(0.125, 0.5, 0.875),
+  level = factor(c("u = 0.125", "u = 0.500", "u = 0.875"))
+)
+quantile_paths$x <- quantile_paths$u^(1 / 3)
+quantile_grid <- data.frame(x = seq(0, 1, length.out = 401))
+
+ggplot(quantile_grid, aes(x, x^3)) +
+  geom_line(color = "grey25", linewidth = 1) +
+  geom_segment(
+    data = quantile_paths, inherit.aes = FALSE,
+    aes(x = 0, xend = x, y = u, yend = u, color = level),
+    linewidth = 0.8, linetype = "dashed", show.legend = FALSE,
+    arrow = grid::arrow(length = grid::unit(0.12, "inches"))
+  ) +
+  geom_segment(
+    data = quantile_paths, inherit.aes = FALSE,
+    aes(x = x, xend = x, y = u, yend = 0, color = level),
+    linewidth = 0.8, linetype = "dashed", show.legend = FALSE,
+    arrow = grid::arrow(length = grid::unit(0.12, "inches"))
+  ) +
+  geom_point(
+    data = quantile_paths, inherit.aes = FALSE,
+    aes(x, u, color = level), size = 2.5
+  ) +
+  annotate("text", x = 0.28, y = 0.97, label = "F(x) = x^3", size = 4.5) +
+  scale_color_manual(values = c("#0072B2", "#009E73", "#D55E00")) +
+  scale_x_continuous(breaks = seq(0, 1, 0.25)) +
+  scale_y_continuous(breaks = seq(0, 1, 0.25)) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1)) +
+  labs(x = "Generated value x", y = "Cumulative probability F(x)", color = NULL) +
+  theme(legend.position = "bottom")
+```
+
 
 ```{r}
 #| label: fig-rv-inverse
@@ -239,9 +337,16 @@ knitr::kable(
 
 Agreement should be approximate. Random samples are not required to reproduce population moments exactly.
 
+::::
+
+:::: {#rv-block-13 .callout-example title="Exponential Random Variables"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 3. Exponential Random Variables**
+
 :::
 
-### Exponential Waiting Times
 
 For $T\sim\operatorname{Exp}(\lambda)$ with **rate** $\lambda>0$,
 
@@ -257,7 +362,7 @@ $$
 T=-\frac{\log(1-U)}{\lambda}.
 $$
 
-Since $U$ and $1-U$ have the same distribution, $-\log(U)/\lambda$ also works. These two formulas have the same marginal distribution; applying both to the **same** $U$ produces dependent outputs.
+Since $U$ and $1-U$ have the same distribution, $-\log(U)/\lambda$ also works. Both formulas have the same marginal distribution.
 
 ```{r}
 #| label: rv-exponential
@@ -277,7 +382,17 @@ c(
 
 `log1p(-u)` computes $\log(1-u)$ accurately when $u$ is close to zero. This connects random-number generation to the numerical stability issues discussed earlier.
 
-**Why this matters.** Exponential waiting times model the time between events in a homogeneous Poisson process. The constant rate is a substantive assumption: it implies a memoryless waiting time. Equipment aging or time-varying arrival rates may require a different distribution.
+::::
+
+::: {#rv-block-14 .callout-caution title="Equal Distributions Do Not Mean Independent Draws"}
+
+The formulas $-\log(U)/\lambda$ and $-\log(1-U)/\lambda$ have the same marginal distribution. Applying both to the **same** $U$ produces dependent outputs. Use independent uniforms when independence is required.
+
+:::
+
+::: {#rv-block-15 .callout-note title="Optional Connection: Survival and Waiting Times"}
+
+Exponential waiting times model the time between events in a homogeneous Poisson process. The constant rate is a substantive assumption: it implies a memoryless waiting time. Equipment aging or time-varying arrival rates may require a different distribution.
 
 More generally, if a nonnegative event time has continuous cumulative hazard $H(t)$ and survival function $S(t)=e^{-H(t)}$ tending to zero, then
 
@@ -287,113 +402,29 @@ $$
 
 This turns survival-model simulation into an inversion problem. For example, the Weibull cumulative hazard $H(t)=(t/b)^a$ gives $T=b\{-\log(U)\}^{1/a}$.
 
-::: {.callout-question title="In-Class Question"}
+:::
+
+:::: {#rv-block-16 .callout-exercise title="In-Class Question"}
+
+::: {.content-visible when-format="pdf"}
+
+**Exercise 1. In-Class Question**
+
+:::
+
 
 If the exponential rate doubles, what happens to the average waiting time? Why would multiplying the simulated waiting times by two represent the opposite change?
 
-:::
+::::
 
-### Discrete Distributions
+:::: {#rv-block-17 .callout-example title="Numerical Inversion: Using Root Finding"}
 
-For ordered support values $x_1<x_2<\cdots$, the quantile rule selects the first value whose cumulative probability reaches $u$:
+::: {.content-visible when-format="pdf"}
 
-$$
-X=x_j
-\quad\text{when}\quad
-F(x_{j-1})<U\leq F(x_j).
-$$
-
-Each outcome receives a subinterval of $(0,1)$ whose length equals its probability.
-
-::: {.callout-example title="Bernoulli and Categorical Outcomes"}
-
-For $X\sim\operatorname{Bernoulli}(p)$, the generalized inverse gives
-
-$$
-X=\mathbf{1}\{U>1-p\}.
-$$
-
-The threshold divides the unit interval into pieces of lengths $1-p$ and $p$.
-
-```{r}
-#| label: rv-discrete
-#| code-fold: true
-set.seed(8674)
-p <- 0.4
-bernoulli <- as.integer(runif(10000) > 1 - p)
-
-labels <- c("Low", "Medium", "High")
-probabilities <- c(0.2, 0.5, 0.3)
-cutoffs <- cumsum(probabilities)
-u <- runif(10000)
-
-# First cutoff that reaches u: this also handles u at a cutoff.
-index <- vapply(u, function(ui) which(ui <= cutoffs)[1], integer(1))
-category <- factor(labels[index], levels = labels)
-
-mean(bernoulli)
-prop.table(table(category))
-
-# Built-in alternative for the same categorical distribution.
-head(sample(labels, size = 10, replace = TRUE, prob = probabilities))
-```
+**Example 4. Numerical Inversion: Using Root Finding**
 
 :::
 
-For the geometric distribution, use R's convention: $X$ counts **failures before the first success**. Then
-
-$$
-P(X=x)=p(1-p)^x,\qquad x=0,1,2,\ldots,
-$$
-
-and $F(x)=1-(1-p)^{x+1}$. Solving $F(x-1)<u\leq F(x)$ gives
-
-$$
-F^{-1}(u)=
-\left\lceil\frac{\log(1-u)}{\log(1-p)}\right\rceil-1.
-$$
-
-```{r}
-#| label: rv-geometric
-#| code-fold: true
-set.seed(8675)
-p <- 0.25
-u <- runif(10000)
-failures <- ceiling(log1p(-u) / log1p(-p)) - 1
-
-c(
-  simulated_mean = mean(failures),
-  theoretical_mean = (1 - p) / p,
-  largest_difference_from_qgeom = max(abs(failures - qgeom(u, prob = p)))
-)
-```
-
-The number of **trials including the success** is $X+1$, with mean $1/p$. Mixing up these conventions creates an off-by-one modeling error. See [R's geometric distribution documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Geometric.html).
-
-For a Poisson distribution, cumulative probabilities can be constructed from
-
-$$
-p_0=e^{-\lambda},\qquad
-p_{k+1}=\frac{\lambda}{k+1}p_k,
-\qquad
-F(k+1)=F(k)+p_{k+1}.
-$$
-
-Search for the first $k$ satisfying $F(k)\geq u$. This explains an inversion algorithm, but the recurrence can underflow for large $\lambda$. In practice, use `qpois(runif(n), lambda)` or the specialized generator `rpois(n, lambda)`. An `r` function need not implement the simple algorithm used in our derivation.
-
-::: {.callout-note title="The Probability Integral Transform Has a Continuity Condition"}
-
-For discrete $X$, $F(X)$ takes only a discrete set of values and is not uniform. One randomized version is
-
-$$
-U=F(X^-)+V\{F(X)-F(X^-)\},
-$$
-
-where $V$ is an independent uniform and $F(X^-)$ is the CDF just below $X$. This spreads each probability mass over its corresponding interval.
-
-:::
-
-### Numerical Inversion: A Link to Root Finding
 
 An inverse may be inconvenient algebraically even when the CDF is easy to evaluate. For each $u$, solve
 
@@ -438,7 +469,16 @@ c(
 
 There are two distinct errors: the root solver introduces **numerical error**, while finite simulation introduces **Monte Carlo error**. Tightening `tol` reduces the former; increasing the number of independent draws reduces the latter. Neither repairs a wrong CDF.
 
-### Conditional Simulation: Truncation
+::::
+
+:::: {#rv-block-18 .callout-example title="Optional: A Truncated Normal Distribution"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 5. Optional: A Truncated Normal Distribution**
+
+:::
+
 
 Suppose only values in $(a,b)$ are eligible for a study. If $F$ is continuous and $F(b)>F(a)$, then the conditional CDF within this interval is
 
@@ -471,11 +511,163 @@ c(
 )
 ```
 
-**Practical interpretation.** Truncation changes which individuals enter the dataset. Censoring instead records incomplete information about some individuals who remain in the dataset, such as knowing that a failure time exceeds the study duration. These require different simulation rules. The direct CDF subtraction above is suitable for this moderate interval; extreme tails require numerically stable tail probabilities or a specialized truncated-distribution generator.
+::::
+
+::: {#rv-block-19 .callout-caution title="Truncation, Censoring, and Extreme Tails"}
+
+Truncation changes which individuals enter the dataset. Censoring instead records incomplete information about some individuals who remain in the dataset, such as knowing that a failure time exceeds the study duration. These require different simulation rules. The direct CDF subtraction above is suitable for this moderate interval; extreme tails require numerically stable tail probabilities or a specialized truncated-distribution generator.
+
+:::
+
+### Discrete Distributions
+
+For ordered support values $x_1<x_2<\cdots$, the quantile rule selects the first value whose cumulative probability reaches $u$:
+
+$$
+X=x_j
+\quad\text{when}\quad
+F(x_{j-1})<U\leq F(x_j).
+$$
+
+Each outcome receives a subinterval of $(0,1)$ whose length equals its probability.
+
+:::: {#rv-block-20 .callout-example title="Bernoulli and Categorical Outcomes"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 6. Bernoulli and Categorical Outcomes**
+
+:::
+
+
+For $X\sim\operatorname{Bernoulli}(p)$, the generalized inverse gives
+
+$$
+X=\mathbf{1}\{U>1-p\}.
+$$
+
+The threshold divides the unit interval into pieces of lengths $1-p$ and $p$.
+
+The same idea applies to three categories with probabilities $0.2$, $0.5$, and $0.3$. In @fig-rv-probability-strip, interval **length** represents probability. A uniform draw at $u=0.62$ selects the middle category because $0.2<0.62\leq0.7$.
+
+```{r}
+#| label: fig-rv-probability-strip
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-cap: "Discrete generation allocates the unit interval to outcomes. The middle category receives half of the interval, so it is selected with probability 0.5. Boundary points follow the generalized-inverse convention and have probability zero for an ideal continuous uniform."
+#| fig-alt: "The interval from zero to one is divided into Low from zero to 0.2, Medium from 0.2 to 0.7, and High from 0.7 to one. An arrow at 0.62 points to Medium."
+#| fig-width: 8
+#| fig-height: 2.8
+probability_strip <- data.frame(
+  left = c(0, 0.2, 0.7), right = c(0.2, 0.7, 1),
+  category = factor(c("Low", "Medium", "High"),
+                    levels = c("Low", "Medium", "High")),
+  label = c("Low\np = 0.2", "Medium\np = 0.5", "High\np = 0.3")
+)
+ggplot(probability_strip) +
+  geom_rect(aes(xmin = left, xmax = right, ymin = 0.15, ymax = 0.7,
+                fill = category), color = "white", linewidth = 1.5) +
+  geom_text(aes(x = (left + right) / 2, y = 0.425, label = label),
+            size = 4.5, lineheight = 1.2) +
+  annotate("segment", x = 0.62, xend = 0.62, y = 1.02, yend = 0.73,
+           linewidth = 0.9,
+           arrow = grid::arrow(length = grid::unit(0.12, "inches"))) +
+  annotate("text", x = 0.62, y = 1.15, label = "U = 0.62 selects Medium",
+           size = 4.3) +
+  scale_fill_manual(values = c("#A9D4E5", "#A8DAB5", "#F4C49B"),
+                    guide = "none") +
+  scale_x_continuous(breaks = c(0, 0.2, 0.7, 1), expand = expansion(mult = 0.04)) +
+  coord_cartesian(xlim = c(0, 1), ylim = c(0, 1.28)) +
+  labs(x = "Uniform probability level", y = NULL) +
+  theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        panel.grid = element_blank())
+```
+
+
+```{r}
+#| label: rv-discrete
+#| code-fold: true
+set.seed(8674)
+p <- 0.4
+bernoulli <- as.integer(runif(10000) > 1 - p)
+
+labels <- c("Low", "Medium", "High")
+probabilities <- c(0.2, 0.5, 0.3)
+cutoffs <- cumsum(probabilities)
+u <- runif(10000)
+
+# First cutoff that reaches u: this also handles u at a cutoff.
+index <- vapply(u, function(ui) which(ui <= cutoffs)[1], integer(1))
+category <- factor(labels[index], levels = labels)
+
+mean(bernoulli)
+prop.table(table(category))
+
+# Built-in alternative for the same categorical distribution.
+head(sample(labels, size = 10, replace = TRUE, prob = probabilities))
+```
+
+::::
+
+:::: {#rv-block-21 .callout-example title="Geometric Random Variables"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 7. Geometric Random Variables**
+
+:::
+
+
+For the geometric distribution, use R's convention: $X$ counts **failures before the first success**. Then
+
+$$
+P(X=x)=p(1-p)^x,\qquad x=0,1,2,\ldots,
+$$
+
+and $F(x)=1-(1-p)^{x+1}$. Solving $F(x-1)<u\leq F(x)$ gives
+
+$$
+F^{-1}(u)=
+\left\lceil\frac{\log(1-u)}{\log(1-p)}\right\rceil-1.
+$$
+
+```{r}
+#| label: rv-geometric
+#| code-fold: true
+set.seed(8675)
+p <- 0.25
+u <- runif(10000)
+failures <- ceiling(log1p(-u) / log1p(-p)) - 1
+
+c(
+  simulated_mean = mean(failures),
+  theoretical_mean = (1 - p) / p,
+  largest_difference_from_qgeom = max(abs(failures - qgeom(u, prob = p)))
+)
+```
+
+The number of **trials including the success** is $X+1$, with mean $1/p$. Mixing up these conventions creates an off-by-one modeling error. See [R's geometric distribution documentation](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/Geometric.html).
+
+::::
+
+::: {#rv-block-22 .callout-note title="Optional: Poisson Inversion"}
+
+For a Poisson distribution, cumulative probabilities can be constructed from
+
+$$
+p_0=e^{-\lambda},\qquad
+p_{k+1}=\frac{\lambda}{k+1}p_k,
+\qquad
+F(k+1)=F(k)+p_{k+1}.
+$$
+
+Search for the first $k$ satisfying $F(k)\geq u$. This explains an inversion algorithm, but the recurrence can underflow for large $\lambda$. In practice, use `qpois(runif(n), lambda)` or the specialized generator `rpois(n, lambda)`. An `r` function need not implement the simple algorithm used in our derivation.
+
+:::
+
+The inverse-transform method is especially convenient when a quantile is available. When a density is easier to work with than its CDF, the next method gives another route.
 
 ## Acceptance-Rejection Method
-
-### Reshaping an Easy Distribution
 
 Inverse transformation requires a usable quantile function. Acceptance-rejection requires a different resource: an easy **proposal distribution** that can cover the target.
 
@@ -487,7 +679,14 @@ $$
 
 everywhere on the target support. In particular, $g(y)$ must be positive wherever $f(y)>0$.
 
-::: {.callout-algorithm title="Acceptance-Rejection Sampling"}
+:::: {#rv-block-23 .callout-algorithm title="Acceptance-Rejection Sampling"}
+
+::: {.content-visible when-format="pdf"}
+
+**Algorithm 2. Acceptance-Rejection Sampling**
+
+:::
+
 
 Repeat until the desired number of observations has been accepted:
 
@@ -495,13 +694,27 @@ Repeat until the desired number of observations has been accepted:
 2. Independently generate $U\sim\operatorname{Unif}(0,1)$.
 3. Accept $Y$ if $U\leq f(Y)/\{M g(Y)\}$; otherwise discard it.
 
+::::
+
+:::: {#rv-block-24 .callout-theorem title="Distribution and Cost of Accepted Proposals"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 3. Distribution and Cost of Accepted Proposals**
+
 :::
 
-**Statistical intuition.** The proposal visits some regions too frequently. The acceptance rule thins those visits by a location-specific amount. After thinning, the relative frequencies match the target.
 
-### Why Does It Work?
+Let $f$ and $g$ be normalized densities with $f(y)\leq M g(y)$ throughout the target support. In the algorithm above:
 
-For continuous proposals,
+- The probability of accepting each proposal is $1/M$.
+- Each accepted value has density $f$.
+- Independent proposal/decision pairs produce independent accepted observations.
+- The expected number of proposals for $n$ accepted observations is $nM$.
+
+::::
+
+**Proof.** For continuous proposals,
 
 $$
 P(\text{accept})
@@ -518,11 +731,24 @@ f_{Y\mid\text{accept}}(y)
 =f(y).
 $$
 
-For discrete distributions, replace the integral by a sum. Independent proposal/acceptance pairs produce independent accepted draws. This differs from a Markov chain method, in which successive draws generally depend on the current state.
+::: {#rv-block-25 .callout-note title="Why Thinning Works"}
 
-The number of proposals through one acceptance is geometric on $\{1,2,\ldots\}$ with mean $M$. To obtain $n$ accepted observations requires **$nM$ proposals on average**, not exactly $nM$ proposals.
+The proposal visits some regions too frequently. The acceptance rule thins those visits by a location-specific amount. After thinning, the relative frequencies match the target.
 
-### A Beta Example: A Good Bound Saves Work
+For discrete distributions, use sums instead of integrals in the proof. The number of proposals through one acceptance is geometric on $\{1,2,\ldots\}$ with mean $M$. The realized cost varies from run to run.
+
+This produces independent accepted draws, unlike a Markov chain method whose successive states are generally dependent.
+
+:::
+
+:::: {#rv-block-26 .callout-example title="Beta(2,2): Choosing an Efficient Envelope"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 8. Beta(2,2): Choosing an Efficient Envelope**
+
+:::
+
 
 For the $\operatorname{Beta}(2,2)$ target,
 
@@ -601,15 +827,28 @@ knitr::kable(data.frame(
 
 Each proposal here uses two uniforms, one for $Y$ and one for the decision. Thus $n=2000$ with $M=1.5$ uses $3000$ proposals and $6000$ uniform draws **in expectation**. For another proposal generator, its internal random-number cost could differ.
 
-::: {.callout-question title="In-Class Question"}
+::::
 
-What goes wrong if we choose $M=1$ and simply replace acceptance probabilities above one by one? Why does a histogram that looks plausible fail to justify this shortcut?
+:::: {#rv-block-27 .callout-exercise title="In-Class Question"}
+
+::: {.content-visible when-format="pdf"}
+
+**Exercise 2. In-Class Question**
 
 :::
 
+
+What goes wrong if we choose $M=1$ and simply replace acceptance probabilities above one by one? Why does a histogram that looks plausible fail to justify this shortcut?
+
+::::
+
+::: {#rv-block-28 .callout-caution title="A Bound Must Hold Everywhere"}
+
 The envelope condition would fail near the mode. Capping the ratio changes the accepted density to one proportional to $\min\{g(y),f(y)/M\}$, which generally is not $f$.
 
-### Unnormalized Densities and Statistical Connections
+:::
+
+::: {#rv-block-29 .callout-note title="Unnormalized Targets"}
 
 Sometimes we know only $h(x)$ where
 
@@ -622,17 +861,30 @@ If we can establish $h(x)\leq Cg(x)$ everywhere, we may accept with probability 
 
 This is useful for some posterior distributions, where the normalizing constant is difficult to compute. The challenge remains finding an easy proposal and a valid global bound.
 
+:::
+
+::: {#rv-block-30 .callout-note title="Connections and Limitations"}
+
 **Connection to optimization.** Finding the smallest bound involves maximizing $f/g$, or its logarithm. A numerical optimizer or a finite grid may help explore this ratio, but does not by itself prove a global bound, especially on unbounded support.
 
 **Connection to importance sampling.** Both methods use a proposal $g$ and the ratio $f/g$. Rejection sampling discards proposals to obtain draws from the target; importance sampling keeps proposals and weights their contributions when estimating an expectation.
 
 **Computational limitation.** In high dimensions, a proposal that misses the target's concentration or dependence can yield a very small acceptance rate. This helps motivate more specialized methods, including the Markov chain Monte Carlo methods encountered in other statistics courses.
 
+:::
+
 ## Using Probability Distribution Theory
 
 Known distributional relationships are also simulation algorithms. They often reveal *why* a distribution appears in statistical inference.
 
-### Normal Variables from Uniforms: Box-Muller
+:::: {#rv-block-31 .callout-theorem title="Box-Muller Transformation"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 4. Box-Muller Transformation**
+
+:::
+
 
 If $U_1,U_2$ are independent uniforms, define
 
@@ -648,7 +900,22 @@ $$
 
 Then $Z_1$ and $Z_2$ are independent standard normal variables.
 
-**Geometric intuition.** A bivariate standard normal has circularly symmetric density. Its direction is uniform, and its squared radius has a $\chi^2_2$ distribution, equivalently an exponential distribution with rate $1/2$. Box-Muller generates that radius and direction, then converts polar coordinates to Cartesian coordinates. The polar Jacobian contributes a factor $r$, giving the radial density $r e^{-r^2/2}$.
+::::
+
+::: {#rv-block-32 .callout-note title="Radius and Direction"}
+
+A bivariate standard normal has circularly symmetric density. Its direction is uniform, and its squared radius has a $\chi^2_2$ distribution, equivalently an exponential distribution with rate $1/2$. Box-Muller generates that radius and direction, then converts polar coordinates to Cartesian coordinates. The polar Jacobian contributes a factor $r$, giving the radial density $r e^{-r^2/2}$.
+
+:::
+
+:::: {#rv-block-33 .callout-example title="Constructing a Bivariate Normal Cloud"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 9. Constructing a Bivariate Normal Cloud**
+
+:::
+
 
 ```{r}
 #| label: fig-rv-box-muller
@@ -667,9 +934,22 @@ ggplot(data.frame(z1, z2), aes(z1, z2)) +
   labs(x = expression(Z[1]), y = expression(Z[2]))
 ```
 
+::::
+
+::: {#rv-block-34 .callout-caution title="Independence Comes from the Joint Distribution"}
+
 Shared ingredients do not automatically imply dependence, and an approximately zero sample correlation does not prove independence. Here independence follows from the joint density. For routine work, use `rnorm()`; this construction explains one way a normal generator can work.
 
-### Chi-Square, Student's t, and F
+:::
+
+:::: {#rv-block-35 .callout-theorem title="Normal, Chi-Square, t, and F Relationships"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 5. Normal, Chi-Square, t, and F Relationships**
+
+:::
+
 
 If $Z_1,\ldots,Z_k$ are independent $N(0,1)$ variables,
 
@@ -689,7 +969,22 @@ $$
 \frac{V_1/d_1}{V_2/d_2}\sim F_{d_1,d_2}.
 $$
 
-**Why this matters in inference.** A $t$ statistic divides a standardized normal estimation error by an estimated scale. When the scale estimate is unusually small, the ratio can be large. This explains the heavier tails of the $t$ distribution and the larger critical values used when estimating an unknown normal variance.
+::::
+
+::: {#rv-block-36 .callout-note title="Why a t Statistic Has Heavier Tails"}
+
+A $t$ statistic divides a standardized normal estimation error by an estimated scale. When the scale estimate is unusually small, the ratio can be large. This explains the heavier tails of the $t$ distribution and the larger critical values used when estimating an unknown normal variance.
+
+:::
+
+:::: {#rv-block-37 .callout-example title="Generating a t Distribution with Five Degrees of Freedom"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 10. Generating a t Distribution with Five Degrees of Freedom**
+
+:::
+
 
 ```{r}
 #| label: fig-rv-student-t
@@ -712,9 +1007,22 @@ ggplot(data.frame(value = t_draws), aes(value)) +
   labs(x = "Ratio", y = "Density")
 ```
 
+::::
+
+::: {#rv-block-38 .callout-caution title="Generate the Numerator and Denominator Independently"}
+
 The numerator and denominator must be generated independently. Reusing the same normals in both changes the distribution. In this example, $\operatorname{Var}(T)=\nu/(\nu-2)=5/3$, so the raw $t_5$ distribution also has greater variance than $N(0,1)$.
 
-### Beta Variables from Gamma Variables
+:::
+
+:::: {#rv-block-39 .callout-theorem title="Beta as a Ratio of Independent Gammas"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 6. Beta as a Ratio of Independent Gammas**
+
+:::
+
 
 If $G_1\sim\operatorname{Gamma}(a,\lambda)$ and $G_2\sim\operatorname{Gamma}(b,\lambda)$ are independent with the **same rate**, then
 
@@ -722,7 +1030,22 @@ $$
 X=\frac{G_1}{G_1+G_2}\sim\operatorname{Beta}(a,b).
 $$
 
+::::
+
+::: {#rv-block-40 .callout-note title="A Proportion of a Random Total"}
+
 The ratio is a random share of a positive total. This gives intuition for beta models of probabilities and proportions. The common rate cancels from the ratio.
+
+:::
+
+:::: {#rv-block-41 .callout-example title="Generating and Checking Beta(3,2) Draws"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 11. Generating and Checking Beta(3,2) Draws**
+
+:::
+
 
 ```{r}
 #| label: fig-rv-beta-qq
@@ -745,9 +1068,17 @@ ggplot(qq_data, aes(theoretical, observed)) +
   labs(x = "Theoretical Beta(3,2) quantile", y = "Sample quantile")
 ```
 
+::::
+
+::: {#rv-block-42 .callout-note title="Connection to Dirichlet Distributions"}
+
 Normalizing several independent gammas with a common rate similarly produces a **Dirichlet** random vector. Its components sum to one, making it useful for uncertain category probabilities and mixture weights.
 
-## Sums, Mixtures, and Hierarchical Models
+:::
+
+These identities construct new variables from familiar ones. We next distinguish two ways of combining distributions: adding contributions and selecting a population.
+
+## Sums and Mixtures
 
 ### Sums and Convolution
 
@@ -765,15 +1096,40 @@ $$
 
 The integral is a convolution. Simulation avoids computing this integral: generate the terms jointly according to the model and add them.
 
-Some familiar relationships are:
+:::: {#rv-block-43 .callout-theorem title="Useful Convolution Identities"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 7. Useful Convolution Identities**
+
+:::
+
+
+Under the independence conditions below:
+
 
 - A sum of independent $\chi^2$ variables is chi-square with the sum of the degrees of freedom.
 - A sum of $k$ independent $\operatorname{Exp}(\lambda)$ variables is $\operatorname{Gamma}(k,\lambda)$.
 - A sum of $k$ independent geometric failure counts with success probability $p$ is negative binomial with `size = k` and `prob = p`.
 
-**Practical intuition.** A total processing time adds durations from all stages. A count of failures before the $k$th success adds the failures before each successive success. The sum corresponds to an actual mechanism, not just an algebraic identity.
+::::
 
-### Mixtures: Select a Component, Then Generate an Observation
+::: {#rv-block-44 .callout-note title="What a Sum Represents"}
+
+A total processing time adds durations from all stages. A count of failures before the $k$th success adds the failures before each successive success. The sum corresponds to an actual mechanism, not just an algebraic identity.
+
+:::
+
+### Mixture Distributions
+
+:::: {#rv-block-45 .callout-definition title="Finite Mixture"}
+
+::: {.content-visible when-format="pdf"}
+
+**Definition 2. Finite Mixture**
+
+:::
+
 
 A finite mixture has CDF and density
 
@@ -793,18 +1149,38 @@ $$
 
 The law of total probability gives the mixture distribution after we average over the unknown label.
 
-::: {.callout-algorithm title="Generating a Finite Mixture"}
+::::
+
+:::: {#rv-block-46 .callout-algorithm title="Generating a Finite Mixture"}
+
+::: {.content-visible when-format="pdf"}
+
+**Algorithm 3. Generating a Finite Mixture**
+
+:::
+
 
 For every observation:
 
 1. Draw a component label $C$ with probabilities $w_1,\ldots,w_K$.
 2. Draw one observation from $F_C$.
 
-:::
+::::
+
+::: {#rv-block-47 .callout-caution title="Mixture Weights Average Distributions"}
 
 The weights average **distributions**. They do not instruct us to return the numerical weighted average $w_1X_1+\cdots+w_KX_K$.
 
-::: {.callout-example title="Three Different Data-Generating Mechanisms"}
+:::
+
+:::: {#rv-block-48 .callout-example title="Three Different Data-Generating Mechanisms"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 12. Three Different Data-Generating Mechanisms**
+
+:::
+
 
 Let $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$ be independent. Compare:
 
@@ -854,7 +1230,16 @@ ggplot(mixture_plot, aes(value)) +
   labs(x = "Value", y = "Density")
 ```
 
+::::
+
+:::: {#rv-block-49 .callout-theorem title="Mean and Variance of a Mixture"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 8. Mean and Variance of a Mixture**
+
 :::
+
 
 If component $j$ has mean $\mu_j$ and variance $\sigma_j^2$, then
 
@@ -873,17 +1258,37 @@ $$
 \end{aligned}
 $$
 
+::::
+
+::: {#rv-block-50 .callout-note title="Heterogeneity and Latent Labels"}
+
 This decomposition explains why unobserved heterogeneity can inflate variability. A mixture of distinct normal components is generally nonnormal, but it need not be bimodal. Identical components yield the original normal distribution.
 
 **Connection to clustering and EM.** Simulation starts with the label and then generates the observation. In mixture-model estimation, we see the observation and infer uncertainty about its label. This reversal is the basis for the responsibility calculations in the EM algorithm.
 
-::: {.callout-question title="In-Class Question"}
+:::
 
-In the example above, the weighted average and the mixture both have mean 2. Why would checking only the sample mean fail to detect the wrong generator?
+:::: {#rv-block-51 .callout-exercise title="In-Class Question"}
+
+::: {.content-visible when-format="pdf"}
+
+**Exercise 3. In-Class Question**
 
 :::
 
-### Continuous Mixing: Why Count Data Can Be Overdispersed
+
+In the example above, the weighted average and the mixture both have mean 2. Why would checking only the sample mean fail to detect the wrong generator?
+
+::::
+
+:::: {#rv-block-52 .callout-example title="Poisson-Gamma Mixing and Overdispersion"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 13. Poisson-Gamma Mixing and Overdispersion**
+
+:::
+
 
 A mixture label need not take only finitely many values. Consider
 
@@ -920,13 +1325,25 @@ knitr::kable(data.frame(
 ), digits = 3)
 ```
 
-**Practical interpretation.** Customers, neighborhoods, or machines can have different event rates. Even when each unit follows a Poisson model conditional on its rate, the pooled counts may have variance greater than their mean. This is one reason negative binomial regression is useful.
+::::
+
+::: {#rv-block-53 .callout-note title="Optional Connection: Heterogeneous Event Rates"}
+
+Customers, neighborhoods, or machines can have different event rates. Even when each unit follows a Poisson model conditional on its rate, the pooled counts may have variance greater than their mean. This is one reason negative binomial regression is useful.
+
+:::
+
+::: {#rv-block-54 .callout-caution title="Shared Latent Variables Create Dependence"}
 
 We drew one independent rate for each count. If several observations share a single group-specific rate, they become dependent after that rate is integrated out. **Where we place a draw in the simulation loop determines which observations share uncertainty.**
 
+:::
+
+The same generative logic extends to random vectors. The additional task is to reproduce how their coordinates vary together.
+
 ## Generating Multivariate Random Variables
 
-### Correct Marginals Do Not Guarantee Correct Dependence
+### Multivariate Normal Distribution
 
 Suppose two measurements each have a standard normal marginal distribution. We still need to specify how they move together. Independent `rnorm()` calls impose independence; they cannot represent a positive correlation merely because the marginal histograms look correct.
 
@@ -936,13 +1353,24 @@ $$
 \boldsymbol X\sim N_d(\boldsymbol\mu,\boldsymbol\Sigma).
 $$
 
+:::: {#rv-block-55 .callout-theorem title="Linear Transformation of a Normal Vector"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 9. Linear Transformation of a Normal Vector**
+
+:::
+
+
 If $\boldsymbol Z\sim N_d(\boldsymbol0,I_d)$ and $AA^\top=\boldsymbol\Sigma$, then
 
 $$
 \boldsymbol X=\boldsymbol\mu+A\boldsymbol Z.
 $$
 
-Indeed,
+::::
+
+**Proof.**
 
 $$
 \mathbb{E}(\boldsymbol X)=\boldsymbol\mu,\qquad
@@ -951,7 +1379,7 @@ $$
 
 The normality follows because every linear combination of $\boldsymbol X$ is a linear combination of independent normals.
 
-### Cholesky Decomposition and R's Row Convention
+::: {#rv-block-56 .callout-caution title="Match the Matrix Factor to the Row Convention"}
 
 R's `chol(Sigma)` returns an **upper triangular** matrix $R$ satisfying
 
@@ -966,6 +1394,62 @@ X=ZR+\boldsymbol1_n\boldsymbol\mu^\top.
 $$
 
 For a column vector, the corresponding factor is $A=R^\top$. Mixing up these orientations generally produces the wrong covariance. See the [R documentation for `chol()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/chol.html).
+
+:::
+
+The construction has a geometric interpretation. In @fig-rv-covariance-map, the same points start in a circular cloud, become an ellipse after multiplication by the matrix factor, and then move to the desired mean. Color tracks each point's original first coordinate.
+
+```{r}
+#| label: fig-rv-covariance-map
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-cap: "A matrix factor introduces scale and dependence; adding the mean shifts location. The black curves are corresponding 95% normal probability contours. All three panels use the same underlying draws and the same axis scale."
+#| fig-alt: "Three panels show the same colored normal points as a circular cloud, a correlated elliptical cloud, and the same ellipse shifted to mean two, one."
+#| fig-width: 10
+#| fig-height: 4.3
+set.seed(8695)
+geometry_z <- matrix(rnorm(1600), ncol = 2)
+geometry_sigma <- matrix(c(1, 0.8, 0.8, 2), 2)
+geometry_R <- chol(geometry_sigma)
+geometry_correlated <- geometry_z %*% geometry_R
+geometry_shifted <- sweep(geometry_correlated, 2, c(2, 1), FUN = "+")
+stages <- c("1. Independent normals", "2. Apply the factor", "3. Add the mean")
+geometry_data <- do.call(rbind, lapply(seq_along(stages), function(j) {
+  values <- list(geometry_z, geometry_correlated, geometry_shifted)[[j]]
+  data.frame(x = values[, 1], y = values[, 2],
+             original_z1 = geometry_z[, 1], stage = stages[j])
+}))
+theta <- seq(0, 2 * pi, length.out = 301)
+reference_circle <- sqrt(qchisq(0.95, df = 2)) * cbind(cos(theta), sin(theta))
+reference_ellipse <- reference_circle %*% geometry_R
+geometry_contours <- do.call(rbind, lapply(seq_along(stages), function(j) {
+  values <- list(reference_circle, reference_ellipse,
+                 sweep(reference_ellipse, 2, c(2, 1), FUN = "+"))[[j]]
+  data.frame(x = values[, 1], y = values[, 2], stage = stages[j])
+}))
+geometry_centers <- data.frame(x = c(0, 0, 2), y = c(0, 0, 1), stage = stages)
+
+ggplot(geometry_data, aes(x, y)) +
+  geom_hline(yintercept = 0, color = "grey80", linewidth = 0.4) +
+  geom_vline(xintercept = 0, color = "grey80", linewidth = 0.4) +
+  geom_point(aes(color = original_z1), alpha = 0.35, size = 0.75) +
+  geom_path(data = geometry_contours, linewidth = 0.7) +
+  geom_point(data = geometry_centers, shape = 4, size = 3, stroke = 1.1) +
+  scale_color_gradient2(low = "#0072B2", mid = "grey80", high = "#D55E00",
+                        midpoint = 0, guide = "none") +
+  facet_wrap(~ stage, nrow = 1) +
+  coord_equal() +
+  labs(x = "Coordinate 1", y = "Coordinate 2")
+```
+
+:::: {#rv-block-57 .callout-example title="A Generator with a Specified Mean and Covariance"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 14. A Generator with a Specified Mean and Covariance**
+
+:::
+
 
 ```{r}
 #| label: rv-mvn-generator
@@ -995,7 +1479,9 @@ Sigma
 
 The function also returns an $n\times d$ matrix for $n=0$ or $n=1$. This matters when a component in a simulated mixture receives few or no observations.
 
-### Geometry, PCA, and Nearly Singular Covariance
+::::
+
+::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization"}
 
 The spectral decomposition is
 
@@ -1013,9 +1499,16 @@ A covariance matrix can be positive semidefinite with some eigenvalues equal to 
 
 If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its factor once and reuse it. Factorization costs roughly order $d^3$, while multiplying $n$ observations by a dense factor costs order $nd^2$. Avoid repeating work that does not change the model.
 
-### Dependence Changes Joint Probabilities
+:::
 
-::: {.callout-example title="Two Measurements Exceed a Threshold"}
+:::: {#rv-block-59 .callout-example title="The Same Marginals, Different Joint Tail Probabilities"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 15. The Same Marginals, Different Joint Tail Probabilities**
+
+:::
+
 
 Consider two standardized laboratory measurements with unit marginal variances. We compare independence with correlation $\rho=0.8$ while keeping the marginals the same.
 
@@ -1071,11 +1564,64 @@ The simulated joint probability rises from approximately `r round(joint_probabil
 
 The same issue arises with simultaneous equipment failures, correlated regression errors, and repeated measurements. A study of a joint event must preserve the relevant dependence.
 
+::::
+
+:::: {#rv-block-60 .callout-theorem title="Optional: Wishart Construction"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 10. Optional: Wishart Construction**
+
+:::
+
+
+If $\boldsymbol X_1,\ldots,\boldsymbol X_m$ are independent $N_d(\boldsymbol0,\boldsymbol\Sigma)$ vectors, then
+
+$$
+W=\sum_{i=1}^m\boldsymbol X_i\boldsymbol X_i^\top
+\sim\operatorname{Wishart}_d(m,\boldsymbol\Sigma).
+$$
+
+::::
+
+::: {#rv-block-61 .callout-note title="Optional Connection: Uncertainty in a Sample Covariance"}
+
+With observations stored in rows, this is simply `crossprod(X)`. For a normal sample of size $n$ with an estimated mean, its usual sample covariance satisfies
+
+$$
+(n-1)S\sim\operatorname{Wishart}_d(n-1,\boldsymbol\Sigma).
+$$
+
+This explains why Wishart simulation is relevant to uncertainty in covariance estimates and multivariate inference.
+
+```{r}
+#| label: rv-wishart
+#| code-fold: true
+set.seed(8688)
+Sigma_w <- matrix(c(1, 0.4, 0.4, 2), 2)
+wishart_df <- 12
+W <- crossprod(rmvn_chol(wishart_df, c(0, 0), Sigma_w))
+W / wishart_df  # expectation equals Sigma_w, but one draw is noisy
+```
+
 :::
 
 ### Multivariate Normal Mixtures
 
+::: {#rv-block-62 .callout-caution title="One Component Label per Vector"}
+
 Each observation needs **one component label for the entire vector**. Drawing a different label for each coordinate changes the joint model.
+
+:::
+
+:::: {#rv-block-63 .callout-example title="A Mixture of Two Bivariate Normals"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 16. A Mixture of Two Bivariate Normals**
+
+:::
+
 
 ```{r}
 #| label: fig-rv-mvn-mixture
@@ -1111,6 +1657,10 @@ ggplot(
   labs(x = "Variable 1", y = "Variable 2", color = "Component")
 ```
 
+::::
+
+::: {#rv-block-64 .callout-note title="Within-Group and Between-Group Covariance"}
+
 For vector means $\boldsymbol\mu_j$ and covariances $\boldsymbol\Sigma_j$,
 
 $$
@@ -1122,36 +1672,18 @@ $$
 
 Between-group differences can create marginal association even if variables are independent *within* every group. This is useful when designing simulation studies for clustering or confounding.
 
-### Optional: Sample Covariance and the Wishart Distribution
+:::
 
-If $\boldsymbol X_1,\ldots,\boldsymbol X_m$ are independent $N_d(\boldsymbol0,\boldsymbol\Sigma)$ vectors, then
+### Uniform Directions and Points in a Ball
 
-$$
-W=\sum_{i=1}^m\boldsymbol X_i\boldsymbol X_i^\top
-\sim\operatorname{Wishart}_d(m,\boldsymbol\Sigma).
-$$
+:::: {#rv-block-65 .callout-theorem title="Uniform Direction from a Standard Normal Vector"}
 
-With observations stored in rows, this is simply `crossprod(X)`. For a normal sample of size $n$ with an estimated mean, its usual sample covariance satisfies
+::: {.content-visible when-format="pdf"}
 
-$$
-(n-1)S\sim\operatorname{Wishart}_d(n-1,\boldsymbol\Sigma).
-$$
+**Theorem 11. Uniform Direction from a Standard Normal Vector**
 
-This explains why Wishart simulation is relevant to uncertainty in covariance estimates and multivariate inference.
+:::
 
-```{r}
-#| label: rv-wishart
-#| code-fold: true
-set.seed(8688)
-Sigma_w <- matrix(c(1, 0.4, 0.4, 2), 2)
-wishart_df <- 12
-W <- crossprod(rmvn_chol(wishart_df, c(0, 0), Sigma_w))
-W / wishart_df  # expectation equals Sigma_w, but one draw is noisy
-```
-
-## Uniform Directions and Uniform Points in a Ball
-
-### Uniform on the Surface of a Sphere
 
 Let $\boldsymbol Z\sim N_d(\boldsymbol0,I_d)$. Its distribution is unchanged by rotations, so it has no preferred direction. Consequently,
 
@@ -1160,6 +1692,42 @@ $$
 $$
 
 is uniform on the **surface** of the unit sphere in $\mathbb R^d$. The zero vector has probability zero under the ideal normal model.
+
+::::
+
+:::: {#rv-block-66 .callout-theorem title="Uniform Volume Requires a Nonuniform Radius"}
+
+::: {.content-visible when-format="pdf"}
+
+**Theorem 12. Uniform Volume Requires a Nonuniform Radius**
+
+:::
+
+
+Uniform direction alone puts every point at distance 1. To fill the ball uniformly in volume, independently generate a radius $R$ satisfying
+
+$$
+P(R\leq r)=r^d,\quad 0\leq r\leq1.
+$$
+
+This follows because a ball of radius $r$ has $r^d$ times the volume of the unit ball. Therefore,
+
+$$
+R=V^{1/d},\qquad \boldsymbol X=R\boldsymbol U,
+$$
+
+where $V$ is uniform and independent of the direction.
+
+::::
+
+:::: {#rv-block-67 .callout-example title="Generating a Circle and a Disk"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 17. Generating a Circle and a Disk**
+
+:::
+
 
 ```{r}
 #| label: rv-sphere-generator
@@ -1176,22 +1744,6 @@ runif_sphere <- function(n, d) {
 ```
 
 We divide each row by its length directly. Constructing an $n\times n$ diagonal matrix of inverse lengths would waste memory.
-
-### Uniform Inside the Ball
-
-Uniform direction alone puts every point at distance 1. To fill the ball uniformly in volume, independently generate a radius $R$ satisfying
-
-$$
-P(R\leq r)=r^d,\quad 0\leq r\leq1.
-$$
-
-This follows because a ball of radius $r$ has $r^d$ times the volume of the unit ball. Therefore,
-
-$$
-R=V^{1/d},\qquad \boldsymbol X=R\boldsymbol U,
-$$
-
-where $V$ is uniform and independent of the direction.
 
 ```{r}
 #| label: fig-rv-ball
@@ -1216,17 +1768,30 @@ ggplot(sphere_plot, aes(x, y)) +
   labs(x = "Coordinate 1", y = "Coordinate 2")
 ```
 
-**Why this matters.** Random directions appear in rotationally invariant perturbations, geometric Monte Carlo methods, and randomized algorithms. In high dimensions, a uniform point in a ball is typically close to its boundary: $P(R\leq0.9)=0.9^d$. At $d=100$, this probability is about $0.000027$.
+::::
 
-::: {.callout-question title="In-Class Question"}
+::: {#rv-block-68 .callout-note title="Geometry in High Dimensions"}
 
-Why does a uniform radius on $(0,1)$ place too much mass near the center of a disk? Why does choosing a uniform latitude fail to generate uniform points on the surface of a three-dimensional sphere?
+Random directions appear in rotationally invariant perturbations, geometric Monte Carlo methods, and randomized algorithms. In high dimensions, a uniform point in a ball is typically close to its boundary: $P(R\leq0.9)=0.9^d$. At $d=100$, this probability is about $0.000027$.
 
 :::
 
-## How Do We Know a Generator Is Working?
+:::: {#rv-block-69 .callout-exercise title="In-Class Question"}
 
-### Check More Than a Histogram
+::: {.content-visible when-format="pdf"}
+
+**Exercise 4. In-Class Question**
+
+:::
+
+
+Why does a uniform radius on $(0,1)$ place too much mass near the center of a disk? Why does choosing a uniform latitude fail to generate uniform points on the surface of a three-dimensional sphere?
+
+::::
+
+## Checking a Generator
+
+A mathematical construction tells us the target law. Numerical checks then help detect programming errors and quantify how much disagreement to expect from a finite sample.
 
 A histogram is a useful first view, but its appearance depends on bin width and sample size. Different distributions can have the same mean, variance, or a similar-looking central region.
 
@@ -1256,7 +1821,7 @@ ggplot(data.frame(value = beta_tight$draws), aes(value)) +
 
 Formal goodness-of-fit tests can supplement these checks, but passing a test is not a proof of correctness. A correct generator can occasionally be rejected, and a small sample may fail to detect a faulty one. The algorithm's mathematical justification remains essential.
 
-### Monte Carlo Error
+::: {#rv-block-70 .callout-note title="Monte Carlo Standard Error"}
 
 Suppose we estimate $p=P(X>c)$ using $B$ independent simulated observations:
 
@@ -1281,6 +1846,17 @@ $$
 =\frac{s_h}{\sqrt B}.
 $$
 
+:::
+
+:::: {#rv-block-71 .callout-example title="Checking an Exponential Tail Probability"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 18. Checking an Exponential Tail Probability**
+
+:::
+
+
 ```{r}
 #| label: rv-mcse
 #| code-fold: true
@@ -1300,11 +1876,17 @@ knitr::kable(data.frame(
 col.names = c("Estimate", "MCSE", "Exact", "Lower MC limit", "Upper MC limit"))
 ```
 
+::::
+
+::: {#rv-block-72 .callout-caution title="What More Simulation Can and Cannot Fix"}
+
 These limits quantify numerical uncertainty from the finite simulation. They do not quantify uncertainty about whether the exponential model or its rate describes a real population.
 
 To halve MCSE, we generally need about **four times** as many independent replications. For rare events, zero simulated occurrences do not imply zero probability: the plug-in MCSE also becomes zero and is misleading. A binomial interval or a method designed for rare events is then more informative.
 
-::: {.callout-note title="Three Different Sources of Uncertainty"}
+:::
+
+::: {#rv-block-73 .callout-note title="Three Different Sources of Uncertainty"}
 
 **Sampling uncertainty** concerns what would happen with another real dataset. **Monte Carlo uncertainty** comes from using finitely many simulated replications to study that behavior. **Model uncertainty** concerns whether the assumed mechanism is an adequate description of the setting.
 
@@ -1312,13 +1894,53 @@ More simulation reduces Monte Carlo uncertainty. It does not automatically reduc
 
 :::
 
-## Real-World Applications
+::: {#rv-block-74 .callout-note title="Choosing a Generation Method"}
 
-The following examples use illustrative models and parameters. Each example states a decision-relevant quantity, translates the model into a generator, and checks the resulting simulation.
+| Available structure | Natural approach | Main issue to check |
+|---|---|---|
+| A reliable built-in generator | Use the distribution's `r` function | Parameterization and joint assumptions |
+| A tractable quantile | Inverse transformation | Correct generalized inverse and endpoints |
+| A tractable CDF without a convenient inverse | Numerical root finding | Bracketing, monotonicity, tolerance, and cost |
+| A target density and a suitable proposal | Acceptance-rejection | Global envelope and acceptance rate |
+| A known distributional identity | Transform simpler independent variables | Conditions such as independence and common rates |
+| A latent-class or hierarchical model | Generate latent variables, then observations | Which observations share each latent draw |
+| A normal covariance structure | Matrix factorization | Positive definiteness and factor orientation |
+| Rotational or volume symmetry | Geometric construction | Surface versus volume and the correct radius |
 
-### Experimental Design: Estimating Power
+Methods are often combined. A hierarchical model may use inverse transformation for event times, normal matrix factors for random effects, and conditional Bernoulli draws for outcomes.
 
-::: {.callout-example title="How Often Would an Experiment Detect an Effect?"}
+The goal is a generator that is statistically correct, numerically reliable, and efficient enough for the problem. A sophisticated algorithm cannot compensate for an incorrect data-generating mechanism.
+
+:::
+
+::: {#rv-block-75 .callout-note title="The Main Ideas to Keep"}
+
+- A probability model becomes operational when we can generate data from it.
+- Uniform draws can be transformed into observations through a generalized inverse CDF.
+- Rejection sampling reshapes an easy proposal; a valid, tight envelope controls efficiency.
+- Distributional identities connect simulation to the foundations of statistical inference.
+- A mixture selects a component; a sum combines contributions from all components.
+- Hierarchical draws specify both marginal variation and dependence.
+- Multivariate generation must reproduce covariance and joint behavior, not only marginal histograms.
+- Validation combines mathematical reasoning, numerical checks, and distributional diagnostics.
+- More independent replications reduce Monte Carlo error; they do not correct a wrong model.
+
+The next step is to use these generators to approximate expectations, integrals, and sampling distributions. That is the central task of **Monte Carlo simulation**.
+
+:::
+
+## Optional: Real-World Applications
+
+The core chapter is complete. The following **optional examples** show how to combine the generators in full statistical analyses. Their assumptions and parameters are illustrative. They can be used for additional class discussion or independent study.
+
+:::: {#rv-block-76 .callout-example title="Optional Application: Experimental Power"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 19. Optional Application: Experimental Power**
+
+:::
+
 
 Suppose an experiment compares two independent groups, each with $n$ observations:
 
@@ -1391,15 +2013,24 @@ ggplot(power_results, aes(n, estimated)) +
   labs(x = "Sample size per group", y = "Rejection probability")
 ```
 
-**Interpretation.** The exact formula gives a benchmark for our simulation. When the model becomes more realistic, such as unequal variances, clustered observations, or missing outcomes, simulation may remain feasible even when a simple power formula does not.
+::: {#rv-block-77 .callout-note title="Interpretation and Assumptions"}
+
+The exact formula gives a benchmark for our simulation. When the model becomes more realistic, such as unequal variances, clustered observations, or missing outcomes, simulation may remain feasible even when a simple power formula does not.
 
 If $\sigma$ is estimated, replace the known-variance test with the actual planned procedure, such as a two-sample $t$ test. Simulating one analysis and reporting power for another answers the wrong question.
 
 :::
 
-### Quality Control: Predicting Future Defects with an Uncertain Rate
+::::
 
-::: {.callout-example title="A Predictive Distribution Needs More Than a Plug-In Estimate"}
+:::: {#rv-block-78 .callout-example title="Optional Application: Predicting Defect Counts"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 20. Optional Application: Predicting Defect Counts**
+
+:::
+
 
 Suppose a process produces independent binary defect indicators conditional on an unknown defect probability $p$. Start with a $\operatorname{Beta}(1,1)$ prior and observe 3 defects among 18 items. Beta-binomial conjugacy gives
 
@@ -1507,15 +2138,24 @@ ggplot(predictive_plot, aes(defects, proportion)) +
   labs(x = "Defects in the next 50 items", y = "Probability")
 ```
 
-**Why it matters.** A decision triggered by a large defect count depends on the predictive tail, not just the expected count. Hierarchical simulation carries parameter uncertainty through to that tail.
+::: {#rv-block-79 .callout-note title="Interpretation and Shared Uncertainty"}
+
+A decision triggered by a large defect count depends on the predictive tail, not just the expected count. Hierarchical simulation carries parameter uncertainty through to that tail.
 
 If we drew a fresh independent $p$ for each individual item instead of one shared $p$ for the batch, the marginal total would be binomial with probability $\mathbb{E}(p)$. That would represent a different mechanism and lose the shared uncertainty in this posterior prediction.
 
 :::
 
-### Service Operations: Random Arrivals Create Dependent Waiting Times
+::::
 
-::: {.callout-example title="How Often Does a Customer Wait More Than Five Minutes?"}
+:::: {#rv-block-80 .callout-example title="Optional Application: Queue Delays"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 21. Optional Application: Queue Delays**
+
+:::
+
 
 Consider a single server, first-come-first-served, initially idle. Let interarrival times be independent exponentials with rate $\lambda$, and service times be independent $\operatorname{Gamma}(2,1)$ variables, with mean 2 minutes. Assume the arrival and service processes are independent.
 
@@ -1584,7 +2224,9 @@ ggplot(queue_paths, aes(customer, wait)) +
   labs(x = "Customer index", y = "Wait before service (minutes)")
 ```
 
-**Interpretation.** The estimand is the expected fraction of the first 200 customers who wait more than five minutes in a system starting empty. It is not automatically the long-run stationary probability. Studying steady-state performance requires addressing the initial transient and dependence.
+::: {#rv-block-81 .callout-note title="Interpretation and Assumptions"}
+
+The estimand is the expected fraction of the first 200 customers who wait more than five minutes in a system starting empty. It is not automatically the long-run stationary probability. Studying steady-state performance requires addressing the initial transient and dependence.
 
 We compute MCSE from **independent run-level fractions**. Pooling all customers and treating their wait indicators as independent Bernoulli trials would ignore the dependence created by the queue.
 
@@ -1592,24 +2234,18 @@ This example combines distribution choice, recursive computation, and statistica
 
 :::
 
-## Choosing a Generation Method
+::::
 
-| Available structure | Natural approach | Main issue to check |
-|---|---|---|
-| A reliable built-in generator | Use the distribution's `r` function | Parameterization and joint assumptions |
-| A tractable quantile | Inverse transformation | Correct generalized inverse and endpoints |
-| A tractable CDF without a convenient inverse | Numerical root finding | Bracketing, monotonicity, tolerance, and cost |
-| A target density and a suitable proposal | Acceptance-rejection | Global envelope and acceptance rate |
-| A known distributional identity | Transform simpler independent variables | Conditions such as independence and common rates |
-| A latent-class or hierarchical model | Generate latent variables, then observations | Which observations share each latent draw |
-| A normal covariance structure | Matrix factorization | Positive definiteness and factor orientation |
-| Rotational or volume symmetry | Geometric construction | Surface versus volume and the correct radius |
+## Exercises {.unnumbered}
 
-Methods are often combined. A hierarchical model may use inverse transformation for event times, normal matrix factors for random effects, and conditional Bernoulli draws for outcomes.
+:::: {#rv-block-82 .callout-exercise title="Questions to Think at Home"}
 
-The goal is a generator that is statistically correct, numerically reliable, and efficient enough for the problem. A sophisticated algorithm cannot compensate for an incorrect data-generating mechanism.
+::: {.content-visible when-format="pdf"}
 
-## Questions to Think at Home
+**Exercise 5. Questions to Think at Home**
+
+:::
+
 
 1. Derive an inverse-transform generator for $f(x)=4x^3$ on $(0,1)$. Check its theoretical mean and one tail probability.
 
@@ -1639,19 +2275,7 @@ The goal is a generator that is statistically correct, numerically reliable, and
 
 14. In the queue example, why is the number of independent runs relevant to the MCSE calculation? How would the target quantity change if you analyzed only later customers after a warm-up period?
 
-## Takeaways
-
-- A probability model becomes operational when we can generate data from it.
-- Uniform draws can be transformed into observations through a generalized inverse CDF.
-- Rejection sampling reshapes an easy proposal; a valid, tight envelope controls efficiency.
-- Distributional identities connect simulation to the foundations of statistical inference.
-- A mixture selects a component; a sum combines contributions from all components.
-- Hierarchical draws specify both marginal variation and dependence.
-- Multivariate generation must reproduce covariance and joint behavior, not only marginal histograms.
-- Validation combines mathematical reasoning, numerical checks, and distributional diagnostics.
-- More independent replications reduce Monte Carlo error; they do not correct a wrong model.
-
-The next step is to use these generators to approximate expectations, integrals, and sampling distributions. That is the central task of **Monte Carlo simulation**.
+::::
 
 ## References and Further Reading {.unnumbered}
 
