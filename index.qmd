@@ -45,12 +45,12 @@ Wednesday 9:00 - 12:00 or by appointment
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-| Status |                     Topic                     | Lecture Covered |
-|:------:|:--------------------------------------------:|:---------------:|
-|✅   ️|                [R Programming](01-R.qmd)                 |       1--3       |
-|✅    | [Numerical Approaches and Computational Statsitics](02-computation.qmd) |  4-- 5  |      |
-| ⏳   | [Optimalization](03-optimization.qmd)  | 6-- |      |
-| ⏳   | [Generating Random Variables](04-generating-rv.qmd)  | 6-- |      |
+| Status | Chapter | Topic | Lecture |
+|:------:|:---------:|:------------------------------------------------:|:---------:|
+| ✅ | Ch. 1 | [R Programming](01-R.qmd) | 1--3 |
+| ✅ | Ch. 2 | [Intro to Computational Statistics](02-computation.qmd) | 4--5 |
+| ⏳ | Ch. 3 | [Optimization](03-optimization.qmd) | 6-- |
+| ⏳ | Ch. 4 | [Generating Random Variable](04-generating-rv.qmd) | TBA |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 

@@ -1,4 +1,4 @@
-# Generating Random Variables {#sec-generating-rv}
+# Generating Random Variable {#sec-generating-rv}
 
 <!-- Adapted from the 2025 chapter and reorganized for the 2026F course. -->
 
