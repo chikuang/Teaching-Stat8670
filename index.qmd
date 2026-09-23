@@ -49,8 +49,8 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 |:------:|:---------:|:------------------------------------------------:|:---------:|
 | ✅ | Ch. 1 | [R Programming](01-R.qmd) | 1--3 |
 | ✅ | Ch. 2 | [Intro to Computational Statistics](02-computation.qmd) | 4--5 |
-| ⏳ | Ch. 3 | [Optimization](03-optimization.qmd) | 6-- |
-| ⏳ | Ch. 4 | [Generating Random Variable](04-generating-rv.qmd) | TBA |
+| ✅ | Ch. 3 | [Optimization](03-optimization.qmd) | 6--9 |
+| ⏳ | Ch. 4 | [Generating Random Variable](04-generating-rv.qmd) | 10--|
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
