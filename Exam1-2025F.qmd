@@ -1,0 +1,604 @@
+---
+show-exam-solutions: true
+---
+
+# Exam 1, 2025F {.unnumbered}
+
+**STAT 8670: Computational Methods in Statistics**  
+**Term:** Fall 2025  
+**Instructor:** [Chi-Kuang Yeh](https://chikuang.github.io/)  
+**Date:** October 8, 2025  
+**Total stated in the original:** 100 points + 10 bonus points
+
+::: {.callout-note title="Archived exam"}
+
+This page reproduces the supplied Fall 2025 exam, including its original answers. The original questions and stated point values are retained. Answers can be expanded below each question. See the [notes on the original source](#exam2025-source-notes) for formula corrections and inconsistencies in the supplied document.
+
+:::
+
+## Exam Instructions {.unnumbered}
+
+**Note 1:** Only a non-programmable calculator is allowed. Any other electronic devices are not allowed, and you would receive **0** for any usage of such a device during the exam.
+
+**Note 2 (original wording):** You will only be able to score of $\max(100,x)$ where $x$ is your grade.
+
+**Note 3:** Please write your answers on separate papers. Do **NOT** write on this paper, even for multiple choice. Any answers you write on this sheet will **NOT** count towards your grade!
+
+**Grade distribution (as stated in the original)**
+
+| Question | Content | Points | Score |
+|:---:|---|---:|:---:|
+| 1 | Multiple Choice | 18 | |
+| 2 | Conceptual | 20 | |
+| 3 | Calculation | 30 | |
+| 4 | Algorithms | 16 | |
+| 5 | Convergence | 16 | |
+| 6 | Bonus | 10 | |
+| **Total** | | **110** | |
+
+
+---
+
+## Question 1: Multiple Choice [18] {#exam2025-q1}
+
+Each of the questions is worth [2] marks.
+
+### 1a) {#exam2025-1a}
+
+In `R`, suppose
+
+    a = c(3, 2, 0)
+    b = c(1, 2, 3)
+
+What is the output of `cbind(a, b)`?
+
+A.  $$\begin{bmatrix}
+    3 & 1 \\
+    2 & 2 \\
+    0 & 3
+    \end{bmatrix}$$
+
+B.  $$\begin{bmatrix}
+    3 & 2 & 0 \\
+    1 & 2 & 3
+    \end{bmatrix}$$
+
+C.  $$\begin{bmatrix}
+    3 & 2 \\
+    0 & 1 \\
+    2 & 3
+    \end{bmatrix}$$
+
+D.  $$\begin{bmatrix}
+    1 & 3 \\
+    2 & 2 \\
+    3 & 0
+    \end{bmatrix}$$
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+A
+
+:::
+
+::::
+
+### 1b) {#exam2025-1b}
+
+List is one of the most important object type in `R`. In `R`, suppose
+
+    x = list(a = 1:3, b = "hello")
+
+What is the output of `print(x)`?
+
+A.      $a
+        [1] 1 2 3
+        $b
+        [1] "hello"
+
+B.      [1] 1 2 3 "hello"
+
+C.      a b 
+        1 2 3 
+        "hello"
+
+D.      $1
+        [1] "a" "b"
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+A
+
+:::
+
+::::
+
+### 1c) {#exam2025-1c}
+
+What is the output of the following `R` code?
+
+    x <- list("a", "b", 1:4)
+    length(x)
+
+A.  3
+
+B.  a b 1 2 3 4
+
+C.  7
+
+D.  a b 1:4
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+A. 3
+
+:::
+
+::::
+
+### 1d) {#exam2025-1d}
+
+Which of the data type allow non-homogeneous data structure to be stored?
+
+A.  list
+
+B.  vector
+
+C.  matrix
+
+D.  boolean
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+A. list
+
+:::
+
+::::
+
+### 1e) {#exam2025-1e}
+
+For multivariate methods, to generate a random vector that follows a multivariate normal distribution $N_d(0,\Sigma)$ with a given covariance matrix $\Sigma$, one often uses the Cholesky decomposition. What is the role of the Cholesky factor $L$ when $\Sigma = L L^\top$?
+
+A.  $L$ is the eigenvector matrix
+
+B.  Multiply $L$ by a standard normal vector gives the desired correlation structure
+
+C.  $L^{-1}$ is used to whiten the data
+
+D.  None of the above
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+B. Multiply $L$ by a standard normal vector gives the desired correlation structure
+
+:::
+
+::::
+
+### 1f) {#exam2025-1f}
+
+In the acceptance--rejection algorithm, the proposal distribution $g(x)$ and the constant $k$ should be chosen such that:
+
+A.  $g(x)$ is complicated to sample from, and $k$ is as large as possible.
+
+B.  $g(x)$ is easy to sample from, and $k$ is as small as possible while satisfying $f_X(x) \le k\, g(x)$ for all $x$.
+
+C.  $g(x)$ closely matches $f_X(x)$ but $k$ can be arbitrarily large.
+
+D.  $g(x)$ is uniform on $[0,1]$, and $k = 1$ regardless of $f_X(x)$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+B $g(x)$ is easy to sample from, and $k$ is as small as possible while satisfying $f_X(x) \le k\, g(x)$ for all $x$.
+
+:::
+
+::::
+
+### 1g) {#exam2025-1g}
+
+What is **not** a difference between theoretical results and computational reality?
+
+A.  Theoretical results assume exact arithmetic, while computers use finite precision.
+
+B.  Theoretical results may ignore algorithmic complexity, while computation must consider time and memory.
+
+C.  Theoretical results are always affected by rounding error, while computation is exact.
+
+D.  Theoretical models may assume infinite samples, while computation works with finite data.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+C. Theoretical results are always affected by rounding error, while computation is exact. (This is false.)
+
+:::
+
+::::
+
+### 1h) {#exam2025-1h}
+
+Let $Z_1$ and $Z_2$ be independent standard normal random variables, and denote a Chi Square distribution with degree of freedom $\nu$ by $\chi^2_\nu$ . Which of the following statements is *correct*?
+
+A.  $Z_1 + Z_2 \sim \chi^2_2$
+
+B.  $Z_1^2 + Z_2^2 \sim \chi^2_2$
+
+C.  $Z_1 Z_2 \sim \chi^2_2$
+
+D.  $(Z_1 + Z_2)^2 \sim \chi^2_2$
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+B
+
+:::
+
+::::
+
+### 1i) {#exam2025-1i}
+
+Consider estimating the integral $$I = \int_0^1 e^{-x^2}\,dx$$ using Monte Carlo integration.
+
+If we generate $X_1, X_2, \dots, X_n \stackrel{\text{i.i.d.}}{\sim} \text{Uniform}(0,1)$, which of the following provides a consistent estimator of $I$?
+
+A.  $\displaystyle \frac{1}{n} \sum_{i=1}^n X_i^2$
+
+B.  $\displaystyle \frac{1}{n} \sum_{i=1}^n e^{-X_i^2}$
+
+C.  $\displaystyle \frac{1}{n} \sum_{i=1}^n e^{X_i^2}$
+
+D.  $\displaystyle \frac{1}{n} \sum_{i=1}^n e^{-X_i}$
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+B
+
+:::
+
+::::
+
+---
+
+## Question 2: Conceptual [20] {#exam2025-q2}
+
+### 2a) {#exam2025-2a}
+
+[2] In your own words, explain why statistical computing is important. {2--3 sentences}
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Any reasonable answers are fine.
+
+:::
+
+::::
+
+### 2b) {#exam2025-2b}
+
+[3] Identify three main reasons why computational results may differ from theoretical results. {1--3 sentences each}
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Any reasonable answers are fine.
+
+:::
+
+::::
+
+### 2c) {#exam2025-2c}
+
+Suppose $\Sigma$ is a variance-covariance matrix with dimension $r\times r$. If we would apply the eigen-decomposition on it, explain what it will be, and the properties of each of the resulting matrices.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Since $\Sigma$ is symmetric and positive semidefinite (PSD), the spectral theorem gives $\Sigma \;=\; Q\,\Lambda\,Q^\top$, where
+
+- $Q = [q_1,\dots,q_r]\in\mathbb{R}^{r\times r}$ has the eigenvectors of $\Sigma$ as columns, and
+
+- $\Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_r)$ collects the eigenvalues.
+
+- You can order the eigenvalues so that $\lambda_1\ge \lambda_2\ge \cdots \ge \lambda_r\ge 0.$
+
+:::
+
+::::
+
+### 2d) {#exam2025-2d}
+
+If we want to estimate the parameter $\mu$ by the estimator $\hat{\mu}=\bar{x}_n=\sum_{i=1}^n x_i/n$. Explain the convergence mode of the $\hat{\mu}$, its limit and the reasoning behind.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+$\hat{\mu}$ converges to $\mu$ almost surely by SLLN, or converges to $\mu$ in probability by WLLN.
+
+:::
+
+::::
+
+---
+
+## Question 3: Calculation [30] {#exam2025-q3}
+
+### 3a) {#exam2025-3a}
+
+Suppose we want to simulate data from the distribution $F_X(x) = 3\exp(x) - 2$. Write down the steps involved in the inverse CDF method for generating random samples from this distribution.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+1.  Find the inverse of the CDF: $F_X^{-1}(u) = \ln\left(\frac{x+2}{3}\right)$.
+
+2.  Simulate $u\sim \operatorname{Unif}(0,1)$
+
+3.  Now we obtain $x$ from $x=F_X^{-1}(u)$
+
+:::
+
+::::
+
+### 3b) {#exam2025-3b}
+
+In your own words, clearly describe the steps of a simulated annealing algorithm.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Assume we are working on the minimization problem
+
+1.  Initialization for the $x_0$ the initial location, $T$ initial temperature, $\alpha$ the cool coefficient and $K$ maximum iteration and $\epsilon$ tolerance.
+
+2.  At the $i$th iteration, move random to a new candidate location $x^\prime$, if it is worse, i.e. $f(x^\prime) < f(x_i)$, it is better so accept it and let $x_{i+1}=x^\prime$. If $f(x^\prime) > f(x_i)$, we got worse, but we accept it with probability $P=\exp(-f(x^\prime) -f(x_i)$.
+
+3.  Cool down the temperature $T=\alpha T$.
+
+4.  Iterative the above steps (2--4) until we reach the maximum iteration $M$ or $|f(x_i)-f(x_{i+1})| \le \varepsilon$.
+
+:::
+
+::::
+
+### 3c) {#exam2025-3c}
+
+Write out the steps to simulate a random variable from a mixture of two Gaussian distributions with parameters $(\mu_1,\sigma_1^2)$ and $(\mu_2,\sigma_2^2)$ with each of the component weight $\alpha_1=0.7$ and $\alpha_2=0.3$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+1.  Simulate $X\sim N(\mu_1,\sigma_1^2)$
+
+2.  Simulate $Y\sim N(\mu_2,\sigma_2^2)$
+
+3.  Simulate $u\sim \operatorname{Unif}(0,1)$
+
+4.  If $u<= 0.7$, let $W := X$, otherwise let $W:= Y$.
+
+5.  The distribution of $W$, $F_W(\cdot)$ will be the mixture of the two gaussian distribution.
+
+:::
+
+::::
+
+### 3d) {#exam2025-3d}
+
+Prove the result of Question 1h) using the moment generating function (MGF). Note, the MGF of a Chi Square random variable is $M_{Z^2}(t)=\mathbb{E}\big[e^{tZ^2}\big]=(1-2t)^{-1/2},~t<\tfrac12$, and of a normal random variable $N(\mu,\sigma^2)$ is $M_x(t) = e^{t \mu+\sigma^2 t^2 / 2}$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Suppose $X,Y\overset{\mathrm{iid}}{\sim} N(0,1) = Z$. Then $M_X(t) = M_Y(t)  = \exp(t^2/2)$. Then, let $W = X^2+Y^2$, so the moment generating function of $W$ is $M_W(t) = \mathbb{E}[e^{tw}]=\mathbb{E}[e^{tx^2+ty^2}]=\mathbb{E}[e^{tx^2}e^{ty^2}]=\mathbb{E}[e^{tx^2}]\mathbb{E}[e^{ty^2}]$, where the last equality is by interdependence. But then both of which are $\sim Z^2$, so we have $$\mathbb{E}[e^{tx^2}]\mathbb{E}[e^{ty^2}] = (1-2t)^{-1/2}(1-2t)^{-1/2} = (1-2t)^{-1} = M_{\chi_2^2}(t),$$ which is the MGF for $\chi_2^2$. By the uniqueness of the MGF, we conclude that $X^2+ Y^2\sim \chi_2^2$. $\square$
+
+:::
+
+::::
+
+---
+
+## Question 4: Algorithms [16] {#exam2025-q4}
+
+Suppose we want to optimize the function $$f(x) = \ln(2x)-2,$$ over the interval $x \in \mathcal{X} = [0,2]$.
+
+### 4a) {#exam2025-4a}
+
+[4] Using the *root-finding* algorithm with $a_0 = 1$ and $b_0 = 10$, write out the values of $\boldsymbol{\theta}_j := (a_j, b_j, c_j, f(a_j), f(b_j))$ for $j = 1,2$. That is, provide the values for the first two iterations.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Note: $f(1)=\ln 2-2\approx -1.30685<0, f(10)=\ln 20-2\approx 0.99573>0$.\
+\
+**First iteration**: Then $c_1=(10+1)/2 = 5.5, f(c_1)=ln(11) - 2 \approx 0.397895>0$. It has the same sign as $a_0$, so $b_1 =c_1 =5.5$ and $a_1 = a_0=1$.\
+
+
+$$
+\boxed{\begin{aligned}\boldsymbol{\theta}_1&=(a_1,b_1,c_1,f(a_1),f(b_1))\\
+&=(1,\,5.5,\,5.5,\,\ln2-2,\,\ln11-2)\end{aligned}}
+$$
+
+\
+$\approx (1,\;5.5,\;5.5,\;-1.3068528,\;0.3978953)$.\
+\
+**Second iteration**: $c_2=\tfrac{1+5.5}{2}=3.25, f(c_2)=\ln 6.5-2\approx -0.128198<0$. Then $a_2 =c_2=3.25$ and $b_2 = b_1 = 5.5$. Hence, 
+
+$$
+\boxed{\begin{aligned}\boldsymbol{\theta}_2&=(a_2,b_2,c_2,f(a_2),f(b_2))\\
+&=(3.25,\,5.5,\,3.25,\,\ln6.5-2,\,\ln11-2)\end{aligned}}
+$$
+
+ $\approx (3.25,\;5.5,\;3.25,\;-0.1281978,\;0.3978953).$\
+$$\boxed{
+\begin{aligned}
+\boldsymbol{\theta}_1&=(a_1,b_1,c_1,f(a_1),f(b_1))\\
+&=(1,\,5.5,\,5.5,\,\ln2-2,\,\ln11-2),\\
+\boldsymbol{\theta}_2&=(a_2,b_2,c_2,f(a_2),f(b_2))\\
+&=(3.25,\,5.5,\,3.25,\,\ln6.5-2,\,\ln11-2).
+\end{aligned}
+}$$
+
+:::
+
+::::
+
+### 4b) {#exam2025-4b}
+
+[4] For the same function, apply Newton's method with initial value $x_0 = 7$, and write out the values of $\boldsymbol{\eta}_j := (x_j,f(x_j))$ for the first two iterations.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+For $f(x) = \ln(2x) - 2$, we have $$f'(x) = \frac{1}{x}.$$ The Newton update is therefore $$x_{j+1} = x_j - \frac{f(x_j)}{f'(x_j)} = x_j \bigl[\,3 - \ln(2x_j)\,\bigr].$$ Starting with $x_0 = 7$: $$f(x_0) = \ln(14) - 2 = 0.6391.$$ **Iteration 1:** $$x_1 = 7[3 - \ln(14)] = 2.5266, \quad f(x_1) = \ln(5.0532) - 2 = -0.3800.$$ $$\boldsymbol{\eta}_1 = (x_1, f(x_1)) = (2.5266, -0.3800).$$ **Iteration 2:** $$x_2 = 2.5266[3 - \ln(5.0532)] = 3.4867, \quad f(x_2) = \ln(6.9733) - 2 = -0.0579.$$ $$\boldsymbol{\eta}_2 = (x_2, f(x_2)) = (3.4867, -0.0579).$$ Hence, the first two iterations are: $$\boxed{
+\begin{aligned}
+\boldsymbol{\eta}_1 &= (2.5266,\; -0.3800),\\
+\boldsymbol{\eta}_2 &= (3.4867,\; -0.0579).
+\end{aligned}
+}$$ Note that the true root is $x^\ast = e^2/2 \approx 3.6945$.
+
+:::
+
+::::
+
+---
+
+## Question 5: Convergence [16] {#exam2025-q5}
+
+Analyze the mode of convergence of the following sequences, and report the limits $x_\infty$, the $\mu$, and the corresponding modes of convergence.
+
+### 5a) {#exam2025-5a}
+
+[3] $x_n = 1 + \left(\tfrac{2}{5}\right)^n$
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+Converges linearly to $x_\infty=1$, and $\mu=2/5=0.4$. It is the assignment questions, so check how you do it on the assignments. The suggestion is to follow the definition of convergence (linearly).
+
+:::
+
+::::
+
+### 5b) {#exam2025-5b}
+
+A sequence $\{x_n\}$ is said to converge *sublinearly* to $x_\infty$ if $$\lim _{n \rightarrow \infty} \frac{\left|x_{n+1}-x_\infty\right|}{\left|x_n-x_\infty\right|}=1.$$ Construct a sequence and provide its limit $x_\infty$ such, and show how this sequence converges to $x_\infty$ sublinearly.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+One possible sequence is $\{x_n\}_{n=1}^N = \{1/n\}$. It is easy to see that $x_\infty = 0$, and using the "ratio test", we can clearly see that this sequence converges to $x_\infty=0$ sublinearly.
+
+:::
+
+::::
+
+---
+
+## Question 6: Bonus! [10] {#exam2025-q6}
+
+For this question, please answer each item in complete sentences. Each question is worth [2] marks.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer (original)"}
+
+I look forward to hearing from you.
+
+:::
+
+::::
+
+### 6a) {#exam2025-6a}
+
+Do you find the online course notes available on the instructor's website useful? Please explain your answer.
+
+### 6b) {#exam2025-6b}
+
+What is your opinion about the in-class slides, is it useful, or do you prefer to use only the online notes?
+
+### 6c) {#exam2025-6c}
+
+What could the instructor do to help you learn more effectively in this course?
+
+### 6d) {#exam2025-6d}
+
+As a student, what could you do to improve your understanding and learning of the course material?
+
+### 6e) {#exam2025-6e}
+
+Finally, do you have any additional comments or feedback for the instructor, your classmates, or about the course in general?
+
+
+---
+
+## Notes on the Original Source {#exam2025-source-notes .unnumbered}
+
+These notes are separate from the archived exam above; they clarify issues in the supplied source rather than changing the historical questions or marks.
+
+::: {.callout-warning title="Original wording and point allocations"}
+
+- **Score rule:** Note 2 uses $\max(100,x)$, which sets a minimum of 100. If the intended rule is to cap a score at 100, the expression should be $\min(100,x)$.
+- **Question 4:** The section is labelled [16], but the two active subquestions are each labelled [4], for 8 explicitly allocated points. The source does not specify a resolution of this discrepancy. Several subquestions in Questions 2, 3, and 5 also have no individual point allocation; no new allocations have been inferred here.
+- **Question 4 setup:** The source says to optimize $\ln(2x)-2$ on $[0,2]$, while the subquestions perform root finding from a bracket $[1,10]$ and an initial value 7. The function is undefined at $x=0$, and its root $e^2/2\approx3.6945$ is outside $[0,2]$. The numerical answers apply to finding the root on $x>0$, not to the stated optimization interval.
+
+:::
+
+::: {.callout-tip title="Formula and explanation corrections"}
+
+**Question 2c:** In the covariance eigendecomposition, the eigenvector matrix is orthogonal: $Q^\top Q=QQ^\top=I$. Covariance eigenvalues are nonnegative.
+
+**Question 2d:** The stated sample-mean convergence requires assumptions. For example, if the observations are i.i.d. with $\mathbb{E}|X_1|<\infty$ and mean $\mu$, the strong law gives almost-sure convergence to $\mu$, which also implies convergence in probability.
+
+**Question 3a:** The expression $3e^x-2$ defines the middle part of a CDF on $\ln(2/3)\leq x\leq0$. The complete CDF is 0 below that interval and 1 above it. With $U\sim\operatorname{Unif}(0,1)$, the inverse-CDF draw is
+
+$$
+X=F_X^{-1}(U)=\ln\left(\frac{U+2}{3}\right).
+$$
+
+The original inverse formula uses $x$ in the numerator where the argument $u$ is intended.
+
+**Question 3b:** For minimization, accept an improving proposal. For a worse proposal with $\Delta f=f(x')-f(x_i)>0$ and temperature $T_i>0$, the acceptance probability is
+
+$$
+p=\exp\left(-\frac{f(x')-f(x_i)}{T_i}\right).
+$$
+
+Cooling may use $T_{i+1}=\alpha T_i$, with $0<\alpha<1$. A single rejected proposal leaves $x_{i+1}=x_i$, so a zero change in one iteration alone is not a reliable stopping rule for simulated annealing; use an iteration budget, temperature threshold, or a sustained lack of improvement.
+
+**Question 3d:** The MGF factorization uses **independence**, not “interdependence.” For a general $\chi^2_\nu$ variable the MGF is $(1-2t)^{-\nu/2}$ for $t<1/2$; the supplied $(1-2t)^{-1/2}$ is the $\nu=1$ case, appropriate to a squared standard normal.
+
+**Question 4a:** At the first midpoint, $f(5.5)>0$ has the same sign as $f(b_0)$, not $f(a_0)$. The stated update $b_1=5.5$ and the two numerical tuples are consistent with bisection.
+
+:::
+
