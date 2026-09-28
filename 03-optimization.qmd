@@ -2298,10 +2298,73 @@ $$
 
 ::::
 
+:::: {.callout-example #sec-newton-ratio-precision title="Newton's Method: Superlinear, Quadratic, and Accurate Enough"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example: Newton's Method - Superlinear, Quadratic, and Accurate Enough**
+
+:::
+
+Return to [Chapter 3 - Optimization, Section 3.5.3: Newton-Raphson Method](#newton-raphson-method). To find the standard normal 97.5th percentile, solve $f(x)=\Phi(x)-0.975=0$. Starting at $x_0=1$, use
+
+$$
+x_{k+1}=x_k-\frac{\Phi(x_k)-0.975}{\phi(x_k)}.
+$$
+
+For example, $x_1\approx1.552361$. Using `qnorm(0.975)` as the reference $x^*\approx1.959964$ gives $e_0\approx0.959964$ and $e_1\approx0.407603$. The first five updates give the following errors. Ratios are calculated before rounding; a dash means that no next error is included in the table.
+
+| $k$ | Error $e_k$ | $R_k=e_{k+1}/e_k$ | $e_{k+1}/e_k^2$ |
+|---:|---:|---:|---:|
+| 0 | $9.600\times10^{-1}$ | $0.424602$ | $0.442310$ |
+| 1 | $4.076\times10^{-1}$ | $0.275955$ | $0.677019$ |
+| 2 | $1.125\times10^{-1}$ | $0.098867$ | $0.878971$ |
+| 3 | $1.112\times10^{-2}$ | $0.010778$ | $0.969244$ |
+| 4 | $1.199\times10^{-4}$ | $0.000117$ | $0.979865$ |
+| 5 | $1.408\times10^{-8}$ | - | - |
+
+**Why superlinear?** The next-error/current-error ratios head toward zero. For example,
+
+$$
+R_0\approx\frac{0.407603}{0.959964}\approx0.424602,
+\qquad
+R_4\approx\frac{1.408\times10^{-8}}{1.199\times10^{-4}}
+\approx0.000117.
+$$
+
+**Why quadratic as well?** The last column settles near a positive constant, about $0.98$. It suggests
+
+$$
+e_{k+1}\approx0.98e_k^2.
+$$
+
+Consequently, $R_k\approx0.98e_k\to0$. **Quadratic and superlinear are both correct descriptions.** The table illustrates Newton's local quadratic behavior for this problem; a finite table alone is not a proof.
+
+**How do we choose $C$?** We do not freely choose $C$ in $e_{k+1}\approx C e_k^q$: it describes the algorithm's error behavior. For linear convergence, estimate it from $e_{k+1}/e_k$. For quadratic convergence, use $e_{k+1}/e_k^2$ once that ratio is stable. Here,
+
+$$
+C\approx\frac{1.408\times10^{-8}}{(1.199\times10^{-4})^2}\approx0.98.
+$$
+
+This $0.98$ is an estimate of the limiting ratio, not a tolerance or a guaranteed error bound. For quadratic convergence, $C$ need not be less than $1$.
+
+**What precision should we request?** We choose a **tolerance**, based on how accurate the answer needs to be. For example, an absolute tolerance of $10^{-6}$ asks for error below one millionth:
+
+- At step 4, $e_4\approx1.2\times10^{-4}>10^{-6}$: not accurate enough.
+- At step 5, $e_5\approx1.4\times10^{-8}<10^{-6}$: accurate enough.
+
+The quadratic rule predicts this improvement: $0.98(1.2\times10^{-4})^2\approx1.4\times10^{-8}$. Near a solution on this scale, roughly four decimal places of accuracy become roughly eight in one update. Ordinary R arithmetic has about 15--16 significant digits of precision, so this improvement cannot continue indefinitely.
+
+Here we can check the error because we have a trusted reference. When the true solution is unknown, small steps and residuals are practical checks, not automatically certified error bounds.
+
+::::
+
+
 **How to decide:** for errors approaching zero,
 
 - Ratios approaching a **fixed constant between $0$ and $1$** mean **linear convergence**.
 - Ratios approaching **$0$** mean **superlinear convergence**.
+- If $e_{k+1}/e_k^2$ approaches a **positive finite constant**, convergence is **quadratic**, and therefore also superlinear.
 
 Even a fixed ratio of $0.01$ is linear: it is small, but it does not tend to zero. A ratio below $1$ only tells us that the error decreased in that step. Always divide the **errors**, not the guesses $x_k$.
 
