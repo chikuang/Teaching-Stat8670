@@ -1032,17 +1032,19 @@ e_{k+1}
 C e_k^q.
 $$
 
-The value $q$ describes how quickly the error decreases.
+The value $q$ describes how quickly the error decreases. Here $C>0$, and the approximation describes the behavior near the solution.
 
-- **Linear convergence:** $q=1$.
+- **Linear convergence:** $q=1$ and $0<C<1$.
 - **Superlinear convergence:** faster than linear.
 - **Quadratic convergence:** $q=2$.
 
 Under suitable conditions:
 
-- bisection converges linearly;
+- bisection has a linearly decreasing error bound: the bracket width halves at each step;
 - the secant method converges superlinearly;
 - Newton's method converges quadratically near the root.
+
+For a simple worked interpretation, see [Section 3.18: Error Analysis and Convergence Rates](#sec-error-analysis).
 
 ### Comparing Convergence in R
 
@@ -2207,6 +2209,108 @@ $$
 \text{Practice}.
 }
 $$
+
+## Error Analysis and Convergence Rates {#sec-error-analysis}
+
+[Chapter 3 - Optimization, Section 3.6: Convergence](#convergence) introduced the error rule $e_{k+1}\approx C e_k^q$. Here we use it to answer two practical questions: **Are the answers approaching the solution? How quickly is the error shrinking?**
+
+### What does the error term measure?
+
+The algorithm produces guesses $x_0,x_1,x_2,\ldots$ for a target $x^*$. The signed error is $x_k-x^*$; its size is the **absolute error**
+
+$$
+e_k=|x_k-x^*|.
+$$
+
+For example, if $x^*=2$ and $x_k=1.9$, then $e_k=0.1$. Convergence means $e_k\to0$. A convergence rate describes how fast that happens. Here the error is **numerical error**, not sampling variability in a statistical estimator.
+
+### Three common convergence patterns
+
+To compare successive errors, look at the fraction $e_{k+1}/e_k$. For quadratic convergence, also compare $e_{k+1}$ with $e_k^2$.
+
+| Pattern | What to look for near the solution | Meaning |
+|---|---|---|
+| Linear | $e_{k+1}/e_k\to C$, with $0<C<1$ | Each step retains roughly the same fraction of the error. |
+| Superlinear | $e_{k+1}/e_k\to0$ | The retained fraction gets closer to zero. |
+| Quadratic | $e_{k+1}/e_k^2\to C$, with $0<C<\infty$ | The next error is roughly a constant times the current error squared. |
+
+For a simple comparison, start both sequences at $e_0=0.1$:
+
+| Update | $e_0$ | $e_1$ | $e_2$ | $e_3$ |
+|---|---:|---:|---:|---:|
+| Linear: $e_{k+1}=0.5e_k$ | $0.1$ | $0.05$ | $0.025$ | $0.0125$ |
+| Quadratic: $e_{k+1}=e_k^2$ | $10^{-1}$ | $10^{-2}$ | $10^{-4}$ | $10^{-8}$ |
+
+Once the error is small, squaring it can reduce it very quickly. **Quadratic convergence is also superlinear**, but superlinear convergence need not be quadratic. For linear convergence, a smaller $C$ means faster improvement: retaining $20\%$ of the error is better than retaining $90\%$.
+
+### Reading a Newton error table
+
+Return to [Chapter 3 - Optimization, Section 3.5.3: Newton-Raphson Method](#newton-raphson-method). We solved
+
+$$
+\Phi(x)-0.975=0,
+\qquad
+x^*\approx1.9599639845,
+$$
+
+starting at $x_0=1$. The following table uses the first five Newton updates already computed in `newton_history`. The R value `qnorm(0.975)` supplies a numerical reference for the root.
+
+```{r}
+#| label: tbl-newton-error-analysis
+#| tbl-cap: "Newton errors for the standard normal 97.5th percentile. Each ratio compares the next error with the error in its row."
+#| code-fold: true
+#| code-summary: "R code for the error table"
+error <- abs(head(newton_history$x, 6) - qnorm(0.975))
+next_error <- c(tail(error, -1), NA_real_)
+
+show_ratio <- function(value) {
+  ifelse(is.na(value), "-", formatC(value, format = "f", digits = 4))
+}
+
+error_table <- data.frame(
+  iteration = 0:5,
+  error = formatC(error, format = "e", digits = 3),
+  ratio = show_ratio(next_error / error),
+  squared_ratio = show_ratio(next_error / error^2)
+)
+
+knitr::kable(
+  error_table,
+  col.names = c("$k$", "$e_k$", "$e_{k+1}/e_k$", "$e_{k+1}/e_k^2$"),
+  align = "rrrr",
+  escape = FALSE
+)
+```
+
+Read the table in three steps:
+
+1. **Check the errors.** They fall from about $0.96$ to $1.4\times10^{-8}$ in five updates.
+2. **Check the retained fraction.** The ratios $e_{k+1}/e_k$ get close to zero, suggesting superlinear convergence.
+3. **Check the squared-error ratio.** The ratios $e_{k+1}/e_k^2$ approach about $0.98$, suggesting quadratic convergence: $e_{k+1}\approx0.98e_k^2$.
+
+For instance, if the current error is about $1.2\times10^{-4}$, this rule predicts a next error of about $0.98(1.2\times10^{-4})^2\approx1.4\times10^{-8}$. The final row has no next error in this table, so its ratios are shown as dashes.
+
+These numbers illustrate the rate; a finite table is not a proof. Newton's fast convergence is local: it requires a suitable starting point and regularity of the function near the root.
+
+### What can we check when the solution is unknown?
+
+In a new problem, we usually do not know $x^*$, so we cannot calculate $e_k$ directly. For root finding, distinguish:
+
+| Quantity | Formula | What it measures |
+|---|---|---|
+| Error | $\lvert x_k-x^*\rvert$ | Distance from the true root; usually unknown. |
+| Residual | $\lvert f(x_k)\rvert$ | How nearly the current guess solves $f(x)=0$. |
+| Step size | $\lvert x_{k+1}-x_k\rvert$ | How much the algorithm moved. |
+
+Check residuals and step sizes together, using tolerances appropriate to the problem's scale. A tiny step can mean the algorithm is stuck. A tiny residual does not automatically imply a tiny location error when the function is very flat.
+
+Two practical reminders:
+
+- **Bisection halves the bracket width**, and therefore halves a guaranteed error bound. The actual distance to the root need not halve at every step.
+- **Stop interpreting ratios near floating-point precision.** Very small computed errors can be dominated by rounding. This is why the Newton table stops after five updates.
+
+The main distinction is: **convergence asks whether the error tends to zero; the convergence rate asks how quickly it does so.**
+
 
 ## Questions to Think at Home
 
