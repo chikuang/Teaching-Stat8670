@@ -2212,104 +2212,100 @@ $$
 
 ## Error Analysis and Convergence Rates {#sec-error-analysis}
 
-[Chapter 3 - Optimization, Section 3.6: Convergence](#convergence) introduced the error rule $e_{k+1}\approx C e_k^q$. Here we use it to answer two practical questions: **Are the answers approaching the solution? How quickly is the error shrinking?**
-
-### What does the error term measure?
-
-The algorithm produces guesses $x_0,x_1,x_2,\ldots$ for a target $x^*$. The signed error is $x_k-x^*$; its size is the **absolute error**
+[Chapter 3 - Optimization, Section 3.6: Convergence](#convergence) asks how quickly an algorithm approaches its target $x^*$. Use two quantities:
 
 $$
-e_k=|x_k-x^*|.
-$$
-
-For example, if $x^*=2$ and $x_k=1.9$, then $e_k=0.1$. Convergence means $e_k\to0$. A convergence rate describes how fast that happens. Here the error is **numerical error**, not sampling variability in a statistical estimator.
-
-### Three common convergence patterns
-
-To compare successive errors, look at the fraction $e_{k+1}/e_k$. For quadratic convergence, also compare $e_{k+1}$ with $e_k^2$.
-
-| Pattern | What to look for near the solution | Meaning |
-|---|---|---|
-| Linear | $e_{k+1}/e_k\to C$, with $0<C<1$ | Each step retains roughly the same fraction of the error. |
-| Superlinear | $e_{k+1}/e_k\to0$ | The retained fraction gets closer to zero. |
-| Quadratic | $e_{k+1}/e_k^2\to C$, with $0<C<\infty$ | The next error is roughly a constant times the current error squared. |
-
-For a simple comparison, start both sequences at $e_0=0.1$:
-
-| Update | $e_0$ | $e_1$ | $e_2$ | $e_3$ |
-|---|---:|---:|---:|---:|
-| Linear: $e_{k+1}=0.5e_k$ | $0.1$ | $0.05$ | $0.025$ | $0.0125$ |
-| Quadratic: $e_{k+1}=e_k^2$ | $10^{-1}$ | $10^{-2}$ | $10^{-4}$ | $10^{-8}$ |
-
-Once the error is small, squaring it can reduce it very quickly. **Quadratic convergence is also superlinear**, but superlinear convergence need not be quadratic. For linear convergence, a smaller $C$ means faster improvement: retaining $20\%$ of the error is better than retaining $90\%$.
-
-### Reading a Newton error table
-
-Return to [Chapter 3 - Optimization, Section 3.5.3: Newton-Raphson Method](#newton-raphson-method). We solved
-
-$$
-\Phi(x)-0.975=0,
+e_k=|x_k-x^*|,
 \qquad
-x^*\approx1.9599639845,
+R_k=\frac{e_{k+1}}{e_k}.
 $$
 
-starting at $x_0=1$. The following table uses the first five Newton updates already computed in `newton_history`. The R value `qnorm(0.975)` supplies a numerical reference for the root.
+The **error** $e_k$ is the distance from the target. The **ratio** $R_k$ is the next error divided by the current error. For example, $R_k=0.5$ means that half of the error remains after one update. Convergence means $e_k\to0$; the ratios tell us how quickly this happens.
 
-```{r}
-#| label: tbl-newton-error-analysis
-#| tbl-cap: "Newton errors for the standard normal 97.5th percentile. Each ratio compares the next error with the error in its row."
-#| code-fold: true
-#| code-summary: "R code for the error table"
-error <- abs(head(newton_history$x, 6) - qnorm(0.975))
-next_error <- c(tail(error, -1), NA_real_)
+:::: {.callout-example #sec-ratio-worked-example title="Linear or Superlinear? Calculate the Error Ratios"}
 
-show_ratio <- function(value) {
-  ifelse(is.na(value), "-", formatC(value, format = "f", digits = 4))
-}
+::: {.content-visible when-format="pdf"}
 
-error_table <- data.frame(
-  iteration = 0:5,
-  error = formatC(error, format = "e", digits = 3),
-  ratio = show_ratio(next_error / error),
-  squared_ratio = show_ratio(next_error / error^2)
-)
+**Example: Linear or Superlinear? Calculate the Error Ratios**
 
-knitr::kable(
-  error_table,
-  col.names = c("$k$", "$e_k$", "$e_{k+1}/e_k$", "$e_{k+1}/e_k^2$"),
-  align = "rrrr",
-  escape = FALSE
-)
-```
+:::
 
-Read the table in three steps:
+Our target is $x^*=2$, and we start at $x_0=2.1$. Because the target is known in this example, we can calculate the error directly:
 
-1. **Check the errors.** They fall from about $0.96$ to $1.4\times10^{-8}$ in five updates.
-2. **Check the retained fraction.** The ratios $e_{k+1}/e_k$ get close to zero, suggesting superlinear convergence.
-3. **Check the squared-error ratio.** The ratios $e_{k+1}/e_k^2$ approach about $0.98$, suggesting quadratic convergence: $e_{k+1}\approx0.98e_k^2$.
+$$
+e_0=|2.1-2|=0.1.
+$$
 
-For instance, if the current error is about $1.2\times10^{-4}$, this rule predicts a next error of about $0.98(1.2\times10^{-4})^2\approx1.4\times10^{-8}$. The final row has no next error in this table, so its ratios are shown as dashes.
+**A. Keep half of the error.** Move halfway from the current guess to $2$:
 
-These numbers illustrate the rate; a finite table is not a proof. Newton's fast convergence is local: it requires a suitable starting point and regularity of the function near the root.
+$$
+x_{k+1}=2+0.5(x_k-2).
+$$
 
-### What can we check when the solution is unknown?
+The first update is $x_1=2+0.5(2.1-2)=2.05$, giving $e_1=|2.05-2|=0.05$. Continue the same way:
 
-In a new problem, we usually do not know $x^*$, so we cannot calculate $e_k$ directly. For root finding, distinguish:
+| Step $k$ | Guess $x_k$ | Error $e_k=\lvert x_k-2\rvert$ |
+|---:|---:|---:|
+| 0 | $2.1$ | $0.1$ |
+| 1 | $2.05$ | $0.05$ |
+| 2 | $2.025$ | $0.025$ |
+| 3 | $2.0125$ | $0.0125$ |
 
-| Quantity | Formula | What it measures |
-|---|---|---|
-| Error | $\lvert x_k-x^*\rvert$ | Distance from the true root; usually unknown. |
-| Residual | $\lvert f(x_k)\rvert$ | How nearly the current guess solves $f(x)=0$. |
-| Step size | $\lvert x_{k+1}-x_k\rvert$ | How much the algorithm moved. |
+Now divide each error by the one before it:
 
-Check residuals and step sizes together, using tolerances appropriate to the problem's scale. A tiny step can mean the algorithm is stuck. A tiny residual does not automatically imply a tiny location error when the function is very flat.
+$$
+\begin{aligned}
+R_0&=\frac{0.05}{0.1}=0.5,\\
+R_1&=\frac{0.025}{0.05}=0.5,\\
+R_2&=\frac{0.0125}{0.025}=0.5.
+\end{aligned}
+$$
 
-Two practical reminders:
+The errors approach zero, while the ratio stays at $0.5$. **This is linear convergence.** The rule $e_{k+1}=0.5e_k$ confirms that the same fraction remains at every step.
 
-- **Bisection halves the bracket width**, and therefore halves a guaranteed error bound. The actual distance to the root need not halve at every step.
-- **Stop interpreting ratios near floating-point precision.** Very small computed errors can be dominated by rounding. This is why the Newton table stops after five updates.
+**B. Square the error.** Start again at $x_0=2.1$, but change the update to
 
-The main distinction is: **convergence asks whether the error tends to zero; the convergence rate asks how quickly it does so.**
+$$
+x_{k+1}=2+(x_k-2)^2.
+$$
+
+Now $x_1=2+(2.1-2)^2=2.01$, so $e_1=|2.01-2|=0.01$. Continue the same way:
+
+| Step $k$ | Guess $x_k$ | Error $e_k=\lvert x_k-2\rvert$ |
+|---:|---:|---:|
+| 0 | $2.1$ | $0.1$ |
+| 1 | $2.01$ | $0.01$ |
+| 2 | $2.0001$ | $0.0001$ |
+| 3 | $2.00000001$ | $0.00000001$ |
+
+Calculate the same ratios:
+
+$$
+\begin{aligned}
+R_0&=\frac{0.01}{0.1}=0.1,\\
+R_1&=\frac{0.0001}{0.01}=0.01,\\
+R_2&=\frac{0.00000001}{0.0001}=0.0001.
+\end{aligned}
+$$
+
+Each step keeps a smaller fraction of the error: $0.1,\ 0.01,\ 0.0001,\ldots$. Starting at $e_0=0.1$, repeatedly squaring the error makes it tend to zero. Since $e_{k+1}=e_k^2$,
+
+$$
+R_k=\frac{e_k^2}{e_k}=e_k\longrightarrow0.
+$$
+
+**This is superlinear convergence.** It is also quadratic because the next error is the current error squared. Quadratic convergence is one kind of superlinear convergence.
+
+::::
+
+**How to decide:** for errors approaching zero,
+
+- Ratios approaching a **fixed constant between $0$ and $1$** mean **linear convergence**.
+- Ratios approaching **$0$** mean **superlinear convergence**.
+
+Even a fixed ratio of $0.01$ is linear: it is small, but it does not tend to zero. A ratio below $1$ only tells us that the error decreased in that step. Always divide the **errors**, not the guesses $x_k$.
+
+**In practice:** a short table suggests a pattern; the update rule explains whether it continues. If $x^*$ is unknown, monitor the residual $|f(x_k)|$ and step size $|x_{k+1}-x_k|$ together. A small step alone may mean the algorithm is stuck. Ratios computed from errors near floating-point precision are unreliable.
 
 
 ## Questions to Think at Home
