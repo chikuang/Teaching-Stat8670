@@ -2210,6 +2210,8 @@ $$
 }
 $$
 
+{{< pagebreak >}}
+
 ## Error Analysis and Convergence Rates {#sec-error-analysis}
 
 [Chapter 3 - Optimization, Section 3.6: Convergence](#convergence) asks how quickly an algorithm approaches its target $x^*$. Use two quantities:
@@ -2221,6 +2223,14 @@ R_k=\frac{e_{k+1}}{e_k}.
 $$
 
 The **error** $e_k$ is the distance from the target. The **ratio** $R_k$ is the next error divided by the current error. For example, $R_k=0.5$ means that half of the error remains after one update. Convergence means $e_k\to0$; the ratios tell us how quickly this happens.
+
+For **linear convergence** (order $q=1$), the limiting ratio must satisfy $0<C<1$. These are **asymptotic definitions**: they describe what happens as $k$ becomes large and the errors approach zero, not necessarily the first few steps.
+
+| Rate | Diagnostic | Interpretation |
+|:---|:---|:---|
+| Linear | $e_{k+1}/e_k\to C\in(0,1)$ | Eventually keeps a fixed fraction of the error. |
+| Superlinear | $e_{k+1}/e_k\to0$ | The fraction of error kept tends to zero. |
+| Quadratic | $e_{k+1}/e_k^2\to C\in(0,\infty)$ | The next error is approximately a constant times the square of the current error. |
 
 :::: {.callout-example #sec-ratio-worked-example title="Linear or Superlinear? Calculate the Error Ratios"}
 
