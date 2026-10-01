@@ -4,9 +4,21 @@ show-solutions: true
 
 # Assignment 1 {.unnumbered}
 
-
 **Due date:** Friday, September 11, 2026  
-**Total:** 30 points
+**Total:** 30 points  
+**Coverage:** [Chapter 1 (Introduction to R)](01-R.qmd) and [Chapter 2 (Computational Approaches)](02-computation.qmd).
+
+::: {tbl-colwidths="[16,72,12]"}
+
+| Question | Topic | Points |
+|:---:|:---:|:---:|
+| 1 | R programming and statistical computing | 10 |
+| 2 | Computational results using the iris data | 10 |
+| 3 | R coding and visualization | 6 |
+| 4 | Numerical linear algebra | 4 |
+| **Total** | | **30** |
+
+:::
 
 ::: {.callout-note title="Submission"}
 

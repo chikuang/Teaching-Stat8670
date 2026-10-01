@@ -6,7 +6,19 @@ show-solutions: false
 
 **Due date:** October 2, 2026, 23:59.  
 **Total:** 30 points  
-**Coverage:** Chapter 2 (Computational Approaches) and Chapter 3 (Optimization).
+**Coverage:** [Chapter 2](02-computation.qmd) (Computational Approaches) and [Chapter 3](03-optimization.qmd) (Optimization).
+
+::: {tbl-colwidths="[16,72,12]"}
+
+| Question | Format | Points |
+|:---:|:---:|:---:|
+| 1 | 8 multiple-choice questions on [Chapter 2](02-computation.qmd) | 8 |
+| 2 | 8 multiple-choice questions on [Chapter 3](03-optimization.qmd) | 8 |
+| 3 | 6 true/false questions | 6 |
+| 4 | 2 short explanations with four prompts each | 8 |
+| **Total** | | **30** |
+
+:::
 
 ::: {.callout-note title="Submission"}
 
@@ -22,15 +34,7 @@ Only Question 4 requires explanations. R code and figures are optional. If you u
 
 :::
 
-| Question | Format | Points |
-|---|---|---:|
-| 1 | 8 multiple-choice questions on Chapter 2 | 8 |
-| 2 | 8 multiple-choice questions on Chapter 3 | 8 |
-| 3 | 6 true/false questions | 6 |
-| 4 | 2 short explanations with four prompts each | 8 |
-| **Total** | | **30** |
-
-The questions use the main material in both chapters; the optional real-world applications at the end of Chapter 3 are not required.
+The questions use the main material in both chapters; the optional real-world applications at the end of [Chapter 3](03-optimization.qmd) are not required.
 
 :::: {.content-visible when-meta="show-solutions"}
 
@@ -776,7 +780,7 @@ For an optional exact check, $Q'(x)=4x(x^2-1)+0.2$ and $Q''(x)=12x^2-4$. Compari
 
 Award **1 point per correct selection**. Explanations are not required for these items.
 
-| Chapter 2 | Answer | Chapter 3 | Answer | True/False | Answer |
+| [Chapter 2](02-computation.qmd) | Answer | [Chapter 3](03-optimization.qmd) | Answer | True/False | Answer |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | 1a | A | 2a | C | 3a | False |
 | 1b | B | 2b | D | 3b | True |
@@ -797,7 +801,7 @@ Award 0.5 for a substantially correct but incomplete idea, and 0 for an incorrec
 
 **Deduction format:** `Q4b(3) [-1] Convergence alone does not establish a global minimum.`
 
-**Coverage:** 15 points per chapter. Chapter 2: Q1, 3a-3c, 4a. Chapter 3: Q2, 3d-3f, 4b.
+**Coverage:** 15 points per chapter. [Chapter 2](02-computation.qmd): Q1, 3a-3c, 4a. [Chapter 3](03-optimization.qmd): Q2, 3d-3f, 4b.
 
 :::
 
