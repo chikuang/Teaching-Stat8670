@@ -1187,13 +1187,13 @@ and the **Hessian** is the matrix of second derivatives,
 $$
 H(\boldsymbol{\theta})
 =
-\left[
+\begin{pmatrix}
 \frac{
 \partial^2 Q
 }{
 \partial\theta_j\partial\theta_k
 }
-\right].
+\end{pmatrix}_{j,k=1}^{p}.
 $$
 
 

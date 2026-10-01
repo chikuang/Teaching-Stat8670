@@ -45,28 +45,28 @@ In `R`, suppose
 
 What is the output of `cbind(a, b)`?
 
-A.  $$\begin{bmatrix}
+A.  $$\begin{pmatrix}
     3 & 1 \\
     2 & 2 \\
     0 & 3
-    \end{bmatrix}$$
+    \end{pmatrix}$$
 
-B.  $$\begin{bmatrix}
+B.  $$\begin{pmatrix}
     3 & 2 & 0 \\
     1 & 2 & 3
-    \end{bmatrix}$$
+    \end{pmatrix}$$
 
-C.  $$\begin{bmatrix}
+C.  $$\begin{pmatrix}
     3 & 2 \\
     0 & 1 \\
     2 & 3
-    \end{bmatrix}$$
+    \end{pmatrix}$$
 
-D.  $$\begin{bmatrix}
+D.  $$\begin{pmatrix}
     1 & 3 \\
     2 & 2 \\
     3 & 0
-    \end{bmatrix}$$
+    \end{pmatrix}$$
 
 :::: {.content-visible when-meta="show-exam-solutions"}
 

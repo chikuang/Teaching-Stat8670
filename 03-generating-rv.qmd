@@ -509,12 +509,12 @@ $$
 
 More explicitly, we can write this as the $$\mu=(\mu_1,\dots,\mu_p) = \begin{pmatrix}\mu_1\\
 \vdots\\
-\mu_p\end{pmatrix}\in \mathbb{R}^p,$$ and $$\Sigma=(\Sigma_{ij}) = (\mathbb{C}ov(X_i,X_j))= \left[\begin{array}{cccc}
+\mu_p\end{pmatrix}\in \mathbb{R}^p,$$ and $$\Sigma=(\Sigma_{ij}) = (\mathbb{C}ov(X_i,X_j))= \begin{pmatrix}
 \sigma_{11} & \sigma_{12} & \ldots & \sigma_{1 d} \\
 \sigma_{21} & \sigma_{22} & \ldots & \sigma_{2 d} \\
 \vdots & \vdots & & \vdots \\
 \sigma_{d 1} & \sigma_{d 2} & \ldots & \sigma_{d d}
-\end{array}\right] \in \mathbb{R}^{d\times d}.
+\end{pmatrix} \in \mathbb{R}^{d\times d}.
 $$
 
 A random vector $X\sim N_d(\mu,\Sigma)$ can be simulated by the following steps:
