@@ -73,7 +73,7 @@ Sampling with replacement allows an observation to appear more than once. Sampli
 ```{r}
 #| label: rv-sampling
 #| code-fold: true
-set.seed(8671)
+set.seed(8670)
 observed_waits <- c(2, 3, 3, 5, 7, 12)  # illustrative waiting times
 
 sample(observed_waits, size = 6, replace = TRUE)
@@ -294,7 +294,7 @@ ggplot(quantile_grid, aes(x, x^3)) +
 #| code-fold: true
 #| fig-cap: "Left: uniform probability levels. Right: mapping them through the quantile function produces values with the increasing target density."
 #| fig-width: 9
-set.seed(8672)
+set.seed(8670)
 n <- 5000
 u <- runif(n)
 x_power <- u^(1 / 3)
@@ -367,7 +367,7 @@ Since $U$ and $1-U$ have the same distribution, $-\log(U)/\lambda$ also works. B
 ```{r}
 #| label: rv-exponential
 #| code-fold: true
-set.seed(8673)
+set.seed(8670)
 lambda <- 0.7
 u <- runif(10000)
 waiting_time <- -log1p(-u) / lambda
@@ -456,7 +456,7 @@ custom_quantile <- function(u) {
   }, numeric(1))
 }
 
-set.seed(8676)
+set.seed(8670)
 u <- runif(2000)
 x_numeric <- custom_quantile(u)
 
@@ -498,7 +498,7 @@ generates from the truncated distribution.
 ```{r}
 #| label: rv-truncation
 #| code-fold: true
-set.seed(8677)
+set.seed(8670)
 a <- 1
 b <- 2
 u <- runif(5000)
@@ -587,7 +587,7 @@ ggplot(probability_strip) +
 ```{r}
 #| label: rv-discrete
 #| code-fold: true
-set.seed(8674)
+set.seed(8670)
 p <- 0.4
 bernoulli <- as.integer(runif(10000) > 1 - p)
 
@@ -634,7 +634,7 @@ $$
 ```{r}
 #| label: rv-geometric
 #| code-fold: true
-set.seed(8675)
+set.seed(8670)
 p <- 0.25
 u <- runif(10000)
 failures <- ceiling(log1p(-u) / log1p(-p)) - 1
@@ -768,7 +768,7 @@ The resulting acceptance probability is $2/3$. Choosing $M=6$ is also valid, but
 #| label: fig-rv-rejection
 #| code-fold: true
 #| fig-cap: "Uniform proposals form points under the envelope of height 1.5. Retaining only points below the target density produces Beta(2,2) draws along the horizontal axis."
-set.seed(8678)
+set.seed(8670)
 proposal <- runif(1500)
 height <- 1.5 * runif(1500)
 accepted <- height <= dbeta(proposal, 2, 2)
@@ -810,7 +810,7 @@ rbeta22_rejection <- function(n, M = 1.5) {
   list(draws = draws, proposals = proposals)
 }
 
-set.seed(8679)
+set.seed(8670)
 beta_tight <- rbeta22_rejection(2000, M = 1.5)
 beta_loose <- rbeta22_rejection(2000, M = 6)
 
@@ -921,7 +921,7 @@ A bivariate standard normal has circularly symmetric density. Its direction is u
 #| label: fig-rv-box-muller
 #| code-fold: true
 #| fig-cap: "Box-Muller creates a circular normal cloud from two independent uniforms. The two normal coordinates are independent even though their formulas share a radius and angle."
-set.seed(8680)
+set.seed(8670)
 n <- 4000
 radius <- sqrt(-2 * log(runif(n)))
 angle <- 2 * pi * runif(n)
@@ -990,7 +990,7 @@ A $t$ statistic divides a standardized normal estimation error by an estimated s
 #| label: fig-rv-student-t
 #| code-fold: true
 #| fig-cap: "A random denominator creates heavier tails. The generated ratios agree with the t distribution with 5 degrees of freedom; the dashed normal density has lighter tails."
-set.seed(8681)
+set.seed(8670)
 n <- 10000
 nu <- 5
 normal_numerator <- rnorm(n)
@@ -1051,7 +1051,7 @@ The ratio is a random share of a positive total. This gives intuition for beta m
 #| label: fig-rv-beta-qq
 #| code-fold: true
 #| fig-cap: "A quantile comparison checks the entire distribution of the gamma ratio against Beta(3,2), including its tails."
-set.seed(8682)
+set.seed(8670)
 n <- 5000
 g1 <- rgamma(n, shape = 3, rate = 1)
 g2 <- rgamma(n, shape = 2, rate = 1)
@@ -1199,7 +1199,7 @@ The mixture has mean 2 and variance 5. It describes observations from two subpop
 #| code-fold: true
 #| fig-cap: "Adding two observations, averaging them, and selecting one population produce different distributions. The solid curves show their respective theoretical densities."
 #| fig-width: 10
-set.seed(8683)
+set.seed(8670)
 n <- 10000
 x1 <- rnorm(n, mean = 0, sd = 1)
 x2 <- rnorm(n, mean = 4, sd = 1)
@@ -1311,7 +1311,7 @@ The second term is variability in the underlying rate. Marginally, $Y$ is negati
 ```{r}
 #| label: rv-poisson-gamma
 #| code-fold: true
-set.seed(8684)
+set.seed(8670)
 n <- 20000
 a <- 2
 b <- 0.5
@@ -1407,7 +1407,7 @@ The construction has a geometric interpretation. In @fig-rv-covariance-map, the 
 #| fig-alt: "Three panels show the same colored normal points as a circular cloud, a correlated elliptical cloud, and the same ellipse shifted to mean two, one."
 #| fig-width: 10
 #| fig-height: 4.3
-set.seed(8695)
+set.seed(8670)
 geometry_z <- matrix(rnorm(1600), ncol = 2)
 geometry_sigma <- matrix(c(1, 0.8, 0.8, 2), 2)
 geometry_R <- chol(geometry_sigma)
@@ -1467,7 +1467,7 @@ rmvn_chol <- function(n, mu, Sigma) {
   sweep(Z %*% R, MARGIN = 2, STATS = mu, FUN = "+")
 }
 
-set.seed(8685)
+set.seed(8670)
 mu <- c(1, 2)
 Sigma <- matrix(c(1, 0.8, 0.8, 2), nrow = 2)
 mvn_draws <- rmvn_chol(10000, mu, Sigma)
@@ -1517,7 +1517,7 @@ Consider two standardized laboratory measurements with unit marginal variances. 
 #| code-fold: true
 #| fig-cap: "The marginal distributions are the same in both panels. Positive correlation puts more probability in the upper-right region where both measurements exceed 1."
 #| fig-width: 9
-set.seed(8686)
+set.seed(8670)
 n <- 30000
 independent_pair <- rmvn_chol(n, c(0, 0), diag(2))
 correlated_pair <- rmvn_chol(
@@ -1597,7 +1597,7 @@ This explains why Wishart simulation is relevant to uncertainty in covariance es
 ```{r}
 #| label: rv-wishart
 #| code-fold: true
-set.seed(8688)
+set.seed(8670)
 Sigma_w <- matrix(c(1, 0.4, 0.4, 2), 2)
 wishart_df <- 12
 W <- crossprod(rmvn_chol(wishart_df, c(0, 0), Sigma_w))
@@ -1627,7 +1627,7 @@ Each observation needs **one component label for the entire vector**. Drawing a 
 #| label: fig-rv-mvn-mixture
 #| code-fold: true
 #| fig-cap: "Each point is generated from one bivariate normal component. The label determines both its coordinates and its covariance structure."
-set.seed(8687)
+set.seed(8670)
 n <- 3000
 component <- sample.int(2, n, replace = TRUE, prob = c(0.65, 0.35))
 means <- list(c(0, 0), c(3, 2))
@@ -1750,7 +1750,7 @@ We divide each row by its length directly. Constructing an $n\times n$ diagonal 
 #| code-fold: true
 #| fig-cap: "In two dimensions, normalized normals lie on the circle. Multiplying by an independent square-root-uniform radius fills the disk uniformly in area."
 #| fig-width: 9
-set.seed(8689)
+set.seed(8670)
 n <- 2500
 directions <- runif_sphere(n, d = 2)
 disk <- sweep(directions, 1, sqrt(runif(n)), FUN = "*")
@@ -1860,7 +1860,7 @@ $$
 ```{r}
 #| label: rv-mcse
 #| code-fold: true
-set.seed(8690)
+set.seed(8670)
 B <- 10000
 event <- rexp(B, rate = 0.7) > 3
 p_hat <- mean(event)
@@ -1965,7 +1965,7 @@ We generate **whole datasets**, apply the proposed analysis to each dataset, and
 ```{r}
 #| label: rv-power-study
 #| code-fold: true
-set.seed(8691)
+set.seed(8670)
 B <- 4000
 sigma <- 1
 design <- expand.grid(n = c(10, 20, 40, 80), delta = c(0, 0.5))
@@ -2071,7 +2071,7 @@ compared with the plug-in variance $50(0.2)(0.8)=8$.
 ```{r}
 #| label: rv-predictive
 #| code-fold: true
-set.seed(8692)
+set.seed(8670)
 B <- 20000
 a_post <- 4
 b_post <- 16
@@ -2185,7 +2185,7 @@ simulate_queue <- function(arrival_rate, n_customers = 200) {
   wait
 }
 
-set.seed(8693)
+set.seed(8670)
 B_days <- 800
 rates <- c(0.35, 0.45)
 queue_results <- do.call(rbind, lapply(rates, function(rate) {
@@ -2210,7 +2210,7 @@ knitr::kable(queue_results, digits = 4, col.names = c(
 #| code-fold: true
 #| fig-cap: "Two illustrative paths show how delays carry over between customers. Estimates in the table average 800 independent runs per scenario; one path alone can be misleading."
 #| fig-width: 9
-set.seed(8694)
+set.seed(8670)
 queue_paths <- do.call(rbind, lapply(rates, function(rate) {
   data.frame(
     customer = 1:200, wait = simulate_queue(rate),

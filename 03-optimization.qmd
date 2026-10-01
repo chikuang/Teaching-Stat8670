@@ -1957,17 +1957,16 @@ sa_fit$par
 sa_fit$value
 ```
 
-Because simulated annealing is stochastic, different seeds may produce different results.
+Because simulated annealing is stochastic, successive runs may produce different results. Set the seed once before the experiment so the complete sequence of runs is reproducible; allow the random-number generator to advance between runs.
 
 ```{r}
 #| code-fold: true
-seeds <- 1:20
+set.seed(8670)
+runs <- 1:20
 
 sa_solution <- vapply(
-  seeds,
-  function(seed) {
-
-    set.seed(seed)
+  runs,
+  function(run) {
 
     optim(
       par = 5,
@@ -1983,7 +1982,7 @@ sa_solution <- vapply(
 )
 
 sa_data <- data.frame(
-  seed = seeds,
+  run = runs,
   solution = sa_solution,
   objective = objective(sa_solution)
 )
@@ -1991,13 +1990,13 @@ sa_data <- data.frame(
 ggplot(
   sa_data,
   aes(
-    x = factor(seed),
+    x = factor(run),
     y = objective
   )
 ) +
   geom_point(size = 3) +
   labs(
-    x = "Random seed",
+    x = "Run",
     y = "Final objective value",
     title = "Variation Across Simulated Annealing Runs"
   )

@@ -41,7 +41,7 @@ Example Theorem
 If we already have a finite population of size $N$ with values $x_1, x_2, \ldots, x_N$ in hand, we can sample from this population *with* and *without* replacement.
 
 ```{r example1}
-set.seed(777)
+set.seed(8670)
 sample(c(0,1), size = 10, replace = TRUE)  # with replacement
 
 # Lottery ticket
@@ -115,7 +115,7 @@ Suppose we want to use the ITM to simulate $N=1000$ rvs from the density $f_X(x)
 2.  Simulate $N=1000$ rvs from $u\sim\unif(0,1)$ and apply the inverse function to obtain the 1000 $x$ values.
 
 ```{r example2, warning = FALSE, message = FALSE}
-set.seed(777)
+set.seed(8670)
 N <- 1000
 uVec <- runif(N)
 xVec <- uVec^(1/3)
@@ -138,7 +138,7 @@ ggplot(df, aes(x)) +
 Suppose $X\sim \exp(\lambda)$ where $\lambda$ is the rate parameter. Then $F_X(x) = 1 - e^{-\lambda x}$, so the inverse function is $F_X^{-1}(u) = -\frac{1}{\lambda}\log(1-u)$. The other fact, is the $U$ and $1-U$ have the same distribution, so we can use either of them, i.e., $x= -\frac{1}{\lambda}\log(u)$ or $x= -\frac{1}{\lambda}\log(1-u)$.
 
 ```{r example-exponential, message=FALSE, warning = FALSE}
-set.seed(777)
+set.seed(8670)
 N <- 1000
 lambda <- 0.7
 uVec <- runif(N)
@@ -203,7 +203,7 @@ $$
 The generator should therefore deliver the numerical value of the logical expression $u > 0.6$.
 
 ```{r}
-set.seed(777)
+set.seed(8670)
 n <- 1000
 p <- 0.4
 u <- runif(n)
@@ -229,7 +229,7 @@ x + 1 = \left\lceil \frac{\log(1 - u)}{\log(q)} \right\rceil,
 $$ where $\lceil \cdot \rceil$ denotes the ceiling function (and $\lfloor \cdot \rfloor$ is the floor function). Hence, we have,
 
 ```{r geom}
-set.seed(999)
+set.seed(8670)
 n <- 1000
 p <- 0.25
 u <- runif(n)
@@ -333,7 +333,7 @@ $$
 On average, $kN = 6\cdot 1000 =6000$ iterations (12000 random numbers as we need $X$ and $Y$) will be required for $N=1000$. In the following simulation, the counter $\operatorname{iter}$ for iterations is not necessary, but included to record how many iterations were actually needed to generate the 1000 beta rvs.
 
 ```{r beta}
-set.seed(7777)
+set.seed(8670)
 N <- 1000
 ell_accept <- 0       # counter for accepted
 iter <- 0       # iterations
@@ -406,7 +406,7 @@ $$ has the $\mathrm{Beta}(r,s)$ distribution. This transformation determines an 
 This method is applied below to generate a random $\mathrm{Beta}(3,2)$ sample.
 
 ```{r beta-combined}
-set.seed(777)
+set.seed(8670)
 n <- 1000
 a <- 3
 b <- 2
@@ -446,7 +446,7 @@ In order to simulate $\chi^2$ distribution with df k, we can simulate k independ
 3.  Compute the row sums of the squared normals. Each row sum is one random observation from the $\chi^2(k)$ distribution.
 
 ```{r chisq}
-set.seed(777)
+set.seed(8670)
 k <- 5
 n <- 1000
 X <- matrix(rnorm(n*k), nrow = n, ncol = k)^2
@@ -560,7 +560,7 @@ There are many different ways to decompose $\Sigma$. Recall that $\Sigma$ is a s
 
 ::: {.callout-note title="Performance Comparison"}
 ```{r MVM-performance, message=FALSE,warning=FALSE}
-set.seed(777)
+set.seed(8670)
 
 
 n  <- 100     # sample size per call
@@ -741,7 +741,7 @@ Way 2:
 
 ::: {.callout-example title="Mixture of multivariate normal"}
 ```{r MVN}
-set.seed(777)
+set.seed(8670)
 loc.mix.0 <- function(n, alpha, mu1, mu2, Sigma) {
   # generate sample from BVN location mixture
   X <- matrix(0, n, 2)
@@ -775,7 +775,7 @@ One interesting example is when $\alpha = 1 − 1/2 (1 − \sqrt{3}/3 )\approx .
 0.7887$, provides an example of a skewed distribution with normal kurtosis (level of the peak).
 
 ```{r MVN-efficient}
-set.seed(777)
+set.seed(8670)
 
 
 n <- 1000
@@ -814,7 +814,7 @@ p1
 It is difficult to visualize data in $R^d$, for $d\ge 4$, so we display only the histograms of the marginal distributions. All of the one-dimensional marginal distributions are univariate normal location mixtures.
 
 ```{r MVN-HD}
-set.seed(777)
+set.seed(8670)
 library(MASS)
 library(ggplot2)
 library(tidyr)

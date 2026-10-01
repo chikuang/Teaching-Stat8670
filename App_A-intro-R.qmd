@@ -1093,7 +1093,7 @@ and the commonly used magrittr/tidyverse pipe is
 The pipe passes the result of one operation to the next function.
 
 ```{r}
-set.seed(777)
+set.seed(8670)
 
 x <- rnorm(5)
 

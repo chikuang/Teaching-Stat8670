@@ -241,7 +241,7 @@ The printed summary of output from the boot function is obtained by the command 
 ```{r}
 
 library(boot) #for boot function
-set.seed(777)
+set.seed(8670)
 (obj <- boot(data = bootstrap::law, statistic = my_r, R = 2000))
 ```
 
@@ -452,7 +452,7 @@ Jackknife does not work when the function $T(\cdot)$ is **not a smooth** functio
 Example 8.8 (Failure of jackknife). In this example the jackknife estimate of standard error of the median is computed for a random sample of 10 integers from $1,\dots, 100$.
 
 ```{r}
-set.seed(777)
+set.seed(8670)
 n <- 10
 x <- sample(1:100, size = n)
 # jackknife estimate of se
@@ -769,7 +769,7 @@ There are other method to construct bootstrap CIs. Interested reader should read
 
 <!-- ```{r bootstrap-simple-example} -->
 
-<!-- set.seed(333) -->
+<!-- set.seed(8670) -->
 
 <!-- n <- 1E4 -->
 
@@ -900,7 +900,7 @@ Alternatively, we may use the **Bootstrap Estimate** to compare with:
 
 ```{r bootstrap-se, message=FALSE, warning=FALSE}
 library(bootstrap) # for the law data
-set.seed(123)
+set.seed(8670)
 
 # Sample data
 law <- data.frame(

@@ -85,7 +85,7 @@ $$\theta = \int_0^1 \exp(-x)dx,$$
 and compare the estimate with the theoretical value
 
 ```{r MC integration}
-set.seed(777)
+set.seed(8670)
 n <- 1E3
 x <- runif(n)
 # simulated estimator
@@ -115,7 +115,7 @@ and compare the estimate with the exact value of the integral.
 ```{r MC2-integral}
 library(tibble)
 
-set.seed(777)
+set.seed(8670)
 m <- 1E3
 x <- runif(m, min = 2, max = 4)
 
@@ -177,7 +177,7 @@ Let $I(\cdot)$ be the indicator function, and $Z\sim N(0,1)$. Then for any const
 Generate a random sample $z_1, \dots , z_m\sim N(0,1)$. Then the theoretical mean and sample mean are $$\hat{\theta}= \frac{1}{m} \sum_{i=1}^m I(z_i \le x),$$ and $$\mathbb{E}[\hat{\theta}] = P(Z \le x) = \Phi(x).$$
 
 ```{r MC-normal-cdf2}
-set.seed(777)
+set.seed(8670)
 x <- seq(0.1, 2.5, length = 10)
 m <- 1E4
 z <- rnorm(m)
@@ -212,7 +212,7 @@ as $m\to\infty$. Hence, if $m$ is sufficiently large, $\hat{\theta}$ is approxim
 Compute the 95% confidence interval for $\Phi(2)$ and $\Phi(2.5)$.
 
 ```{r error-bound}
-set.seed(777)
+set.seed(8670)
 x <- 2
 m <- 10000
 z <- rnorm(m)
@@ -427,9 +427,9 @@ MC.Phi <- function(x, R = 10000, antithetic = TRUE) {
 
 x <- seq(.1, 2.5, length=5)
 Phi <- pnorm(x)
-set.seed(123)
+set.seed(8670)
 MC_raw <- MC.Phi(x, anti = FALSE)
-set.seed(123)
+set.seed(8670)
 MC_anti <- MC.Phi(x)
 print(round(rbind(x, MC_raw, MC_anti, Phi), 5))
 
@@ -487,7 +487,7 @@ m\mathbb{V}ar(\hat{\theta}_{c^\ast})
 Thus, the reduction in variance using the control variate compared with the simple Monte Carlo estimate is $$100 \frac{1-0.003940175}{0.2429355} = 98.3781 \%$$.
 
 ```{r example-cv}
-set.seed(777)
+set.seed(8670)
 m <- 10000
 a <- - 12 + 6 * (exp(1) - 1)
 U <- runif(m)

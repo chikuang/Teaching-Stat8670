@@ -144,7 +144,7 @@ Here, we avoid explicitly calculating the inverse of $X^\top X$. Instead, we use
 #### Speed comparison
 
 ``` r
-set.seed(2025-09-03)
+set.seed(8670)
 X <- matrix(rnorm(5000 * 100), 5000, 100)
 y <- rnorm(5000)
 library(microbenchmark)
@@ -189,7 +189,7 @@ The take home here is that the issues arise from the finite precision of compute
 The above approach may break down when there is any multi-colinearity in the $\boldsymbol{X}$ matrix. For example, we can tack on a column to $\boldsymbol{X}$ that is very similar (but not identical) to the first column of $\boldsymbol{X}$.
 
 ```{r}
-set.seed(7777)
+set.seed(8670)
 N <- 3000
 K <- 100
 y <- rnorm(N)
@@ -277,7 +277,7 @@ t(z) %*% solve(Sigma) %*% z
 To illustrate, let’s simulate some data and compute the quadratic form the naive way:
 
 ```{r, message = F, warning = F}
-set.seed(2025-09-03)
+set.seed(8670)
 
 # Generate data
 z <- matrix(rnorm(200 * 100), 200, 100)

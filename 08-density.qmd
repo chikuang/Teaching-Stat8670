@@ -65,7 +65,7 @@ Properties of KDE:
 
 ```{r}
 # Generate sample data
-set.seed(123)
+set.seed(8670)
 data <- rnorm(1000, mean = 0, sd = 1)
 # Perform Kernel Density Estimation
 kde <- density(data, bw = "nrd0")  # Using default bandwidth selection
@@ -141,7 +141,7 @@ df_kernel <- tibble(
 
 # --- Density estimation using different kernels ---
 
-set.seed(123)
+set.seed(8670)
 sample_data <- rnorm(300, mean = 0, sd = 1)  # some example data
 
 dens_gauss <- density(sample_data, kernel = "gaussian", n = 400)
@@ -187,7 +187,7 @@ Choosing an appropriate bandwidth is critical for obtaining a good density estim
 
 ```{r}
 # Generate sample data
-set.seed(123)
+set.seed(8670)
 data <- rnorm(1000, mean = 0, sd = 1)
 # Perform KDE with different bandwidths
 kde_small_bw <- density(data, bw = 0.1)
@@ -207,7 +207,7 @@ Other Kernel Functions
 
 ```{r}
 # Generate sample data
-set.seed(123)
+set.seed(8670)
 data <- rnorm(1000, mean = 0, sd = 1)
 # Perform KDE with different kernel functions
 kde_gaussian <- density(data, kernel = "gaussian")
