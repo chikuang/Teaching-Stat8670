@@ -1,0 +1,94 @@
+# Project Package {.unnumbered}
+
+**STAT 8670 | Fall 2026**  
+**Due date:** TBA  
+**Total:** 10 points (10% of the course grade)  
+**Group size:** 1-3 students  
+**Language:** R or Python
+
+Build an **installable package** that implements your group's chosen statistical method. A user should be able to install it, call a documented function, and reproduce a worked example. Use the same method and submitted version for your [report](Project-Report.qmd) and [presentation](Project-Presentation.qmd).
+
+See the [project overview and topic approval instructions](Project-Report.qmd#groups-and-topic-approval) before choosing your topic.
+
+## What your group should implement
+
+Implement the **main algorithmic steps** of the approved method in functions your group writes. You may use standard tools for arrays, matrix operations, random-number generation, plotting, and other supporting tasks. Identify these dependencies and clearly distinguish your implementation from any existing method used for comparison.
+
+For example, a bootstrap project should implement the resampling loop and interval construction; a gradient-descent project should implement the update rule and stopping criterion. The package should expose at least one main user-facing function with meaningful inputs and outputs.
+
+::: {.callout-note title="A small, complete package is a suitable project"}
+
+Choose one method with a manageable scope. Make it correct, usable, documented, and reproducible. A package with one well-developed method can meet all requirements. Distribution through your GitHub repository is sufficient; publication on CRAN or PyPI is optional.
+
+:::
+
+## Required package contents
+
+1. **Working implementation.** Provide the core method, sensible defaults, and outputs that match the documentation. For iterative methods, expose the stopping tolerance or iteration limit and report convergence information.
+2. **Input checks.** Detect invalid dimensions, unsupported input values, and other relevant failure cases. Give useful error or warning messages.
+3. **Function documentation.** Describe each public function's purpose, arguments, return values, assumptions, and a runnable example.
+4. **One worked example.** Provide an R vignette or a Python tutorial/notebook that runs from start to finish. Show inputs, a function call, the output, and its statistical interpretation.
+5. **Meaningful automated tests.** Cover a known-answer or reference case, an edge case, and invalid input. Set a random seed and use an appropriate numerical tolerance for stochastic or approximate calculations. Tests should check behavior and results, not just that a function runs.
+6. **Reproducible experiments.** Include the scripts or notebooks used for the report, with seeds, dependencies, and instructions for generating the main figures and tables. Include usable example data or clear instructions for obtaining or generating it.
+7. **README and attribution.** State the project purpose, group members, installation steps, a minimal usage example, commands for running tests and experiments, and the software versions used. Cite external code, methods, and data, and include an appropriate license.
+
+## R and Python requirements
+
+Both languages are assessed using the **same 10-point rubric**.
+
+::: {tbl-colwidths="[22,39,39]"}
+
+| Requirement | R package | Python package |
+|:---|:---|:---|
+| Package structure | Include `DESCRIPTION`, `NAMESPACE`, and functions in `R/`. | Include `pyproject.toml` and an importable package directory. |
+| Dependencies | Declare packages used by your implementation and examples. | Declare dependencies and the supported Python version. |
+| Function reference | Use roxygen2 and include generated help files in `man/`. | Include docstrings describing parameters, outputs, and examples. |
+| Worked example | Include at least one working vignette. | Include at least one runnable tutorial or notebook. |
+| Tests | Include automated tests, for example with testthat. | Include automated tests, for example with pytest or unittest. |
+| Installation and checks | The source package installs and `R CMD check` finishes with **no errors**. Explain any remaining warnings or notes. | The package installs in a clean virtual environment, imports successfully, and all submitted tests pass. |
+
+:::
+
+Record the installation and checking commands in the README. Include the resulting check or test log with the submission. Re-run the worked example using the installed package before submitting.
+
+## Package grading [10]
+
+The first four criteria assess **functionality and implementation [6]**; the last four assess **documentation, examples, testing, and checks [4]**.
+
+::: {tbl-colwidths="[26,62,12]"}
+
+| Criterion | Full-credit evidence | Points |
+|:---|:---|---:|
+| P1. Statistical correctness | The core algorithm is implemented correctly [2]; results agree with known answers or a suitable reference within justified tolerance [1]. | 3 |
+| P2. Code quality | Functions are readable and organized, with sensible use of computation and memory. | 1 |
+| P3. Input handling | Relevant invalid inputs and failure cases are detected with useful messages. | 1 |
+| P4. Usable outputs | Returned values match the documentation and provide the information needed to use and interpret the method. | 1 |
+| P5. Documentation | Public functions and the README provide complete, accurate instructions and attribution. | 1 |
+| P6. Worked example | A vignette or tutorial runs completely and explains a meaningful statistical use case. | 1 |
+| P7. Tests | Automated tests cover a reference case, an edge case, and invalid input, with sensible tolerances. | 1 |
+| P8. Installation and checks | The submitted version meets the language-specific installation/check requirements and includes the check or test log. | 1 |
+| **Total** | | **10** |
+
+:::
+
+Each listed requirement is scored on its stated points. Partial credit is available in **0.5-point increments** for correct but incomplete work; missing or substantially incorrect evidence receives zero for the relevant requirement. A missing package receives **0/10**. The report is assessed separately for how clearly it explains and evaluates the method.
+
+::: {.callout-note title="Package submission checklist"}
+
+One member submits the following for the group to the **iCollege project submission area** (folder details TBA):
+
+- A **public GitHub repository URL** containing the complete package, documentation, tests, and experiment code.
+- An **exact release tag or commit identifier** for the version to be graded. Use this same version in the report and presentation.
+- `Project_Package_GroupName.zip`, a snapshot of that version, including the check or test log.
+
+Before submission, follow your own README from a clean R session or Python environment: install the package, run the tests, run the worked example, and reproduce the report results. The tagged or identified version is the grading submission; later repository edits do not replace it automatically.
+
+:::
+
+## Development resources
+
+- **R:** [R Packages, second edition](https://r-pkgs.org/) covers package structure, documentation, vignettes, and testing.
+- **Python:** The [Python Packaging User Guide](https://packaging.python.org/en/latest/tutorials/packaging-projects/) explains a minimal installable package and `pyproject.toml`.
+- **Python tests:** The [pytest getting-started guide](https://docs.pytest.org/en/stable/getting-started.html) shows how to write and run tests.
+
+**Related:** [Project overview and report](Project-Report.qmd) | [Presentation requirements and grading](Project-Presentation.qmd)

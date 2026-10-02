@@ -20,6 +20,11 @@ book:
     - part: "Exam"
       chapters:
         - Exam1-2025F.qmd
+    - part: "Project"
+      chapters:
+        - Project-Report.qmd
+        - Project-Package.qmd
+        - Project-Presentation.qmd
   navbar:
     right:
       - icon: github

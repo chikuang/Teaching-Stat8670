@@ -1,0 +1,117 @@
+# Project Report {.unnumbered}
+
+**STAT 8670 | Fall 2026**  
+**Due date:** TBA  
+**Report:** 10 points (10% of the course grade)  
+**Group size:** 1-3 students  
+**Project total:** 30 points (30% of the course grade)
+
+## What is the project?
+
+Choose **one statistical method**, implement it in **R or Python**, and show how well it works. Your group will produce a reusable package, explain the method and results in a written report, and present the project to the class.
+
+An established method is a suitable topic. The goal is to understand its statistical reasoning, implement its main computational steps, and evaluate the results. Your project should answer:
+
+1. **What problem does the method solve?** Identify the inputs, outputs, and assumptions.
+2. **How does the method work?** Explain the algorithm and implement its core steps.
+3. **How well does it work?** Use reproducible experiments to examine accuracy, computing time, and limitations.
+
+::: {tbl-colwidths="[24,62,14]"}
+
+| Component | What your group submits or delivers | Points |
+|:---|:---|---:|
+| [Report](Project-Report.qmd) | An 8-10 page PDF explaining the method, implementation, and results, with its source files | 10 |
+| [Package](Project-Package.qmd) | An installable R or Python package, documentation, a worked example, and tests | 10 |
+| [Presentation](Project-Presentation.qmd) | A class presentation and slides explaining and demonstrating the project | 10 |
+| **Total** | **One coordinated project** | **30** |
+
+:::
+
+Each component is worth **10 points and 10% of the course grade**: report 10%, package 10%, and presentation 10%. Each page gives the requirements and point-by-point rubric for that component.
+
+## Groups and topic approval
+
+Work individually or in a group of **2 or 3 students**. Choose one group name and list every member on the report, repository, and slides. Each member should make a meaningful contribution and be able to explain the method and results. Groups submit one shared set of materials and receive a shared project score under the rubrics below.
+
+You may choose a topic from the **instructor's topic list** or propose your own statistical method. **Self-selected topics require the instructor's approval.** Confirm the scope with the instructor before starting the full implementation.
+
+::: {.callout-note title="Topic selection and schedule"}
+
+**Instructor's topic list:** TBA  
+**Group and topic proposal deadline:** TBA  
+**Report and package deadline:** TBA  
+**Presentation date and time limit:** TBA, after groups are finalized
+
+Send the instructor a short proposal with your group members, proposed method, choice of R or Python, core algorithm to implement, and one planned experiment or application. Explain what your group will implement and which existing libraries you plan to use.
+
+:::
+
+### Examples of a manageable project
+
+These examples illustrate possible scope; confirm your choice with the instructor.
+
+::: {tbl-colwidths="[24,38,38]"}
+
+| Statistical method | What you could implement | What you could investigate |
+|:---|:---|:---|
+| Bootstrap confidence intervals | Resampling and interval construction for a mean or median | How often do the intervals cover the true value as sample size changes? |
+| Numerical optimization | Gradient descent for a regression objective | How do step size and starting value affect convergence, accuracy, and time? |
+| Monte Carlo integration | A basic estimator and a variance-reduction method | How does estimation error change as the number of draws increases? |
+| A permutation test | Shuffling group labels and calculating a test statistic | Does the test maintain its intended rejection rate under a simulated null model? |
+| A regression or dimension-reduction method | The main fitting algorithm and a prediction or transformation function | How do its results compare with a trusted reference implementation? |
+
+:::
+
+For example: *"We implement percentile bootstrap confidence intervals for a population mean in Python, compare coverage and interval length at two sample sizes, and explain when the method performs poorly."* A focused question like this is enough to organize all three project components.
+
+## Report requirements
+
+Write **8-10 pages of main text**, excluding the title page, references, and appendices. Use Quarto, R Markdown, or LaTeX and submit the rendered **PDF plus its source files**. Use readable 11- or 12-point text, standard margins, and numbered sections. Place long code listings and supplementary output in an appendix or the repository.
+
+Include the following sections:
+
+1. **Title and summary.** Give the project title, group name, member names, and a short summary of the problem and main finding.
+2. **Motivation and background.** Explain why the method is useful, identify its intended users or application, and cite the sources you used.
+3. **Statistical method.** Define the relevant notation, assumptions, inputs, and outputs. State the quantity being estimated, tested, or optimized. For an optimization method, explicitly give the objective function and any constraints.
+4. **Algorithm and implementation.** Describe the computational steps with pseudocode or a clear numbered algorithm. Explain important choices such as tuning parameters, stopping criteria, and numerical safeguards. Identify the core functions your group wrote and any library routines used.
+5. **Experiments and results.** Include at least one reproducible simulation study or data analysis with **two settings** (for example, two sample sizes or two noise levels). Compare against at least one known answer, simple baseline, or trusted implementation. Explain a relevant accuracy measure and report computing time for the settings you compare. State random seeds, replication counts where relevant, and the software environment.
+6. **Discussion and conclusion.** Interpret the results, discuss computational cost and a limitation or failure case, and suggest one useful extension.
+7. **References and contributions.** Cite methods, data, and borrowed or adapted code. Add a short table describing each member's contribution; a one-person group should state that the work was completed individually.
+
+Every figure and table should have a caption and be discussed in the text. A reader should understand what was compared, what the results show, and why the result matters statistically.
+
+## Report grading [10]
+
+The first four criteria assess **clarity and writing [4]**; the last four assess **method, experiments, and interpretation [6]**.
+
+::: {tbl-colwidths="[25,63,12]"}
+
+| Criterion | Full-credit evidence | Points |
+|:---|:---|---:|
+| R1. Organization | Required sections form a logical account of the problem, method, and findings. | 1 |
+| R2. Writing and notation | Explanations are readable and technically precise; symbols are defined and used consistently. | 1 |
+| R3. Figures and tables | Results are legible, labeled, captioned, and interpreted in the text. | 1 |
+| R4. Scientific reporting | The report follows the length and format requirements and includes references and a contribution statement. | 1 |
+| R5. Statistical method | The purpose and assumptions are correct [1]; the mathematical formulation is correct and clearly stated [1]. | 2 |
+| R6. Algorithm | The computational steps and important implementation choices are explained accurately. | 1 |
+| R7. Experiments | Reproducible experiments cover two settings [1]; a meaningful reference or baseline supports the accuracy and timing comparisons [1]. | 2 |
+| R8. Interpretation | Conclusions follow from the evidence and discuss computational cost, limitations, and a possible extension. | 1 |
+| **Total** | | **10** |
+
+:::
+
+Score each 1-point requirement as **1** for complete and correct evidence, **0.5** for partially correct or incomplete evidence, or **0** for missing or substantially incorrect evidence. The 2-point criteria each contain two 1-point requirements, as shown above. A missing report receives **0/10**. Package and presentation marks are assessed separately using their own rubrics.
+
+::: {.callout-note title="Report submission checklist"}
+
+One member submits the following on behalf of the group to the **iCollege project submission area** (folder details TBA):
+
+- `Project_Report_GroupName.pdf`.
+- The matching `.qmd`, `.Rmd`, or `.tex` source, with supporting files in a ZIP if needed.
+- The package repository URL and the exact release tag or commit used for the report.
+
+Replace `GroupName` with your group's chosen name and use it consistently for all components. Include all member names. Check that the report's figures and tables can be reproduced from the submitted package and experiment code.
+
+:::
+
+**Next:** [Package requirements and grading](Project-Package.qmd) | [Presentation requirements and grading](Project-Presentation.qmd)
