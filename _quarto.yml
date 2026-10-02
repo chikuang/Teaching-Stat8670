@@ -22,6 +22,7 @@ book:
         - Exam1-2025F.qmd
     - part: "Project"
       chapters:
+        - Project-Instructions.qmd
         - Project-Report.qmd
         - Project-Package.qmd
         - Project-Presentation.qmd

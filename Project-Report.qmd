@@ -1,4 +1,4 @@
-# Project Report {.unnumbered}
+# Report {.unnumbered}
 
 **STAT 8670 | Fall 2026**  
 **Due date:** TBA  

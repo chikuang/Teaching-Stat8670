@@ -1,4 +1,4 @@
-# Project Presentation {.unnumbered}
+# Presentation {.unnumbered}
 
 **STAT 8670 | Fall 2026**  
 **Presentation date:** TBA  
@@ -72,4 +72,4 @@ Check that every member is named, the repository version matches the report and 
 
 :::
 
-**Related:** [Project overview and report](Project-Report.qmd) | [Package requirements and grading](Project-Package.qmd)
+**Related:** [Instructions](Project-Instructions.qmd) | [Report requirements and grading](Project-Report.qmd) | [Package requirements and grading](Project-Package.qmd)

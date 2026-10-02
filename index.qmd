@@ -42,6 +42,8 @@ Wednesday 9:00 - 12:00 or by appointment
 
 ## Project
 
+Start with [Instructions](Project-Instructions.qmd) for a quick overview and a few topic ideas.
+
 Work in groups of **1-3 students** on a statistical method implemented in **R or Python**. Select from the instructor's topic list or propose a topic for instructor approval.
 
 - [ ] [Report](Project-Report.qmd): TBA (10%)
