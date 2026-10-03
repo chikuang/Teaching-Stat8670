@@ -1,5 +1,5 @@
 ---
-show-solutions: false
+show-solutions: true
 ---
 
 # Assignment 2 {.unnumbered}
@@ -38,9 +38,9 @@ The questions use the main material in both chapters; the optional real-world ap
 
 :::: {.content-visible when-meta="show-solutions"}
 
-::: {.callout-important title="Instructor Version"}
+::: {.callout-important title="Solutions"}
 
-Model answers follow each question. The final page provides a compact grading key.
+Expand the **Answer** below each question to view the solution. A compact grading key appears at the end.
 
 :::
 
