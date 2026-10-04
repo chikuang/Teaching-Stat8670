@@ -6,9 +6,11 @@
 **Group size:** 1-3 students  
 **Language:** R or Python
 
-Build an **installable package** that implements your group's chosen statistical method. A user should be able to install it, call a documented function, and reproduce a worked example. Use the same method and submitted version for your [report](Project-Report.qmd) and [presentation](Project-Presentation.qmd).
+Build an **installable R package or Python package** that implements your group's chosen statistical method. A user should be able to install it, call a documented function, and reproduce a worked example. Use the same method and submitted version for your [report](Project-Report.qmd) and [presentation](Project-Presentation.qmd).
 
-Start with [Instructions](Project-Instructions.qmd) for a quick overview, and review the [topic approval details](Project-Report.qmd#groups-and-topic-approval) before choosing your topic.
+Start with [Instruction](Project-Instructions.qmd) for a quick overview, and review the [topic approval details](Project-Report.qmd#groups-and-topic-approval) before choosing your topic.
+
+**Python packages are accepted.** Follow the [Python requirements](#r-and-python-requirements); R and Python packages use the same **10-point rubric**.
 
 ## What your group should implement
 
@@ -91,4 +93,4 @@ Before submission, follow your own README from a clean R session or Python envir
 - **Python:** The [Python Packaging User Guide](https://packaging.python.org/en/latest/tutorials/packaging-projects/) explains a minimal installable package and `pyproject.toml`.
 - **Python tests:** The [pytest getting-started guide](https://docs.pytest.org/en/stable/getting-started.html) shows how to write and run tests.
 
-**Related:** [Instructions](Project-Instructions.qmd) | [Report requirements and grading](Project-Report.qmd) | [Presentation requirements and grading](Project-Presentation.qmd)
+**Related:** [Instruction](Project-Instructions.qmd) | [Report requirements and grading](Project-Report.qmd) | [Presentation requirements and grading](Project-Presentation.qmd)
