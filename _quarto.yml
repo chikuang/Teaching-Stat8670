@@ -17,6 +17,7 @@ book:
       chapters:
         - Assignment1.qmd
         - Assignment2.qmd
+        - Assignment3.qmd
     - part: "Exam"
       chapters:
         - Exam1-2025F.qmd

@@ -1,0 +1,27 @@
+---
+show-solutions: false
+---
+
+# Assignment 3 {.unnumbered}
+
+**STAT 8670 \| Fall 2026**\
+**Due date:** TBA\
+**Total:** TBA\
+**Coverage:** TBA
+
+::: {.callout-note title="To be announced"}
+
+Assignment 3 has not been released yet. The questions, coverage, point allocation, and due date will be posted here.
+
+:::
+
+::: {.callout-note title="Submission"}
+
+Use **Quarto** or **R Markdown**. Once the assignment is released, upload **both** files to the **Assignment 3** submission folder on **iCollege**:
+
+1. Your rendered **PDF**, named `A3_LastName_FirstName.pdf`.
+2. Its matching source file, named `A3_LastName_FirstName.qmd` or `A3_LastName_FirstName.Rmd`.
+
+The PDF must be generated from the submitted source file. Put your name and course number at the beginning of the PDF, and ensure that your source renders from beginning to end without errors.
+
+:::

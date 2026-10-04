@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Report – STAT 8670 – Computational Methods in Statistics</title>
+<title>Assignment 3 – STAT 8670 – Computational Methods in Statistics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,7 +23,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */
   vertical-align: middle;
 }
 </style>
@@ -36,8 +36,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Project-Package.html" rel="next">
-<link href="./Project-Instructions.html" rel="prev">
+<link href="./Exam1-2025F.html" rel="next">
+<link href="./Assignment2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -99,14 +99,14 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/chikuang/Teaching-Stat8670/tree/2026F"> <i class="bi bi-github" role="img" aria-label="GitHub">
-</i> 
+</i>
 <span class="menu-text"></span></a>
-  </li>  
+  </li>
   <li class="nav-item compact">
     <a class="nav-link" href="./STAT-8670-Computational-Methods-in-Statistics.pdf"> <i class="bi bi-file-pdf" role="img" aria-label="Download PDF">
-</i> 
+</i>
 <span class="menu-text"></span></a>
-  </li>  
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -118,8 +118,8 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Project-Instructions.html">Project</a></li><li class="breadcrumb-item"><a href="./Project-Report.html">Report</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Assignment1.html">Assignment</a></li><li class="breadcrumb-item"><a href="./Assignment3.html">Assignment 3</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         </a>
     </div>
   </nav>
@@ -128,78 +128,78 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
+    <div class="sidebar-menu-container">
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./01-R.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./02-computation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Intro to Computational Statistics</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./03-optimization.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Optimization</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./04-generating-rv.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Generating Random Variable</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
+      <div class="sidebar-item-container">
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Assignment</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+          </a>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Assignment1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Assignment2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container">
-  <a href="./Assignment3.html" class="sidebar-item-text sidebar-link">
+  <a href="./Assignment3.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
+      <div class="sidebar-item-container">
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Exam</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+          </a>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Exam1-2025F.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exam 1, 2025F</span></a>
   </div>
@@ -207,34 +207,34 @@ ul.task-list li input[type="checkbox"] {
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
+      <div class="sidebar-item-container">
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Project</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+          </a>
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Project-Instructions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Project-Report.html" class="sidebar-item-text sidebar-link active">
+  <div class="sidebar-item-container">
+  <a href="./Project-Report.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Report</span></a>
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Project-Package.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Package</span></a>
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./Project-Presentation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Presentation</span></a>
   </div>
@@ -246,38 +246,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#what-is-the-project" id="toc-what-is-the-project" class="nav-link active" data-scroll-target="#what-is-the-project">What is the project?</a></li>
-  <li><a href="#groups-and-topic-approval" id="toc-groups-and-topic-approval" class="nav-link" data-scroll-target="#groups-and-topic-approval">Groups and topic approval</a>
-  <ul class="collapse">
-  <li><a href="#examples-of-a-manageable-project" id="toc-examples-of-a-manageable-project" class="nav-link" data-scroll-target="#examples-of-a-manageable-project">Examples of a manageable project</a></li>
-  </ul></li>
-  <li><a href="#report-requirements" id="toc-report-requirements" class="nav-link" data-scroll-target="#report-requirements">Report requirements</a></li>
-  <li><a href="#report-grading-10" id="toc-report-grading-10" class="nav-link" data-scroll-target="#report-grading-10">Report grading [10]</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Project-Instructions.html">Project</a></li><li class="breadcrumb-item"><a href="./Project-Report.html">Report</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Assignment1.html">Assignment</a></li><li class="breadcrumb-item"><a href="./Assignment3.html">Assignment 3</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Report</h1>
+<h1 class="title">Assignment 3</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    
-  
-    
+
+
+
   </div>
-  
+
 
 
 </header>
@@ -285,233 +273,41 @@ ul.task-list li input[type="checkbox"] {
 
 <p><strong>STAT 8670 | Fall 2026</strong><br>
 <strong>Due date:</strong> TBA<br>
-<strong>Report:</strong> 10 points (10% of the course grade)<br>
-<strong>Group size:</strong> 1-3 students<br>
-<strong>Project total:</strong> 30 points (30% of the course grade)</p>
-<section id="what-is-the-project" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-the-project">What is the project?</h2>
-<p>Choose <strong>one statistical method</strong>, implement it in <strong>R or Python</strong>, and show how well it works. Your group will produce a reusable package, explain the method and results in a written report, and present the project to the class.</p>
-<p>An established method is a suitable topic. The goal is to understand its statistical reasoning, implement its main computational steps, and evaluate the results. Your project should answer:</p>
-<ol type="1">
-<li><strong>What problem does the method solve?</strong> Identify the inputs, outputs, and assumptions.</li>
-<li><strong>How does the method work?</strong> Explain the algorithm and implement its core steps.</li>
-<li><strong>How well does it work?</strong> Use reproducible experiments to examine accuracy, computing time, and limitations.</li>
-</ol>
-<div data-tbl-colwidths="[24,62,14]">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 62%">
-<col style="width: 14%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Component</th>
-<th style="text-align: left;">What your group submits or delivers</th>
-<th style="text-align: right;">Points</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><a href="./Project-Report.html">Report</a></td>
-<td style="text-align: left;">An 8-10 page PDF explaining the method, implementation, and results, with its source files</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="./Project-Package.html">Package</a></td>
-<td style="text-align: left;">An installable R or Python package, documentation, a worked example, and tests</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><a href="./Project-Presentation.html">Presentation</a></td>
-<td style="text-align: left;">A class presentation and slides explaining and demonstrating the project</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Total</strong></td>
-<td style="text-align: left;"><strong>One coordinated project</strong></td>
-<td style="text-align: right;"><strong>30</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Each component is worth <strong>10 points and 10% of the course grade</strong>: report 10%, package 10%, and presentation 10%. Each page gives the requirements and point-by-point rubric for that component.</p>
-</section>
-<section id="groups-and-topic-approval" class="level2">
-<h2 class="anchored" data-anchor-id="groups-and-topic-approval">Groups and topic approval</h2>
-<p>Work individually or in a group of <strong>2 or 3 students</strong>. Choose one group name and list every member on the report, repository, and slides. Each member should make a meaningful contribution and be able to explain the method and results. Groups submit one shared set of materials and receive a shared project score under the rubrics below.</p>
-<p>You may choose a topic from the <strong>instructor’s topic list</strong> or propose your own statistical method. <strong>Self-selected topics require the instructor’s approval.</strong> Confirm the scope with the instructor before starting the full implementation.</p>
-<div id="callout-1" class="callout callout-style-default callout-note callout-titled" title="Topic selection and schedule">
+<strong>Total:</strong> TBA<br>
+<strong>Coverage:</strong> TBA</p>
+<div id="callout-1" class="callout callout-style-default callout-note callout-titled" title="To be announced">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Topic selection and schedule
+<span class="screen-reader-only">Note</span>To be announced
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Instructor’s topic list:</strong> TBA<br>
-<strong>Group and topic proposal deadline:</strong> TBA<br>
-<strong>Report and package deadline:</strong> TBA<br>
-<strong>Presentation date and time limit:</strong> TBA, after groups are finalized</p>
-<p>Send the instructor a short proposal with your group members, proposed method, choice of R or Python, core algorithm to implement, and one planned experiment or application. Explain what your group will implement and which existing libraries you plan to use.</p>
+<p>Assignment 3 has not been released yet. The questions, coverage, point allocation, and due date will be posted here.</p>
 </div>
 </div>
-<section id="examples-of-a-manageable-project" class="level3">
-<h3 class="anchored" data-anchor-id="examples-of-a-manageable-project">Examples of a manageable project</h3>
-<p>These examples illustrate possible scope; confirm your choice with the instructor.</p>
-<div data-tbl-colwidths="[24,38,38]">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 38%">
-<col style="width: 38%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Statistical method</th>
-<th style="text-align: left;">What you could implement</th>
-<th style="text-align: left;">What you could investigate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Bootstrap confidence intervals</td>
-<td style="text-align: left;">Resampling and interval construction for a mean or median</td>
-<td style="text-align: left;">How often do the intervals cover the true value as sample size changes?</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Numerical optimization</td>
-<td style="text-align: left;">Gradient descent for a regression objective</td>
-<td style="text-align: left;">How do step size and starting value affect convergence, accuracy, and time?</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Monte Carlo integration</td>
-<td style="text-align: left;">A basic estimator and a variance-reduction method</td>
-<td style="text-align: left;">How does estimation error change as the number of draws increases?</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">A permutation test</td>
-<td style="text-align: left;">Shuffling group labels and calculating a test statistic</td>
-<td style="text-align: left;">Does the test maintain its intended rejection rate under a simulated null model?</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">A regression or dimension-reduction method</td>
-<td style="text-align: left;">The main fitting algorithm and a prediction or transformation function</td>
-<td style="text-align: left;">How do its results compare with a trusted reference implementation?</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>For example: <em>“We implement percentile bootstrap confidence intervals for a population mean in Python, compare coverage and interval length at two sample sizes, and explain when the method performs poorly.”</em> A focused question like this is enough to organize all three project components.</p>
-</section>
-</section>
-<section id="report-requirements" class="level2">
-<h2 class="anchored" data-anchor-id="report-requirements">Report requirements</h2>
-<p>Write <strong>8-10 pages of main text</strong>, excluding the title page, references, and appendices. Use Quarto, R Markdown, or LaTeX and submit the rendered <strong>PDF plus its source files</strong>. Use readable 11- or 12-point text, standard margins, and numbered sections. Place long code listings and supplementary output in an appendix or the repository.</p>
-<p>Include the following sections:</p>
-<ol type="1">
-<li><strong>Title and summary.</strong> Give the project title, group name, member names, and a short summary of the problem and main finding.</li>
-<li><strong>Motivation and background.</strong> Explain why the method is useful, identify its intended users or application, and cite the sources you used.</li>
-<li><strong>Statistical method.</strong> Define the relevant notation, assumptions, inputs, and outputs. State the quantity being estimated, tested, or optimized. For an optimization method, explicitly give the objective function and any constraints.</li>
-<li><strong>Algorithm and implementation.</strong> Describe the computational steps with pseudocode or a clear numbered algorithm. Explain important choices such as tuning parameters, stopping criteria, and numerical safeguards. Identify the core functions your group wrote and any library routines used.</li>
-<li><strong>Experiments and results.</strong> Include at least one reproducible simulation study or data analysis with <strong>two settings</strong> (for example, two sample sizes or two noise levels). Compare against at least one known answer, simple baseline, or trusted implementation. Explain a relevant accuracy measure and report computing time for the settings you compare. State random seeds, replication counts where relevant, and the software environment.</li>
-<li><strong>Discussion and conclusion.</strong> Interpret the results, discuss computational cost and a limitation or failure case, and suggest one useful extension.</li>
-<li><strong>References and contributions.</strong> Cite methods, data, and borrowed or adapted code. Add a short table describing each member’s contribution; a one-person group should state that the work was completed individually.</li>
-</ol>
-<p>Every figure and table should have a caption and be discussed in the text. A reader should understand what was compared, what the results show, and why the result matters statistically.</p>
-</section>
-<section id="report-grading-10" class="level2">
-<h2 class="anchored" data-anchor-id="report-grading-10">Report grading [10]</h2>
-<p>The first four criteria assess <strong>clarity and writing [4]</strong>; the last four assess <strong>method, experiments, and interpretation [6]</strong>.</p>
-<div data-tbl-colwidths="[25,63,12]">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 63%">
-<col style="width: 12%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Criterion</th>
-<th style="text-align: left;">Full-credit evidence</th>
-<th style="text-align: right;">Points</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">R1. Organization</td>
-<td style="text-align: left;">Required sections form a logical account of the problem, method, and findings.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R2. Writing and notation</td>
-<td style="text-align: left;">Explanations are readable and technically precise; symbols are defined and used consistently.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R3. Figures and tables</td>
-<td style="text-align: left;">Results are legible, labeled, captioned, and interpreted in the text.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R4. Scientific reporting</td>
-<td style="text-align: left;">The report follows the length and format requirements and includes references and a contribution statement.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R5. Statistical method</td>
-<td style="text-align: left;">The purpose and assumptions are correct [1]; the mathematical formulation is correct and clearly stated [1].</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R6. Algorithm</td>
-<td style="text-align: left;">The computational steps and important implementation choices are explained accurately.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R7. Experiments</td>
-<td style="text-align: left;">Reproducible experiments cover two settings [1]; a meaningful reference or baseline supports the accuracy and timing comparisons [1].</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R8. Interpretation</td>
-<td style="text-align: left;">Conclusions follow from the evidence and discuss computational cost, limitations, and a possible extension.</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Total</strong></td>
-<td style="text-align: left;"></td>
-<td style="text-align: right;"><strong>10</strong></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Score each 1-point requirement as <strong>1</strong> for complete and correct evidence, <strong>0.5</strong> for partially correct or incomplete evidence, or <strong>0</strong> for missing or substantially incorrect evidence. The 2-point criteria each contain two 1-point requirements, as shown above. A missing report receives <strong>0/10</strong>. Package and presentation marks are assessed separately using their own rubrics.</p>
-<div id="callout-2" class="callout callout-style-default callout-note callout-titled" title="Report submission checklist">
+<div id="callout-2" class="callout callout-style-default callout-note callout-titled" title="Submission">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Report submission checklist
+<span class="screen-reader-only">Note</span>Submission
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One member submits the following on behalf of the group to the <strong>iCollege project submission area</strong> (folder details TBA):</p>
-<ul>
-<li><code>Project_Report_GroupName.pdf</code>.</li>
-<li>The matching <code>.qmd</code>, <code>.Rmd</code>, or <code>.tex</code> source, with supporting files in a ZIP if needed.</li>
-<li>The package repository URL and the exact release tag or commit used for the report.</li>
-</ul>
-<p>Replace <code>GroupName</code> with your group’s chosen name and use it consistently for all components. Include all member names. Check that the report’s figures and tables can be reproduced from the submitted package and experiment code.</p>
+<p>Use <strong>Quarto</strong> or <strong>R Markdown</strong>. Once the assignment is released, upload <strong>both</strong> files to the <strong>Assignment 3</strong> submission folder on <strong>iCollege</strong>:</p>
+<ol type="1">
+<li>Your rendered <strong>PDF</strong>, named <code>A3_LastName_FirstName.pdf</code>.</li>
+<li>Its matching source file, named <code>A3_LastName_FirstName.qmd</code> or <code>A3_LastName_FirstName.Rmd</code>.</li>
+</ol>
+<p>The PDF must be generated from the submitted source file. Put your name and course number at the beginning of the PDF, and ensure that your source renders from beginning to end without errors.</p>
 </div>
 </div>
-<p><strong>Next:</strong> <a href="./Project-Package.html">Package requirements and grading</a> | <a href="./Project-Presentation.html">Presentation requirements and grading</a></p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -525,7 +321,7 @@ ul.task-list li input[type="checkbox"] {
     anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
+        if (clz.startsWith('code-annotation-')) {
           return true;
         }
       }
@@ -545,11 +341,11 @@ ul.task-list li input[type="checkbox"] {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
         button.setAttribute("data-bs-title", "Copied!");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
+        tooltip = new bootstrap.Tooltip(button,
+          { trigger: "manual",
             customClass: "code-copy-button-tooltip",
             offset: [0, -8]});
-        tooltip.show();    
+        tooltip.show();
       }
       setTimeout(function() {
         if (tooltip) {
@@ -626,7 +422,7 @@ ul.task-list li input[type="checkbox"] {
       if (onUntriggerFn) {
         config.onUntrigger = onUntriggerFn;
       }
-      window.tippy(el, config); 
+      window.tippy(el, config);
     }
     const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
     for (var i=0; i<noterefs.length; i++) {
@@ -701,7 +497,7 @@ ul.task-list li input[type="checkbox"] {
       tippyHover(xref, undefined, function(instance) {
         instance.disable();
         let url = xref.getAttribute('href');
-        let hash = undefined; 
+        let hash = undefined;
         if (url.startsWith('#')) {
           hash = url;
         } else {
@@ -729,7 +525,7 @@ ul.task-list li input[type="checkbox"] {
               if (note !== null) {
                 const html = processXRef(id, note);
                 instance.setContent(html);
-              } 
+              }
             }).finally(() => {
               instance.enable();
               instance.show();
@@ -753,7 +549,7 @@ ul.task-list li input[type="checkbox"] {
               }
               const html = processXRef(null, note);
               instance.setContent(html);
-            } 
+            }
           }).finally(() => {
             instance.enable();
             instance.show();
@@ -793,7 +589,7 @@ ul.task-list li input[type="checkbox"] {
               height = bottom - top;
             }
             if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
+              // cook up a div (if necessary) and position it
               let div = window.document.getElementById("code-annotation-line-highlight");
               if (div === null) {
                 div = window.document.createElement("div");
@@ -916,13 +712,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Project-Instructions.html" class="pagination-link" aria-label="Instructions">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Instructions</span>
-      </a>          
+      <a href="./Assignment2.html" class="pagination-link" aria-label="Assignment 2">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 2</span>
+      </a>
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Project-Package.html" class="pagination-link" aria-label="Package">
-        <span class="nav-page-text">Package</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Exam1-2025F.html" class="pagination-link" aria-label="Exam 1, 2025F">
+        <span class="nav-page-text">Exam 1, 2025F</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
