@@ -14,7 +14,7 @@ Use the same method for all three components. Follow the links for full requirem
 |:---|:---|---:|
 | [Report](Project-Report.qmd) | An 8-10 page PDF explaining the method and results, plus source files | 10% |
 | [Package](Project-Package.qmd) | An installable R or Python package with documentation, an example, and tests | 10% |
-| [Presentation](Project-Presentation.qmd) | Slides explaining the method, a package demo, and findings | 10% |
+| [Presentation](Project-Presentation.qmd) | An oral presentation explaining the method, implementation, and findings | 10% |
 
 :::
 
@@ -32,4 +32,4 @@ Use the same method for all three components. Follow the links for full requirem
 - **Gradient descent:** how does step size affect convergence when fitting a regression?
 - **Monte Carlo integration:** how do more random draws improve accuracy?
 
-**Due on December 13, 2026:** report, package, and slides. Presentation date and time limit: **TBA**. All members contribute and present.
+**Due on December 13, 2026:** report and package. Presentation date, time, and time limit: **TBA**. All members contribute and present. No slides or other presentation files need to be submitted.

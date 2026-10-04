@@ -2,7 +2,7 @@
 
 **STAT 8670 | Fall 2026**  
 **Presentation date and time:** TBA  
-**Slides submission:** Due on December 13, 2026  
+**Format:** In-class oral presentation; no file submission  
 **Time limit:** TBA, after groups are finalized  
 **Total:** 10 points (10% of the course grade)  
 **Group size:** 1-3 students
@@ -14,10 +14,10 @@ Present the statistical method your group implemented in **R or Python**. Help c
 Organize the presentation around this sequence:
 
 1. **Problem and motivation.** Start with a concrete statistical question and explain why someone would use your method.
-2. **Method.** Define the key assumptions, inputs, and outputs. Explain the main algorithm with a diagram, short pseudocode, or a small worked example. Define the objective and constraints if your method involves optimization.
+2. **Method.** Define the key assumptions, inputs, and outputs. Explain the main algorithm in words or with a small worked example. Define the objective and constraints if your method involves optimization.
 3. **Implementation.** Identify the main functions your group wrote and one important computational choice, such as a stopping criterion, a tuning parameter, or numerical stabilization.
-4. **Package demonstration.** Show a small input, the function call, its output, and what the result means. A live demo, a recorded demo, or a prepared code walkthrough with output is acceptable. Keep backup output available if you choose a live demo.
-5. **Results.** Use readable figures or tables to show the main comparison from your report. Explain accuracy and computing time, including what changes between the experimental settings.
+4. **Package example.** Walk classmates through a small input, the function call, its output, and what the result means. A verbal explanation is sufficient; a live demonstration is optional.
+5. **Results.** Explain the main comparison from your report using relevant numerical results. Discuss accuracy and computing time, including what changes between the experimental settings.
 6. **Conclusion.** State the main finding, a limitation or failure case, and one possible extension. Finish with a clear take-home message and be ready for questions.
 
 ::: {.callout-note title="Group participation"}
@@ -26,20 +26,15 @@ For groups of 2 or 3, **every member must speak** and explain a substantive part
 
 :::
 
-## Slide requirements
+## Oral presentation format
 
-- Begin with the project title, group name, and all member names.
-- Use readable text, labeled axes, captions, and a consistent visual style.
-- Include at least one visual explanation of the method and one figure or table of results.
-- Use short code excerpts when they help explain the algorithm or demonstrate the package.
-- Cite methods, data, and external material, and include the package repository URL and submitted release tag or commit.
-- Submit a PDF of the slides and the editable source, such as `.qmd`, `.Rmd`, `.tex`, or `.pptx`.
+Begin by introducing the project and all group members. Explain the work at a level classmates who have taken STAT 8670 can follow, and leave time for questions within the announced time limit.
 
-Choose the number of slides to fit the announced presentation time. The explanation and demonstration should be understandable to classmates who have taken STAT 8670 but have not worked on your project.
+**Slides are optional. No slides or other presentation files need to be submitted.** The assessment is based on your oral explanation and discussion.
 
 ## Presentation grading [10]
 
-The presentation is assessed as **clarity and delivery [4]**, **organization and visuals [3]**, and **technical depth and demonstration [3]**.
+The presentation is assessed as **clarity and delivery [4]**, **organization and communication [3]**, and **technical depth and application [3]**.
 
 ::: {tbl-colwidths="[27,61,12]"}
 
@@ -49,26 +44,20 @@ The presentation is assessed as **clarity and delivery [4]**, **organization and
 | S2. Delivery and participation | Delivery is audible, well-paced, and within the announced time limit; every member explains a substantive part. | 1 |
 | S3. Understanding and questions | The group demonstrates understanding and responds to questions with accurate reasoning. | 1 |
 | S4. Organization | The talk progresses logically from motivation to method, implementation, results, and conclusion. | 1 |
-| S5. Readable slides | Text and graphics are legible, consistently formatted, and appropriately cited. | 1 |
-| S6. Effective visuals | A method visual and a results figure or table help explain the statistical ideas and findings. | 1 |
+| S5. Accessible language | Key terms are defined, and explanations connect the statistical ideas to the project question. | 1 |
+| S6. Communication of results | The main findings and their practical meaning are highlighted, with relevant numerical evidence. | 1 |
 | S7. Implementation insight | The group explains the main computational steps and an important implementation choice. | 1 |
-| S8. Demonstration | A live/recorded demo or prepared walkthrough shows inputs, a package call, outputs, and interpretation. | 1 |
+| S8. Worked example | A verbal walkthrough explains a small input, a package call, its output, and interpretation. | 1 |
 | S9. Critical discussion | The conclusion identifies a supported finding, a limitation, and a useful extension. | 1 |
 | **Total** | | **10** |
 
 :::
 
-Partial credit is available in **0.5-point increments** for partially demonstrated criteria. Missing or substantially incorrect evidence receives zero for the relevant criterion. A missing presentation receives **0/10**; uploading slides alone does not complete this component. The report and package are graded separately.
+Partial credit is available in **0.5-point increments** for partially demonstrated criteria. Missing or substantially incorrect evidence receives zero for the relevant criterion. A missing presentation receives **0/10**. Slides are not required to earn full credit. The report and package are graded separately.
 
-::: {.callout-note title="Presentation submission checklist"}
+::: {.callout-note title="Presentation arrangements"}
 
-One member uploads the following on behalf of the group to the **iCollege project submission area** (folder details TBA) by **December 13, 2026**:
-
-- `Project_Slides_GroupName.pdf`.
-- The editable slide source, with supporting files in a ZIP if needed.
-- The demo script or notebook, with any small example data needed to run it; it may be included in the submitted package repository.
-
-Check that every member is named, the repository version matches the report and package, and the demonstration works before class. Presentation order, date, time, and duration will be announced after groups are finalized.
+Present in class on the announced date. Presentation order, date, time, and duration are **TBA** and will be announced after groups are finalized.
 
 :::
 
