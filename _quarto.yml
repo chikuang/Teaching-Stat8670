@@ -59,8 +59,27 @@ format:
     cache: true
   pdf:
     documentclass: scrreprt
+    monofont: Menlo
+    fig-pos: H
+    colorlinks: true
+    linkcolor: CourseAccent
+    urlcolor: CourseAccent
+    citecolor: CourseAccent
+    toccolor: CourseAccent
+    filecolor: CourseAccent
+    geometry:
+      - margin=1in
+      - headheight=38pt
+      - headsep=12pt
+      - footskip=36pt
+    include-in-header:
+      - pdf-environments.tex
+      - pdf-page-style.tex
     filters:
       - addcalloutid.lua
+      - filters/pdf-callouts.lua
+      - filters/pdf-layout.lua
+      - filters/course-links.lua
     cache: true
 
 editor: source
