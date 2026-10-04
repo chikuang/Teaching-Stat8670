@@ -32,4 +32,4 @@ Use the same method for all three components. Follow the links for full requirem
 - **Gradient descent:** how does step size affect convergence when fitting a regression?
 - **Monte Carlo integration:** how do more random draws improve accuracy?
 
-**Schedule:** All deadlines, the presentation date, and the time limit are **TBA**. Every group member contributes and speaks during the presentation.
+**Due on December 13, 2026:** report, package, and slides. Presentation date and time limit: **TBA**. All members contribute and present.

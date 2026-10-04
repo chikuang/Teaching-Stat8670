@@ -1,7 +1,7 @@
 # Report {.unnumbered}
 
 **STAT 8670 | Fall 2026**  
-**Due date:** TBA  
+**Due on December 13, 2026**  
 **Report:** 10 points (10% of the course grade)  
 **Group size:** 1-3 students  
 **Project total:** 30 points (30% of the course grade)
@@ -39,7 +39,7 @@ You may choose a topic from the **instructor's topic list** or propose your own 
 
 **Instructor's topic list:** TBA  
 **Group and topic proposal deadline:** TBA  
-**Report and package deadline:** TBA  
+**Report, package, and slides:** Due on December 13, 2026  
 **Presentation date and time limit:** TBA, after groups are finalized
 
 Send the instructor a short proposal with your group members, proposed method, choice of R or Python, core algorithm to implement, and one planned experiment or application. Explain what your group will implement and which existing libraries you plan to use.
@@ -104,7 +104,7 @@ Score each 1-point requirement as **1** for complete and correct evidence, **0.5
 
 ::: {.callout-note title="Report submission checklist"}
 
-One member submits the following on behalf of the group to the **iCollege project submission area** (folder details TBA):
+One member submits the following on behalf of the group to the **iCollege project submission area** (folder details TBA) by **December 13, 2026**:
 
 - `Project_Report_GroupName.pdf`.
 - The matching `.qmd`, `.Rmd`, or `.tex` source, with supporting files in a ZIP if needed.

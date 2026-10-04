@@ -2,7 +2,7 @@
 
 **STAT 8670 | Fall 2026**  
 **Presentation date:** TBA  
-**Slides due:** TBA  
+**Due on December 13, 2026**  
 **Time limit:** TBA, after groups are finalized  
 **Total:** 10 points (10% of the course grade)  
 **Group size:** 1-3 students
@@ -62,7 +62,7 @@ Partial credit is available in **0.5-point increments** for partially demonstrat
 
 ::: {.callout-note title="Presentation submission checklist"}
 
-One member uploads the following on behalf of the group to the **iCollege project submission area** (folder details TBA):
+One member uploads the following on behalf of the group to the **iCollege project submission area** (folder details TBA) by **December 13, 2026**:
 
 - `Project_Slides_GroupName.pdf`.
 - The editable slide source, with supporting files in a ZIP if needed.
