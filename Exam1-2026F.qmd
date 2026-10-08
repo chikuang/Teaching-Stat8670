@@ -1,0 +1,428 @@
+---
+show-exam-solutions: true
+---
+
+# Exam 1, 2026F {.unnumbered}
+
+**Term:** 2026F (Fall 2026)  
+**Date:** October 7, 2026  
+**Status:** Completed  
+**Time:** 75 minutes  
+**Total:** 100 points  
+**Coverage:** [Chapter 1](01-R.qmd) (R Programming), [Chapter 2](02-computation.qmd) (Computational Approaches), and [Chapter 3](03-optimization.qmd) (Optimization).
+
+::: {tbl-colwidths="[16,72,12]"}
+
+| Question | Format | Points |
+|:---:|:---:|:---:|
+| 1 | 9 multiple-choice questions, 6 points each | 54 |
+| 2 | 6 true/false questions, 5 points each | 30 |
+| 3 | 3 short conceptual responses: 3a(i), 3a(ii), and 3b(i) | 16 |
+| **Total** | | **100** |
+
+:::
+
+::: {.callout-note title="Exam instructions"}
+
+- Work independently. Only a **non-programmable calculator** is permitted as an electronic device.
+- **Questions 1–2:** Select one best answer, A–D, or write **True** or **False**. No explanations are required.
+- **Question 3:** Answer each numbered part in one or two sentences. Brief formulas or R expressions may be used.
+
+:::
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-important title="Solutions"}
+
+Expand the **Answer** below each question to view the solution and explanation. A compact answer key and the Question 3 grading rubric appear at the end.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 1: Multiple Choice [54] {#exam2026-q1}
+
+Select the **single best answer**. Each part is worth **6 points**.
+
+### 1a) {#exam2026-1a}
+
+Let `x <- c(4, NA, 9, -1)`. Which expression returns exactly the nonmissing values greater than zero, with no `NA` in the result?
+
+A. `x[x > 0]`  
+B. `x[is.na(x) | x > 0]`  
+C. `x[!is.na(x) & x > 0]`  
+D. `x[!is.na(x)]`
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: C.**
+The mask must exclude missing values and require positivity. The result is `c(4, 9)`.
+
+:::
+
+::::
+
+### 1b) {#exam2026-1b}
+
+Let `fit <- list(coef = 1.2, se = 0.4)`. How do `fit["coef"]` and `fit[["coef"]]` differ?
+
+A. Both return a numeric scalar.  
+B. The first returns a one-element list; the second returns its numeric element.  
+C. The first returns a numeric scalar; the second returns a list.  
+D. The second expression is invalid because lists cannot have names.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+Single brackets retain a sublist; double brackets extract the element.
+
+:::
+
+::::
+
+### 1c) {#exam2026-1c}
+
+What does `c(1, 2, 3, 4) + c(10, 20)` return in R?
+
+A. `c(11, 22, 13, 24)`  
+B. `c(11, 12, 23, 24)`  
+C. `c(11, 22)`  
+D. An error because the vector lengths differ.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: A.**
+The shorter vector is recycled as `c(10, 20, 10, 20)`.
+
+:::
+
+::::
+
+### 1d) {#exam2026-1d}
+
+In floating-point arithmetic, a product of many mathematically positive, very small densities is stored as zero. Which change best addresses this numerical problem?
+
+A. Take the logarithm of the already computed zero.  
+B. Round every density to fewer decimal places.  
+C. Replace the likelihood by the sum of the densities.  
+D. Evaluate log-densities directly and add them.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: D.**
+Accumulate log-densities before the product underflows. Taking a logarithm after underflow cannot recover the lost information.
+
+:::
+
+::::
+
+### 1e) {#exam2026-1e}
+
+Two upper triangular Cholesky factors $R_1,R_2$ have the same size and the same positive diagonal entries in corresponding positions, but different off-diagonal entries. For $\Sigma_i=R_i^\top R_i$, what must be equal?
+
+A. Every entry of $\Sigma_1$ and $\Sigma_2$.  
+B. The log-determinants of $\Sigma_1$ and $\Sigma_2$.  
+C. Every correlation in the two covariance matrices.  
+D. The quadratic forms $\mathbf{z}^\top\Sigma_1^{-1}\mathbf{z}$ and $\mathbf{z}^\top\Sigma_2^{-1}\mathbf{z}$ for every $\mathbf{z}$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+The determinant of a triangular matrix depends only on its diagonal. Off-diagonal changes can alter covariance entries and quadratic forms.
+
+:::
+
+::::
+
+### 1f) {#exam2026-1f}
+
+Let $X\in\mathbb R^{n\times p}$ have full column rank but nearly dependent columns. In floating-point arithmetic, why can QR be preferable to forming $X^\top X$ to solve $\min_{\boldsymbol{\beta}}\|\mathbf{y}-X\boldsymbol{\beta}\|_2^2$?
+
+A. Forming $X^\top X$ can magnify the conditioning problem; QR avoids this step.  
+B. QR changes the response variable to remove all noise.  
+C. QR makes the original predictors statistically independent.  
+D. QR guarantees exact coefficients for every input matrix.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: A.**
+For full column rank, $\kappa_2(X^\top X)=\kappa_2(X)^2$. QR avoids forming the Gram matrix but cannot remove inherent sensitivity.
+
+:::
+
+::::
+
+### 1g) {#exam2026-1g}
+
+Bisection is applied to a continuous function on $[a,b]$. At $m=(a+b)/2$, $f(a)<0$, $f(m)>0$, and $f(b)>0$. Under the standard bisection update, which half-interval retains an endpoint sign change?
+
+A. $[m,b]$.  
+B. $[a,b]$ without shortening it.  
+C. $[a,m]$.  
+D. An interval centered at $b$ and lying outside $[a,b]$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: C.**
+The sign change is between $a$ and $m$, so that half retains a root.
+
+:::
+
+::::
+
+### 1h) {#exam2026-1h}
+
+For $f(x)=a(x-x^*)^2/2$ with $a>0$, gradient descent uses $x_{k+1}=x_k-\alpha f^{\prime}(x_k)$, $\alpha>0$. The errors $x_k-x^*$ alternate in sign and $|x_{k+1}-x^*|>|x_k-x^*|$. What is the most appropriate adjustment?
+
+A. Increase the step size further.  
+B. Replace the gradient by zero.  
+C. Stop and declare the oscillation proof of multiple local minima.  
+D. Reduce the step size sufficiently or use a suitable line search.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: D.**
+Here $x_{k+1}-x^*=(1-\alpha a)(x_k-x^*)$. Alternating, growing errors imply $\alpha a>2$; a step with $0<\alpha a<2$ gives convergence.
+
+:::
+
+::::
+
+### 1i) {#exam2026-1i}
+
+When minimizing $Q$, simulated annealing accepts an uphill move with fixed $\Delta Q=Q_{\mathrm{new}}-Q_{\mathrm{current}}>0$ with probability $\exp(-\Delta Q/T)$, where $T>0$. What happens as $T$ increases?
+
+A. The acceptance probability becomes zero.  
+B. The acceptance probability increases.  
+C. The acceptance probability decreases.  
+D. The probability is unchanged because $\Delta Q$ is fixed.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+At higher temperature, $-\Delta Q/T$ is less negative, so uphill moves are accepted more often.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 2: True or False [30] {#exam2026-q2}
+
+Write **True** or **False**. Each part is worth **5 points**; no explanation is required.
+
+### 2a) {#exam2026-2a}
+
+A data frame contains one character column and one numeric column. After converting the entire data frame with `as.matrix()`, the column that was numeric still has numeric type.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+The character column forces a common character type in the resulting matrix, including the formerly numeric column.
+
+:::
+
+::::
+
+### 2b) {#exam2026-2b}
+
+If a computed scalar $\widehat r$ should equal zero in exact arithmetic, checking $|\widehat r|<\varepsilon$ for a suitably chosen tolerance $\varepsilon>0$ can be more appropriate than requiring $\widehat r=0$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+Rounding error can leave a small nonzero residual; a context-appropriate tolerance accommodates it.
+
+:::
+
+::::
+
+### 2c) {#exam2026-2c}
+
+For the same response vector $\mathbf{y}$, let $X$ and $\widetilde X$ be full-column-rank design matrices with the same column space. In exact arithmetic, their ordinary least-squares fitted vectors satisfy $X\widehat{\boldsymbol{\beta}}=\widetilde X\widehat{\boldsymbol{\gamma}}$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+Least-squares fitted values are the projection onto the column space, regardless of its basis.
+
+:::
+
+::::
+
+### 2d) {#exam2026-2d}
+
+Let $\Sigma=R^\top R$ be a Cholesky factorization. If $\widetilde\Sigma\ne\Sigma$ is another positive-definite matrix of the same size, the unchanged factor $R$ always satisfies $\widetilde\Sigma=R^\top R$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+Since $R^\top R=\Sigma$ and $\widetilde\Sigma\ne\Sigma$, the unchanged $R$ cannot factor the new matrix.
+
+:::
+
+::::
+
+### 2e) {#exam2026-2e}
+
+An error sequence satisfying $e_{n+1}=2e_n^2$ with $0<e_0<1/2$ converges quadratically to zero.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+Here $e_n=(2e_0)^{2^n}/2\to0$, and $e_{n+1}/e_n^2=2$. Thus the order is two, unlike the linear and sublinear examples in the practice exam.
+
+:::
+
+::::
+
+### 2f) {#exam2026-2f}
+
+The standard secant method for solving $f(x)=0$ requires an analytic formula for $f^{\prime}(x)$ at every iteration.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+Secant slopes use function values at two iterates instead of an analytic derivative.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 3: Conceptual [16] {#exam2026-q3}
+
+Answer **3a(i)**, **3a(ii)**, and **3b(i)** separately. Use one or two sentences per part; brief formulas or R expressions may be used.
+
+Throughout, $\|\mathbf{v}\|_2=(\sum_j v_j^2)^{1/2}$ denotes the Euclidean norm, which evaluates the size of the vector $\mathbf{v}$.
+
+### 3a) R and numerical computation [10] {#exam2026-3a}
+
+#### 3a(i) [4] {#exam2026-3a-i}
+
+A numeric vector `x` contains missing measurements and at least one observed value. A student replaces each missing value by zero and averages all entries. Explain why this can be inappropriate, and state how to compute the mean of only the observed values. You may give an R expression or describe the calculation.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer:** Zero replacement treats missing measurements as observed zeros and generally changes the average ([2] points: interpretation [1], effect [1]). Exclude missing entries and average only the observed values ([2] points: exclusion [1], denominator [1]); accept `mean(x, na.rm = TRUE)` for the latter [2] points.
+
+:::
+
+::::
+
+#### 3a(ii) [6] {#exam2026-3a-ii}
+
+For the same full-column-rank design matrix $X$ and response $\mathbf{y}$, two numerical algorithms return approximate OLS coefficient vectors $\widehat{\boldsymbol{\beta}}_1,\widehat{\boldsymbol{\beta}}_2$ such that 
+
+$$
+\frac{\|\widehat{\boldsymbol{\beta}}_1-\widehat{\boldsymbol{\beta}}_2\|_2}{\|\widehat{\boldsymbol{\beta}}_1\|_2}=0.2,\qquad \frac{\|X\widehat{\boldsymbol{\beta}}_1-X\widehat{\boldsymbol{\beta}}_2\|_2}{\|X\widehat{\boldsymbol{\beta}}_1\|_2}=10^{-8}.
+$$
+
+ Both denominators are nonzero. Explain how nearly collinear columns of $X$ can produce this behavior. Name one diagnostic and state qualitatively what result would indicate poor conditioning; you do not need to calculate its value.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer:** Writing $\mathbf{d}=\widehat{\boldsymbol{\beta}}_1-\widehat{\boldsymbol{\beta}}_2$, near dependence permits non-negligible $\mathbf{d}$ with small $X\mathbf{d}$: coefficient changes offset each other [2]. Thus the fitted values $X\widehat{\boldsymbol{\beta}}_1$ and $X\widehat{\boldsymbol{\beta}}_2$ can remain close [1]. Name a valid diagnostic [1] and interpret a concerning result [2]: a large condition number, a reciprocal condition number near zero, or a singular-value ratio near zero indicates sensitivity. Accept equivalent valid diagnostics; no numerical calculation or cutoff is required.
+
+:::
+
+::::
+
+### 3b) Optimization [6] {#exam2026-3b}
+
+#### 3b(i) [6] {#exam2026-3b-i}
+
+A numerical algorithm is used to minimize a continuously differentiable function $f:\mathbb R\to\mathbb R$ without constraints. In the current variable and objective scales, its step and derivative tolerances are $\varepsilon_x=10^{-8}$ and $\varepsilon_d=10^{-4}$. It stops at $x_{k+1}$ because the step test passes, with 
+
+$$
+|x_{k+1}-x_k|=10^{-10}<\varepsilon_x,\qquad |f^{\prime}(x_{k+1})|=10^{-1}>\varepsilon_d.
+$$
+
+ Give one plausible cause of the small update and explain how it can produce a small step. Explain why the step test alone does not establish approximate stationarity under the stated derivative tolerance.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-tip collapse="true" title="Answer"}
+
+**Answer:** A tiny step size is one possible cause [1]. For example, gradient descent in one dimension has $x_{k+1}-x_k=-\alpha_k f^{\prime}(x_k)$, hence $|x_{k+1}-x_k|=\alpha_k|f^{\prime}(x_k)|$ for $\alpha_k>0$; a tiny $\alpha_k$ can yield a tiny update despite a non-negligible derivative [2]. Approximate stationarity requires the derivative to be sufficiently close to zero, here $|f^{\prime}(x_{k+1})|\leq\varepsilon_d$ [2]. Accept an equivalent statement of the zero-derivative condition at a differentiable unconstrained local minimum. The reported derivative fails $|f^{\prime}(x_{k+1})|\leq\varepsilon_d$, so the step test alone does not establish approximate stationarity [1]. Accept a correctly explained poor-scaling or numerical-stagnation mechanism for the first [3] points.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+## Answer Key and Grading Rubric {#exam2026-answer-key}
+
+### Question 1: Multiple Choice [54]
+
+| Part | 1a | 1b | 1c | 1d | 1e | 1f | 1g | 1h | 1i |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Answer | C | B | A | D | B | A | C | D | B |
+
+Award **6 points** for each correct answer and **0 points** otherwise.
+
+### Question 2: True or False [30]
+
+| Part | 2a | 2b | 2c | 2d | 2e | 2f |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Answer | False | True | True | False | True | False |
+
+Award **5 points** for each correct answer and **0 points** otherwise.
+
+### Question 3: Conceptual [16]
+
+Accept equivalent concise explanations. The expanded answers above give model responses and acceptable alternatives.
+
+::: {tbl-colwidths="[14,74,12]"}
+
+| Part | Grading criteria | Points |
+|:---:|:---|:---:|
+| 3a(i) | Recognizes that missing values are treated as observed zeros (1) and that this changes the average (1); excludes missing entries (1) and uses the observed count (1). Accept `mean(x, na.rm = TRUE)` for the latter 2 points. | 4 |
+| 3a(ii) | Explains that near dependence permits offsetting coefficient changes (2) while fitted values remain similar (1); names a suitable diagnostic (1) and interprets a concerning result (2). | 6 |
+| 3b(i) | Gives a plausible cause (1) and explains the small update (2); states the small-derivative requirement for approximate stationarity (2) and recognizes that the reported derivative fails the stated tolerance (1). | 6 |
+| **Total** | | **16** |
+
+:::
+
+::::
