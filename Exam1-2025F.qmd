@@ -2,7 +2,7 @@
 show-exam-solutions: true
 ---
 
-# Exam 1, 2025F {.unnumbered}
+# Past Exam 1 {.unnumbered}
 
 **STAT 8670: Computational Methods in Statistics**  
 **Term:** Fall 2025  

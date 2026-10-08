@@ -38,7 +38,7 @@ Wednesday 9:00 - 12:00 or by appointment
 
 ## Midterm
 
-- [x] [Exam 1, 2026F](Exam1-2026F.qmd): October 7, 2026
+- [x] [Exam 1](Exam1-2026F.qmd): October 7, 2026
 - [ ] Exam 2: November 16, 2026
 
 ## Project
@@ -63,7 +63,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 2 | [Intro to Computational Statistics](02-computation.qmd) | 4--5 |
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 3 | [Optimization](03-optimization.qmd) | 6--10 |
 | `r if (knitr::is_latex_output()) "In progress" else "⏳"` | Ch. 4 | [Generating Random Variable](04-generating-rv.qmd) | 11--|
-| `r if (knitr::is_latex_output()) "Done" else "✅"` |  | [Exam 1, 2026F](Exam1-2026F.qmd) | 13 |
+| `r if (knitr::is_latex_output()) "Done" else "✅"` |  | [Exam 1](Exam1-2026F.qmd) | 13 |
 | `r if (knitr::is_latex_output()) "Exam" else "📝"` |  | Exam 2 | 24 |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->

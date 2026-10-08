@@ -2,7 +2,7 @@
 show-exam-solutions: true
 ---
 
-# Exam 1, 2026F {.unnumbered}
+# Exam 1 {.unnumbered}
 
 **Term:** 2026F (Fall 2026)  
 **Date:** October 7, 2026  
