@@ -38,7 +38,7 @@ Wednesday 9:00 - 12:00 or by appointment
 
 ## Midterm
 
-- [x] [Exam 1, 2026F](Exam1-2026F.qmd): October 7, 2026 — Completed
+- [x] [Exam 1, 2026F](Exam1-2026F.qmd): October 7, 2026
 - [ ] Exam 2: November 16, 2026
 
 ## Project
