@@ -54,7 +54,8 @@ format:
     theme:
       - minty
       - brand
-    css: custom-callouts.css
+    css: [custom-callouts.css, chapter4-practice.css]
+    include-after-body: solution-collapse.html
     filters:
       - addcalloutid.lua
     cache: true

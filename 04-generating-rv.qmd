@@ -1,4 +1,4 @@
-# Generating Random Variable {#sec-generating-rv}
+# Generating Random Variables {#sec-generating-rv}
 
 <!-- Adapted from the 2025 chapter and reorganized for the 2026F course. -->
 
@@ -8,8 +8,12 @@
 #| cache: false
 #| code-fold: true
 library(ggplot2)
+options(knitr.table.format = function() {
+  if (knitr::is_latex_output()) "latex" else "html"
+})
 theme_set(theme_minimal(base_size = 14))
 knitr::opts_chunk$set(
+  cache.extra = getOption("knitr.table.format")(),
   fig.width = 8, fig.height = 4.8, fig.align = "center",
   dpi = 144, collapse = TRUE, comment = "#>"
 )
@@ -32,7 +36,9 @@ The main methods in this chapter follow a common pattern:
 | Familiar independent variables | Transform or combine them | Related distributions, sums, and mixtures |
 | Independent standard normals | Apply a matrix or normalize lengths | Correlated vectors and random directions |
 
-We develop these constructions first. The final **optional applications** use them in complete statistical experiments.
+**Core route: about 120 minutes across class meetings.** Allow 20 minutes for inversion, 25 for rejection, 25 for distributional identities and mixtures, 35 for multivariate generation, and 15 for checks and recap. These times include the short in-class questions. Optional connections and applications are for independent reading; the final practice set is for review.
+
+For each method, work through **one draw by hand**, identify the corresponding R lines, and then check a larger simulated sample.
 
 A pseudorandom number generator produces a deterministic sequence from an initial state. A well-designed generator makes that sequence useful as an approximation to independent random draws. In the mathematical arguments below, we work with ideal independent uniforms; software approximates them with finite precision.
 
@@ -236,11 +242,22 @@ $$
 f(x)=3x^2,\qquad 0<x<1.
 $$
 
-Within the support, $F(x)=x^3$, so $F^{-1}(u)=u^{1/3}$. Therefore,
+First integrate the density, then solve for the observation:
 
 $$
-X=U^{1/3}.
+F(x)=\int_0^x 3t^2\,dt=x^3,
+\qquad u=x^3\ \Longrightarrow\ x=u^{1/3}.
 $$
+
+Thus $X=U^{1/3}$. For one draw, $u=0.125$ gives $x=0.5$; checking $F(0.5)=0.125$ confirms the direction of the transformation.
+
+```{r}
+#| label: rv-inverse-one-draw
+#| code-fold: false
+u <- 0.125              # a given probability level
+x <- u^(1 / 3)          # convert it to an observation
+c(x = x, F_x = x^3)
+```
 
 Why do the observations concentrate near 1? Equal-width intervals near 1 contain more probability because the CDF rises faster there. The inverse maps more uniform probability levels into those intervals.
 
@@ -292,6 +309,7 @@ ggplot(quantile_grid, aes(x, x^3)) +
 ```{r}
 #| label: fig-rv-inverse
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Left: uniform probability levels. Right: mapping them through the quantile function produces values with the increasing target density."
 #| fig-width: 9
 set.seed(8670)
@@ -325,7 +343,7 @@ Here $\mathbb{E}(X)=3/4$ and $\operatorname{Var}(X)=3/80$. A simulation provides
 ```{r}
 #| label: rv-power-moments
 #| code-fold: true
-knitr::kable(
+knitr::kable(booktabs = TRUE,
   data.frame(
     quantity = c("Mean", "Variance"),
     simulated = c(mean(x_power), var(x_power)),
@@ -390,7 +408,7 @@ The formulas $-\log(U)/\lambda$ and $-\log(1-U)/\lambda$ have the same marginal 
 
 :::
 
-::: {#rv-block-15 .callout-note title="Optional Connection: Survival and Waiting Times"}
+::: {#rv-block-15 .callout-note title="Optional Connection: Survival and Waiting Times" collapse="true"}
 
 Exponential waiting times model the time between events in a homogeneous Poisson process. The constant rate is a substantive assumption: it implies a memoryless waiting time. Equipment aging or time-varying arrival rates may require a different distribution.
 
@@ -404,18 +422,29 @@ This turns survival-model simulation into an inversion problem. For example, the
 
 :::
 
-:::: {#rv-block-16 .callout-exercise title="In-Class Question"}
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
 
-::: {.content-visible when-format="pdf"}
+::: {#exr-rv-rate}
 
-**Exercise 1. In-Class Question**
+## In Class: Rate or Mean? (2 minutes)
+
+**Multiple choice.** To generate exponential waiting times with mean 5, use **(A)** `rexp(n, rate = 5)` or **(B)** `rexp(n, rate = 1 / 5)`.
+
+If the rate doubles, does the mean waiting time double or halve? Explain in one sentence.
 
 :::
 
+```{=latex}
+\end{minipage}\par
+```
 
-If the exponential rate doubles, what happens to the average waiting time? Why would multiplying the simulated waiting times by two represent the opposite change?
+::: {#sol-rv-rate}
 
-::::
+**B.** The mean is $1/\lambda$, so `rate = 1 / 5` gives mean 5. Doubling the rate halves the mean. Multiplying each waiting time by two would instead halve the rate.
+
+:::
 
 :::: {#rv-block-17 .callout-example title="Numerical Inversion: Using Root Finding"}
 
@@ -756,17 +785,40 @@ $$
 f(y)=6y(1-y),\qquad 0<y<1.
 $$
 
-With a uniform proposal, $g(y)=1$. Since the maximum occurs at $y=1/2$,
+With a uniform proposal, $g(y)=1$. The derivative is $6-12y$, which is zero at $y=1/2$; the second derivative is $-12$ and the endpoint densities are zero. Thus
 
 $$
 M_{\min}=\max_{0<y<1}6y(1-y)=\frac{3}{2}.
 $$
 
-The resulting acceptance probability is $2/3$. Choosing $M=6$ is also valid, but accepts only $1/6$ of proposals on average. A bound can be correct and unnecessarily expensive.
+The overall acceptance rate is $1/M=2/3$. For a particular proposal $y$, the decision uses $f(y)/(Mg(y))=4y(1-y)$:
+
+```{r}
+#| label: rv-rejection-trace
+#| echo: false
+knitr::kable(booktabs = TRUE, data.frame(
+  y = c(0.2, 0.5, 0.9), u = c(0.5, 0.9, 0.5),
+  threshold = c(0.64, 1, 0.36),
+  decision = c("Accept; save 0.2", "Accept; save 0.5", "Reject; draw a new pair")
+), col.names = c("y", "u", "4y(1-y)", "Decision"), digits = 2)
+```
+
+```{r}
+#| label: rv-rejection-one-draw
+#| code-fold: false
+set.seed(8670)
+y <- runif(1)                    # propose the value to keep
+u <- runif(1)                    # independent decision draw
+accept_prob <- 4 * y * (1 - y)   # f(y) / (M * g(y))
+u <= accept_prob                 # if TRUE, save y, not u
+```
+
+Repeat until $n$ values have been saved. Choosing $M=6$ is also valid, but the overall acceptance rate falls to $1/6$.
 
 ```{r}
 #| label: fig-rv-rejection
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Uniform proposals form points under the envelope of height 1.5. Retaining only points below the target density produces Beta(2,2) draws along the horizontal axis."
 set.seed(8670)
 proposal <- runif(1500)
@@ -784,11 +836,13 @@ ggplot(proposal_data, aes(proposal, height, color = accepted)) +
   labs(x = "Proposal y", y = "Height", color = NULL)
 ```
 
-The following implementation stops as soon as it has exactly $n$ accepted observations. Counting all proposals makes its efficiency visible.
+The full R function in the online notes stops at exactly $n$ accepted observations. The table compares its proposal counts with the expected cost $nM$.
 
 ```{r}
 #| label: rv-rejection-generator
+#| code-summary: "Full generator and efficiency check"
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 rbeta22_rejection <- function(n, M = 1.5) {
   stopifnot(
     length(n) == 1L, is.finite(n), n >= 0, n == floor(n),
@@ -814,7 +868,7 @@ set.seed(8670)
 beta_tight <- rbeta22_rejection(2000, M = 1.5)
 beta_loose <- rbeta22_rejection(2000, M = 6)
 
-knitr::kable(data.frame(
+knitr::kable(booktabs = TRUE, data.frame(
   M = c(1.5, 6),
   proposals = c(beta_tight$proposals, beta_loose$proposals),
   expected_proposals = 2000 * c(1.5, 6),
@@ -829,26 +883,39 @@ Each proposal here uses two uniforms, one for $Y$ and one for the decision. Thus
 
 ::::
 
-:::: {#rv-block-27 .callout-exercise title="In-Class Question"}
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
 
-::: {.content-visible when-format="pdf"}
+::: {#exr-rv-rejection}
 
-**Exercise 2. In-Class Question**
+## In Class: Check One Proposal (3 minutes)
+
+For the same target and uniform proposal, take $y=0.8$ and $u=0.7$.
+
+1. With $M=1.5$, compute the acceptance threshold and decide whether to keep $y$.
+2. **T/F.** We can improve efficiency by using $M=1$ and capping the acceptance probability at 1.
 
 :::
 
+```{=latex}
+\end{minipage}\par
+```
 
-What goes wrong if we choose $M=1$ and simply replace acceptance probabilities above one by one? Why does a histogram that looks plausible fail to justify this shortcut?
+::: {#sol-rv-rejection}
 
-::::
+1. The threshold is $4(0.8)(0.2)=0.64$. Since $0.7>0.64$, reject this proposal.
+2. **F.** At $y=0.5$, $f(y)=1.5>Mg(y)=1$. Capping the ratio cannot repair an invalid envelope; it changes the accepted distribution.
+
+:::
 
 ::: {#rv-block-28 .callout-caution title="A Bound Must Hold Everywhere"}
 
-The envelope condition would fail near the mode. Capping the ratio changes the accepted density to one proportional to $\min\{g(y),f(y)/M\}$, which generally is not $f$.
+The envelope must satisfy $f(y)\leq Mg(y)$ throughout the support. A plausible histogram cannot establish that condition.
 
 :::
 
-::: {#rv-block-29 .callout-note title="Unnormalized Targets"}
+::: {#rv-block-29 .callout-note title="Unnormalized Targets" collapse="true"}
 
 Sometimes we know only $h(x)$ where
 
@@ -863,7 +930,7 @@ This is useful for some posterior distributions, where the normalizing constant 
 
 :::
 
-::: {#rv-block-30 .callout-note title="Connections and Limitations"}
+::: {#rv-block-30 .callout-note title="Connections and Limitations" collapse="true"}
 
 **Connection to optimization.** Finding the smallest bound involves maximizing $f/g$, or its logarithm. A numerical optimizer or a finite grid may help explore this ratio, but does not by itself prove a global bound, especially on unbounded support.
 
@@ -920,6 +987,7 @@ A bivariate standard normal has circularly symmetric density. Its direction is u
 ```{r}
 #| label: fig-rv-box-muller
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Box-Muller creates a circular normal cloud from two independent uniforms. The two normal coordinates are independent even though their formulas share a radius and angle."
 set.seed(8670)
 n <- 4000
@@ -989,6 +1057,7 @@ A $t$ statistic divides a standardized normal estimation error by an estimated s
 ```{r}
 #| label: fig-rv-student-t
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "A random denominator creates heavier tails. The generated ratios agree with the t distribution with 5 degrees of freedom; the dashed normal density has lighter tails."
 set.seed(8670)
 n <- 10000
@@ -1050,6 +1119,7 @@ The ratio is a random share of a positive total. This gives intuition for beta m
 ```{r}
 #| label: fig-rv-beta-qq
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "A quantile comparison checks the entire distribution of the gamma ratio against Beta(3,2), including its tails."
 set.seed(8670)
 n <- 5000
@@ -1197,6 +1267,7 @@ The mixture has mean 2 and variance 5. It describes observations from two subpop
 ```{r}
 #| label: fig-rv-mixture
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Adding two observations, averaging them, and selecting one population produce different distributions. The solid curves show their respective theoretical densities."
 #| fig-width: 10
 set.seed(8670)
@@ -1268,18 +1339,27 @@ This decomposition explains why unobserved heterogeneity can inflate variability
 
 :::
 
-:::: {#rv-block-51 .callout-exercise title="In-Class Question"}
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
 
-::: {.content-visible when-format="pdf"}
+::: {#exr-rv-mixture}
 
-**Exercise 3. In-Class Question**
+## In Class: Mixture or Average? (2 minutes)
+
+Let $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$ be independent. **T/F.** Returning $(X_1+X_2)/2$ generates the same distribution as choosing one of the two components with equal probabilities. Both have mean 2; what else should you check?
 
 :::
 
+```{=latex}
+\end{minipage}\par
+```
 
-In the example above, the weighted average and the mixture both have mean 2. Why would checking only the sample mean fail to detect the wrong generator?
+::: {#sol-rv-mixture}
 
-::::
+**F.** The average has variance $(1+1)/4=0.5$. The mixture has variance $1+\{(0-2)^2+(4-2)^2\}/2=5$. Check variance and the distribution's shape; the common mean does not distinguish the generators.
+
+:::
 
 :::: {#rv-block-52 .callout-example title="Poisson-Gamma Mixing and Overdispersion"}
 
@@ -1318,7 +1398,7 @@ b <- 0.5
 latent_rate <- rgamma(n, shape = a, rate = b)
 counts <- rpois(n, lambda = latent_rate)
 
-knitr::kable(data.frame(
+knitr::kable(booktabs = TRUE, data.frame(
   quantity = c("Mean", "Variance"),
   simulated = c(mean(counts), var(counts)),
   theoretical = c(a / b, a / b + a / b^2)
@@ -1397,6 +1477,53 @@ For a column vector, the corresponding factor is $A=R^\top$. Mixing up these ori
 
 :::
 
+**Work one two-dimensional case before using the matrix formula.** To obtain standard normal marginals with correlation $0.6$, use
+
+$$
+\Sigma=\begin{pmatrix}1&0.6\\0.6&1\end{pmatrix},
+\qquad R=\begin{pmatrix}1&0.6\\0&0.8\end{pmatrix},
+\qquad R^\top R=\Sigma.
+$$
+
+For independent standard normals $Z_1,Z_2$, row multiplication gives
+
+$$
+X_1=Z_1,\qquad X_2=0.6Z_1+0.8Z_2.
+$$
+
+The second variance is $0.6^2+0.8^2=1$, and the covariance is $0.6\operatorname{Var}(Z_1)=0.6$. If $(z_1,z_2)=(1,-1)$, the output is $(1,-0.2)$.
+
+```{r}
+#| label: rv-cholesky-core
+#| code-fold: false
+Sigma_small <- matrix(c(1, 0.6, 0.6, 1), nrow = 2)
+R_small <- chol(Sigma_small)             # upper triangular factor
+z_row <- matrix(c(1, -1), nrow = 1)      # one observation, two coordinates
+z_row %*% R_small                       # one correlated observation
+```
+
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
+::: {#exr-rv-cholesky}
+
+## In Class: Match the Matrix to the Code (3 minutes)
+
+Using the same $R$, transform the row $(z_1,z_2)=(2,0)$. **Multiple choice.** For independent standard normal rows in `Z`, which gives covariance $\Sigma$: **(A)** `Z %*% R` or **(B)** `Z %*% t(R)`?
+
+:::
+
+```{=latex}
+\end{minipage}\par
+```
+
+::: {#sol-rv-cholesky}
+
+The transformed row is $(2,1.2)$. **A.** Each row corresponds to the column transformation $X=R^\top Z$, with covariance $R^\top R=\Sigma$. Choice B instead gives $RR^\top=\begin{pmatrix}1.36&0.48\\0.48&0.64\end{pmatrix}$.
+
+:::
+
 The construction has a geometric interpretation. In @fig-rv-covariance-map, the same points start in a circular cloud, become an ellipse after multiplication by the matrix factor, and then move to the desired mean. Color tracks each point's original first coordinate.
 
 ```{r}
@@ -1450,10 +1577,13 @@ ggplot(geometry_data, aes(x, y)) +
 
 :::
 
+The reusable `rmvn_chol()` function in the online notes generates rows of independent normals, multiplies by `chol(Sigma)`, and adds `mu` to each row. Here $n=10000$, $\mu=(1,2)^\top$, and $\Sigma=\begin{pmatrix}1&0.8\\0.8&2\end{pmatrix}$. Compare the sample mean and covariance below with these targets.
 
 ```{r}
 #| label: rv-mvn-generator
+#| code-summary: "Full multivariate generator and checks"
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 rmvn_chol <- function(n, mu, Sigma) {
   d <- length(mu)
   stopifnot(
@@ -1481,7 +1611,7 @@ The function also returns an $n\times d$ matrix for $n=0$ or $n=1$. This matters
 
 ::::
 
-::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization"}
+::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization" collapse="true"}
 
 The spectral decomposition is
 
@@ -1515,6 +1645,7 @@ Consider two standardized laboratory measurements with unit marginal variances. 
 ```{r}
 #| label: fig-rv-dependence
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "The marginal distributions are the same in both panels. Positive correlation puts more probability in the upper-right region where both measurements exceed 1."
 #| fig-width: 9
 set.seed(8670)
@@ -1555,7 +1686,7 @@ ggplot(dependence_plot, aes(x, y)) +
 ```{r}
 #| label: rv-joint-probability
 #| code-fold: true
-knitr::kable(joint_results, digits = 4,
+knitr::kable(booktabs = TRUE, joint_results, digits = 4,
              col.names = c("Model", "Joint probability", "MCSE"))
 (1 - pnorm(1))^2  # exact probability under independence
 ```
@@ -1626,6 +1757,7 @@ Each observation needs **one component label for the entire vector**. Drawing a 
 ```{r}
 #| label: fig-rv-mvn-mixture
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Each point is generated from one bivariate normal component. The label determines both its coordinates and its covariance structure."
 set.seed(8670)
 n <- 3000
@@ -1748,6 +1880,7 @@ We divide each row by its length directly. Constructing an $n\times n$ diagonal 
 ```{r}
 #| label: fig-rv-ball
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "In two dimensions, normalized normals lie on the circle. Multiplying by an independent square-root-uniform radius fills the disk uniformly in area."
 #| fig-width: 9
 set.seed(8670)
@@ -1770,24 +1903,25 @@ ggplot(sphere_plot, aes(x, y)) +
 
 ::::
 
-::: {#rv-block-68 .callout-note title="Geometry in High Dimensions"}
+::: {#rv-block-68 .callout-note title="Geometry in High Dimensions" collapse="true"}
 
 Random directions appear in rotationally invariant perturbations, geometric Monte Carlo methods, and randomized algorithms. In high dimensions, a uniform point in a ball is typically close to its boundary: $P(R\leq0.9)=0.9^d$. At $d=100$, this probability is about $0.000027$.
 
 :::
 
-:::: {#rv-block-69 .callout-exercise title="In-Class Question"}
+::: {#exr-rv-radius}
 
-::: {.content-visible when-format="pdf"}
+## Optional Self-Check: A Uniform Disk
 
-**Exercise 4. In-Class Question**
+**T/F.** A uniform angle and an independent $R\sim U(0,1)$ give a uniform point inside the unit disk. Compare the proposed $P(R\leq1/2)$ with the fraction of disk area inside radius $1/2$.
 
 :::
 
+::: {#sol-rv-radius}
 
-Why does a uniform radius on $(0,1)$ place too much mass near the center of a disk? Why does choosing a uniform latitude fail to generate uniform points on the surface of a three-dimensional sphere?
+**F.** A uniform radius gives probability $1/2$, but the inner disk occupies only $(1/2)^2=1/4$ of the area. Use $R=\sqrt U$ so that $P(R\leq r)=r^2$.
 
-::::
+:::
 
 ## Checking a Generator
 
@@ -1811,6 +1945,7 @@ For the rejection sampler, the ECDF should track the target CDF, and the transfo
 ```{r}
 #| label: fig-rv-validation
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "The empirical CDF of accepted proposals tracks the Beta(2,2) CDF. Sampling variation creates small discrepancies even for a correct generator."
 ggplot(data.frame(value = beta_tight$draws), aes(value)) +
   stat_ecdf(geom = "step", color = "steelblue", linewidth = 0.7) +
@@ -1866,7 +2001,7 @@ event <- rexp(B, rate = 0.7) > 3
 p_hat <- mean(event)
 mcse <- sqrt(p_hat * (1 - p_hat) / B)
 
-knitr::kable(data.frame(
+knitr::kable(booktabs = TRUE, data.frame(
   estimate = p_hat,
   MCSE = mcse,
   exact = exp(-0.7 * 3),
@@ -1931,7 +2066,12 @@ The next step is to use these generators to approximate expectations, integrals,
 
 ## Optional: Real-World Applications
 
-The core chapter is complete. The following **optional examples** show how to combine the generators in full statistical analyses. Their assumptions and parameters are illustrative. They can be used for additional class discussion or independent study.
+The core chapter is complete. These optional examples are for independent study. Choose one to connect the generators to a full analysis; their assumptions and parameters are illustrative.
+
+```{=html}
+<details class="rv-optional" id="rv-optional-power">
+<summary>Optional worked application: Experimental Power</summary>
+```
 
 :::: {#rv-block-76 .callout-example title="Optional Application: Experimental Power"}
 
@@ -1965,6 +2105,7 @@ We generate **whole datasets**, apply the proposed analysis to each dataset, and
 ```{r}
 #| label: rv-power-study
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 set.seed(8670)
 B <- 4000
 sigma <- 1
@@ -1991,13 +2132,14 @@ power_results <- do.call(rbind, lapply(seq_len(nrow(design)), function(i) {
 power_results$scenario <- ifelse(
   power_results$delta == 0, "Null: Type I error", "Effect 0.5: power"
 )
-knitr::kable(power_results[, c("n", "delta", "estimated", "exact", "MCSE")],
+knitr::kable(booktabs = TRUE, power_results[, c("n", "delta", "estimated", "exact", "MCSE")],
              digits = 4)
 ```
 
 ```{r}
 #| label: fig-rv-power
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Points are simulated rejection rates with approximate 95% Monte Carlo error bars. Lines are exact normal-model probabilities. Increasing the experiment's sample size increases power, while the Type I error remains near 0.05."
 #| fig-width: 9
 ggplot(power_results, aes(n, estimated)) +
@@ -2022,6 +2164,15 @@ If $\sigma$ is estimated, replace the known-variance test with the actual planne
 :::
 
 ::::
+
+```{=html}
+</details>
+```
+
+```{=html}
+<details class="rv-optional" id="rv-optional-prediction">
+<summary>Optional worked application: Predicting Defect Counts</summary>
+```
 
 :::: {#rv-block-78 .callout-example title="Optional Application: Predicting Defect Counts"}
 
@@ -2071,6 +2222,7 @@ compared with the plug-in variance $50(0.2)(0.8)=8$.
 ```{r}
 #| label: rv-predictive
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 set.seed(8670)
 B <- 20000
 a_post <- 4
@@ -2105,14 +2257,17 @@ predictive_comparison <- data.frame(
     pbinom(14, size = batch_size, prob = p_mean, lower.tail = FALSE)
   )
 )
-knitr::kable(predictive_comparison, digits = 3, col.names = c(
-  "Model", "Sim. variance", "Exact variance", "Sim. P(Y >= 15)", "Exact P(Y >= 15)"
+knitr::kable(booktabs = TRUE, predictive_comparison, digits = 3, col.names = c(
+  "Model", "Sim. Var", "Exact Var", "Sim. tail", "Exact tail"
 ))
 ```
+
+The tail columns report $P(Y\geq15)$.
 
 ```{r}
 #| label: fig-rv-predictive
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "The posterior predictive distribution spreads probability over a wider range of defect counts. The plug-in model ignores uncertainty about the process rate. Lines show exact probabilities and bars show simulated proportions."
 #| fig-width: 9
 predictive_plot <- rbind(
@@ -2148,6 +2303,15 @@ If we drew a fresh independent $p$ for each individual item instead of one share
 
 ::::
 
+```{=html}
+</details>
+```
+
+```{=html}
+<details class="rv-optional" id="rv-optional-queue">
+<summary>Optional worked application: Queue Delays</summary>
+```
+
 :::: {#rv-block-80 .callout-example title="Optional Application: Queue Delays"}
 
 ::: {.content-visible when-format="pdf"}
@@ -2173,6 +2337,7 @@ We compare arrival rates $0.35$ and $0.45$ per minute. Their utilization values 
 ```{r}
 #| label: rv-queue
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 simulate_queue <- function(arrival_rate, n_customers = 200) {
   interarrival <- rexp(n_customers, rate = arrival_rate)
   service <- rgamma(n_customers, shape = 2, rate = 1)
@@ -2200,7 +2365,7 @@ queue_results <- do.call(rbind, lapply(rates, function(rate) {
     MCSE = sd(fraction_delayed) / sqrt(B_days)
   )
 }))
-knitr::kable(queue_results, digits = 4, col.names = c(
+knitr::kable(booktabs = TRUE, queue_results, digits = 4, col.names = c(
   "Arrival rate", "Utilization", "Fraction waiting > 5", "MCSE"
 ))
 ```
@@ -2208,6 +2373,7 @@ knitr::kable(queue_results, digits = 4, col.names = c(
 ```{r}
 #| label: fig-rv-queue
 #| code-fold: true
+#| echo: !expr knitr::is_html_output()
 #| fig-cap: "Two illustrative paths show how delays carry over between customers. Estimates in the table average 800 independent runs per scenario; one path alone can be misleading."
 #| fig-width: 9
 set.seed(8670)
@@ -2236,46 +2402,62 @@ This example combines distribution choice, recursive computation, and statistica
 
 ::::
 
-## Exercises {.unnumbered}
+```{=html}
+</details>
+```
 
-:::: {#rv-block-82 .callout-exercise title="Questions to Think at Home"}
+## Concept Checks and Practice {#sec-rv-practice}
 
-::: {.content-visible when-format="pdf"}
+Try the concept checks first (about 5 minutes), then the short calculations (about 10 minutes). Explain your choice before opening the solution.
 
-**Exercise 5. Questions to Think at Home**
+::: {#exr-rv-concepts}
+
+## Concept Check: Choose or Mark True/False
+
+1. **Multiple choice.** In inverse transformation, $U$ is **(A)** an observation from the target or **(B)** a probability level to be transformed.
+2. **T/F.** A larger valid rejection bound $M$ increases the acceptance rate.
+3. **T/F.** If $f=h/Z$ and $h\leq Cg$, accepting with probability $h(Y)/(Cg(Y))$ requires knowing $Z$.
+4. **Multiple choice.** To generate a $t_4$ variable from independent $Z\sim N(0,1)$ and $V\sim\chi^2_4$, use **(A)** $Z/\sqrt{V/4}$ or **(B)** $Z/(V/4)$.
+5. **T/F.** A mixture of bivariate normals uses one component label for the whole row.
+6. **T/F.** Correct marginal histograms establish that a multivariate generator is correct.
 
 :::
 
+::: {#sol-rv-concepts}
 
-1. Derive an inverse-transform generator for $f(x)=4x^3$ on $(0,1)$. Check its theoretical mean and one tail probability.
+| Item | Answer | Reason |
+|:----:|:--------:|:--------------------------------------------------|
+| 1 | B | Apply $F^{-1}$ to convert the probability level into an observation. |
+| 2 | F | The rate is $1/M$ for a normalized target and proposal. |
+| 3 | F | $Z$ is unnecessary for the decision; the overall rate is $Z/C$. |
+| 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
+| 5 | T | Both coordinates belong to the chosen component; separate labels change the joint model. |
+| 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
 
-2. Generate 500 observations from an exponential distribution with mean 5. Explain the difference between `rate = 5` and `rate = 1 / 5`.
+:::
 
-3. Why does the generalized inverse use $F(x)\geq u$? Illustrate your answer with a Bernoulli distribution.
+::: {#exr-rv-calculations}
 
-4. For a $\operatorname{Beta}(3,1)$ target and a uniform proposal, find the smallest valid rejection bound $M$, the acceptance probability, and the expected number of proposals for 1000 accepted draws.
+## Practice: Construct, Calculate, Check
 
-5. Derive the acceptance probability when the target is known only through an unnormalized density. Which constant need not be computed?
+1. **Inverse transformation.** For $f(x)=4x^3$ on $(0,1)$, derive $F(x)$ and a generator. Transform $u=1/16$, and find $E(X)$ and $P(X>1/2)$.
+2. **Rejection sampling.** For $f(y)=3y^2$ on $(0,1)$ and $g(y)=1$, find the smallest valid $M$, the acceptance rate, and the expected number of proposals for 1000 accepted draws. Is $(y,u)=(0.5,0.3)$ accepted?
+3. **Repair the R code.** Rows of `Z` contain independent standard normals. The target has mean `mu` and positive definite covariance `Sigma`. Correct the second line and explain which covariance check detects the original error.
 
-6. Generate a $t_4$ variable from independent normal and chi-square variables. Explain why its variance is 2 rather than 1. How would you rescale it to unit variance?
+```r
+R <- chol(Sigma)
+X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
+```
 
-7. Compare $0.3X_1+0.7X_2$ with a mixture that selects $X_1$ with probability $0.3$. Derive both means and variances for independent $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$.
+:::
 
-8. For a fixed positive definite covariance matrix, compare `Z %*% chol(Sigma)` with `Z %*% t(chol(Sigma))`. Derive the covariance produced by each.
+::: {#sol-rv-calculations}
 
-9. In a mixture of bivariate normals, what changes if you draw one component label per coordinate instead of one per row?
+1. $F(x)=\int_0^x4t^3\,dt=x^4$, so $X=U^{1/4}$. At $u=1/16$, $x=1/2$. Also $E(X)=\int_0^1 4x^4\,dx=4/5$ and $P(X>1/2)=1-(1/2)^4=15/16$.
+2. The supremum of $3y^2$ is 3, so $M=3$. The rate is $1/3$, and the expected proposal count is 3000. The threshold at $y=0.5$ is $y^2=0.25$; reject because $0.3>0.25$.
+3. Use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. The corrected covariance is $R^\top R=\Sigma$; the original gives $RR^\top$, generally different. Compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
 
-10. Derive the radius distribution for a uniform point inside a three-dimensional ball. Verify it using the empirical distribution of simulated radii.
-
-11. Extend the power experiment to unknown variance and a two-sample $t$ test. Compare Type I error and power under normal errors and under rescaled $t_3$ errors with the same variance.
-
-12. Simulate repeated datasets and estimate the coverage of a 95% confidence interval for an exponential mean. State the true mean, interval procedure, number of datasets, and MCSE of the coverage estimate.
-
-13. In the defect prediction example, vary the posterior concentration $a+b$ while holding $a/(a+b)=0.2$. What happens to predictive variance, and why?
-
-14. In the queue example, why is the number of independent runs relevant to the MCSE calculation? How would the target quantity change if you analyzed only later customers after a warm-up period?
-
-::::
+:::
 
 ## References and Further Reading {.unnumbered}
 
