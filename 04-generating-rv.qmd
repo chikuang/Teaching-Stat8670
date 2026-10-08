@@ -8,12 +8,14 @@
 #| cache: false
 #| code-fold: true
 library(ggplot2)
+source("chapter4-flowcharts.R")
 options(knitr.table.format = function() {
   if (knitr::is_latex_output()) "latex" else "html"
 })
 theme_set(theme_minimal(base_size = 14))
 knitr::opts_chunk$set(
-  cache.extra = getOption("knitr.table.format")(),
+  cache.extra = list(format = getOption("knitr.table.format")(),
+                     flowcharts = unname(tools::md5sum("chapter4-flowcharts.R"))),
   fig.width = 8, fig.height = 4.8, fig.align = "center",
   dpi = 144, collapse = TRUE, comment = "#>"
 )
@@ -219,11 +221,23 @@ where $V$ is an independent uniform and $F(X^-)$ is the CDF just below $X$.
 :::
 
 
-1. Obtain the quantile function $F^{-1}$ analytically or numerically.
-2. Generate independent $U_1,\ldots,U_n\sim\operatorname{Unif}(0,1)$.
-3. Return $X_i=F^{-1}(U_i)$ for each $i$.
+**Input:** a target CDF $F$ and sample size $n$. **Output:** $n$ independent draws from $F$.
+
+1. **Prepare the map.** Obtain $F^{-1}(u)$ analytically or numerically. For a continuous increasing CDF, solve $u=F(x)$ for $x$.
+2. **Draw probability levels.** Generate independent $U_1,\ldots,U_n\sim\operatorname{Unif}(0,1)$.
+3. **Convert to observations.** Return $X_i=F^{-1}(U_i)$ for each $i$. The output is on the target's scale, not the probability scale.
 
 ::::
+
+```{r}
+#| label: fig-rv-inverse-flow
+#| echo: false
+#| fig-width: 8
+#| fig-height: 1.25
+#| fig-cap: "Inverse transformation: prepare one map, then apply it to independent uniforms."
+#| fig-alt: "Specify the target CDF, find its quantile function, draw independent uniforms, and transform each uniform to an observation."
+rv_flowchart("inverse")
+```
 
 ### Continuous Distributions
 
@@ -442,7 +456,9 @@ If the rate doubles, does the mean waiting time double or halve? Explain in one 
 
 ::: {#sol-rv-rate}
 
-**B.** The mean is $1/\lambda$, so `rate = 1 / 5` gives mean 5. Doubling the rate halves the mean. Multiplying each waiting time by two would instead halve the rate.
+1. **Translate the mean into a rate.** For an exponential variable, $E(X)=1/\lambda$. Set $1/\lambda=5$, giving $\lambda=1/5$.
+2. **Match the R argument.** Use `rate = 1 / 5`, so the correct choice is **B**.
+3. **Check the direction.** Doubling the rate gives mean $1/(2/5)=2.5$. Multiplying waiting times by two would give mean 10 instead.
 
 :::
 
@@ -717,13 +733,24 @@ everywhere on the target support. In particular, $g(y)$ must be positive whereve
 :::
 
 
-Repeat until the desired number of observations has been accepted:
+**Input:** target density $f$, proposal density $g$, a valid bound $M$, and sample size $n$.
 
-1. Generate $Y\sim g$.
-2. Independently generate $U\sim\operatorname{Unif}(0,1)$.
-3. Accept $Y$ if $U\leq f(Y)/\{M g(Y)\}$; otherwise discard it.
+1. **Check before sampling.** Verify $f(y)\leq Mg(y)$ throughout the target support. Start with zero accepted values.
+2. **Propose and compare.** Draw $Y\sim g$ and, independently, $U\sim\operatorname{Unif}(0,1)$. Compute $a=f(Y)/\{Mg(Y)\}$.
+3. **Keep or discard.** If $U\leq a$, save **$Y$** and increase the accepted count by one. Otherwise discard $Y$.
+4. **Repeat with fresh $Y$ and $U$.** Stop only when $n$ values have been accepted. Return those $n$ values.
 
 ::::
+
+```{r}
+#| label: fig-rv-rejection-flow
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3.2
+#| fig-cap: "Rejection sampling: count accepted values, not attempted proposals."
+#| fig-alt: "Check the envelope and initialize the count. Draw a fresh proposal and uniform. Reject and redraw if the uniform exceeds the acceptance threshold. Otherwise save the proposal. Stop after n accepted values; if fewer, draw a new pair."
+rv_flowchart("rejection")
+```
 
 :::: {#rv-block-24 .callout-theorem title="Distribution and Cost of Accepted Proposals"}
 
@@ -904,8 +931,9 @@ For the same target and uniform proposal, take $y=0.8$ and $u=0.7$.
 
 ::: {#sol-rv-rejection}
 
-1. The threshold is $4(0.8)(0.2)=0.64$. Since $0.7>0.64$, reject this proposal.
-2. **F.** At $y=0.5$, $f(y)=1.5>Mg(y)=1$. Capping the ratio cannot repair an invalid envelope; it changes the accepted distribution.
+1. **Compute the threshold.** At $y=0.8$, $f(y)=6(0.8)(0.2)=0.96$ and $Mg(y)=1.5(1)=1.5$. Thus $a=0.96/1.5=0.64$.
+2. **Make the decision.** Since $u=0.7>0.64$, reject $y$. Draw a fresh proposal and a fresh uniform; do not increase the accepted count.
+3. **Check the proposed shortcut: F.** With $M=1$, the envelope fails at $y=0.5$: $f(y)=1.5>Mg(y)=1$. Capping the ratio changes the accepted distribution; choose a valid $M$ before sampling.
 
 :::
 
@@ -1230,12 +1258,23 @@ The law of total probability gives the mixture distribution after we average ove
 :::
 
 
-For every observation:
+**Input:** component distributions $F_1,\ldots,F_K$, weights $w_k\geq0$ with $\sum_k w_k=1$, and sample size $n$.
 
-1. Draw a component label $C$ with probabilities $w_1,\ldots,w_K$.
-2. Draw one observation from $F_C$.
+1. **Choose a component.** Draw one label $C$ with probabilities $w_1,\ldots,w_K$.
+2. **Sample within it.** Draw one observation $X$ from $F_C$ using fresh randomness. For a vector observation, the same label selects its entire component distribution.
+3. **Save and repeat.** Repeat steps 1--2 independently for each of the $n$ observations. Do not replace the label draw by a weighted average of component draws.
 
 ::::
+
+```{r}
+#| label: fig-rv-mixture-flow
+#| echo: false
+#| fig-width: 8
+#| fig-height: 1.25
+#| fig-cap: "A mixture chooses a component before generating an observation."
+#| fig-alt: "Specify components and probabilities, draw one component label, sample from that component, and save the observation. Use a fresh label for the next observation."
+rv_flowchart("mixture")
+```
 
 ::: {#rv-block-47 .callout-caution title="Mixture Weights Average Distributions"}
 
@@ -1357,7 +1396,9 @@ Let $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$ be independent. **T/F.** Returning $(X
 
 ::: {#sol-rv-mixture}
 
-**F.** The average has variance $(1+1)/4=0.5$. The mixture has variance $1+\{(0-2)^2+(4-2)^2\}/2=5$. Check variance and the distribution's shape; the common mean does not distinguish the generators.
+1. **Check the shared mean.** Both constructions have mean $(0+4)/2=2$, so the mean cannot tell them apart.
+2. **Compute the average's variance.** Independence gives $\operatorname{Var}\{(X_1+X_2)/2\}=(1+1)/4=0.5$.
+3. **Compute the mixture's variance.** Within-component variance is 1; between-component variance is $\{(0-2)^2+(4-2)^2\}/2=4$. The total is $1+4=5$. Hence **F**: the generators differ. Check variance and shape, not just the mean.
 
 :::
 
@@ -1461,21 +1502,29 @@ The normality follows because every linear combination of $\boldsymbol X$ is a l
 
 ::: {#rv-block-56 .callout-caution title="Match the Matrix Factor to the Row Convention"}
 
-R's `chol(Sigma)` returns an **upper triangular** matrix $R$ satisfying
+For **$n$ rows**, each with target mean $\boldsymbol\mu$ and symmetric positive-definite covariance $\boldsymbol\Sigma$:
 
-$$
-R^\top R=\boldsymbol\Sigma.
-$$
-
-If simulated observations are **rows** of an $n\times d$ matrix $Z$, use
+1. **Factor once.** Compute `R <- chol(Sigma)`. R returns an **upper triangular** factor with $R^\top R=\boldsymbol\Sigma$.
+2. **Generate independent inputs.** Fill an $n\times d$ matrix $Z$ with independent $N(0,1)$ draws.
+3. **Transform each row.** Multiply on the right by $R$, then add the mean to every row:
 
 $$
 X=ZR+\boldsymbol1_n\boldsymbol\mu^\top.
 $$
 
-For a column vector, the corresponding factor is $A=R^\top$. Mixing up these orientations generally produces the wrong covariance. See the [R documentation for `chol()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/chol.html).
+For a **column** vector, the corresponding formula is $X=\boldsymbol\mu+R^\top Z$. Multiplying rows by `t(R)` instead gives covariance $RR^\top$, generally the wrong matrix. See the [R documentation for `chol()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/chol.html).
 
 :::
+
+```{r}
+#| label: fig-rv-cholesky-flow
+#| echo: false
+#| fig-width: 8
+#| fig-height: 1.25
+#| fig-cap: "Cholesky generation in R: observations are rows, so multiply by R on the right."
+#| fig-alt: "Specify the mean, covariance, and sample size. Compute the Cholesky factor once, generate an n by d matrix of independent standard normals, multiply by the upper triangular factor, and add the mean to each row."
+rv_flowchart("cholesky")
+```
 
 **Work one two-dimensional case before using the matrix formula.** To obtain standard normal marginals with correlation $0.6$, use
 
@@ -1520,7 +1569,9 @@ Using the same $R$, transform the row $(z_1,z_2)=(2,0)$. **Multiple choice.** Fo
 
 ::: {#sol-rv-cholesky}
 
-The transformed row is $(2,1.2)$. **A.** Each row corresponds to the column transformation $X=R^\top Z$, with covariance $R^\top R=\Sigma$. Choice B instead gives $RR^\top=\begin{pmatrix}1.36&0.48\\0.48&0.64\end{pmatrix}$.
+1. **Multiply the row by each column.** For $(2,0)R$, the first entry is $2(1)+0(0)=2$; the second is $2(0.6)+0(0.8)=1.2$. The result is $(2,1.2)$.
+2. **Match the covariance.** A row multiplied by $R$ corresponds to a column transformed by $R^\top$, so its covariance is $R^\top R=\Sigma$. Choose **A**.
+3. **Diagnose B.** Multiplying rows by `t(R)` gives $RR^\top=\begin{pmatrix}1.36&0.48\\0.48&0.64\end{pmatrix}$, which does not match the target.
 
 :::
 
@@ -1919,7 +1970,8 @@ Random directions appear in rotationally invariant perturbations, geometric Mont
 
 ::: {#sol-rv-radius}
 
-**F.** A uniform radius gives probability $1/2$, but the inner disk occupies only $(1/2)^2=1/4$ of the area. Use $R=\sqrt U$ so that $P(R\leq r)=r^2$.
+1. **Compare probability with area.** A uniform radius gives $P(R\leq1/2)=1/2$, but the inner disk occupies only $(1/2)^2=1/4$ of the area. Hence **F**.
+2. **Use the required radial CDF.** Uniform area requires $F_R(r)=r^2$. Solve $u=r^2$ to get $R=\sqrt U$.
 
 :::
 
@@ -2453,9 +2505,23 @@ X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
 
 ::: {#sol-rv-calculations}
 
-1. $F(x)=\int_0^x4t^3\,dt=x^4$, so $X=U^{1/4}$. At $u=1/16$, $x=1/2$. Also $E(X)=\int_0^1 4x^4\,dx=4/5$ and $P(X>1/2)=1-(1/2)^4=15/16$.
-2. The supremum of $3y^2$ is 3, so $M=3$. The rate is $1/3$, and the expected proposal count is 3000. The threshold at $y=0.5$ is $y^2=0.25$; reject because $0.3>0.25$.
-3. Use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. The corrected covariance is $R^\top R=\Sigma$; the original gives $RR^\top$, generally different. Compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
+1. **Inverse transformation** (follow @fig-rv-inverse-flow).
+
+   - **Find the CDF:** $F(x)=\int_0^x4t^3\,dt=x^4$ for $0<x<1$.
+   - **Invert and substitute:** $u=x^4$ gives $X=U^{1/4}$. At $u=1/16$, $x=(1/16)^{1/4}=1/2$.
+   - **Check the target:** $E(X)=\int_0^1 4x^4\,dx=4/5$ and $P(X>1/2)=1-F(1/2)=15/16$.
+
+2. **Rejection sampling** (follow @fig-rv-rejection-flow).
+
+   - **Find a global bound:** $f(y)/g(y)=3y^2$ has supremum 3 on $(0,1)$, so the smallest valid bound is $M=3$.
+   - **Compute efficiency:** acceptance rate $=1/M=1/3$; expected proposals $=nM=1000(3)=3000$.
+   - **Decide on this proposal:** $a=f(0.5)/\{Mg(0.5)\}=3(0.5)^2/3=0.25$. Since $0.3>0.25$, reject and draw a fresh pair.
+
+3. **Repair the R code** (follow @fig-rv-cholesky-flow).
+
+   - **Identify the factor:** `chol(Sigma)` gives $R^\top R=\Sigma$.
+   - **Match rows to the factor:** use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. This gives covariance $R^\top R$; the original gives $RR^\top$.
+   - **Check the result:** compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
 
 :::
 
