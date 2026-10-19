@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In the previous chapter, we used computation to estimate parameters from data. Here we go in the other direction: **given a probability model, how do we generate observations from it?**
+In [Chapter 3: Optimization](03-optimization.qmd), we used computation to estimate parameters from data. Here we go in the other direction: **given a probability model, how do we generate observations from it?**
 
 We start with uniform random numbers, use them to construct one-dimensional distributions, and then build mixtures and random vectors. At each step, we ask the same three questions: **What is the construction? Why does it have the desired distribution? How can we check it?**
 
@@ -968,11 +968,11 @@ This is useful for some posterior distributions, where the normalizing constant 
 
 Known distributional relationships are also simulation algorithms. They often reveal *why* a distribution appears in statistical inference.
 
-:::: {#rv-block-31 .callout-theorem title="Box-Muller Transformation"}
+:::: {#rv-block-31 .callout-theorem title="Box-Muller Transformation (Optional)"}
 
 ::: {.content-visible when-format="pdf"}
 
-**Theorem 4. Box-Muller Transformation**
+**Theorem 4. Box-Muller Transformation (Optional)**
 
 :::
 
@@ -1082,7 +1082,8 @@ A $t$ statistic divides a standardized normal estimation error by an estimated s
 #| label: fig-rv-student-t
 #| code-fold: true
 #| echo: !expr knitr::is_html_output()
-#| fig-cap: "A random denominator creates heavier tails. The generated ratios agree with the t distribution with 5 degrees of freedom; the dashed normal density has lighter tails."
+#| fig-cap: "The light-blue bars show 10,000 simulated ratios. The red solid line is the theoretical t density with 5 degrees of freedom; the black dashed line is the standard normal density. The ratios follow the t distribution, which has heavier tails than the standard normal."
+#| fig-alt: "A light-blue histogram of simulated t ratios, a red solid t(5) density curve, and a black dashed standard normal density curve. The legend identifies both curves; the t curve has heavier tails."
 set.seed(8670)
 n <- 10000
 nu <- 5
@@ -1094,10 +1095,22 @@ ggplot(data.frame(value = t_draws), aes(value)) +
   geom_histogram(aes(y = after_stat(density)), binwidth = 0.2,
                  fill = "lightblue", color = "white") +
   stat_function(fun = function(x) dt(x, df = nu),
-                color = "firebrick", linewidth = 1) +
-  stat_function(fun = dnorm, linetype = "dashed", linewidth = 0.8) +
+                aes(color = "t distribution (df = 5)",
+                    linetype = "t distribution (df = 5)"), linewidth = 1) +
+  stat_function(fun = dnorm,
+                aes(color = "Standard normal N(0, 1)",
+                    linetype = "Standard normal N(0, 1)"), linewidth = 0.8) +
+  scale_color_manual(name = "Density curve",
+                     breaks = c("t distribution (df = 5)", "Standard normal N(0, 1)"),
+                     values = c("t distribution (df = 5)" = "firebrick",
+                                "Standard normal N(0, 1)" = "black")) +
+  scale_linetype_manual(name = "Density curve",
+                        breaks = c("t distribution (df = 5)", "Standard normal N(0, 1)"),
+                        values = c("t distribution (df = 5)" = "solid",
+                                   "Standard normal N(0, 1)" = "dashed")) +
   coord_cartesian(xlim = c(-6, 6)) +
-  labs(x = "Ratio", y = "Density")
+  labs(x = "Ratio", y = "Density") +
+  theme(legend.position = "bottom", legend.text = element_text(size = 11))
 ```
 
 ::::
@@ -1164,7 +1177,7 @@ ggplot(qq_data, aes(theoretical, observed)) +
 
 ::::
 
-::: {#rv-block-42 .callout-note title="Connection to Dirichlet Distributions"}
+::: {#rv-block-42 .callout-note title="Connection to Dirichlet Distributions (Optional)"}
 
 Normalizing several independent gammas with a common rate similarly produces a **Dirichlet** random vector. Its components sum to one, making it useful for uncertain category probabilities and mixture weights.
 
@@ -2071,7 +2084,9 @@ To halve MCSE, we generally need about **four times** as many independent replic
 
 ::: {#rv-block-73 .callout-note title="Three Different Sources of Uncertainty"}
 
-**Sampling uncertainty** concerns what would happen with another real dataset. **Monte Carlo uncertainty** comes from using finitely many simulated replications to study that behavior. **Model uncertainty** concerns whether the assumed mechanism is an adequate description of the setting.
+- **Sampling uncertainty** concerns what would happen with another real dataset.
+- **Monte Carlo uncertainty** comes from using finitely many simulated replications to study that behavior.
+- **Model uncertainty** concerns whether the assumed mechanism is an adequate description of the setting.
 
 More simulation reduces Monte Carlo uncertainty. It does not automatically reduce the other two.
 
@@ -2520,6 +2535,23 @@ X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
    - **Check the result:** compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
 
 :::
+
+## Chapter Summary {#sec-rv-summary}
+
+This chapter answers one question: **How can we turn a probability model into simulated data?**
+
+### Main Ideas {.unnumbered .unlisted}
+
+- **Choose a suitable method.** Use inverse transformation when the quantile function is available, acceptance-rejection when an easy proposal and a valid bound are available, or known distributional relationships.
+- **Preserve the joint model.** For a mixture, choose a component before drawing an observation. For multivariate data, preserve the required dependence as well as the marginal distributions.
+- **Check the generator.** Compare its support, moments, plots, and joint behavior with the intended model.
+- **Measure simulation error.** For independent replications, MCSE typically decreases like $1/\sqrt{B}$. More simulation reduces Monte Carlo uncertainty; it does not fix an inappropriate model.
+
+### Connections to Other Chapters {.unnumbered .unlisted}
+
+- [**Chapter 1: Introduction to R**](01-R.qmd) provides the functions, vectors, and loops used to implement simulations.
+- [**Chapter 2: Intro to Computational Statistics**](02-computation.qmd) provides the numerical and matrix tools needed to turn mathematical formulas into reliable code.
+- [**Chapter 3: Optimization**](03-optimization.qmd) fits a model to data. This chapter generates data from a model. Combining the two lets us repeatedly simulate and refit data to study an estimator's accuracy.
 
 ## References and Further Reading {.unnumbered}
 

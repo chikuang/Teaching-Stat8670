@@ -4,6 +4,18 @@
 
 Choose **one statistical method**, implement its main algorithm, test it, and explain what you learned. One well-developed, established method is enough.
 
+## Group Members {#group-members}
+
+::: {tbl-colwidths="[12,63,25]"}
+
+| Group | Members | Topic |
+|:---:|:---|:---|
+| 1 | Jones, Airianna; Grant, Jada; Honne, Shravya | TBA |
+
+:::
+
+## Project Overview
+
 **What you will produce**
 
 Use the same method for all three components. Follow the links for full requirements and rubrics.
