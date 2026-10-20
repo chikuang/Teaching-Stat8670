@@ -910,6 +910,21 @@ ggplot() +
   theme(legend.position = "bottom", legend.text = element_text(size = 11))
 ```
 
+::: {#rv-density-normalization .callout-note title="A normalized density can exceed 1"}
+A probability density is **normalized when its total area equals 1**. Its height can exceed 1. The target $\operatorname{Beta}(2,2)$ density in @fig-rv-rejection is already normalized:
+
+$$
+f(y)=6y(1-y),\quad 0\leq y\leq 1,
+\qquad
+\int_0^1 f(y)\,dy
+=\left[3y^2-2y^3\right]_0^1=1.
+$$
+
+Nevertheless, its maximum is $f(1/2)=3/2=1.5$. Probabilities are **areas over intervals**, such as $P(a\leq Y\leq b)=\int_a^b f(y)\,dy$, rather than the height $f(y)$ at a point.
+
+The right-hand histogram is also normalized: each bar has height $\text{count}/(n_{\text{accepted}}\times\text{bin width})$, so the bar areas sum to 1. For example, a density of $1.6$ over a bin of width $0.05$ represents probability $1.6\times0.05=0.08$. Normalization therefore does not require the density's maximum to equal 1.
+:::
+
 The full R function in the online notes stops at exactly $n$ accepted observations. The table compares its proposal counts with the expected cost $nM$.
 
 ```{r}
