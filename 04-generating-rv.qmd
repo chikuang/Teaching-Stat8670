@@ -2314,7 +2314,115 @@ The next step is to use these generators to approximate expectations, integrals,
 
 :::
 
-## Optional: Real-World Applications
+## Concept Checks and Practice {#sec-rv-practice}
+
+Try the concept checks first, then the short calculations. Explain your choice before opening the solution.
+
+::: {#exr-rv-concepts}
+
+## Concept Check: Choose or Mark True/False
+
+1. **Multiple choice.** In inverse transformation, $U$ is **(A)** an observation from the target or **(B)** a probability level to be transformed.
+2. **T/F.** A larger valid rejection bound $M$ increases the acceptance rate.
+3. **T/F.** If $f=h/Z$ and $h\leq Cg$, accepting with probability $h(Y)/(Cg(Y))$ requires knowing $Z$.
+4. **Multiple choice.** To generate a $t_4$ variable from independent $Z\sim N(0,1)$ and $V\sim\chi^2_4$, use **(A)** $Z/\sqrt{V/4}$ or **(B)** $Z/(V/4)$.
+5. **T/F.** A mixture of bivariate normals uses one component label for the whole row.
+6. **T/F.** Correct marginal histograms establish that a multivariate generator is correct.
+
+:::
+
+::: {#sol-rv-concepts}
+
+| Item | Answer | Reason |
+|:----:|:--------:|:--------------------------------------------------|
+| 1 | B | Apply $F^{-1}$ to convert the probability level into an observation. |
+| 2 | F | The rate is $1/M$ for a normalized target and proposal. |
+| 3 | F | $Z$ is unnecessary for the decision; the overall rate is $Z/C$. |
+| 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
+| 5 | T | Both coordinates belong to the chosen component; separate labels change the joint model. |
+| 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
+
+:::
+
+::: {#exr-rv-calculations}
+
+## Practice: Construct, Calculate, Check
+
+1. **Inverse transformation.** For $f(x)=4x^3$ on $(0,1)$, derive $F(x)$ and a generator. Transform $u=1/16$, and find $E(X)$ and $P(X>1/2)$.
+2. **Rejection sampling.** For $f(y)=3y^2$ on $(0,1)$ and $g(y)=1$, find the smallest valid $M$, the acceptance rate, and the expected number of proposals for 1000 accepted draws. Is $(y,u)=(0.5,0.3)$ accepted?
+3. **Repair the R code.** Rows of `Z` contain independent standard normals. The target has mean `mu` and positive definite covariance `Sigma`. Correct the second line and explain which covariance check detects the original error.
+
+```r
+R <- chol(Sigma)
+X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
+```
+
+:::
+
+::: {#sol-rv-calculations}
+
+1. **Inverse transformation** (follow @fig-rv-inverse-flow).
+
+   - **Find the CDF:** $F(x)=\int_0^x4t^3\,dt=x^4$ for $0<x<1$.
+   - **Invert and substitute:** $u=x^4$ gives $X=U^{1/4}$. At $u=1/16$, $x=(1/16)^{1/4}=1/2$.
+   - **Check the target:** $E(X)=\int_0^1 4x^4\,dx=4/5$ and $P(X>1/2)=1-F(1/2)=15/16$.
+
+2. **Rejection sampling** (follow @fig-rv-rejection-flow).
+
+   - **Find a global bound:** $f(y)/g(y)=3y^2$ has supremum 3 on $(0,1)$, so the smallest valid bound is $M=3$.
+   - **Compute efficiency:** acceptance rate $=1/M=1/3$; expected proposals $=nM=1000(3)=3000$.
+   - **Decide on this proposal:** $a=f(0.5)/\{Mg(0.5)\}=3(0.5)^2/3=0.25$. Since $0.3>0.25$, reject and draw a fresh pair.
+
+3. **Repair the R code** (follow @fig-rv-cholesky-flow).
+
+   - **Identify the factor:** `chol(Sigma)` gives $R^\top R=\Sigma$.
+   - **Match rows to the factor:** use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. This gives covariance $R^\top R$; the original gives $RR^\top$.
+   - **Check the result:** compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
+
+:::
+
+## Chapter Summary {#sec-rv-summary}
+
+This chapter answers one question: **How can we turn a probability model into simulated data?**
+
+### Main Ideas {.unnumbered .unlisted}
+
+- **Choose a suitable method.** Use inverse transformation when the quantile function is available, acceptance-rejection when an easy proposal and a valid bound are available, or known distributional relationships.
+- **Preserve the joint model.** For a mixture, choose a component before drawing an observation. For multivariate data, preserve the required dependence as well as the marginal distributions.
+- **Check the generator.** Compare its support, moments, plots, and joint behavior with the intended model.
+- **Measure simulation error.** For independent replications, MCSE typically decreases like $1/\sqrt{B}$. More simulation reduces Monte Carlo uncertainty; it does not fix an inappropriate model.
+
+### Connections to Other Chapters {.unnumbered .unlisted}
+
+- [**Chapter 1: Introduction to R**](01-R.qmd) provides the functions, vectors, and loops used to implement simulations.
+- [**Chapter 2: Intro to Computational Statistics**](02-computation.qmd) provides the numerical and matrix tools needed to turn mathematical formulas into reliable code.
+- [**Chapter 3: Optimization**](03-optimization.qmd) fits a model to data. This chapter generates data from a model. Combining the two lets us repeatedly simulate and refit data to study an estimator's accuracy.
+
+## Side facts {#sec-rv-supplement}
+
+The content here won't be on the exam
+
+::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization" collapse="true"}
+
+The spectral decomposition is
+
+$$
+\boldsymbol\Sigma=P\Lambda P^\top,
+\qquad
+\boldsymbol\Sigma^{1/2}=P\Lambda^{1/2}P^\top.
+$$
+
+The eigenvectors specify directions, and the square roots of the eigenvalues specify how much to stretch a standard normal cloud in those directions.
+
+This connects generation to **principal component analysis**. PCA identifies directions of variation in observed data; simulation constructs that variation from independent coordinates.
+
+A covariance matrix can be positive semidefinite with some eigenvalues equal to zero. The normal vector then lies in a lower-dimensional subspace. Ordinary unpivoted Cholesky may fail, whereas an eigenvalue construction can handle that case. Tiny negative eigenvalues caused by roundoff may be set to zero after a tolerance check; substantial negative eigenvalues indicate an invalid covariance matrix and should not be silently removed.
+
+If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its factor once and reuse it. Factorization costs roughly order $d^3$, while multiplying $n$ observations by a dense factor costs order $nd^2$. Avoid repeating work that does not change the model.
+
+:::
+
+### Optional: Real-World Applications
 
 The core chapter is complete. These optional examples are for independent study. Choose one to connect the generators to a full analysis; their assumptions and parameters are illustrative.
 
@@ -2655,114 +2763,6 @@ This example combines distribution choice, recursive computation, and statistica
 ```{=html}
 </details>
 ```
-
-## Concept Checks and Practice {#sec-rv-practice}
-
-Try the concept checks first, then the short calculations. Explain your choice before opening the solution.
-
-::: {#exr-rv-concepts}
-
-## Concept Check: Choose or Mark True/False
-
-1. **Multiple choice.** In inverse transformation, $U$ is **(A)** an observation from the target or **(B)** a probability level to be transformed.
-2. **T/F.** A larger valid rejection bound $M$ increases the acceptance rate.
-3. **T/F.** If $f=h/Z$ and $h\leq Cg$, accepting with probability $h(Y)/(Cg(Y))$ requires knowing $Z$.
-4. **Multiple choice.** To generate a $t_4$ variable from independent $Z\sim N(0,1)$ and $V\sim\chi^2_4$, use **(A)** $Z/\sqrt{V/4}$ or **(B)** $Z/(V/4)$.
-5. **T/F.** A mixture of bivariate normals uses one component label for the whole row.
-6. **T/F.** Correct marginal histograms establish that a multivariate generator is correct.
-
-:::
-
-::: {#sol-rv-concepts}
-
-| Item | Answer | Reason |
-|:----:|:--------:|:--------------------------------------------------|
-| 1 | B | Apply $F^{-1}$ to convert the probability level into an observation. |
-| 2 | F | The rate is $1/M$ for a normalized target and proposal. |
-| 3 | F | $Z$ is unnecessary for the decision; the overall rate is $Z/C$. |
-| 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
-| 5 | T | Both coordinates belong to the chosen component; separate labels change the joint model. |
-| 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
-
-:::
-
-::: {#exr-rv-calculations}
-
-## Practice: Construct, Calculate, Check
-
-1. **Inverse transformation.** For $f(x)=4x^3$ on $(0,1)$, derive $F(x)$ and a generator. Transform $u=1/16$, and find $E(X)$ and $P(X>1/2)$.
-2. **Rejection sampling.** For $f(y)=3y^2$ on $(0,1)$ and $g(y)=1$, find the smallest valid $M$, the acceptance rate, and the expected number of proposals for 1000 accepted draws. Is $(y,u)=(0.5,0.3)$ accepted?
-3. **Repair the R code.** Rows of `Z` contain independent standard normals. The target has mean `mu` and positive definite covariance `Sigma`. Correct the second line and explain which covariance check detects the original error.
-
-```r
-R <- chol(Sigma)
-X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
-```
-
-:::
-
-::: {#sol-rv-calculations}
-
-1. **Inverse transformation** (follow @fig-rv-inverse-flow).
-
-   - **Find the CDF:** $F(x)=\int_0^x4t^3\,dt=x^4$ for $0<x<1$.
-   - **Invert and substitute:** $u=x^4$ gives $X=U^{1/4}$. At $u=1/16$, $x=(1/16)^{1/4}=1/2$.
-   - **Check the target:** $E(X)=\int_0^1 4x^4\,dx=4/5$ and $P(X>1/2)=1-F(1/2)=15/16$.
-
-2. **Rejection sampling** (follow @fig-rv-rejection-flow).
-
-   - **Find a global bound:** $f(y)/g(y)=3y^2$ has supremum 3 on $(0,1)$, so the smallest valid bound is $M=3$.
-   - **Compute efficiency:** acceptance rate $=1/M=1/3$; expected proposals $=nM=1000(3)=3000$.
-   - **Decide on this proposal:** $a=f(0.5)/\{Mg(0.5)\}=3(0.5)^2/3=0.25$. Since $0.3>0.25$, reject and draw a fresh pair.
-
-3. **Repair the R code** (follow @fig-rv-cholesky-flow).
-
-   - **Identify the factor:** `chol(Sigma)` gives $R^\top R=\Sigma$.
-   - **Match rows to the factor:** use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. This gives covariance $R^\top R$; the original gives $RR^\top$.
-   - **Check the result:** compare `cov(X)` with `Sigma`, allowing for Monte Carlo variation. Adding `mu` changes the mean, not covariance.
-
-:::
-
-## Chapter Summary {#sec-rv-summary}
-
-This chapter answers one question: **How can we turn a probability model into simulated data?**
-
-### Main Ideas {.unnumbered .unlisted}
-
-- **Choose a suitable method.** Use inverse transformation when the quantile function is available, acceptance-rejection when an easy proposal and a valid bound are available, or known distributional relationships.
-- **Preserve the joint model.** For a mixture, choose a component before drawing an observation. For multivariate data, preserve the required dependence as well as the marginal distributions.
-- **Check the generator.** Compare its support, moments, plots, and joint behavior with the intended model.
-- **Measure simulation error.** For independent replications, MCSE typically decreases like $1/\sqrt{B}$. More simulation reduces Monte Carlo uncertainty; it does not fix an inappropriate model.
-
-### Connections to Other Chapters {.unnumbered .unlisted}
-
-- [**Chapter 1: Introduction to R**](01-R.qmd) provides the functions, vectors, and loops used to implement simulations.
-- [**Chapter 2: Intro to Computational Statistics**](02-computation.qmd) provides the numerical and matrix tools needed to turn mathematical formulas into reliable code.
-- [**Chapter 3: Optimization**](03-optimization.qmd) fits a model to data. This chapter generates data from a model. Combining the two lets us repeatedly simulate and refit data to study an estimator's accuracy.
-
-## Supplementary Material (Not Examined) {#sec-rv-supplement}
-
-**Not examinable.** Eigenvalues, principal component analysis (PCA), and reusing a matrix factorization are supplementary reading and will not be included in exams.
-
-::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization" collapse="true"}
-
-The spectral decomposition is
-
-$$
-\boldsymbol\Sigma=P\Lambda P^\top,
-\qquad
-\boldsymbol\Sigma^{1/2}=P\Lambda^{1/2}P^\top.
-$$
-
-The eigenvectors specify directions, and the square roots of the eigenvalues specify how much to stretch a standard normal cloud in those directions.
-
-This connects generation to **principal component analysis**. PCA identifies directions of variation in observed data; simulation constructs that variation from independent coordinates.
-
-A covariance matrix can be positive semidefinite with some eigenvalues equal to zero. The normal vector then lies in a lower-dimensional subspace. Ordinary unpivoted Cholesky may fail, whereas an eigenvalue construction can handle that case. Tiny negative eigenvalues caused by roundoff may be set to zero after a tolerance check; substantial negative eigenvalues indicate an invalid covariance matrix and should not be silently removed.
-
-If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its factor once and reuse it. Factorization costs roughly order $d^3$, while multiplying $n$ observations by a dense factor costs order $nd^2$. Avoid repeating work that does not change the model.
-
-:::
 
 ## References and Further Reading {.unnumbered}
 
