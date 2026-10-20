@@ -52,15 +52,13 @@ The key questions are conceptual:
 3. **Where does variation come from?** Fresh random inputs give a different set of outputs and a different estimate.
 4. **What does variance reduction change?** It makes the estimate more stable while keeping the same target.
 
-We will follow one example, $\mathbb{E}[e^U]$ with $U\sim\operatorname{Uniform}(0,1)$. Detailed formulas, proofs, and extra examples are in [Supplementary](#sec-mc-supplement).
+We begin with a shop deciding how many muffins to prepare, then use $\mathbb{E}[e^U]$ with $U\sim\operatorname{Uniform}(0,1)$ to compare variance-reduction methods. Detailed formulas, proofs, and extra examples are in [Supplementary](#sec-mc-supplement).
 
 ## The Main Idea: Simulate, Calculate, Average {#sec-mc-integration}
 
 ### Why use simulation?
 
 Suppose a model describes uncertain inputs, and we want its **average output** or the **probability of an event**. An exact calculation may involve a difficult integral or many inputs. If we can generate inputs from the model and calculate the corresponding outputs, simulation gives us a practical numerical estimate.
-
-For example, to estimate the chance that a queue exceeds 10 people in the next hour, we could simulate arrivals and service for that hour, record whether the event occurs, and repeat. The fraction of successes estimates the probability **under that model**.
 
 Simulation uses computer-generated outcomes to explore a specified model. More simulated outcomes improve numerical precision; they do not supply new real observations or make the model more realistic.
 
@@ -79,6 +77,126 @@ $$
 $$
 
 Here $\theta$ is the fixed answer we want and $\widehat\theta$ is the answer from this run. A **contribution** simply means one value $Y_i$ going into the average.
+
+### A Practical Example: Are 12 Muffins Enough? {#sec-mc-muffin-shop}
+
+**The question.** A shop prepares 12 muffins each morning. What is the probability that demand exceeds the stock, so at least one customer cannot buy a muffin?
+
+For this teaching example, **assume** 20 potential customers per day. Each independently wants one muffin with probability 0.6, whether or not stock is available. Days are independent, and these assumptions stay the same across runs. These numbers are illustrative, not estimates from shop data.
+
+The average demand is $20\times0.6=12$, but **an average of 12 does not mean demand is always 12**. Simulation lets us try many artificial days and count how often the stock is insufficient.
+
+**Step 1: Simulate one day.** For each of the 20 customers, generate a uniform number between 0 and 1. A number below 0.6 means the customer wants to buy. Count the buyers.
+
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
+```{r}
+#| label: mc-shop-one-day
+#| code-fold: false
+set.seed(8670)
+wants_one <- runif(20) < 0.6
+demand_today <- sum(wants_one)
+c(demand = demand_today, insufficient = demand_today > 12)
+```
+
+```{=latex}
+\end{minipage}\par
+```
+
+This artificial day has demand `r demand_today`, so the stock is sufficient. A day with demand 15 would leave 3 customers unserved. **Demand 12 is still fully served**: our event is `demand > 12`, not `demand >= 12`.
+
+**Step 2: Repeat for many days and record 0 or 1.** Use 1 when stock is insufficient and 0 otherwise. In R, `rbinom(N, size = 20, prob = 0.6)` is a shortcut that generates the number of buyers for each of $N$ independent days using exactly the same model.
+
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
+```{r}
+#| label: mc-shop-one-run
+#| code-fold: false
+set.seed(8671)
+N <- 1000
+demand <- rbinom(N, size = 20, prob = 0.6)
+insufficient <- as.integer(demand > 12)
+c(days_short = sum(insufficient),
+  estimated_probability = mean(insufficient))
+```
+
+```{=latex}
+\end{minipage}\par
+```
+
+**Step 3: Interpret the average.** Stock was insufficient on `r sum(insufficient)` of the 1,000 simulated days, giving `r sprintf("%.1f%%", 100 * mean(insufficient))`. That is roughly **4 days out of 10 under this model**. It is an estimate of the chance for a day, not a prediction of exactly which future days will have a shortage.
+
+**Step 4: Rerun the whole experiment.** Each run below simulates another 1,000 days and produces one estimated probability. We set the seed once before all the runs.
+
+```{r}
+#| label: mc-shop-repeated-runs
+#| echo: !expr knitr::is_html_output()
+#| code-fold: true
+#| code-summary: "Repeat the 1,000-day experiment with fresh random draws"
+set.seed(8672)
+shop_large_runs <- replicate(30, {
+  new_demand <- rbinom(1000, size = 20, prob = 0.6)
+  mean(new_demand > 12)
+})
+knitr::kable(data.frame(
+  Run = 1:3,
+  `Simulated days` = rep(1000, 3),
+  `Days with insufficient stock` = round(1000 * shop_large_runs[1:3]),
+  `Estimated chance` = sprintf("%.1f%%", 100 * shop_large_runs[1:3]),
+  check.names = FALSE
+), booktabs = TRUE)
+```
+
+**Why do the answers differ?** The random buying decisions differ, so each run contains a different number of shortage days. The stock, purchase probability, and true shortage probability have not changed.
+
+```{r}
+#| label: fig-mc-shop-reruns
+#| echo: !expr knitr::is_html_output()
+#| code-fold: true
+#| fig-width: 9
+#| fig-height: 3.8
+#| fig-cap: "Each point is one complete simulation run, not one day. Both panels show 30 independent runs of the same shop model on the same vertical scale. Averaging 1,000 days gives a more stable estimate than averaging 50 days. The dashed line is the exact model probability, about 41.6%."
+#| fig-alt: "Two panels show estimated shortage probabilities across 30 runs. Estimates based on 50 days fluctuate more than estimates based on 1,000 days. Both are near the same dashed target line at 41.6 percent."
+set.seed(8673)
+shop_small_runs <- replicate(30, mean(rbinom(50, 20, 0.6) > 12))
+shop_true_probability <- pbinom(12, 20, 0.6, lower.tail = FALSE)
+shop_plot <- data.frame(
+  Run = rep(1:30, 2),
+  Estimate = c(shop_small_runs, shop_large_runs),
+  Budget = factor(rep(c("50 days per run", "1,000 days per run"), each = 30),
+                  levels = c("50 days per run", "1,000 days per run"))
+)
+ggplot(shop_plot, aes(Run, Estimate, color = Budget)) +
+  geom_hline(yintercept = shop_true_probability, linetype = "dashed",
+             color = "grey35") +
+  geom_line(linewidth = .5, alpha = .7) +
+  geom_point(size = 1.8) +
+  facet_wrap(~Budget) +
+  scale_color_manual(values = c("#0072B2", "#D55E00")) +
+  scale_x_continuous(breaks = c(1, 10, 20, 30)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, .25),
+                    labels = function(x) paste0(100 * x, "%")) +
+  labs(x = "Run number (fresh days in every run)",
+       y = "Estimated chance of insufficient stock") +
+  theme(legend.position = "none", strip.text = element_text(size = 12))
+```
+
+This simple model also has an exact binomial answer, about `r sprintf("%.1f%%", 100 * shop_true_probability)`, which checks our simulation. We practice the recipe here because it also works when the shop model becomes harder to calculate directly, such as when customers buy several items or demand changes during the day.
+
+::: {#mc-shop-takeaway .callout-note title="Two different kinds of variation"}
+
+- **Day to day:** customer demand varies. Even knowing the exact shortage probability would not tell us tomorrow's demand.
+- **Run to run:** our estimated probability varies because each run uses only a finite number of simulated days. More simulated days reduce this numerical uncertainty; they do not make real customer demand less variable.
+
+The practical answer is therefore: **12 muffins covers the average demand, but leaves about a 42% chance of insufficient stock under these assumptions.** Choosing a stock level also requires considering shortage and leftover costs.
+
+:::
+
+### A Small Mathematical Example
 
 ::: {#mc-main-example .callout-example title="One example to use throughout the chapter"}
 
@@ -366,6 +484,8 @@ Increasing $N$ is one way to improve precision. Another is to keep the same targ
 
 We are reducing the variation of our **numerical estimate across runs**. We are not making the modeled system itself less random. Simply forcing every answer toward a convenient number would change the question; a valid method must preserve the target.
 
+For the [muffin shop](#sec-mc-muffin-shop), this means obtaining more stable estimates of the shortage probability **with the stock still fixed at 12**. Preparing more muffins changes the probability being estimated; that is a different stocking policy, not variance reduction.
+
 We will try two methods:
 
 | Method | Idea |
@@ -525,6 +645,10 @@ ggplot(control_curves, aes(u, value, color = Method)) +
   theme(legend.position = "bottom")
 ```
 
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
 ::: {#mc-control-warning .callout-warning title="The control mean must be known"}
 
 Use the known mean **0.5**, not `mean(u)`. Subtracting `mean(u)` would make the average adjustment zero and leave the original estimate unchanged.
@@ -532,6 +656,10 @@ Use the known mean **0.5**, not `mean(u)`. Subtracting `mean(u)` would make the 
 If you need to estimate $c$, use a separate pilot sample and then keep $c$ fixed for the main run. A worked example is in [Supplementary](#mc-control-pilot-details).
 
 :::
+
+```{=latex}
+\end{minipage}\par
+```
 
 ::: {#exr-mc-control}
 
@@ -635,6 +763,10 @@ These results apply to this example. A method's name alone does not guarantee a 
 
 :::
 
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
 ::: {#sol-mc-concepts}
 
 | Item | Answer | Reason |
@@ -645,6 +777,10 @@ These results apply to this example. A method's name alone does not guarantee a 
 | 4 | T | We improve the estimator's stability while preserving its expectation. |
 
 :::
+
+```{=latex}
+\end{minipage}\par
+```
 
 ::: {#exr-mc-calculations}
 
