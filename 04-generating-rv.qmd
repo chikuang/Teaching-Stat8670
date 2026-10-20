@@ -844,85 +844,110 @@ Repeat until $n$ values have been saved. Choosing $M=6$ is also valid, but the o
 #| echo: !expr knitr::is_html_output()
 #| fig-width: 10
 #| fig-height: 4.8
-#| fig-cap: "Left: acceptance-rejection under the uniform envelope M g(y) = 1.5; point ordinates are auxiliary uniform draws on the density scale. Right: the density-normalized histogram and boundary-corrected density estimate of the accepted y values are compared with the original target Beta(2,2) density, f(y) = 6y(1-y), shown as a black dashed curve in both panels."
-#| fig-alt: "Two panels with y axes labeled Density. The left panel shows accepted and rejected proposals under the envelope. The right panel overlays the accepted-sample density and a normalized histogram with the theoretical Beta(2,2) density."
+#| fig-cap: "Left: each point is (Y, V), where Y is a uniform proposal and V = 1.5 U for an independent U ~ Uniform(0,1). Accept Y when V is below the normalized target f(Y); V is an auxiliary ordinate on the density scale, not a density estimate. Right: the density-normalized histogram and boundary-corrected density estimate of accepted Y values are compared with the normalized Beta(2,2) target f(y) = 6y(1-y), shown as a black dashed curve in both panels."
+#| fig-alt: "Two panels with distinct vertical-axis labels. Left: Auxiliary ordinate v (density scale), with accepted and rejected proposal points. Right: Density, with a normalized histogram and estimated density compared with the Beta(2,2) target."
 set.seed(8670)
 proposal <- runif(1500)
-height <- 1.5 * runif(1500)
-accepted <- height <= dbeta(proposal, 2, 2)
-proposal_data <- data.frame(proposal, height, accepted)
-
-panel_levels <- c("Acceptance-rejection", "Accepted sample vs. target")
-proposal_data$panel <- factor(panel_levels[1], levels = panel_levels)
-accepted_data <- data.frame(
-  value = proposal[accepted],
-  panel = factor(panel_levels[2], levels = panel_levels)
-)
-target_data <- expand.grid(
-  value = seq(0, 1, length.out = 501),
-  panel = factor(panel_levels, levels = panel_levels)
-)
+u <- runif(1500)
+v <- 1.5 * u
+accepted <- v <= dbeta(proposal, 2, 2)
+proposal_data <- data.frame(proposal, v, accepted)
+accepted_data <- data.frame(value = proposal[accepted])
+target_data <- data.frame(value = seq(0, 1, length.out = 501))
 target_data$density <- dbeta(target_data$value, 2, 2)
-envelope_data <- data.frame(
-  panel = factor(panel_levels[1], levels = panel_levels),
-  density = 1.5
-)
 
-ggplot() +
-  geom_point(
-    data = proposal_data,
-    aes(proposal, height, color = ifelse(accepted, "Accepted", "Rejected")),
-    alpha = 0.6, size = 1.2
-  ) +
-  geom_hline(
-    data = envelope_data, aes(yintercept = density),
-    linetype = "dashed", color = "grey40"
-  ) +
-  geom_histogram(
-    data = accepted_data,
-    aes(value, after_stat(density)),
-    binwidth = 0.05, boundary = 0,
-    fill = "steelblue", color = "white", alpha = 0.25
-  ) +
-  geom_density(
-    data = accepted_data,
-    aes(value, color = "Accepted-sample density"),
-    bounds = c(0, 1), linewidth = 1, key_glyph = "path"
-  ) +
-  geom_line(
-    data = target_data,
-    aes(value, density, color = "Target Beta(2,2)"),
-    linewidth = 1, linetype = "longdash"
-  ) +
-  facet_wrap(~ panel, nrow = 1) +
-  scale_color_manual(
-    values = c(
-      "Rejected" = "grey70", "Accepted" = "steelblue",
-      "Accepted-sample density" = "steelblue",
-      "Target Beta(2,2)" = "black"
-    ),
-    breaks = c("Rejected", "Accepted", "Accepted-sample density", "Target Beta(2,2)")
-  ) +
+left_plot <- ggplot(proposal_data, aes(proposal, v)) +
+  geom_point(aes(color = ifelse(accepted, "Accepted", "Rejected")),
+             alpha = 0.6, size = 1.2) +
+  geom_hline(yintercept = 1.5, linetype = "dashed", color = "grey40") +
+  geom_line(data = target_data, aes(value, density),
+            color = "black", linewidth = 1, linetype = "longdash") +
+  scale_color_manual(values = c("Rejected" = "grey70", "Accepted" = "steelblue"),
+                     breaks = c("Rejected", "Accepted")) +
   scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25)) +
-  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.05))) +
-  labs(x = "y", y = "Density", color = NULL) +
+  scale_y_continuous(limits = c(0, 1.75), breaks = seq(0, 1.6, by = 0.4),
+                     expand = expansion(mult = c(0, 0))) +
+  labs(title = "Acceptance-rejection", x = "Proposal y",
+       y = "Auxiliary ordinate v\n(density scale)", color = NULL) +
   guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
   theme(legend.position = "bottom", legend.text = element_text(size = 11))
+
+right_plot <- ggplot() +
+  geom_histogram(data = accepted_data, aes(value, after_stat(density)),
+                 binwidth = 0.05, boundary = 0,
+                 fill = "steelblue", color = "white", alpha = 0.25) +
+  geom_density(data = accepted_data,
+               aes(value, color = "Accepted-sample density"),
+               bounds = c(0, 1), linewidth = 1, key_glyph = "path") +
+  geom_line(data = target_data, aes(value, density, color = "Target Beta(2,2)"),
+            linewidth = 1, linetype = "longdash") +
+  scale_color_manual(values = c("Accepted-sample density" = "steelblue",
+                                 "Target Beta(2,2)" = "black"),
+                     breaks = c("Accepted-sample density", "Target Beta(2,2)")) +
+  scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25)) +
+  scale_y_continuous(limits = c(0, 1.75), breaks = seq(0, 1.6, by = 0.4),
+                     expand = expansion(mult = c(0, 0))) +
+  labs(title = "Accepted sample vs. target", x = "Accepted y", y = "Density", color = NULL) +
+  guides(color = guide_legend(nrow = 2, byrow = TRUE)) +
+  theme(legend.position = "bottom", legend.text = element_text(size = 11))
+
+# Use separate plots so the two vertical axes describe different quantities.
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 2)))
+print(left_plot, newpage = FALSE,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(right_plot, newpage = FALSE,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+grid::popViewport()
 ```
 
-::: {#rv-density-normalization .callout-note title="A normalized density can exceed 1"}
-A probability density is **normalized when its total area equals 1**. Its height can exceed 1. The target $\operatorname{Beta}(2,2)$ density in @fig-rv-rejection is already normalized:
+::: {#rv-rejection-ordinates .callout-note title="What the left-hand points represent"}
+Each point in the left panel of @fig-rv-rejection is $(Y,V)$. Generate a proposal $Y\sim\operatorname{Uniform}(0,1)$ and an independent decision variable $U\sim\operatorname{Uniform}(0,1)$, then plot $V=Mg(Y)U=1.5U$. Thus the plotted ordinate ranges from 0 to 1.5, while the original decision variable $U$ ranges from 0 to 1. The two acceptance rules are equivalent:
 
 $$
-f(y)=6y(1-y),\quad 0\leq y\leq 1,
+V\leq f(Y)
+\quad\Longleftrightarrow\quad
+U\leq\frac{f(Y)}{Mg(Y)}=4Y(1-Y).
+$$
+
+Blue points satisfy this rule. **Save their horizontal coordinates $Y$; discard $U$ and $V$.** A point's ordinate is an auxiliary random value used for the decision, not $f(Y)$, an estimated density, or an acceptance probability. The left axis therefore says **Auxiliary ordinate v (density scale)**. The right panel estimates the density of the retained $Y$ values, so its axis says **Density**. The horizontal envelope at 1.5 is a bound on $f$, not a probability density with area 1.
+:::
+
+::: {#rv-density-normalization .callout-note title="Normalized and unnormalized targets"}
+An **unnormalized target** is a nonnegative function $q(y)$ whose relative heights describe the desired distribution. Its total area is $Z=\int q(y)\,dy$, where $0<Z<\infty$. The **normalized density** is $f(y)=q(y)/Z$, so $\int f(y)\,dy=1$. Dividing by the area preserves the shape; it does not set the maximum to 1.
+
+For the Beta(2,2) example, choose $q(y)=y(1-y)$ on $[0,1]$ and zero elsewhere. Then
+
+$$
+Z=\int_0^1 y(1-y)\,dy
+=\left[\frac{y^2}{2}-\frac{y^3}{3}\right]_0^1
+=\frac16,
+\qquad f(y)=\frac{q(y)}{1/6}=6y(1-y).
+$$
+
+| Quantity | Unnormalized target $q$ | Normalized density $f=q/Z$ |
+|:--|:--|:--|
+| Function on $[0,1]$ | $y(1-y)$ | $6y(1-y)$ |
+| Total area | $1/6$ | $1$ |
+| Maximum at $y=1/2$ | $1/4$ | $3/2=1.5$ |
+
+**Why use the normalized version in this figure?** The right-hand histogram uses bar height $\text{count}/(n_{\text{accepted}}\times\text{bin width})$, so its bar areas sum to 1; the smooth density estimate also has area 1. Overlaying $f$, which also has area 1, makes a direct comparison possible. Overlaying $q$ would put the target six times too low even when the accepted sample is correct.
+
+Probabilities are **areas over intervals**: $P(a\leq Y\leq b)=\int_a^b f(y)\,dy$. For example, a histogram density of $1.6$ over a bin of width $0.05$ represents relative frequency $1.6\times0.05=0.08$. The target is already normalized even though its peak is 1.5.
+:::
+
+::: {#rv-unnormalized-rejection .callout-note title="Rejection sampling can also use an unnormalized target"}
+Normalization is needed for a density comparison, but the sampling algorithm need not know $Z$. If the proposal density $g$ is normalized and a known constant $C$ satisfies $q(y)\leq Cg(y)$ everywhere, accept with probability $q(y)/(Cg(y))$. Then
+
+$$
+P(\text{accept})=\frac{Z}{C},
 \qquad
-\int_0^1 f(y)\,dy
-=\left[3y^2-2y^3\right]_0^1=1.
+f_{Y\mid\text{accept}}(y)
+=\frac{g(y)\,q(y)/(Cg(y))}{Z/C}
+=\frac{q(y)}{Z}=f(y).
 $$
 
-Nevertheless, its maximum is $f(1/2)=3/2=1.5$. Probabilities are **areas over intervals**, such as $P(a\leq Y\leq b)=\int_a^b f(y)\,dy$, rather than the height $f(y)$ at a point.
-
-The right-hand histogram is also normalized: each bar has height $\text{count}/(n_{\text{accepted}}\times\text{bin width})$, so the bar areas sum to 1. For example, a density of $1.6$ over a bin of width $0.05$ represents probability $1.6\times0.05=0.08$. Normalization therefore does not require the density's maximum to equal 1.
+Here $g(y)=1$, $q(y)=y(1-y)$ and $C=1/4$, giving acceptance probability $4y(1-y)$ and overall rate $(1/6)/(1/4)=2/3$. These are exactly the same as using normalized $f$ with $M=3/2$. The corresponding unnormalized plot would use ordinate $W=CU=U/4$ and compare it with $q(Y)$; both the target and envelope are one-sixth of the scales used in @fig-rv-rejection. **Keep the target and envelope on the same scale.** The formula $1/M$ for the overall acceptance rate assumes a normalized target; with $q$, the rate is $Z/C$.
 :::
 
 The full R function in the online notes stops at exactly $n$ accepted observations. The table compares its proposal counts with the expected cost $nM$.
