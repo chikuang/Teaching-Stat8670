@@ -10,3 +10,4 @@ The user requested on 2026-10-20 that every lecture update include rendering and
 - Commit and push the website update, then verify the deployed course page and affected figure. The public course URL is `https://chikuang.github.io/teaching/2026F_stat8670/`.
 - For these lecture updates, rendering and uploading are already authorized. Do not stop after editing local source or ask for upload permission again.
 - Update only this course's published directory; preserve other website content.
+- After every update, include visible, clickable links to the updated course page or figure and the online PDF in the final response. When a figure changes, also display its rendered image inline.
