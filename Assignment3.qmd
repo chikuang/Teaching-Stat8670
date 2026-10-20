@@ -8,43 +8,39 @@ show-solutions: false
 \begingroup\ifdefined\chapter\small\fi
 ```
 
-**STAT 8670 | Fall 2026**  
-**Due date:** TBA  
+**Due date:** TBA.  
 **Total:** 30 points  
-**Coverage:** [Chapter 4: Generating Random Variables](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html).
+**Coverage:** [Chapter 4](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html) (Generating Random Variables).
 
-**Downloads:** [Assignment PDF](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3.pdf) | [Quarto response template (.qmd)](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3-response-template.qmd)
+::: {tbl-colwidths="[16,72,12]"}
 
-::: {tbl-colwidths="[12,76,12]"}
-
-| Question | Topic and format | Points |
-|:---:|:---|---:|
-| 1 | Uniform inputs, inverse transformation, and rejection sampling: 8 multiple-choice items | 8 |
-| 2 | Distributional constructions, mixtures, multivariate generation, and MCSE: 8 multiple-choice items | 8 |
-| 3 | Six true/false statements | 6 |
-| 4 | Two short explanations, with four prompts each | 8 |
+| Question | Format | Points |
+|:---:|:---:|:---:|
+| 1 | 8 multiple-choice questions on inversion and rejection sampling | 8 |
+| 2 | 8 multiple-choice questions on constructing and checking random variables | 8 |
+| 3 | 6 true/false questions | 6 |
+| 4 | 2 short explanations with four prompts each | 8 |
 | **Total** | | **30** |
 
 :::
 
-## Submission {.unnumbered}
+[Assignment PDF](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3.pdf) | [Response template (.qmd)](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3-response-template.qmd)
 
-Use **Quarto** or **R Markdown**. Submit **both** of the following to the **Assignment 3** submission folder on **iCollege**:
+::: {.callout-note title="Submission"}
 
-1. Your rendered PDF, named `A3_LastName_FirstName.pdf`.
-2. Its matching source, named `A3_LastName_FirstName.qmd` or `A3_LastName_FirstName.Rmd`.
+Use **R Markdown** or **Quarto**. Submit both your **source file** (`.Rmd` or `.qmd`) and its **rendered PDF** to the **Assignment 3** folder on **iCollege**. Use the filename `A3_LastName_FirstName` with the appropriate extension and include your name in the PDF.
 
-Put your name and course number at the beginning of the PDF. The PDF must be generated from your submitted source, and the source must render from beginning to end without errors.
-
-Begin your response with an answer table for Questions 1-3, followed by your responses to Question 4. You may use the supplied response template or create your own with the same part labels.
+Begin the PDF with an answer table for Questions 1-3, followed by Question 4. Use the supplied response template, or make your own table with the same part labels.
 
 - **Questions 1-2:** Select one best answer, A, B, C, or D.
 - **Question 3:** Write **True** or **False**.
-- **Question 4:** Answer each numbered prompt in one or two sentences, with formulas where useful.
+- **Question 4:** Explain your reasoning in your own words, using one or two sentences per numbered prompt.
 
-Only Question 4 requires explanations. **No code execution is required.** R code and figures are optional; if you use R to check your work, include the code in your source.
+Only Question 4 requires explanations. **No code execution is required.** R code and figures are optional. If you use R to check your work, include the code in your source file. The submitted source must render to the submitted PDF without errors.
 
-This assignment uses the core material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the optional real-world applications, are not required.
+:::
+
+The questions use the main material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required.
 
 **Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and **rate** $b$. Use the independence assumptions stated in each question.
 
@@ -52,9 +48,10 @@ This assignment uses the core material in Chapter 4. Topics marked **optional**,
 
 ## Question 1: Uniform Inputs, Inversion, and Rejection [8]
 
-Select the **best answer**. Each item is worth **1 point**.
+Select the **best answer**. Each question is worth **1 point**.
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -82,6 +79,7 @@ D. A uniform generator cannot be used inside a loop.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -99,6 +97,7 @@ D. $5U$
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -116,6 +115,7 @@ D. $X=1-\sqrt{1-U}$
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -135,10 +135,8 @@ D. No value is defined at a jump.
 
 {{< pagebreak >}}
 
-## Question 1 (continued) {.unnumbered .unlisted}
-
-
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -156,6 +154,7 @@ D. Change the stopping tolerance without changing the interval.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -173,6 +172,7 @@ D. Accept and store $1.60$.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -190,6 +190,7 @@ D. 1000
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -210,9 +211,10 @@ D. Choose a different random seed.
 
 ## Question 2: Constructing and Checking Random Variables [8]
 
-Select the **best answer**. Each item is worth **1 point**.
+Select the **best answer**. Each question is worth **1 point**.
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -230,6 +232,7 @@ D. $\operatorname{Binomial}(4,0.5)$
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -247,6 +250,7 @@ D. $\operatorname{Unif}(0,1)$
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -270,6 +274,7 @@ D. The numerator is not independent of the chi-square denominator.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -288,10 +293,8 @@ D. Choose one label once and use that component for every observation in the dat
 
 {{< pagebreak >}}
 
-## Question 2 (continued) {.unnumbered .unlisted}
-
-
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -309,6 +312,7 @@ D. 3.00
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -332,6 +336,7 @@ D. $\begin{pmatrix}2&1\\0&1\end{pmatrix}$
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -349,6 +354,7 @@ D. Neither coordinate has a standard normal distribution.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -369,9 +375,10 @@ D. Nine times as many
 
 ## Question 3: True or False [6]
 
-Write **True** or **False** for each statement. Each item is worth **1 point**. No explanation is required.
+Write **True** or **False** for each statement. Each statement is worth **1 point**. No explanation is required.
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -384,6 +391,7 @@ Sampling all $n$ observed records without replacement only permutes the records,
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -396,6 +404,7 @@ If $X$ has a discrete CDF $F$, then $F(X)$ is necessarily uniform on $(0,1)$.
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -408,6 +417,7 @@ If independent gamma variables have the same rate, their sum is gamma with the s
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -420,6 +430,7 @@ In R, `rnorm(100, mean = 0, sd = 2)` targets a normal distribution with variance
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -432,6 +443,7 @@ In rejection sampling, replacing a valid bound $M$ by a larger valid bound prese
 ```
 
 ```{=latex}
+\par\noindent
 \begin{minipage}{\linewidth}
 ```
 
@@ -445,7 +457,9 @@ Matching a target distribution's mean and covariance is sufficient to establish 
 
 {{< pagebreak >}}
 
-## Question 4: Explain What the Generator Does [8]
+## Question 4: Explain What the Results Mean [8]
+
+Each part is worth **4 points**: **1 point for each numbered prompt**. Use one or two sentences per prompt. We grade the statistical and computational reasoning, not the exact wording of your response.
 
 ### 4a) A mixture is not a weighted average [4]
 
@@ -462,8 +476,7 @@ $$
 W=0.25A+0.75B.
 $$
 
-Answer each prompt in one or two sentences, with formulas where useful.
-Each numbered prompt is worth **1 point**.
+Explain:
 
 1. Describe a correct procedure for generating one observation from the target mixture.
 2. Find the mean of the target mixture and $E(W)$. Would checking only the mean detect the error?
@@ -480,8 +493,7 @@ $$
 
 A claimed generator is run for $B=10{,}000$ independent observations. Exactly 2,400 observations exceed $\log 5$, giving $\hat p=0.24$. All logarithms are natural.
 
-Answer each prompt in one or two sentences, with formulas where useful.
-Each numbered prompt is worth **1 point**.
+Explain:
 
 1. Compute the plug-in MCSE, $\sqrt{\hat p(1-\hat p)/B}$, to four decimal places.
 2. Express $|\hat p-p_0|$ in units of this MCSE. Is the discrepancy small enough to dismiss as ordinary Monte Carlo variation, or does it warrant investigating the generator?
