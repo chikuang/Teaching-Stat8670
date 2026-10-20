@@ -2412,7 +2412,7 @@ This chapter answers one question: **How can we turn a probability model into si
 - [**Chapter 2: Intro to Computational Statistics**](02-computation.qmd) provides the numerical and matrix tools needed to turn mathematical formulas into reliable code.
 - [**Chapter 3: Optimization**](03-optimization.qmd) fits a model to data. This chapter generates data from a model. Combining the two lets us repeatedly simulate and refit data to study an estimator's accuracy.
 
-## Side facts {#sec-rv-supplement}
+## Supplementary {#sec-rv-supplement}
 
 The content here won't be on the exam
 
@@ -2442,14 +2442,14 @@ The core chapter is complete. These optional examples are for independent study.
 
 ```{=html}
 <details class="rv-optional" id="rv-optional-power">
-<summary>Optional worked application: Experimental Power</summary>
+<summary>Application: Experimental Power</summary>
 ```
 
-:::: {#rv-block-76 .callout-example title="Optional Application: Experimental Power"}
+:::: {#rv-block-76 .callout-example title="Application: Experimental Power"}
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 19. Optional Application: Experimental Power**
+**Example 19. Application: Experimental Power**
 
 :::
 
@@ -2543,14 +2543,14 @@ If $\sigma$ is estimated, replace the known-variance test with the actual planne
 
 ```{=html}
 <details class="rv-optional" id="rv-optional-prediction">
-<summary>Optional worked application: Predicting Defect Counts</summary>
+<summary>Application: Predicting Defect Counts</summary>
 ```
 
-:::: {#rv-block-78 .callout-example title="Optional Application: Predicting Defect Counts"}
+:::: {#rv-block-78 .callout-example title="Application: Predicting Defect Counts"}
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 20. Optional Application: Predicting Defect Counts**
+**Example 20. Application: Predicting Defect Counts**
 
 :::
 
@@ -2681,14 +2681,14 @@ If we drew a fresh independent $p$ for each individual item instead of one share
 
 ```{=html}
 <details class="rv-optional" id="rv-optional-queue">
-<summary>Optional worked application: Queue Delays</summary>
+<summary>Application: Queue Delays</summary>
 ```
 
-:::: {#rv-block-80 .callout-example title="Optional Application: Queue Delays"}
+:::: {#rv-block-80 .callout-example title="Application: Queue Delays"}
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 21. Optional Application: Queue Delays**
+**Example 21. Application: Queue Delays**
 
 :::
 
