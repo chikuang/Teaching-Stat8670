@@ -1,5 +1,8 @@
 project:
   type: book
+  resources:
+    - Assignment3.pdf
+    - Assignment3-response-template.qmd
 
 book:
   title: "STAT 8670 -- Computational Methods in Statistics"

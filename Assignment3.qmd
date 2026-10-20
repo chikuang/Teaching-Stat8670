@@ -4,24 +4,490 @@ show-solutions: false
 
 # Assignment 3 {.unnumbered}
 
-**STAT 8670 \| Fall 2026**\
-**Due date:** TBA\
-**Total:** TBA\
-**Coverage:** TBA
+```{=latex}
+\begingroup\ifdefined\chapter\small\fi
+```
 
-::: {.callout-note title="To be announced"}
+**STAT 8670 | Fall 2026**  
+**Due date:** TBA  
+**Total:** 30 points  
+**Coverage:** [Chapter 4: Generating Random Variables](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html).
 
-Assignment 3 has not been released yet. The questions, coverage, point allocation, and due date will be posted here.
+**Downloads:** [Assignment PDF](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3.pdf) | [Quarto response template (.qmd)](https://chikuang.github.io/teaching/2026F_stat8670/Assignment3-response-template.qmd)
+
+::: {tbl-colwidths="[12,76,12]"}
+
+| Question | Topic and format | Points |
+|:---:|:---|---:|
+| 1 | Uniform inputs, inverse transformation, and rejection sampling: 8 multiple-choice items | 8 |
+| 2 | Distributional constructions, mixtures, multivariate generation, and MCSE: 8 multiple-choice items | 8 |
+| 3 | Six true/false statements | 6 |
+| 4 | Two short explanations, with four prompts each | 8 |
+| **Total** | | **30** |
 
 :::
 
-::: {.callout-note title="Submission"}
+## Submission {.unnumbered}
 
-Use **Quarto** or **R Markdown**. Once the assignment is released, upload **both** files to the **Assignment 3** submission folder on **iCollege**:
+Use **Quarto** or **R Markdown**. Submit **both** of the following to the **Assignment 3** submission folder on **iCollege**:
 
-1. Your rendered **PDF**, named `A3_LastName_FirstName.pdf`.
-2. Its matching source file, named `A3_LastName_FirstName.qmd` or `A3_LastName_FirstName.Rmd`.
+1. Your rendered PDF, named `A3_LastName_FirstName.pdf`.
+2. Its matching source, named `A3_LastName_FirstName.qmd` or `A3_LastName_FirstName.Rmd`.
 
-The PDF must be generated from the submitted source file. Put your name and course number at the beginning of the PDF, and ensure that your source renders from beginning to end without errors.
+Put your name and course number at the beginning of the PDF. The PDF must be generated from your submitted source, and the source must render from beginning to end without errors.
 
-:::
+Begin your response with an answer table for Questions 1-3, followed by your responses to Question 4. You may use the supplied response template or create your own with the same part labels.
+
+- **Questions 1-2:** Select one best answer, A, B, C, or D.
+- **Question 3:** Write **True** or **False**.
+- **Question 4:** Answer each numbered prompt in one or two sentences, with formulas where useful.
+
+Only Question 4 requires explanations. **No code execution is required.** R code and figures are optional; if you use R to check your work, include the code in your source.
+
+This assignment uses the core material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the optional real-world applications, are not required.
+
+**Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and **rate** $b$. Use the independence assumptions stated in each question.
+
+{{< pagebreak >}}
+
+## Question 1: Uniform Inputs, Inversion, and Rejection [8]
+
+Select the **best answer**. Each item is worth **1 point**.
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1a)
+
+Consider the following R code:
+
+```r
+x <- numeric(100)
+for (i in seq_len(100)) {
+  set.seed(8670)
+  x[i] <- runif(1)
+}
+```
+
+What is the main problem with using `x` as 100 independent uniform draws?
+
+A. The values must all be zero.  
+B. The values are sampled without replacement.  
+C. Resetting the seed repeats the same first draw in every iteration.  
+D. A uniform generator cannot be used inside a loop.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1b)
+
+Let $U\sim\operatorname{Unif}(0,1)$. Which expression generates an exponential random variable with **mean 5**?
+
+A. $-\log(1-U)/5$  
+B. $-5\log(1-U)$  
+C. $\exp(-5U)$  
+D. $5U$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1c)
+
+A target density is $f(x)=2(1-x)$ for $0<x<1$, and zero otherwise. Which inverse-transform generator has this density? Use $U\sim\operatorname{Unif}(0,1)$.
+
+A. $X=\sqrt{U}$  
+B. $X=1-U$  
+C. $X=U^2$  
+D. $X=1-\sqrt{1-U}$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1d)
+
+A discrete random variable takes values $-2$, $1$, and $5$ with probabilities $0.20$, $0.50$, and $0.30$, respectively. Using
+$F^{-1}(u)=\inf\{x:F(x)\geq u\}$, what value is returned at the exact probability level $u=0.70$?
+
+A. $1$  
+B. $-2$  
+C. $5$  
+D. No value is defined at a jump.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 1 (continued) {.unnumbered .unlisted}
+
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1e)
+
+A continuous, strictly increasing CDF on $[0,\infty)$ is inverted numerically. For a draw $u=0.90$, a proposed search interval $[a,b]$ has $F(a)=0.25$ and $F(b)=0.75$. What should be done before applying a bracketing root finder to $F(x)-u$?
+
+A. Accept the interval because both CDF values lie between 0 and 1.  
+B. Replace the random draw by 0.75.  
+C. Increase the upper endpoint until $F(b)\geq0.90$.  
+D. Change the stopping tolerance without changing the interval.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1f)
+
+A rejection sampler targets $f(y)=2y$ on $(0,1)$, uses a uniform proposal $g(y)=1$, and takes $M=2$. For one independent proposal/decision pair, $Y=0.80$ and $U=0.65$. What should the sampler do?
+
+A. Accept and store $0.80$.  
+B. Accept and store $0.65$.  
+C. Reject because $0.65<0.80$.  
+D. Accept and store $1.60$.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1g)
+
+A rejection sampler uses normalized target and proposal densities with a valid bound $M=2.5$. What is the **expected** number of proposals needed to obtain 400 accepted observations?
+
+A. 160  
+B. 400  
+C. 800  
+D. 1000
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 1h)
+
+A programmer chooses a rejection bound by evaluating $f(y)/g(y)$ at 100 grid points and taking the largest observed ratio. Which step is needed to justify the sampler's correctness? Assume the proposal covers the target support.
+
+A. Increase the number of accepted observations.  
+B. Establish that the bound holds throughout the target support.  
+C. Replace every acceptance ratio above 1 by 1.  
+D. Choose a different random seed.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 2: Constructing and Checking Random Variables [8]
+
+Select the **best answer**. Each item is worth **1 point**.
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2a)
+
+Let $X_1\sim\operatorname{Poisson}(1.2)$ and $X_2\sim\operatorname{Poisson}(2.8)$ be independent. What is the distribution of $X_1+X_2$?
+
+A. $\operatorname{Poisson}(1.6)$  
+B. $\operatorname{Poisson}(3.36)$  
+C. $\operatorname{Poisson}(4)$  
+D. $\operatorname{Binomial}(4,0.5)$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2b)
+
+Suppose $G_1\sim\operatorname{Gamma}(2,4)$ and $G_2\sim\operatorname{Gamma}(5,4)$ are independent, with the second parameter denoting the **rate**. What is the distribution of $G_1/(G_1+G_2)$?
+
+A. $\operatorname{Beta}(2,5)$  
+B. $\operatorname{Beta}(5,2)$  
+C. $\operatorname{Gamma}(7,4)$  
+D. $\operatorname{Unif}(0,1)$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2c)
+
+Let $Z_1,\ldots,Z_6$ be independent standard normals. A programmer returns
+
+$$
+W=\frac{Z_1}{\sqrt{(Z_1^2+\cdots+Z_6^2)/6}}
+$$
+
+and calls the result a $t_6$ draw. Which statement identifies the error?
+
+A. The sum of six squared standard normals cannot be chi-square.  
+B. A t generator requires a uniform numerator.  
+C. Dividing the sum of squares by 6 is incorrect.  
+D. The numerator is not independent of the chi-square denominator.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2d)
+
+The target is a sample of **independent observations** from a mixture of two **bivariate** normal distributions, with probabilities 0.30 and 0.70. How should the component label be generated for each observation?
+
+A. Choose independent labels for the two coordinates.  
+B. Choose one label for the whole vector, then draw that vector from the selected component.  
+C. Draw a vector from each component and return their weighted average.  
+D. Choose one label once and use that component for every observation in the dataset.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 2 (continued) {.unnumbered .unlisted}
+
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2e)
+
+Suppose $\Lambda\sim\operatorname{Gamma}(3,2)$ with rate 2, and $Y\mid\Lambda\sim\operatorname{Poisson}(\Lambda)$. What is the **marginal variance** of $Y$?
+
+A. 2.25  
+B. 1.50  
+C. 0.75  
+D. 3.00
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2f)
+
+Each row of an $n\times2$ matrix $Z$ contains two independent standard normal draws. Let
+
+$$
+R=\begin{pmatrix}2&1\\0&1\end{pmatrix}.
+$$
+
+If `X <- Z %*% R`, what is the covariance matrix of a row of $X$?
+
+A. $\begin{pmatrix}5&1\\1&1\end{pmatrix}$  
+B. $\begin{pmatrix}4&0\\0&2\end{pmatrix}$  
+C. $\begin{pmatrix}4&2\\2&2\end{pmatrix}$  
+D. $\begin{pmatrix}2&1\\0&1\end{pmatrix}$
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2g)
+
+To generate a pair of independent standard normals, a programmer draws one $U\sim\operatorname{Unif}(0,1)$ and returns $X_1=\Phi^{-1}(U)$ and $X_2=\Phi^{-1}(U)$, where $\Phi$ is the standard normal CDF. Which conclusion is correct?
+
+A. The pair is correct because both marginal distributions are standard normal.  
+B. Both marginals are correct, but the coordinates are equal and hence not independent.  
+C. The coordinates are independent because the quantile function is deterministic.  
+D. Neither coordinate has a standard normal distribution.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 2h)
+
+For independent replications with the same finite-variance model, an estimator's Monte Carlo standard error is approximately proportional to $1/\sqrt{B}$. To reduce it from 0.03 to 0.01, approximately how many replications are needed relative to the current number?
+
+A. One third as many  
+B. Three times as many  
+C. Six times as many  
+D. Nine times as many
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 3: True or False [6]
+
+Write **True** or **False** for each statement. Each item is worth **1 point**. No explanation is required.
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3a)
+
+Sampling all $n$ observed records without replacement only permutes the records, so their sample mean is unchanged.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3b)
+
+If $X$ has a discrete CDF $F$, then $F(X)$ is necessarily uniform on $(0,1)$.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3c)
+
+If independent gamma variables have the same rate, their sum is gamma with the sum of their shapes and that common rate.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3d)
+
+In R, `rnorm(100, mean = 0, sd = 2)` targets a normal distribution with variance 2.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3e)
+
+In rejection sampling, replacing a valid bound $M$ by a larger valid bound preserves the target distribution of accepted values, although acceptance becomes less frequent.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\begin{minipage}{\linewidth}
+```
+
+### 3f)
+
+Matching a target distribution's mean and covariance is sufficient to establish that a multivariate generator has the correct joint distribution.
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 4: Explain What the Generator Does [8]
+
+### 4a) A mixture is not a weighted average [4]
+
+The target is
+
+$$
+0.25\,N(-2,1)+0.75\,N(2,1),
+$$
+
+where the second parameter of each normal distribution is its **variance**.
+A student instead generates independent $A\sim N(-2,1)$ and $B\sim N(2,1)$ and returns
+
+$$
+W=0.25A+0.75B.
+$$
+
+Answer each prompt in one or two sentences, with formulas where useful.
+Each numbered prompt is worth **1 point**.
+
+1. Describe a correct procedure for generating one observation from the target mixture.
+2. Find the mean of the target mixture and $E(W)$. Would checking only the mean detect the error?
+3. Find the variance of the target mixture and $\operatorname{Var}(W)$.
+4. Suppose the two sets of simulated values are each recentered and rescaled to have mean 0 and variance 1. Does this establish that they have the same distribution? Give one additional distributional check.
+
+### 4b) Simulation precision and generator error [4]
+
+The intended model is an exponential distribution with **rate 1**. The exact probability of interest is
+
+$$
+p_0=P(X>\log 5)=0.20.
+$$
+
+A claimed generator is run for $B=10{,}000$ independent observations. Exactly 2,400 observations exceed $\log 5$, giving $\hat p=0.24$. All logarithms are natural.
+
+Answer each prompt in one or two sentences, with formulas where useful.
+Each numbered prompt is worth **1 point**.
+
+1. Compute the plug-in MCSE, $\sqrt{\hat p(1-\hat p)/B}$, to four decimal places.
+2. Express $|\hat p-p_0|$ in units of this MCSE. Is the discrepancy small enough to dismiss as ordinary Monte Carlo variation, or does it warrant investigating the generator?
+3. If the same algorithm is run for 40,000 independent observations and $\hat p$ remains close to 0.24, what approximate MCSE would you expect?
+4. Name one concrete implementation or parameterization error worth checking. Explain why increasing $B$ would not correct that error.
+
+```{=latex}
+\par\endgroup
+```
