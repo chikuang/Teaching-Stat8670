@@ -11,6 +11,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 | Group | Members | Topic |
 |:---:|:---|:---|
 | 1 | Jones, Airianna; Grant, Jada; Honne, Shravya | TBA |
+| 2 | Guo, Jennifer; Pham, Duc; Park, Jieun | TBA |
 
 :::
 
