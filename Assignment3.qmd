@@ -40,9 +40,9 @@ Only Question 4 requires explanations. **No code execution is required.** R code
 
 :::
 
-The questions use the main material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required.
+Note: The questions use the main material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required.
 
-**Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and **rate** $b$. Use the independence assumptions stated in each question.
+**Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$. Use the independence assumptions stated in each question.
 
 {{< pagebreak >}}
 
@@ -238,7 +238,7 @@ D. $\operatorname{Binomial}(4,0.5)$
 
 ### 2b)
 
-Suppose $G_1\sim\operatorname{Gamma}(2,4)$ and $G_2\sim\operatorname{Gamma}(5,4)$ are independent, with the second parameter denoting the **rate**. What is the distribution of $G_1/(G_1+G_2)$?
+Suppose $G_1\sim\operatorname{Gamma}(2,4)$ and $G_2\sim\operatorname{Gamma}(5,4)$ are independent, with the second parameter denoting the rate. What is the distribution of $G_1/(G_1+G_2)$?
 
 A. $\operatorname{Beta}(2,5)$  
 B. $\operatorname{Beta}(5,2)$  
@@ -485,7 +485,7 @@ Explain:
 
 ### 4b) Simulation precision and generator error [4]
 
-The intended model is an exponential distribution with **rate 1**. The exact probability of interest is
+The intended model is an exponential distribution with rate 1. The exact probability of interest is
 
 $$
 p_0=P(X>\log 5)=0.20.
