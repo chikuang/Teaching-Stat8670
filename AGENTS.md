@@ -11,3 +11,4 @@ The user requested on 2026-10-20 that every lecture update include rendering and
 - For these lecture updates, rendering and uploading are already authorized. Do not stop after editing local source or ask for upload permission again.
 - Update only this course's published directory; preserve other website content.
 - After every update, include visible, clickable links to the updated course page or figure and the online PDF in the final response. When a figure changes, also display its rendered image inline.
+- Do not add suggested activity durations such as "(3 minutes)" to classroom exercise headings or practice instructions.

@@ -438,7 +438,7 @@ This turns survival-model simulation into an inversion problem. For example, the
 
 ::: {#exr-rv-rate}
 
-## In Class: Rate or Mean? (2 minutes)
+## In Class: Rate or Mean?
 
 **Multiple choice.** To generate exponential waiting times with mean 5, use **(A)** `rexp(n, rate = 5)` or **(B)** `rexp(n, rate = 1 / 5)`.
 
@@ -1119,7 +1119,7 @@ Each proposal here uses two uniforms, one for $Y$ and one for the decision. Thus
 
 ::: {#exr-rv-rejection}
 
-## In Class: Check One Proposal (3 minutes)
+## In Class: Check One Proposal
 
 For the same target and uniform proposal, take $y=0.8$ and $u=0.7$.
 
@@ -1600,7 +1600,7 @@ This decomposition explains why unobserved heterogeneity can inflate variability
 
 ::: {#exr-rv-mixture}
 
-## In Class: Mixture or Average? (2 minutes)
+## In Class: Mixture or Average?
 
 Let $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$ be independent. **T/F.** Returning $(X_1+X_2)/2$ generates the same distribution as choosing one of the two components with equal probabilities. Both have mean 2; what else should you check?
 
@@ -1773,7 +1773,7 @@ z_row %*% R_small                       # one correlated observation
 
 ::: {#exr-rv-cholesky}
 
-## In Class: Match the Matrix to the Code (3 minutes)
+## In Class: Match the Matrix to the Code
 
 Using the same $R$, transform the row $(z_1,z_2)=(2,0)$. **Multiple choice.** For independent standard normal rows in `Z`, which gives covariance $\Sigma$: **(A)** `Z %*% R` or **(B)** `Z %*% t(R)`?
 
@@ -1877,26 +1877,6 @@ Sigma
 The function also returns an $n\times d$ matrix for $n=0$ or $n=1$. This matters when a component in a simulated mixture receives few or no observations.
 
 ::::
-
-::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization" collapse="true"}
-
-The spectral decomposition is
-
-$$
-\boldsymbol\Sigma=P\Lambda P^\top,
-\qquad
-\boldsymbol\Sigma^{1/2}=P\Lambda^{1/2}P^\top.
-$$
-
-The eigenvectors specify directions, and the square roots of the eigenvalues specify how much to stretch a standard normal cloud in those directions.
-
-This connects generation to **principal component analysis**. PCA identifies directions of variation in observed data; simulation constructs that variation from independent coordinates.
-
-A covariance matrix can be positive semidefinite with some eigenvalues equal to zero. The normal vector then lies in a lower-dimensional subspace. Ordinary unpivoted Cholesky may fail, whereas an eigenvalue construction can handle that case. Tiny negative eigenvalues caused by roundoff may be set to zero after a tolerance check; substantial negative eigenvalues indicate an invalid covariance matrix and should not be silently removed.
-
-If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its factor once and reuse it. Factorization costs roughly order $d^3$, while multiplying $n$ observations by a dense factor costs order $nd^2$. Avoid repeating work that does not change the model.
-
-:::
 
 :::: {#rv-block-59 .callout-example title="The Same Marginals, Different Joint Tail Probabilities"}
 
@@ -2678,7 +2658,7 @@ This example combines distribution choice, recursive computation, and statistica
 
 ## Concept Checks and Practice {#sec-rv-practice}
 
-Try the concept checks first (about 5 minutes), then the short calculations (about 10 minutes). Explain your choice before opening the solution.
+Try the concept checks first, then the short calculations. Explain your choice before opening the solution.
 
 ::: {#exr-rv-concepts}
 
@@ -2759,6 +2739,30 @@ This chapter answers one question: **How can we turn a probability model into si
 - [**Chapter 1: Introduction to R**](01-R.qmd) provides the functions, vectors, and loops used to implement simulations.
 - [**Chapter 2: Intro to Computational Statistics**](02-computation.qmd) provides the numerical and matrix tools needed to turn mathematical formulas into reliable code.
 - [**Chapter 3: Optimization**](03-optimization.qmd) fits a model to data. This chapter generates data from a model. Combining the two lets us repeatedly simulate and refit data to study an estimator's accuracy.
+
+## Supplementary Material (Not Examined) {#sec-rv-supplement}
+
+**Not examinable.** Eigenvalues, principal component analysis (PCA), and reusing a matrix factorization are supplementary reading and will not be included in exams.
+
+::: {#rv-block-58 .callout-note title="Eigenvalues, PCA, and Reusing the Factorization" collapse="true"}
+
+The spectral decomposition is
+
+$$
+\boldsymbol\Sigma=P\Lambda P^\top,
+\qquad
+\boldsymbol\Sigma^{1/2}=P\Lambda^{1/2}P^\top.
+$$
+
+The eigenvectors specify directions, and the square roots of the eigenvalues specify how much to stretch a standard normal cloud in those directions.
+
+This connects generation to **principal component analysis**. PCA identifies directions of variation in observed data; simulation constructs that variation from independent coordinates.
+
+A covariance matrix can be positive semidefinite with some eigenvalues equal to zero. The normal vector then lies in a lower-dimensional subspace. Ordinary unpivoted Cholesky may fail, whereas an eigenvalue construction can handle that case. Tiny negative eigenvalues caused by roundoff may be set to zero after a tolerance check; substantial negative eigenvalues indicate an invalid covariance matrix and should not be silently removed.
+
+If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its factor once and reuse it. Factorization costs roughly order $d^3$, while multiplying $n$ observations by a dense factor costs order $nd^2$. Avoid repeating work that does not change the model.
+
+:::
 
 ## References and Further Reading {.unnumbered}
 
