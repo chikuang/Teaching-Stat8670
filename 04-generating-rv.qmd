@@ -2438,7 +2438,7 @@ If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its f
 
 ### Real-World Applications {#optional-real-world-applications}
 
-The core chapter is complete. These optional examples are for independent study. Choose one to connect the generators to a full analysis; their assumptions and parameters are illustrative.
+The core chapter is complete. These examples are for independent study. Choose one to connect the generators to a full analysis; their assumptions and parameters are illustrative.
 
 ```{=html}
 <details class="rv-optional" id="rv-optional-power">
