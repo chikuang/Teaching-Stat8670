@@ -950,6 +950,20 @@ $$
 Here $g(y)=1$, $q(y)=y(1-y)$ and $C=1/4$, giving acceptance probability $4y(1-y)$ and overall rate $(1/6)/(1/4)=2/3$. These are exactly the same as using normalized $f$ with $M=3/2$. The corresponding unnormalized plot would use ordinate $W=CU=U/4$ and compare it with $q(Y)$; both the target and envelope are one-sixth of the scales used in @fig-rv-rejection. **Keep the target and envelope on the same scale.** The formula $1/M$ for the overall acceptance rate assumes a normalized target; with $q$, the rate is $Z/C$.
 :::
 
+::: {#rv-normalization-choice .callout-warning title="Normalized or unnormalized: when to use which"}
+
+- **Density plots and probabilities: use the normalized density $f=q/Z$.** Compare $f$ with a density histogram or KDE, and integrate $f$ to calculate probabilities. An area under $q$ must be divided by $Z$ before it is a probability.
+- **Rejection sampling: either form works.** Use normalized $f$ when it is available. If $Z$ is unknown or costly to compute, use $q$ with a known valid envelope $Cg$, where $g$ is a normalized proposal density and $q(y)\leq Cg(y)$ everywhere. Accept when $U\leq q(Y)/(Cg(Y))$; this decision does not need $Z$.
+- **For identical accept/reject decisions, rescale both target and envelope.** For Beta(2,2), $f(y)=6y(1-y)$ and $q(y)=y(1-y)$ give the same decision because
+
+$$
+\frac{f(Y)}{3/2}=\frac{q(Y)}{1/4}=4Y(1-Y).
+$$
+
+Keeping $3/2$ as the envelope for $q$ is still valid here, but less efficient. **Do not compare $q$ directly with a density histogram:** their vertical scales do not match.
+
+:::
+
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
 ```
@@ -2422,7 +2436,7 @@ If $\boldsymbol\Sigma$ stays fixed across many simulation batches, compute its f
 
 :::
 
-### Optional: Real-World Applications
+### Real-World Applications {#optional-real-world-applications}
 
 The core chapter is complete. These optional examples are for independent study. Choose one to connect the generators to a full analysis; their assumptions and parameters are illustrative.
 
