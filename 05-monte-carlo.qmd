@@ -323,22 +323,46 @@ c(mean_height = mean(y24) / 2,
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 4.3
-#| fig-cap: "The orange dashed line is the average height from all 10,000 draws used in the code output. The blue segments show only the first 40 draws for readability. Multiplying the average height by width 2 gives the displayed integral estimate."
-#| fig-alt: "The curve exp(-x) on 2 to 4, blue vertical segments at the first 40 sampled x values, and an orange dashed line at the average height of all 10,000 draws. The subtitle reports the same mean height and integral estimate as the code output."
+#| fig-cap: "The legend identifies sampled heights, their mean, and the target integral. Only the first 40 draws are shown; the orange mean uses all 10,000 draws. Multiplying this mean by width 2 gives the printed estimate of the shaded area."
+#| fig-alt: "The black curve is exp(-x) on 2 to 4. A legend identifies blue segments as sampled heights for the first 40 draws, the orange dashed line as the mean height of all 10,000 draws, and green shading as the target integral under the curve. The subtitle reports the same mean height and integral estimate as the code output."
 height_grid <- data.frame(x = seq(2, 4, length.out = 301))
 height_grid$height <- exp(-height_grid$x)
 height_draws <- data.frame(x = x[1:40])
 height_draws$height <- exp(-height_draws$x)
 ggplot(height_grid, aes(x, height)) +
-  geom_area(fill = "#E6F2EC", alpha = .8) +
+  geom_area(aes(fill = "Target integral (area under curve)"), alpha = .8) +
   geom_line(color = "black", linewidth = .8) +
-  geom_segment(data = height_draws, aes(xend = x, y = 0, yend = height),
-               color = "#0072B2", alpha = .4) +
-  geom_hline(yintercept = mean(y24) / 2,
-             linetype = "dashed", color = "#D55E00", linewidth = .8) +
+  geom_segment(data = height_draws,
+    aes(xend = x, y = 0, yend = height,
+        color = "Sampled heights (first 40 draws)",
+        linetype = "Sampled heights (first 40 draws)"), alpha = .4) +
+  geom_hline(aes(yintercept = mean(y24) / 2,
+                 color = "Mean height (all 10,000 draws)",
+                 linetype = "Mean height (all 10,000 draws)"), linewidth = .8) +
+  scale_color_manual(name = NULL,
+    breaks = c("Sampled heights (first 40 draws)", "Mean height (all 10,000 draws)"),
+    values = c("Sampled heights (first 40 draws)" = "#0072B2",
+               "Mean height (all 10,000 draws)" = "#D55E00")) +
+  scale_linetype_manual(name = NULL,
+    breaks = c("Sampled heights (first 40 draws)", "Mean height (all 10,000 draws)"),
+    values = c("Sampled heights (first 40 draws)" = "solid",
+               "Mean height (all 10,000 draws)" = "dashed")) +
+  scale_fill_manual(name = NULL,
+    values = c("Target integral (area under curve)" = "#E6F2EC")) +
+  guides(color = guide_legend(order = 1, ncol = 1,
+                              override.aes = list(alpha = 1)),
+         linetype = guide_legend(order = 1, ncol = 1),
+         fill = guide_legend(order = 2,
+                             override.aes = list(color = "#7DAF95", alpha = 1))) +
   labs(x = "x", y = "Integrand exp(-x)",
        subtitle = sprintf("Mean height = %.6f; integral estimate = %.6f",
-                          mean(y24) / 2, mean(y24)))
+                          mean(y24) / 2, mean(y24))) +
+  theme(legend.position = "bottom", legend.box = "vertical",
+        legend.text = element_text(size = 10),
+        legend.key.width = grid::unit(1.3, "lines"),
+        legend.key.height = grid::unit(.8, "lines"),
+        legend.margin = margin(0, 0, 0, 0),
+        legend.spacing.y = grid::unit(.1, "lines"))
 ```
 
 This curve is the **integrand**, not a probability density on $[2,4]$. Its area is the integral we want; it need not equal 1.
