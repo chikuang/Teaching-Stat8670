@@ -13,6 +13,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |  | 1 | Grant, Jada; Honne, Shravya; Jones, Airianna | TBA |
 |  | 2 | Guo, Jennifer; Park, Jieun; Pham, Duc | TBA |
 |  | 3 | Nicholas | TBA |
+|  | 4 | Karki, Prakash; Jangam, Shaswat Bhushan; Limbu Pheudin, Mangsa | TBA |
 
 :::
 
