@@ -20,8 +20,7 @@ execute:
   message: false
 ---
 
-<!-- Replace all prompts. Write 8-10 pages of main text, including the abstract,
-     excluding a separate title page, references, and appendices. -->
+**Template note (remove before submission).** Write **8-10 pages of main text**, counting the abstract, Sections 1-6, and their figures, tables, captions, equations, and code examples. Exclude a separate title-only cover page, References, Software availability and reproducibility, Author contributions, and appendices or supplementary material. The first page here includes the abstract and counts as a main-text page. References starts on a new page to mark the end of the counted text. This short template illustrates structure, not the required report length.
 
 # Introduction
 
@@ -55,6 +54,8 @@ Choose meaningful metrics for your method; adjust the table columns as needed. E
 # Discussion and conclusion
 
 Explain what the experiments establish, computational cost, a limitation or failure case, and one useful extension. Return to the statistical question in the introduction.
+
+{{< pagebreak >}}
 
 # References {.unnumbered}
 

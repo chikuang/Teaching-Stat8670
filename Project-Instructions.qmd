@@ -25,7 +25,7 @@ Use the same method for all three components. Follow the links for full requirem
 
 | Component | Deliverable | Weight |
 |:---|:---|---:|
-| [Report](Project-Report.qmd) | An 8-10 page PDF explaining the method and results, plus source files | 10% |
+| [Report](Project-Report.qmd) | A PDF with 8-10 pages of main text explaining the method and results, plus source files | 10% |
 | [Package](Project-Package.qmd) | An installable R or Python package with documentation, an example, and tests | 10% |
 | [Presentation](Project-Presentation.qmd) | An oral presentation explaining the method, implementation, and findings | 10% |
 
@@ -34,6 +34,8 @@ Use the same method for all three components. Follow the links for full requirem
 **Python option:** You may build a **Python package**; see the [Python requirements](Project-Package.qmd#r-and-python-requirements).
 
 ## Report writing model
+
+The report requires **8-10 pages of main text**, including the abstract and main-text figures, tables, and captions. A separate title-only cover page and the end sections are excluded; see the [complete page-count rule](Project-Report.qmd#page-count).
 
 [Preview the report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf) to see the report layout and section headings. You may refer to [published articles in The R Journal](https://journal.r-project.org/) for examples of how to organize and present your work.
 

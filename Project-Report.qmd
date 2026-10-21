@@ -20,7 +20,7 @@ An established method is a suitable topic. The goal is to understand its statist
 
 | Component | What your group submits or delivers | Points |
 |:---|:---|---:|
-| [Report](Project-Report.qmd) | An 8-10 page PDF explaining the method, implementation, and results, with its source files | 10 |
+| [Report](Project-Report.qmd) | A PDF with 8-10 pages of main text explaining the method, implementation, and results, plus source files | 10 |
 | [Package](Project-Package.qmd) | An installable R or Python package, documentation, a worked example, and tests | 10 |
 | [Presentation](Project-Presentation.qmd) | An oral presentation explaining the project; no presentation files to submit | 10 |
 | **Total** | **One coordinated project** | **30** |
@@ -66,7 +66,19 @@ For example: *"We implement percentile bootstrap confidence intervals for a popu
 
 ## Report requirements
 
-Write **8-10 pages of main text**, excluding the title page, references, and appendices. Use Quarto, R Markdown, or LaTeX and submit the rendered **PDF plus its source files**. Use readable 11- or 12-point text, standard margins, and numbered sections. Place long code listings and supplementary output in an appendix or the repository.
+Write **8-10 pages of main text**, counted using the rule below. Use Quarto, R Markdown, or LaTeX and submit the rendered **PDF plus its source files**. Use readable 11- or 12-point text, standard margins, and numbered sections. Place long code listings and supplementary output in an appendix or the repository.
+
+::: {.callout-note title="Page count: 8-10 pages of main text" #page-count}
+
+The finished report must contain **at least 8 and at most 10 pages of main text**.
+
+- **Count:** the abstract, Sections 1-6 (Introduction through Discussion and conclusion), and all figures, tables, captions, equations, and code examples within those sections.
+- **Do not count:** a separate title-only cover page, References, Software availability and reproducibility, Author contributions, and appendices or supplementary material. Put these end sections after the main text; start **References on a new page**.
+- A first page containing the title, author names, and abstract **counts as a main-text page**. Only a separate page containing the title and author information alone is excluded; a separate cover page is optional.
+
+The **9-page plan below is a suggested allocation**, not a different requirement. The short template PDF shows headings and prompts; its number of pages is **not** the required report length. The full submitted PDF may exceed 10 pages because the excluded material comes afterward.
+
+:::
 
 ### Writing model: The R Journal {#journal-style}
 
@@ -85,7 +97,7 @@ This is a **course adaptation** of the journal's structure. Both **R and Python 
 
 Use a descriptive title identifying the method or package, and list the group and all members. Start with an abstract of **about 150-200 words**, covering the problem, implementation, evaluation, and main result. This length is a course writing suggestion. Define technical terms for readers who have not seen your code.
 
-The following is an illustrative **9-page plan**, including the abstract. Adjust it within the 8-10 page main-text limit; references, the title page, and appendices are excluded.
+The following is an illustrative **9-page plan**, including the abstract and main-text figures and tables. Adjust the allocation within the required **8-10 counted pages**; apply the [page-count rule](#page-count) above.
 
 ::: {tbl-colwidths="[27,60,13]"}
 
@@ -109,7 +121,7 @@ Number and caption figures and tables and explain their statistical meaning in t
 
 ### Preview and download the template {#report-template}
 
-[Preview the STAT 8670 report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf). This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline; your completed report should still contain **8-10 pages of main text**.
+[Preview the STAT 8670 report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf). This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline, not an example of the required length; your completed report must contain **8-10 counted pages of main text** under the [page-count rule](#page-count).
 
 You may refer to [published articles in **The R Journal**](https://journal.r-project.org/) and the [examples linked above](#journal-style) for software presentation, reproducible examples, figures, and experimental results. Use them as models for organizing and presenting your own work.
 
