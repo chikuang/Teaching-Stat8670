@@ -49,6 +49,7 @@ Note that Bernoulli distribution is a special case of the Binomial distribution 
 #### Implementation in R
 
 ``` r
+set.seed(8670)
 rbinom(10, 1, 0.7) # 0.7 is the probability of success
 ```
 
@@ -66,6 +67,7 @@ The mean and variance of the Binomial Distribution $$
 #### Implementation in R
 
 ```{r}
+set.seed(8670)
 X = rbinom(10000, 4, prob = 0.3)
 mean(X == 1)
 mean(X > 1)
@@ -78,6 +80,7 @@ g(x;\theta) = \theta (1 - \theta)^{\,x-1}, \quad x = 1,2,3,\ldots
 $$
 
 ```{r}
+set.seed(8670)
 # Function to generate n samples from Geometric(p)
 geom.gener <- function(n, p) {
   tmp <- NULL
@@ -132,6 +135,7 @@ The mean and the variance are $$\mathbb{E}X = \frac{nM}{N}, \qquad
 #### Implementation in R
 
 ```{r }
+set.seed(8670)
 # Define population: 12 ones and 13 zeros
 x <- c(1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
@@ -168,6 +172,7 @@ A random variable X has the Poisson Distribution if and only if its probability 
 $$P(x;\lambda) = \frac{\lambda^x e^{-\lambda}}{x!}, \quad x = 0,1,2,\ldots$$
 
 ```{r poisson}
+set.seed(8670)
 # Generate 10,000 samples from Poisson(λ = 2)
 X <- rpois(10000, 2)
 
@@ -230,6 +235,7 @@ $$
 #### Implementation in R
 
 ```{r Uniform}
+set.seed(8670)
 X <- runif(1000)
 
 # Histogram of simulated data
@@ -265,6 +271,7 @@ Theorem: The mean and variance of the Gamma Distribution are $$\mathbb{E}X = \al
 #### Implementation in R
 
 ``` r
+set.seed(8670)
 rgamma(n = 10, shape = 10, scale = 3)
 ```
 
@@ -298,6 +305,7 @@ The mean and variance of the exponential distribution are $$\mathbb{E}X = \theta
 #### Implementation in R
 
 ```{r}
+set.seed(8670)
 # Generate 1000 samples from Exponential(λ = 1)
 X <- rexp(1000)
 hist(X)
@@ -324,6 +332,7 @@ $$\mathbb{E}X = \nu,
 :::
 
 ```{r chisq}
+set.seed(8670)
 X <- rchisq(1000, df = 5)
 
 hist(X)
@@ -478,6 +487,7 @@ $$
 Note: The Standard Normal Distribution has density with $\mathbb{E}X = 0$ and $\mathbb{V}ar(X) = 1$.
 
 ```{r normal}
+set.seed(8670)
 X <- rnorm(1000, 0, 1)
 qqnorm(X)
 
@@ -500,6 +510,7 @@ Another special distribution in statistical inference is the *Student’s t-Dist
 ### Implementation in R
 
 ```{r t-distribution}
+set.seed(8670)
 my_df <- 5
 X <- rt(1000, df = my_df)
 
@@ -518,6 +529,7 @@ To find an expression for the distribution function, let $Y = u(x_1, x_2, \ldots
 Example:
 
 ```{r}
+set.seed(8670)
 # Create sequence from 0 to 1
 t <- seq(0, 1, length = 1000)
 

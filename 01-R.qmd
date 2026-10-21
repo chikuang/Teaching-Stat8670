@@ -106,6 +106,7 @@ For example, an executable R chunk is written as
 ```{r}
 #| echo: fenced
 
+set.seed(8670)
 x <- rnorm(100)
 mean(x)
 ```
@@ -1030,6 +1031,7 @@ with(
 These functions apply a function to corresponding elements of multiple inputs.
 
 ```{r}
+set.seed(8670)
 Map(
   function(center, spread) rnorm(3, center, spread),
   center = c(0, 10),
@@ -1303,7 +1305,7 @@ The second computation is numerically safer.
 
 ## Randomness and reproducibility
 
-Pseudo-random numbers are generated deterministically from an internal state.
+Pseudo-random numbers are generated deterministically from an internal state. In STAT 8670, use `set.seed(8670)` at the start of each independent simulation example.
 
 ```{r}
 set.seed(8670)

@@ -13,3 +13,5 @@ The user requested on 2026-10-20 that every lecture update include rendering and
 - After every update, include visible, clickable links to the updated course page or figure and the online PDF in the final response. When a figure changes, also display its rendered image inline.
 - Do not add suggested activity durations such as "(3 minutes)" to classroom exercise headings or practice instructions.
 - After every update, provide a versioned course-page link so the user can open or refresh the latest published page.
+
+- Use `set.seed(8670)` for STAT 8670 randomized examples. Normally set the seed once per independent simulation and continue the random-number stream across repetitions. Preserve deliberate demonstrations of resetting the seed.

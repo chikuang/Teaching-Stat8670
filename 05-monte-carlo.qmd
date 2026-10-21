@@ -86,7 +86,7 @@ For this teaching example, **assume** 20 potential customers per day. Each indep
 
 The average demand is $20\times0.6=12$, but **an average of 12 does not mean demand is always 12**. Simulation lets us try many artificial days and count how often the stock is insufficient.
 
-**Step 1: Simulate one day.** For each of the 20 customers, generate a uniform number between 0 and 1. A number below 0.6 means the customer wants to buy. Count the buyers.
+**Step 1: Simulate one day.** For each of the 20 customers, generate a uniform number between 0 and 1. A number below 0.6 means the customer wants to buy. Count the buyers. Set the seed once here; the later steps continue the same random-number stream.
 
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
@@ -116,7 +116,6 @@ This artificial day has demand `r demand_today`, so the stock is sufficient. A d
 ```{r}
 #| label: mc-shop-one-run
 #| code-fold: false
-set.seed(8671)
 N <- 1000
 demand <- rbinom(N, size = 20, prob = 0.6)
 insufficient <- as.integer(demand > 12)
@@ -130,14 +129,13 @@ c(days_short = sum(insufficient),
 
 **Step 3: Interpret the average.** Stock was insufficient on `r sum(insufficient)` of the 1,000 simulated days, giving `r sprintf("%.1f%%", 100 * mean(insufficient))`. That is roughly **4 days out of 10 under this model**. It is an estimate of the chance for a day, not a prediction of exactly which future days will have a shortage.
 
-**Step 4: Rerun the whole experiment.** Each run below simulates another 1,000 days and produces one estimated probability. We set the seed once before all the runs.
+**Step 4: Rerun the whole experiment.** Each run below simulates another 1,000 days and produces one estimated probability. Continue the random-number stream from Step 1; do not reset the seed between runs.
 
 ```{r}
 #| label: mc-shop-repeated-runs
 #| echo: !expr knitr::is_html_output()
 #| code-fold: true
 #| code-summary: "Repeat the 1,000-day experiment with fresh random draws"
-set.seed(8672)
 shop_large_runs <- replicate(30, {
   new_demand <- rbinom(1000, size = 20, prob = 0.6)
   mean(new_demand > 12)
@@ -161,7 +159,6 @@ knitr::kable(data.frame(
 #| fig-height: 3.8
 #| fig-cap: "Each point is one complete simulation run, not one day. Both panels show 30 independent runs of the same shop model on the same vertical scale. Averaging 1,000 days gives a more stable estimate than averaging 50 days. The dashed line is the exact model probability, about 41.6%."
 #| fig-alt: "Two panels show estimated shortage probabilities across 30 runs. Estimates based on 50 days fluctuate more than estimates based on 1,000 days. Both are near the same dashed target line at 41.6 percent."
-set.seed(8673)
 shop_small_runs <- replicate(30, mean(rbinom(50, 20, 0.6) > 12))
 shop_true_probability <- pbinom(12, 20, 0.6, lower.tail = FALSE)
 shop_plot <- data.frame(
@@ -379,7 +376,7 @@ There are two levels of variation:
 #| fig-height: 3.8
 #| fig-cap: "Left: 400 individual outputs. Right: 400 estimates, each averaging 100 fresh outputs. Both panels use the same horizontal scale. The dashed line is the fixed target e - 1; the averages cluster more tightly around it. The vertical scales differ."
 #| fig-alt: "Side-by-side histograms distinguish the broad spread of individual exp(U) values from the much smaller spread of averages of 100 such values. A dashed vertical line marks the same target in both panels."
-set.seed(8671)
+set.seed(8670)
 variation_draws <- exp(runif(400))
 variation_means <- replicate(400, mean(exp(runif(100))))
 variation_data <- data.frame(
