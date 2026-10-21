@@ -2,6 +2,8 @@ project:
   type: book
   resources:
     - project-report-template.zip
+    - project-report-template.pdf
+    - project-report-template-preview.png
     - Assignment3.pdf
     - Assignment3-response-template.qmd
 

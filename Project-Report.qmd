@@ -107,7 +107,18 @@ After the main text, include **References**, **Software availability and reprodu
 
 Number and caption figures and tables and explain their statistical meaning in the text. A few short, evaluated code examples belong in the workflow section. Keep full source listings, long logs, and additional experiments in the repository or supplementary material. Use the same submitted package version for the report and package assessment.
 
-### Download and adapt the template {#report-template}
+### Preview and download the template {#report-template}
+
+[Preview the STAT 8670 report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf). This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline; your completed report should still contain **8-10 pages of main text**.
+
+You may refer to [published articles in **The R Journal**](https://journal.r-project.org/) and the [examples linked above](#journal-style) for software presentation, reproducible examples, figures, and experimental results. Use them as models for organizing and presenting your own work.
+
+::: {.content-visible when-format="html"}
+
+[![First-page preview of the STAT 8670 report template; open the PDF to view all pages.](project-report-template-preview.png){width=420px fig-alt="First page of the STAT 8670 report template"}](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf)
+
+:::
+
 
 [Download the STAT 8670 report starter (ZIP)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.zip). Unzip it to obtain `Project_Report_GroupName.qmd` and `README.md`. Replace `GroupName` and the writing prompts, add your code and citations, and render the matching PDF. The starter uses the R Journal-inspired structure with ordinary Quarto, so it works as a report outline for either an R or a Python package.
 

@@ -35,6 +35,8 @@ Use the same method for all three components. Follow the links for full requirem
 
 ## Report writing model
 
+[Preview the report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf) to see the report layout and section headings. You may refer to [published articles in The R Journal](https://journal.r-project.org/) for examples of how to organize and present your work.
+
 Use **The R Journal** as the writing model for the 8-10 page report: introduce the method and software, demonstrate a reproducible package workflow, and evaluate accuracy, computing time, and limitations. This structure applies to both **R and Python projects**. See the [journal references and report structure](Project-Report.qmd#journal-style) and [downloadable Quarto starter](Project-Report.qmd#report-template).
 
 **How to get started**
