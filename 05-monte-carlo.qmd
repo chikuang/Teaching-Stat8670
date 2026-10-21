@@ -313,7 +313,8 @@ set.seed(8670)
 N <- 10000
 x <- runif(N, 2, 4)
 y24 <- 2 * exp(-x)  # width times the function value
-c(estimate = mean(y24), exact = exp(-2) - exp(-4))
+c(mean_height = mean(y24) / 2,
+  estimate = mean(y24), exact = exp(-2) - exp(-4))
 ```
 
 ```{r}
@@ -322,21 +323,22 @@ c(estimate = mean(y24), exact = exp(-2) - exp(-4))
 #| code-fold: true
 #| fig-width: 8
 #| fig-height: 4.3
-#| fig-cap: "The orange dashed line is the sampled average height. Multiply it by width 2 to estimate the shaded area."
-#| fig-alt: "The curve exp(-x) on 2 to 4, vertical segments at sampled x values, and a dashed horizontal line at the sampled average height."
+#| fig-cap: "The orange dashed line is the average height from all 10,000 draws used in the code output. The blue segments show only the first 40 draws for readability. Multiplying the average height by width 2 gives the displayed integral estimate."
+#| fig-alt: "The curve exp(-x) on 2 to 4, blue vertical segments at the first 40 sampled x values, and an orange dashed line at the average height of all 10,000 draws. The subtitle reports the same mean height and integral estimate as the code output."
 height_grid <- data.frame(x = seq(2, 4, length.out = 301))
 height_grid$height <- exp(-height_grid$x)
-set.seed(8670)
-height_draws <- data.frame(x = runif(40, 2, 4))
+height_draws <- data.frame(x = x[1:40])
 height_draws$height <- exp(-height_draws$x)
 ggplot(height_grid, aes(x, height)) +
   geom_area(fill = "#E6F2EC", alpha = .8) +
   geom_line(color = "black", linewidth = .8) +
   geom_segment(data = height_draws, aes(xend = x, y = 0, yend = height),
                color = "#0072B2", alpha = .4) +
-  geom_hline(yintercept = mean(height_draws$height),
+  geom_hline(yintercept = mean(y24) / 2,
              linetype = "dashed", color = "#D55E00", linewidth = .8) +
-  labs(x = "x", y = "Integrand exp(-x)")
+  labs(x = "x", y = "Integrand exp(-x)",
+       subtitle = sprintf("Mean height = %.6f; integral estimate = %.6f",
+                          mean(y24) / 2, mean(y24)))
 ```
 
 This curve is the **integrand**, not a probability density on $[2,4]$. Its area is the integral we want; it need not equal 1.
