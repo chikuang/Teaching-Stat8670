@@ -36,7 +36,7 @@ Begin with the answer table for Questions 1-3, followed by the eight labeled res
 - **Question 3:** Write **True** or **False** for each item.
 - **Question 4:** Follow each prompt's requested format. A short sentence or calculation is enough; no essays are needed.
 
-Every item is worth **1 point**. No explanations are required for Questions 1-3. **No code execution or plots are required.** If you use R to check an answer, include the code in your source file. Your source must render to the submitted PDF without errors.
+Every item is worth **1 point**. No explanations are required for Questions 1-3. **No code execution or plots are required.** If you use R to check an answer, include the code in your source file. For random sampling or simulation, set a seed (e.g., `set.seed(8670)`) before generating random values and include it in your submitted code so your results are reproducible. Your source must render to the submitted PDF without errors.
 
 :::
 
