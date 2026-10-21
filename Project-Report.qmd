@@ -123,7 +123,7 @@ Number and caption figures and tables and explain their statistical meaning in t
 
 ::: {.content-visible when-format="html"}
 
-[Read the STAT 8670 report template](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.html) in the browser, or [download the PDF](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf){download="STAT8670-report-template.pdf"}. This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline, not an example of the required length; your completed report must contain **8-10 counted pages of main text** under the [page-count rule](#page-count).
+Read the **three-page template below**, [open a larger view](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.html){target="_blank" rel="noopener"}, or [download the PDF](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf){download="STAT8670-report-template.pdf"}. This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline, not an example of the required length; your completed report must contain **8-10 counted pages of main text** under the [page-count rule](#page-count).
 
 :::
 
@@ -137,7 +137,18 @@ You may refer to [published articles in **The R Journal**](https://journal.r-pro
 
 ::: {.content-visible when-format="html"}
 
-[![First-page preview of the STAT 8670 report template; open the reader to view all pages.](project-report-template-preview.png){width=420px fig-alt="First page of the STAT 8670 report template"}](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.html)
+Use the page and zoom controls to explore the report layout.
+
+```{=html}
+<iframe
+  src="project-report-template.html"
+  title="STAT 8670 report template PDF preview"
+  loading="lazy"
+  width="100%"
+  height="800"
+  style="display: block; width: 100%; height: 80vh; min-height: 560px; max-height: 900px; border: 1px solid #b7c3cb; border-radius: 6px;">
+</iframe>
+```
 
 :::
 
