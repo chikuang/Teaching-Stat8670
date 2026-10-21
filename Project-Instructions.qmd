@@ -6,15 +6,17 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 
 ## Group Members {#group-members}
 
-::: {tbl-colwidths="[12,63,25]"}
+::: {tbl-colwidths="[18,10,52,20]"}
 
-| Group | Members | Topic |
-|:---:|:---|:---|
-| 1 | Jones, Airianna; Grant, Jada; Honne, Shravya | TBA |
-| 2 | Guo, Jennifer; Pham, Duc; Park, Jieun | TBA |
-| 3 | Nicholas | TBA |
+| Presented? | Group | Members | Topic |
+|:---:|:---:|:---|:---|
+| TBA | 1 | Grant, Jada; Honne, Shravya; Jones, Airianna | TBA |
+| TBA | 2 | Guo, Jennifer; Park, Jieun; Pham, Duc | TBA |
+| TBA | 3 | Nicholas | TBA |
 
 :::
+
+**Presentation status:** Yes = presented; No = not yet presented; TBA = status not yet recorded.
 
 ## Project Overview
 
