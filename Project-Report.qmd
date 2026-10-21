@@ -68,17 +68,48 @@ For example: *"We implement percentile bootstrap confidence intervals for a popu
 
 Write **8-10 pages of main text**, excluding the title page, references, and appendices. Use Quarto, R Markdown, or LaTeX and submit the rendered **PDF plus its source files**. Use readable 11- or 12-point text, standard margins, and numbered sections. Place long code listings and supplementary output in an appendix or the repository.
 
-Include the following sections:
+### Writing model: The R Journal {#journal-style}
 
-1. **Title and summary.** Give the project title, group name, member names, and a short summary of the problem and main finding.
-2. **Motivation and background.** Explain why the method is useful, identify its intended users or application, and cite the sources you used.
-3. **Statistical method.** Define the relevant notation, assumptions, inputs, and outputs. State the quantity being estimated, tested, or optimized. For an optimization method, explicitly give the objective function and any constraints.
-4. **Algorithm and implementation.** Describe the computational steps with pseudocode or a clear numbered algorithm. Explain important choices such as tuning parameters, stopping criteria, and numerical safeguards. Identify the core functions your group wrote and any library routines used.
-5. **Experiments and results.** Include at least one reproducible simulation study or data analysis with **two settings** (for example, two sample sizes or two noise levels). Compare against at least one known answer, simple baseline, or trusted implementation. Explain a relevant accuracy measure and report computing time for the settings you compare. State random seeds, replication counts where relevant, and the software environment.
-6. **Discussion and conclusion.** Interpret the results, discuss computational cost and a limitation or failure case, and suggest one useful extension.
-7. **References and contributions.** Cite methods, data, and borrowed or adapted code. Add a short table describing each member's contribution; a one-person group should state that the work was completed individually.
+Write the report as a short **R Journal-style software article**: explain the statistical problem, introduce your implementation, show a usable workflow, and evaluate its behavior. The [R Journal author guide](https://journal.r-project.org/submissions.html) emphasizes a broad readership, software design, practical use, and reproducible results. For this course, also explain the statistical formulation and the core algorithm your group implements, as required by the rubric.
 
-Every figure and table should have a caption and be discussed in the text. A reader should understand what was compared, what the results show, and why the result matters statistically.
+This is a **course adaptation** of the journal's structure. Both **R and Python projects** use it. Keep the course's 8-10 page limit, readable 11- or 12-point text, and PDF-plus-source submission. A course project may implement an established method; journal acceptance, methodological novelty, and CRAN/PyPI publication are not requirements. The existing report, package, and presentation rubrics determine the grades.
+
+**Read these references before drafting:**
+
+- [R Journal author guide](https://journal.r-project.org/submissions.html): article organization, software reporting, and reproducibility.
+- [Official rjtools documentation](https://rjournal.github.io/rjtools/): the journal's R Markdown authoring workflow. This is an optional tool for R users; the course also accepts Quarto and LaTeX.
+- [Official article-template showcase](https://rjournal.github.io/rjtools/articles/article_template.html): links to source files and a rendered sample article.
+- [Kenny and Wolock (2025), “SimEngine: A Modular Framework for Statistical Simulations in R”](https://journal.r-project.org/articles/RJ-2025-010/): a published example linking motivation, design choices, a user workflow, and discussion. Use its exposition as a model; your project can remain a small implementation of one method.
+
+### Suggested report structure {#report-structure}
+
+Use a descriptive title identifying the method or package, and list the group and all members. Start with an abstract of **about 150-200 words**, covering the problem, implementation, evaluation, and main result. This length is a course writing suggestion. Define technical terms for readers who have not seen your code.
+
+The following is an illustrative **9-page plan**, including the abstract. Adjust it within the 8-10 page main-text limit; references, the title page, and appendices are excluded.
+
+::: {tbl-colwidths="[27,60,13]"}
+
+| Section | What the reader should learn | Pages |
+|:---|:---|:---:|
+| Abstract | The purpose, implementation, evaluation, and main finding. | 0.5 |
+| 1. Introduction | The problem, intended users, existing approaches, and the scope of your package. | 1 |
+| 2. Statistical method | The estimand, test, or optimization objective; notation, assumptions, inputs, and outputs. State constraints when relevant. | 1 |
+| 3. Algorithm and implementation | Core steps or pseudocode, design choices, tuning/stopping rules, numerical safeguards, and which routines you wrote or reused. | 1.5 |
+| 4. Package workflow and example | Installation, a minimal function call, its output, and its statistical interpretation. Use a small example a reader can reproduce. | 1 |
+| 5. Experiments and results | Two settings, a known answer or reference method, accuracy and timing comparisons, and an explanatory results figure. | 3 |
+| 6. Discussion and conclusion | What worked, computational cost, a limitation or failure case, and one useful extension. | 1 |
+
+:::
+
+For Section 5, give the simulation or data-analysis design, metric definitions, random seeds, replication counts when relevant, and software/hardware details needed to understand the timing results. Use the same experiment conditions for your implementation and the reference. Distinguish correctness checks from performance comparisons. Include at least one reproducible simulation study or data analysis with **two settings**, as required above.
+
+After the main text, include **References**, **Software availability and reproducibility**, and **Author contributions**. Cite methods, data, packages, and borrowed or adapted code with consistent author-year references. Identify the package repository and the exact release tag or commit used for all results. Give commands for reproducing the main tables and figures. Add a brief contribution table; an individual project should say that the work was completed individually.
+
+Number and caption figures and tables and explain their statistical meaning in the text. A few short, evaluated code examples belong in the workflow section. Keep full source listings, long logs, and additional experiments in the repository or supplementary material. Use the same submitted package version for the report and package assessment.
+
+### Download and adapt the template {#report-template}
+
+[Download the STAT 8670 report starter (ZIP)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.zip). Unzip it to obtain `Project_Report_GroupName.qmd` and `README.md`. Replace `GroupName` and the writing prompts, add your code and citations, and render the matching PDF. The starter uses the R Journal-inspired structure with ordinary Quarto, so it works as a report outline for either an R or a Python package.
 
 ## Report grading [10]
 

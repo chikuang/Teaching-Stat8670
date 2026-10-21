@@ -1,0 +1,77 @@
+---
+title: "Replace with a specific project title"
+subtitle: "STAT 8670 | Fall 2026"
+author: "Replace with all author names and group name"
+abstract: "Replace with about 150-200 words stating the problem, data or implementation, evaluation, main quantitative result, and conclusion. Write this after completing the analysis."
+format:
+  pdf:
+    documentclass: scrartcl
+    fontsize: 11pt
+    geometry: margin=1in
+    colorlinks: true
+    number-sections: true
+    toc: false
+  html:
+    number-sections: true
+    toc: false
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+<!-- Replace all prompts. Write 8-10 pages of main text, including the abstract,
+     excluding a separate title page, references, and appendices. -->
+
+# Introduction
+
+Explain the statistical problem and intended users. Cite existing methods or software and describe the scope of your implementation. An established method with one well-developed algorithm is sufficient.
+
+# Statistical method
+
+Define notation, assumptions, inputs, outputs, and the quantity estimated, tested, or optimized. Give the objective and constraints for an optimization method. Explain enough statistical reasoning for a reader to understand the implementation and results.
+
+# Algorithm and implementation
+
+Give pseudocode or numbered steps for the core algorithm. Identify the functions your group wrote and supporting libraries you used. Explain the interface, defaults, tuning or stopping rules, numerical safeguards, and relevant input checks.
+
+# Package workflow and example
+
+Show how to install the submitted package and use a documented function in a small reproducible example. Include a short evaluated code chunk in R or Python, its relevant output, and an interpretation. Use your own package; keep its full source in the repository.
+
+# Experiments and results
+
+Describe a reproducible simulation study or data analysis with at least two settings. Define the design, a known answer or trusted reference, accuracy metrics, replication counts when relevant, and seeds.
+
+| Setting | Method | Accuracy measure | Computing time |
+|:---|:---|---:|---:|
+| Setting 1 | Your implementation | Replace | Replace |
+| Setting 1 | Reference or baseline | Replace | Replace |
+| Setting 2 | Your implementation | Replace | Replace |
+| Setting 2 | Reference or baseline | Replace | Replace |
+
+Choose meaningful metrics for your method; adjust the table columns as needed. Explain timing units, what was timed, software/hardware, and repeated timing if used. Keep comparison conditions consistent. Add a figure that shows the main finding, including uncertainty when relevant. Generate reported results from your experiment code.
+
+# Discussion and conclusion
+
+Explain what the experiments establish, computational cost, a limitation or failure case, and one useful extension. Return to the statistical question in the introduction.
+
+# References {.unnumbered}
+
+Replace this prompt with complete author-year references for methods, data, software, and adapted code. If using a BibTeX file, add `bibliography: references.bib` to the YAML and cite entries in the text. Include the bibliography file with your submission.
+
+# Software availability and reproducibility {.unnumbered}
+
+Give the public package repository URL, exact release tag or commit, language and dependency versions, and commands for installation, tests, and reproduction of the figures and tables. Use the same version for the report and package submission. Include data or generation/access instructions and seeds.
+
+# Author contributions {.unnumbered}
+
+| Member | Contribution |
+|:---|:---|
+| Replace | Replace |
+
+For a one-person group, state that the work was completed individually.
+
+# Supplementary material {.unnumbered}
+
+Include supplementary experiments, long output, and supporting derivations as needed. Keep the full implementation and reproducibility scripts in the submitted package repository.

@@ -33,6 +33,10 @@ Use the same method for all three components. Follow the links for full requirem
 
 **Python option:** You may build a **Python package**; see the [Python requirements](Project-Package.qmd#r-and-python-requirements).
 
+## Report writing model
+
+Use **The R Journal** as the writing model for the 8-10 page report: introduce the method and software, demonstrate a reproducible package workflow, and evaluate accuracy, computing time, and limitations. This structure applies to both **R and Python projects**. See the [journal references and report structure](Project-Report.qmd#journal-style) and [downloadable Quarto starter](Project-Report.qmd#report-template).
+
 **How to get started**
 
 1. **Choose a topic.** Use the instructor's list (TBA), or propose your own method for instructor approval.
