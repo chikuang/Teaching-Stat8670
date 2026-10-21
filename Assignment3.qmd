@@ -16,10 +16,10 @@ show-solutions: false
 
 | Question | Format | Points |
 |:---:|:---:|:---:|
-| 1 | 8 multiple-choice questions on generators and normalization | 8 |
+| 1 | 8 multiple-choice questions on random variable generation | 8 |
 | 2 | 8 multiple-choice questions on simulation and variance reduction | 8 |
-| 3 | 6 true/false questions on interpreting simulation | 6 |
-| 4 | One shop example with 8 short, structured responses | 8 |
+| 3 | 6 true/false questions | 6 |
+| 4 | 2 short-answer parts with four prompts each | 8 |
 | **Total** | | **30** |
 
 :::
@@ -28,23 +28,25 @@ show-solutions: false
 
 ::: {.callout-note title="Submission"}
 
-Use **R Markdown** or **Quarto**. Submit both your **source file** (`.Rmd` or `.qmd`) and its **rendered PDF** to the **Assignment 3** folder on **iCollege**. Use the filename `A3_LastName_FirstName` with the appropriate extension and include your name in the PDF.
+Use **R Markdown** or **Quarto**. Submit your **source file** (`.Rmd` or `.qmd`) and **rendered PDF** to the **Assignment 3** folder on **iCollege**. Name both files `A3_LastName_FirstName` with the appropriate extension, and include your name in the PDF.
 
-Begin with the answer table for Questions 1-3, followed by the eight labeled responses for Question 4. Use the supplied response template, or follow the same labels and order.
+Use the response template, or follow its answer table and question labels.
 
-- **Questions 1-2:** Write one letter, A, B, C, or D, for each item.
-- **Question 3:** Write **True** or **False** for each item.
-- **Question 4:** Follow each prompt's requested format. A short sentence or calculation is enough; no essays are needed.
+- **Questions 1-2:** Select one best answer, A, B, C, or D.
+- **Question 3:** Write **True** or **False**.
+- **Question 4:** Give a short explanation or calculation for each prompt.
 
-Every item is worth **1 point**. No explanations are required for Questions 1-3. **No code execution or plots are required.** If you use R to check an answer, include the code in your source file. For random sampling or simulation, set a seed (e.g., `set.seed(8670)`) before generating random values and include it in your submitted code so your results are reproducible. Your source must render to the submitted PDF without errors.
+Each item is worth **1 point**. Only Question 4 requires explanations or calculations.
+
+R code and plots are optional. If you use R, include the code in your source file. Before generating random values, set a seed (e.g., `set.seed(8670)`) and keep that line in your code. Check that your source renders to PDF without errors.
 
 :::
 
-**Scope:** Use the main material in Chapters 4 and 5. **Supplementary material is not assessed.** Focus on what the simulation does, what it estimates, and why its output varies. No proofs or derivations of optimal variance-reduction coefficients are required.
+Note: The questions cover the main material in Chapters 4 and 5. Supplementary sections, proofs, and derivations of optimal variance-reduction coefficients are not required.
 
 {{< pagebreak >}}
 
-## Question 1: Generators and Normalization [8]
+## Question 1: Generating Random Variables [8]
 
 Select the **best answer**. Each item is worth **1 point**.
 
@@ -139,12 +141,12 @@ D. $f(x)=h(x)$
 
 ### 1e)
 
-For the same target, compare two rejection samplers with a uniform proposal on $(0,1)$:
+For the target in 1d), compare two rejection samplers with a uniform proposal on $(0,1)$:
 
 - normalized scale: target $f(y)=6y(1-y)$, envelope height $1.5$;
 - unnormalized scale: target $h(y)=y(1-y)$, envelope height $0.25$.
 
-Using the same proposal $Y$ and decision draw $U\sim\operatorname{Uniform}(0,1)$, independent of $Y$, how do the acceptance decisions compare?
+Suppose both samplers use the same proposal $Y$ and the same draw $U\sim\operatorname{Uniform}(0,1)$, independent of $Y$. How do their acceptance decisions compare?
 
 A. The normalized version accepts six times as often.  
 B. The unnormalized version cannot be used for rejection sampling.  
@@ -180,7 +182,7 @@ D. Accept and store the density height $1.125$.
 
 ### 1g)
 
-In the rejection diagram, a proposal is plotted at $(Y,V)$ with $V=1.5U$, where $U$ is uniform on $(0,1)$ and independent of $Y$. What does the point's height $V$ represent?
+For the sampler in 1e), a proposal is plotted at $(Y,V)$ with $V=1.5U$, where $U$ is uniform on $(0,1)$ and independent of $Y$. What does the point's height $V$ represent?
 
 A. The probability that the target equals $Y$.  
 B. The value of the target density $f(Y)$.  
@@ -198,7 +200,7 @@ D. An auxiliary random height between zero and the envelope, used to decide whet
 
 ### 1h)
 
-A programmer chooses an envelope after checking the target at only 100 grid points. What must be established for a valid rejection sampler? Assume the proposal covers the target support.
+An envelope lies above the target at 100 grid points. What else must be checked before using it for rejection sampling? Assume the proposal covers the target support.
 
 A. The number of proposals is at least 100.  
 B. The envelope is at least as high as the target throughout its support.  
@@ -222,7 +224,7 @@ Select the **best answer**. Each item is worth **1 point**.
 
 ### 2a)
 
-Why use simulation to estimate the chance of an event when a direct calculation is difficult?
+Why use simulation to estimate an event probability when a direct calculation is difficult?
 
 A. It guarantees that the chosen model matches the real world.  
 B. It removes all uncertainty after a single run.  
@@ -258,7 +260,7 @@ D. `mean(demand >= 12)`
 
 ### 2c)
 
-Two runs use the same model and the same number of simulated days, but fresh random draws. Their estimated shortage probabilities differ. What is the main reason?
+Two simulation runs use the same model and number of days, but independent random draws. Why can their estimated shortage probabilities differ?
 
 A. The stock level must have changed.  
 B. The model's true shortage probability changes after each run.  
@@ -276,7 +278,7 @@ D. Different finite samples contain different numbers of shortage days.
 
 ### 2d)
 
-A simulation averages independent outputs $Y_1,\ldots,Y_N$. What do the output SD and the MCSE describe?
+A simulation averages independent outputs $Y_1,\ldots,Y_N$. Which statement correctly distinguishes the output standard deviation (SD) from the Monte Carlo standard error (MCSE)?
 
 A. Both measure only the spread of individual $Y_i$ values.  
 B. SD describes the spread of individual outputs; MCSE describes the uncertainty of their average due to simulation.  
@@ -314,11 +316,11 @@ D. Exactly zero.
 
 ### 2f)
 
-What is the goal of variance reduction in this chapter?
+What is the purpose of variance reduction?
 
 A. Change the quantity of interest to one with a smaller numerical value.  
 B. Make real customer demand less variable by simulating more days.  
-C. Estimate the same quantity with less run-to-run variation at comparable computational work.  
+C. Estimate the same quantity with less variation across repeated runs for a similar amount of computation.  
 D. Select the random seed that happens to give the closest answer.
 
 ```{=latex}
@@ -441,7 +443,7 @@ A small MCSE guarantees that the model assumptions accurately describe the real 
 
 ### 3f)
 
-To compare simulation methods, we should use repeated runs targeting the same quantity and compare their variability at comparable computational work.
+A comparison of simulation methods should examine the variability of repeated estimates of the same quantity, using a similar amount of computation per run.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -449,31 +451,31 @@ To compare simulation methods, we should use repeated runs targeting the same qu
 
 {{< pagebreak >}}
 
-## Question 4: From One Artificial Day to Many Runs [8]
+## Question 4: Simulating Daily Demand [8]
 
-Each numbered prompt is worth **1 point**. Give only the requested sentence, expression, or calculation. Use the labels **4a.1-4a.4** and **4b.1-4b.4** in your response.
+Each item is worth **1 point**. Label your answers **4a.1-4a.4** and **4b.1-4b.4**. Keep explanations to one sentence and show the requested calculations.
 
-### 4a) Why simulate, and what are the steps? [4]
+### 4a) Estimating the shortage probability [4]
 
-A shop prepares **12 muffins** each morning. Assume **20 potential customers** per day. Each independently wants one muffin with probability **0.6**, whether or not stock is available. Days are independent. These are illustrative model assumptions, not estimates from shop data.
+A shop prepares 12 muffins each morning and has 20 potential customers per day. Assume that each customer independently wants one muffin with probability 0.6 and that demand is independent across days.
 
 Let $D$ be the number of customers wanting a muffin in one day. We want to estimate $p=P(D>12)$, the probability that at least one customer cannot be served.
 
-1. The mean demand is $20\times0.6=12$. Why does this **not** imply that 12 muffins are always enough? Give **one sentence**.
-2. Describe how to generate **one artificial day's demand $D$** using independent uniform draws. State how many draws you use and which draws count as customers wanting a muffin. Give **one sentence**; R code is also acceptable.
-3. Complete the rule: record $Y=1$ if **_____**; otherwise record $Y=0$. Give an **inequality involving $D$**.
-4. In one run of 1,000 independent days, 430 days have insufficient stock. Compute $\hat p$. Give the **fraction and its decimal value**.
+1. The mean demand is $20\times0.6=12$. Why might 12 muffins still not be enough?
+2. Describe how to simulate one day's demand $D$ using independent uniform draws. Specify the number of draws and how each draw determines whether a customer wants a muffin. A line of R code is also acceptable.
+3. Complete the indicator rule: $Y=1$ if **_____**, and $Y=0$ otherwise. Write the condition as an inequality involving $D$.
+4. A run of 1,000 independent days includes 430 shortage days. Compute $\hat p$ as a fraction and a decimal.
 
-### 4b) Why do repeated runs differ? [4]
+### 4b) Variation between runs [4]
 
-A second run of the same model, using fresh random draws for another 1,000 days, has 397 shortage days. Stock, purchase probability, and all other assumptions are unchanged.
+A second run with the same assumptions and 1,000 new simulated days produces 397 shortage days.
 
-1. The two estimates are 0.430 and 0.397. Explain why they can differ even if both programs are correct. Give **one sentence**.
+1. The two estimates are 0.430 and 0.397. Why can they differ even if both programs are correct?
 2. For the first run, use $\hat p=0.430$ and $N=1{,}000$ to compute
    $\widehat{\operatorname{MCSE}}=\sqrt{\hat p(1-\hat p)/N}$.
    Give the value to **four decimal places**.
 3. If $N$ increases to 4,000 and $\hat p$ stays close to 0.430, what approximate MCSE do you expect? Give the value to **four decimal places**.
-4. Complete both statements using **decreases**, **stays the same**, or **increases**: when only the number of simulated days increases, the typical run-to-run spread of $\hat p$ **_____**; the model's day-to-day spread of demand $D$ **_____**.
+4. When only the number of simulated days increases, complete each statement with **decreases**, **stays the same**, or **increases**: the spread of $\hat p$ across runs **_____**; the day-to-day spread of demand $D$ under the model **_____**.
 
 ```{=latex}
 \par\endgroup
