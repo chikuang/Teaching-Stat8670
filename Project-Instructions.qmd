@@ -8,15 +8,13 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 
 ::: {tbl-colwidths="[18,10,52,20]"}
 
-| Presented? | Group | Members | Topic |
+|  | Group | Members | Topic |
 |:---:|:---:|:---|:---|
-| TBA | 1 | Grant, Jada; Honne, Shravya; Jones, Airianna | TBA |
-| TBA | 2 | Guo, Jennifer; Park, Jieun; Pham, Duc | TBA |
-| TBA | 3 | Nicholas | TBA |
+|  | 1 | Grant, Jada; Honne, Shravya; Jones, Airianna | TBA |
+|  | 2 | Guo, Jennifer; Park, Jieun; Pham, Duc | TBA |
+|  | 3 | Nicholas | TBA |
 
 :::
-
-**Presentation status:** Yes = presented; No = not yet presented; TBA = status not yet recorded.
 
 ## Project Overview
 
