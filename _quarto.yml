@@ -4,6 +4,8 @@ project:
     - project-report-template.zip
     - project-report-template.pdf
     - project-report-template-preview.png
+    - project-report-template.html
+    - pdf-reader/**
     - Assignment3.pdf
     - Assignment3-response-template.qmd
 

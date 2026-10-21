@@ -121,13 +121,23 @@ Number and caption figures and tables and explain their statistical meaning in t
 
 ### Preview and download the template {#report-template}
 
+::: {.content-visible when-format="html"}
+
+[Read the STAT 8670 report template](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.html) in the browser, or [download the PDF](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf){download="STAT8670-report-template.pdf"}. This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline, not an example of the required length; your completed report must contain **8-10 counted pages of main text** under the [page-count rule](#page-count).
+
+:::
+
+::: {.content-visible when-format="pdf"}
+
 [Preview the STAT 8670 report template (PDF)](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf). This PDF is rendered directly from the downloadable template below and shows the layout, section headings, and writing prompts. It is a short outline, not an example of the required length; your completed report must contain **8-10 counted pages of main text** under the [page-count rule](#page-count).
+
+:::
 
 You may refer to [published articles in **The R Journal**](https://journal.r-project.org/) and the [examples linked above](#journal-style) for software presentation, reproducible examples, figures, and experimental results. Use them as models for organizing and presenting your own work.
 
 ::: {.content-visible when-format="html"}
 
-[![First-page preview of the STAT 8670 report template; open the PDF to view all pages.](project-report-template-preview.png){width=420px fig-alt="First page of the STAT 8670 report template"}](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.pdf)
+[![First-page preview of the STAT 8670 report template; open the reader to view all pages.](project-report-template-preview.png){width=420px fig-alt="First page of the STAT 8670 report template"}](https://chikuang.github.io/teaching/2026F_stat8670/project-report-template.html)
 
 :::
 
