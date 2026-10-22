@@ -281,12 +281,12 @@ D. The numerator is not independent of the chi-square denominator.
 
 ### 2d)
 
-The target is a sample of independent observations from a mixture of two normal distributions, with probabilities 0.30 and 0.70. How should each observation be generated?
+The target is a sample of independent pairs $(X_1,X_2)$ from a mixture of two bivariate normal distributions, with probabilities 0.30 and 0.70. How should each pair be generated?
 
-A. Alternate between the two components throughout the sample.  
-B. Independently choose a component with probabilities 0.30 and 0.70, then draw one value from it.  
-C. Draw one value from each component and return their weighted average.  
-D. Choose one component once and use it for every observation in the dataset.
+A. Choose a separate component label for each coordinate, then draw from the corresponding marginal distributions.  
+B. Choose one component with probabilities 0.30 and 0.70, then draw the whole pair from that component's bivariate distribution. Use a fresh label for each pair.  
+C. Draw a pair from each component and return their coordinatewise weighted average.  
+D. Choose one component once and use it for every pair in the dataset.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -450,7 +450,7 @@ In rejection sampling, replacing a valid bound $M$ by a larger valid bound prese
 
 ### 3f)
 
-Matching a target distribution's mean and covariance is sufficient to establish that a multivariate generator has the correct joint distribution.
+A mixture of two bivariate normal distributions must itself have a bivariate normal distribution.
 
 ```{=latex}
 \end{minipage}\par\medskip

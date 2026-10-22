@@ -1341,41 +1341,50 @@ $$
 
 The mixture has mean 2 and variance 5. It describes observations from two subpopulations; each observation belongs to one subpopulation.
 
+The first two panels of @fig-rv-mixture show the component densities separately. In the third panel, multiply each density by its selection probability and add the two curves. The mixture retains observations near both component centers; it does not move each observation to their average.
+
 ```{r}
 #| label: fig-rv-mixture
 #| code-fold: true
 #| echo: !expr knitr::is_html_output()
-#| fig-cap: "Adding two observations, averaging them, and selecting one population produce different distributions. The solid curves show their respective theoretical densities."
+#| fig-cap: "Two normal components and their equal-weight mixture, on the same axes. Each component density has area 1. In the right panel, the dashed curves have area 0.5 each; their sum is the solid mixture density, with total area 1."
+#| fig-alt: "The first two panels show normal densities centered at zero and four. The third shows the mixture density with two peaks, formed by adding half of each component density."
 #| fig-width: 10
-set.seed(8670)
-n <- 10000
-x1 <- rnorm(n, mean = 0, sd = 1)
-x2 <- rnorm(n, mean = 4, sd = 1)
-component <- sample.int(2, n, replace = TRUE, prob = c(0.5, 0.5))
-x_mixture <- rnorm(n, mean = c(0, 4)[component], sd = 1)
-
-mechanisms <- c("1. Sum", "2. Weighted average", "3. Mixture")
-mixture_plot <- data.frame(
-  value = c(x1 + x2, (x1 + x2) / 2, x_mixture),
-  mechanism = rep(mechanisms, each = n)
+#| fig-height: 3.6
+mixture_panels <- c("1. Component 1: N(0, 1)",
+                    "2. Component 2: N(4, 1)",
+                    "3. Mixture: 0.5 f1 + 0.5 f2")
+mixture_grid <- seq(-4, 8, length.out = 601)
+mixture_f1 <- dnorm(mixture_grid, 0, 1)
+mixture_f2 <- dnorm(mixture_grid, 4, 1)
+mixture_densities <- data.frame(
+  x = rep(mixture_grid, 3),
+  density = c(mixture_f1, mixture_f2, 0.5 * mixture_f1 + 0.5 * mixture_f2),
+  panel = factor(rep(mixture_panels, each = length(mixture_grid)),
+                 levels = mixture_panels),
+  curve = rep(c("Component 1", "Component 2", "Mixture"),
+               each = length(mixture_grid))
 )
-grid <- seq(-4, 10, length.out = 500)
-mixture_curves <- data.frame(
-  value = rep(grid, 3),
-  density = c(
-    dnorm(grid, 4, sqrt(2)),
-    dnorm(grid, 2, sqrt(0.5)),
-    0.5 * dnorm(grid, 0, 1) + 0.5 * dnorm(grid, 4, 1)
-  ),
-  mechanism = rep(mechanisms, each = length(grid))
+mixture_contributions <- data.frame(
+  x = rep(mixture_grid, 2), density = c(0.5 * mixture_f1, 0.5 * mixture_f2),
+  panel = factor(mixture_panels[3], levels = mixture_panels),
+  curve = rep(c("Component 1", "Component 2"), each = length(mixture_grid))
 )
-ggplot(mixture_plot, aes(value)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 45,
-                 fill = "lightblue", color = "white") +
-  geom_line(data = mixture_curves, aes(y = density),
-            color = "firebrick", linewidth = 0.9) +
-  facet_wrap(~ mechanism, nrow = 1) +
-  labs(x = "Value", y = "Density")
+mixture_colors <- c("Component 1" = "#0072B2", "Component 2" = "#D55E00",
+                    "Mixture" = "#303030")
+ggplot(mixture_densities, aes(x, density)) +
+  geom_area(aes(fill = curve), alpha = 0.12) +
+  geom_line(data = mixture_contributions, aes(color = curve),
+            linetype = "dashed", linewidth = 0.8) +
+  geom_line(aes(color = curve), linewidth = 1) +
+  scale_color_manual(values = mixture_colors, guide = "none") +
+  scale_fill_manual(values = mixture_colors, guide = "none") +
+  scale_x_continuous(breaks = c(-4, 0, 4, 8)) +
+  scale_y_continuous(limits = c(0, 0.43), breaks = c(0, 0.2, 0.4)) +
+  facet_wrap(~ panel, nrow = 1) +
+  labs(x = "Value", y = "Density") +
+  theme(strip.text = element_text(size = 11, face = "bold"),
+        panel.grid.minor = element_blank())
 ```
 
 ::::
@@ -1584,6 +1593,101 @@ The transformed row is $(2,0)R+(1,2)=(3,3.2)$. Choose **A**, since the covarianc
 
 :::
 
+### Multivariate Normal Mixtures
+
+The same two-step rule works for vectors. For a two-component mixture, choose $C=1$ with probability $w$ and $C=2$ with probability $1-w$, then generate the **whole vector** from the selected multivariate normal distribution:
+
+$$
+\boldsymbol X\mid C=j\sim N_d(\boldsymbol\mu_j,\Sigma_j),
+\qquad
+f(\boldsymbol x)=w f_1(\boldsymbol x)+(1-w)f_2(\boldsymbol x).
+$$
+
+Here $f_1$ and $f_2$ are joint densities. Use one label for all coordinates of an observation and a fresh label for the next observation. Choosing a separate label for each coordinate generally gives a different joint distribution. A mixture of multivariate normals need not itself be multivariate normal.
+
+:::: {#rv-block-62 .callout-example title="Two Bivariate Normal Components"}
+
+::: {.content-visible when-format="pdf"}
+
+**Example 14. Two Bivariate Normal Components**
+
+:::
+
+Consider equal weights and the two components used in last year's notes:
+
+$$
+\boldsymbol\mu_1=\begin{pmatrix}0\\0\end{pmatrix},\quad
+\Sigma_1=\begin{pmatrix}1&0\\0&1\end{pmatrix},\qquad
+\boldsymbol\mu_2=\begin{pmatrix}3\\2\end{pmatrix},\quad
+\Sigma_2=\begin{pmatrix}1&0.5\\0.5&1\end{pmatrix}.
+$$
+
+Component 1 has independent coordinates and circular density contours. Component 2 has correlation 0.5 and tilted contours. The right panel of @fig-rv-mvn-mixture shows the **combined joint density of $(X_1,X_2)$**: at each point, take half of the first component's density plus half of the second's.
+
+```{r}
+#| label: fig-rv-mvn-mixture
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 10
+#| fig-height: 4.3
+#| fig-cap: "Two bivariate normal component densities and their equal-weight mixture. All panels use the same axes and density color scale; darker regions have higher density. Lines join points of equal density. The mixture's contours describe the combined joint distribution, which is not a single bivariate normal distribution."
+#| fig-alt: "Component 1 is centered at zero, zero with circular contours; component 2 is centered at three, two with tilted elliptical contours. The combined joint density has two high-density regions near the component centers."
+joint_grid <- expand.grid(x1 = seq(-3.5, 6.5, length.out = 201),
+                           x2 = seq(-3.5, 5.5, length.out = 181))
+# Both component variances are 1; rho controls their correlation.
+bivariate_density <- function(x1, x2, mu, rho) {
+  z1 <- x1 - mu[1]
+  z2 <- x2 - mu[2]
+  exp(-(z1^2 - 2 * rho * z1 * z2 + z2^2) / (2 * (1 - rho^2))) /
+    (2 * pi * sqrt(1 - rho^2))
+}
+joint_f1 <- with(joint_grid, bivariate_density(x1, x2, c(0, 0), 0))
+joint_f2 <- with(joint_grid, bivariate_density(x1, x2, c(3, 2), 0.5))
+joint_panels <- c("1. Component 1: f1", "2. Component 2: f2",
+                  "3. Joint mixture: 0.5 f1 + 0.5 f2")
+joint_densities <- do.call(rbind, lapply(seq_along(joint_panels), function(j) {
+  data.frame(joint_grid,
+    density = list(joint_f1, joint_f2, 0.5 * joint_f1 + 0.5 * joint_f2)[[j]],
+    panel = factor(joint_panels[j], levels = joint_panels))
+}))
+ggplot(joint_densities, aes(x1, x2)) +
+  geom_raster(aes(fill = density)) +
+  geom_contour(aes(z = density), breaks = c(0.01, 0.03, 0.06, 0.10, 0.15),
+               color = "#303030", linewidth = 0.4) +
+  scale_fill_gradient(low = "#FFFFFF", high = "#0072B2", limits = c(0, 0.19),
+                       breaks = c(0, 0.05, 0.10, 0.15), name = "Density") +
+  scale_x_continuous(breaks = c(-3, 0, 3, 6), expand = c(0, 0)) +
+  scale_y_continuous(breaks = c(-3, 0, 3, 5), expand = c(0, 0)) +
+  facet_wrap(~ panel, nrow = 1) +
+  coord_equal() +
+  labs(x = expression(X[1]), y = expression(X[2])) +
+  theme(strip.text = element_text(size = 10, face = "bold"),
+        legend.position = "bottom", legend.key.width = grid::unit(1.3, "cm"),
+        panel.grid = element_blank())
+```
+
+To simulate this model, draw the labels first. For each label, use that component's mean and Cholesky factor to generate the corresponding rows.
+
+```{r}
+#| label: rv-mvn-mixture-generator
+#| code-fold: false
+set.seed(8670)
+n <- 1000
+component <- sample.int(2, n, replace = TRUE, prob = c(0.5, 0.5))
+means <- list(c(0, 0), c(3, 2))
+covariances <- list(diag(2), matrix(c(1, 0.5, 0.5, 1), 2, 2))
+X_mix <- matrix(NA_real_, nrow = n, ncol = 2)
+for (j in 1:2) {
+  rows <- which(component == j)
+  Z <- matrix(rnorm(2 * length(rows)), ncol = 2)
+  X_mix[rows, ] <- sweep(Z %*% chol(covariances[[j]]), 2, means[[j]], "+")
+}
+```
+
+Each row of `X_mix` is one bivariate observation. A scatterplot should resemble the two regions in the mixture panel, with roughly half the observations drawn from each component.
+
+::::
+
 ## Checking a Generator
 
 Start with a few simple checks against the intended distribution:
@@ -1729,7 +1833,7 @@ The core chapter is complete. These examples are for independent study. Choose o
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 14. Application: Experimental Power**
+**Example 15. Application: Experimental Power**
 
 :::
 
@@ -1830,7 +1934,7 @@ If $\sigma$ is estimated, replace the known-variance test with the actual planne
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 15. Application: Predicting Defect Counts**
+**Example 16. Application: Predicting Defect Counts**
 
 :::
 
@@ -1968,7 +2072,7 @@ If we drew a fresh independent $p$ for each individual item instead of one share
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 16. Application: Queue Delays**
+**Example 17. Application: Queue Delays**
 
 :::
 
