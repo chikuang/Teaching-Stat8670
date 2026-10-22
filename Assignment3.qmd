@@ -8,16 +8,16 @@ show-solutions: false
 \begingroup\ifdefined\chapter\small\fi
 ```
 
-**Due date:** TBA.  
+**Due date:** Monday, November 2, 2026.  
 **Total:** 30 points  
-**Coverage:** [Chapter 4: Generating Random Variables](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html) and [Chapter 5: Monte Carlo Simulation and Variance Reduction](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html).
+**Coverage:** [Chapter 4: Generating Random Variables](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html).
 
 ::: {tbl-colwidths="[16,72,12]"}
 
 | Question | Format | Points |
 |:---:|:---:|:---:|
 | 1 | 8 multiple-choice questions on random variable generation | 8 |
-| 2 | 8 multiple-choice questions on simulation and variance reduction | 8 |
+| 2 | 8 multiple-choice questions on constructing and checking random variables | 8 |
 | 3 | 6 true/false questions | 6 |
 | 4 | 2 short-answer parts with four prompts each | 8 |
 | **Total** | | **30** |
@@ -42,7 +42,9 @@ R code and plots are optional. If you use R, include the code in your source fil
 
 :::
 
-Note: The questions cover the main material in Chapters 4 and 5. Supplementary sections, proofs, and derivations of optimal variance-reduction coefficients are not required.
+Note: The questions use the main material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required.
+
+**Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$.
 
 {{< pagebreak >}}
 
@@ -182,7 +184,7 @@ D. Accept and store the density height $1.125$.
 
 ### 1g)
 
-For the sampler in 1e), a proposal is plotted at $(Y,V)$ with $V=1.5U$, where $U$ is uniform on $(0,1)$ and independent of $Y$. What does the point's height $V$ represent?
+For the normalized sampler in 1e), a proposal is plotted at $(Y,V)$ with $V=1.5U$, where $U$ is uniform on $(0,1)$ and independent of $Y$. What does the point's height $V$ represent?
 
 A. The probability that the target equals $Y$.  
 B. The value of the target density $f(Y)$.  
@@ -213,9 +215,9 @@ D. Every proposal is accepted.
 
 {{< pagebreak >}}
 
-## Question 2: Simulation and Variance Reduction [8]
+## Question 2: Constructing and Checking Random Variables [8]
 
-Select the **best answer**. Each item is worth **1 point**.
+Select the **best answer**. Each question is worth **1 point**.
 
 ```{=latex}
 \par\noindent
@@ -224,12 +226,12 @@ Select the **best answer**. Each item is worth **1 point**.
 
 ### 2a)
 
-Why use simulation to estimate an event probability when a direct calculation is difficult?
+Let $X_1\sim\operatorname{Poisson}(1.2)$ and $X_2\sim\operatorname{Poisson}(2.8)$ be independent. What is the distribution of $X_1+X_2$?
 
-A. It guarantees that the chosen model matches the real world.  
-B. It removes all uncertainty after a single run.  
-C. It generates repeated outcomes from a model and estimates how often the event occurs.  
-D. It replaces the event probability by the mean of the model's inputs.
+A. $\operatorname{Poisson}(1.6)$  
+B. $\operatorname{Poisson}(3.36)$  
+C. $\operatorname{Poisson}(4)$  
+D. $\operatorname{Binomial}(4,0.5)$
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -242,12 +244,12 @@ D. It replaces the event probability by the mean of the model's inputs.
 
 ### 2b)
 
-A shop has 12 muffins each day. The vector `demand` contains the number of customers wanting one muffin on each simulated day. Which R expression estimates the probability that **at least one customer cannot be served**?
+Suppose $G_1\sim\operatorname{Gamma}(2,4)$ and $G_2\sim\operatorname{Gamma}(5,4)$ are independent, with the second parameter denoting the rate. What is the distribution of $G_1/(G_1+G_2)$?
 
-A. `mean(demand > 12)`  
-B. `mean(demand)`  
-C. `sum(demand > 12)`  
-D. `mean(demand >= 12)`
+A. $\operatorname{Beta}(2,5)$  
+B. $\operatorname{Beta}(5,2)$  
+C. $\operatorname{Gamma}(7,4)$  
+D. $\operatorname{Unif}(0,1)$
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -260,12 +262,18 @@ D. `mean(demand >= 12)`
 
 ### 2c)
 
-Two simulation runs use the same model and number of days, but independent random draws. Why can their estimated shortage probabilities differ?
+Let $Z_1,\ldots,Z_6$ be independent standard normals. A programmer returns
 
-A. The stock level must have changed.  
-B. The model's true shortage probability changes after each run.  
-C. One of the runs must contain a coding error.  
-D. Different finite samples contain different numbers of shortage days.
+$$
+W=\frac{Z_1}{\sqrt{(Z_1^2+\cdots+Z_6^2)/6}}
+$$
+
+and calls the result a $t_6$ draw. Which statement identifies the error?
+
+A. The sum of six squared standard normals cannot be chi-square.  
+B. A t generator requires a uniform numerator.  
+C. Dividing the sum of squares by 6 is incorrect.  
+D. The numerator is not independent of the chi-square denominator.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -278,12 +286,12 @@ D. Different finite samples contain different numbers of shortage days.
 
 ### 2d)
 
-A simulation averages independent outputs $Y_1,\ldots,Y_N$. Which statement correctly distinguishes the output standard deviation (SD) from the Monte Carlo standard error (MCSE)?
+The target is a sample of independent observations from a mixture of two bivariate normal distributions, with probabilities 0.30 and 0.70. How should the component label be generated for each observation?
 
-A. Both measure only the spread of individual $Y_i$ values.  
-B. SD describes the spread of individual outputs; MCSE describes the uncertainty of their average due to simulation.  
-C. SD describes the uncertainty of the average; MCSE describes individual outputs.  
-D. MCSE measures how wrong the model's assumptions are.
+A. Choose independent labels for the two coordinates.  
+B. Choose one label for the whole vector, then draw that vector from the selected component.  
+C. Draw a vector from each component and return their weighted average.  
+D. Choose one label once and use that component for every observation in the dataset.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -298,12 +306,12 @@ D. MCSE measures how wrong the model's assumptions are.
 
 ### 2e)
 
-With 1,000 independent simulated days, an estimated probability has MCSE about 0.02. With the same model and method, what MCSE should we expect using 4,000 days?
+A discrete random variable takes values $-2$, $1$, and $5$ with probabilities $0.20$, $0.50$, and $0.30$. Using $F^{-1}(u)=\inf\{x:F(x)\geq u\}$, which value is returned when $u=0.70$?
 
-A. About 0.01.  
-B. About 0.005.  
-C. About 0.02.  
-D. Exactly zero.
+A. $1$  
+B. $-2$  
+C. $5$  
+D. No value is defined at a jump.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -316,12 +324,18 @@ D. Exactly zero.
 
 ### 2f)
 
-What is the purpose of variance reduction?
+Each row of an $n\times2$ matrix $Z$ contains two independent standard normal draws. Let
 
-A. Change the quantity of interest to one with a smaller numerical value.  
-B. Make real customer demand less variable by simulating more days.  
-C. Estimate the same quantity with less variation across repeated runs for a similar amount of computation.  
-D. Select the random seed that happens to give the closest answer.
+$$
+R=\begin{pmatrix}2&1\\0&1\end{pmatrix}.
+$$
+
+If `X <- Z %*% R`, what is the covariance matrix of a row of $X$?
+
+A. $\begin{pmatrix}5&1\\1&1\end{pmatrix}$  
+B. $\begin{pmatrix}4&0\\0&2\end{pmatrix}$  
+C. $\begin{pmatrix}4&2\\2&2\end{pmatrix}$  
+D. $\begin{pmatrix}2&1\\0&1\end{pmatrix}$
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -334,13 +348,12 @@ D. Select the random seed that happens to give the closest answer.
 
 ### 2g)
 
-An antithetic method generates 500 independent $U_j\sim\operatorname{Uniform}(0,1)$ draws and forms the 500 pair averages
-$A_j=\{e^{U_j}+e^{1-U_j}\}/2$. Which values are the independent units used in $\operatorname{sd}(\cdot)/\sqrt{N}$ to estimate MCSE?
+To generate a pair of independent standard normals, a programmer draws one $U\sim\operatorname{Unif}(0,1)$ and returns $X_1=\Phi^{-1}(U)$ and $X_2=\Phi^{-1}(U)$, where $\Phi$ is the standard normal CDF. Which conclusion is correct?
 
-A. The 1,000 separate function values, treating all of them as independent.  
-B. The 500 pair averages, so MCSE is $\operatorname{sd}(A)/\sqrt{500}$.  
-C. Only the first pair average.  
-D. The two values in any single pair.
+A. The pair is correct because both marginal distributions are standard normal.  
+B. Both marginals are correct, but the coordinates are equal and hence not independent.  
+C. The coordinates are independent because the quantile function is deterministic.  
+D. Neither coordinate has a standard normal distribution.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -353,13 +366,12 @@ D. The two values in any single pair.
 
 ### 2h)
 
-For $U\sim\operatorname{Uniform}(0,1)$, a control-variate method uses
-$Y_{\mathrm{adj}}=e^U-c(U-0.5)$, with a fixed coefficient $c$. Why does this adjustment preserve the target mean $\mathbb{E}[e^U]$?
+For independent replications with the same finite-variance model, an estimator's Monte Carlo standard error is approximately proportional to $1/\sqrt{B}$. To reduce it from 0.03 to 0.01, approximately how many replications are needed relative to the current number?
 
-A. The adjusted output equals $e^U$ for every draw.  
-B. Any constant can replace 0.5 without changing the mean.  
-C. The adjustment always makes the output positive.  
-D. The subtracted term has mean zero because $\mathbb{E}[U]=0.5$.
+A. One third as many  
+B. Three times as many  
+C. Six times as many  
+D. Nine times as many
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -367,9 +379,9 @@ D. The subtracted term has mean zero because $\mathbb{E}[U]=0.5$.
 
 {{< pagebreak >}}
 
-## Question 3: Interpreting Simulation [6]
+## Question 3: True or False [6]
 
-Write **True** or **False** for each statement. Each item is worth **1 point**. No explanation is required.
+Write **True** or **False** for each statement. Each statement is worth **1 point**. No explanation is required.
 
 ```{=latex}
 \par\noindent
@@ -378,7 +390,7 @@ Write **True** or **False** for each statement. Each item is worth **1 point**. 
 
 ### 3a)
 
-Setting the seed once at the start allows the same simulation to be reproduced when the code and computing environment are unchanged.
+With the same code and computing environment, setting the same seed at the start reproduces the same simulation results.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -391,7 +403,7 @@ Setting the seed once at the start allows the same simulation to be reproduced w
 
 ### 3b)
 
-Increasing the number of simulated days makes real customer demand less variable from day to day.
+If $X$ has a discrete CDF $F$, then $F(X)$ is necessarily uniform on $(0,1)$.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -404,7 +416,7 @@ Increasing the number of simulated days makes real customer demand less variable
 
 ### 3c)
 
-In rejection sampling, increasing a valid envelope by a constant factor greater than 1 preserves the distribution of accepted values but lowers the acceptance rate.
+If independent gamma variables have the same rate, their sum is gamma with the sum of their shapes and that common rate.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -417,7 +429,7 @@ In rejection sampling, increasing a valid envelope by a constant factor greater 
 
 ### 3d)
 
-Pairing $U$ and $1-U$ must reduce Monte Carlo variance for every possible function of $U$.
+In R, `rnorm(100, mean = 0, sd = 2)` targets a normal distribution with variance 2.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -430,7 +442,7 @@ Pairing $U$ and $1-U$ must reduce Monte Carlo variance for every possible functi
 
 ### 3e)
 
-A small MCSE guarantees that the model assumptions accurately describe the real world.
+In rejection sampling, replacing a valid bound $M$ by a larger valid bound preserves the target distribution of accepted values, although acceptance becomes less frequent.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -443,7 +455,7 @@ A small MCSE guarantees that the model assumptions accurately describe the real 
 
 ### 3f)
 
-A comparison of simulation methods should examine the variability of repeated estimates of the same quantity, using a similar amount of computation per run.
+Matching a target distribution's mean and covariance is sufficient to establish that a multivariate generator has the correct joint distribution.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -451,31 +463,45 @@ A comparison of simulation methods should examine the variability of repeated es
 
 {{< pagebreak >}}
 
-## Question 4: Simulating Daily Demand [8]
+## Question 4: Generating and Checking Samples [8]
 
-Each item is worth **1 point**. Label your answers **4a.1-4a.4** and **4b.1-4b.4**. Keep explanations to one sentence and show the requested calculations.
+Each item is worth **1 point**. Label your answers **4a.1-4a.4** and **4b.1-4b.4**. Show the requested calculations and keep explanations to one or two sentences.
 
-### 4a) Estimating the shortage probability [4]
+### 4a) A normal mixture [4]
 
-A shop prepares 12 muffins each morning and has 20 potential customers per day. Assume that each customer independently wants one muffin with probability 0.6 and that demand is independent across days.
+The target distribution is
 
-Let $D$ be the number of customers wanting a muffin in one day. We want to estimate $p=P(D>12)$, the probability that at least one customer cannot be served.
+$$
+0.25\,N(-2,1)+0.75\,N(2,1),
+$$
 
-1. The mean demand is $20\times0.6=12$. Why might 12 muffins still not be enough?
-2. Describe how to simulate one day's demand $D$ using independent uniform draws. Specify the number of draws and how each draw determines whether a customer wants a muffin. A line of R code is also acceptable.
-3. Complete the indicator rule: $Y=1$ if **_____**, and $Y=0$ otherwise. Write the condition as an inequality involving $D$.
-4. A run of 1,000 independent days includes 430 shortage days. Compute $\hat p$ as a fraction and a decimal.
+where the second parameter is the variance. A student instead generates independent $A\sim N(-2,1)$ and $B\sim N(2,1)$ and returns
 
-### 4b) Variation between runs [4]
+$$
+W=0.25A+0.75B.
+$$
 
-A second run with the same assumptions and 1,000 new simulated days produces 397 shortage days.
+1. Describe a correct procedure for generating one observation from the target mixture.
+2. Find the mean of the target mixture and $E(W)$. Would checking only the mean detect the error?
+3. Find the variance of the target mixture and $\operatorname{Var}(W)$.
+4. Both sets of simulated values are recentered and rescaled to have mean 0 and variance 1. Does this show that they have the same distribution? Name one additional distributional check.
 
-1. The two estimates are 0.430 and 0.397. Why can they differ even if both programs are correct?
-2. For the first run, use $\hat p=0.430$ and $N=1{,}000$ to compute
-   $\widehat{\operatorname{MCSE}}=\sqrt{\hat p(1-\hat p)/N}$.
-   Give the value to **four decimal places**.
-3. If $N$ increases to 4,000 and $\hat p$ stays close to 0.430, what approximate MCSE do you expect? Give the value to **four decimal places**.
-4. When only the number of simulated days increases, complete each statement with **decreases**, **stays the same**, or **increases**: the spread of $\hat p$ across runs **_____**; the day-to-day spread of demand $D$ under the model **_____**.
+{{< pagebreak >}}
+
+### 4b) Checking an exponential generator [4]
+
+The intended distribution is exponential with rate 1. The exact tail probability is
+
+$$
+p_0=P(X>\log 5)=0.20.
+$$
+
+A generator produces $B=10{,}000$ independent observations. Of these, 2,400 exceed $\log 5$, so $\hat p=0.24$. All logarithms are natural. Keep full precision until the final rounding.
+
+1. Compute the estimated MCSE, $\sqrt{\hat p(1-\hat p)/B}$, to four decimal places.
+2. Compute $|\hat p-p_0|$ divided by the MCSE, to one decimal place. Is this discrepancy small enough to dismiss as ordinary simulation variation, or should the generator be checked?
+3. If the same algorithm produces 40,000 independent observations and $\hat p$ remains close to 0.24, what approximate MCSE would you expect? Give four decimal places.
+4. Name one implementation or parameterization error worth checking. Explain why increasing $B$ would not correct it.
 
 ```{=latex}
 \par\endgroup
