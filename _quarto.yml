@@ -27,6 +27,7 @@ book:
         - Assignment1.qmd
         - Assignment2.qmd
         - Assignment3.qmd
+        - Assignment4.qmd
     - part: "Exam"
       chapters:
         - Exam1-2026F.qmd

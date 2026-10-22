@@ -35,6 +35,7 @@ Wednesday 9:00 - 12:00 or by appointment
 - [x] [Assignment 1](Assignment1.qmd): September 11, 2026
 - [x] [Assignment 2](Assignment2.qmd): October 2, 2026
 - [ ] [Assignment 3](Assignment3.qmd): November 2, 2026
+- [ ] [Assignment 4](Assignment4.qmd): TBA
 
 ## Midterm
 
