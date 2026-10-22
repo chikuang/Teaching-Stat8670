@@ -1212,12 +1212,6 @@ ggplot(qq_data, aes(theoretical, observed)) +
 
 ::::
 
-::: {#rv-block-42 .callout-note title="Connection to Dirichlet Distributions (Optional)"}
-
-Normalizing several independent gammas with a common rate similarly produces a **Dirichlet** random vector. Its components sum to one, making it useful for uncertain category probabilities and mixture weights.
-
-:::
-
 These identities construct new variables from familiar ones. We next distinguish two ways of combining distributions: adding contributions and selecting a population.
 
 ## Sums and Mixtures
@@ -1446,77 +1440,13 @@ Let $X_1\sim N(0,1)$ and $X_2\sim N(4,1)$ be independent. **T/F.** Returning $(X
 
 :::
 
-:::: {#rv-block-52 .callout-example title="Poisson-Gamma Mixing and Overdispersion"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 13. Poisson-Gamma Mixing and Overdispersion**
-
-:::
-
-
-A mixture label need not take only finitely many values. Consider
-
-$$
-\Lambda\sim\operatorname{Gamma}(a,b),
-\qquad
-Y\mid\Lambda\sim\operatorname{Poisson}(\Lambda),
-$$
-
-where $b$ is a rate. Then
-
-$$
-\mathbb{E}(Y)=\frac{a}{b},
-\qquad
-\operatorname{Var}(Y)=\frac{a}{b}+\frac{a}{b^2}.
-$$
-
-The second term is variability in the underlying rate. Marginally, $Y$ is negative binomial with `size = a` and `prob = b / (b + 1)`.
-
-```{r}
-#| label: rv-poisson-gamma
-#| code-fold: true
-set.seed(8670)
-n <- 20000
-a <- 2
-b <- 0.5
-latent_rate <- rgamma(n, shape = a, rate = b)
-counts <- rpois(n, lambda = latent_rate)
-
-knitr::kable(booktabs = TRUE, data.frame(
-  quantity = c("Mean", "Variance"),
-  simulated = c(mean(counts), var(counts)),
-  theoretical = c(a / b, a / b + a / b^2)
-), digits = 3)
-```
-
-::::
-
-::: {#rv-block-53 .callout-note title="Optional Connection: Heterogeneous Event Rates"}
-
-Customers, neighborhoods, or machines can have different event rates. Even when each unit follows a Poisson model conditional on its rate, the pooled counts may have variance greater than their mean. This is one reason negative binomial regression is useful.
-
-:::
-
-::: {#rv-block-54 .callout-caution title="Shared Latent Variables Create Dependence"}
-
-We drew one independent rate for each count. If several observations share a single group-specific rate, they become dependent after that rate is integrated out. **Where we place a draw in the simulation loop determines which observations share uncertainty.**
-
-:::
-
-The same generative logic extends to random vectors. The additional task is to reproduce how their coordinates vary together.
+We now extend simulation to random vectors, where we must also reproduce dependence between coordinates.
 
 ## Generating Multivariate Random Variables
 
 ### Multivariate Normal Distribution
 
-Suppose two measurements each have a standard normal marginal distribution. We still need to specify how they move together. Independent `rnorm()` calls impose independence; they cannot represent a positive correlation merely because the marginal histograms look correct.
-
-For a normal vector, the covariance matrix supplies this information:
-
-$$
-\boldsymbol X\sim N_d(\boldsymbol\mu,\boldsymbol\Sigma).
-$$
+Correct marginal distributions are not enough: we must also reproduce how the coordinates vary together. To generate $\boldsymbol X\sim N_d(\boldsymbol\mu,\boldsymbol\Sigma)$, start with independent standard normals and introduce the required covariance through a matrix transformation.
 
 :::: {#rv-block-55 .callout-theorem title="Linear Transformation of a Normal Vector"}
 
@@ -1526,116 +1456,82 @@ $$
 
 :::
 
-
 If $\boldsymbol Z\sim N_d(\boldsymbol0,I_d)$ and $AA^\top=\boldsymbol\Sigma$, then
 
 $$
-\boldsymbol X=\boldsymbol\mu+A\boldsymbol Z.
+\boldsymbol X=\boldsymbol\mu+A\boldsymbol Z
+\sim N_d(\boldsymbol\mu,\boldsymbol\Sigma).
 $$
+
+The transformation preserves normality, with $E(\boldsymbol X)=\boldsymbol\mu$ and $\operatorname{Cov}(\boldsymbol X)=AA^\top=\boldsymbol\Sigma$.
 
 ::::
 
-**Proof.**
+::: {#rv-block-56 .callout-caution title="Use the Cholesky Factor in the Right Direction"}
 
-$$
-\mathbb{E}(\boldsymbol X)=\boldsymbol\mu,\qquad
-\operatorname{Cov}(\boldsymbol X)=AI_dA^\top=\boldsymbol\Sigma.
-$$
+For a symmetric positive-definite `Sigma`, R's `R <- chol(Sigma)` returns an upper triangular factor satisfying $R^\top R=\Sigma$. When observations are stored in **rows**:
 
-The normality follows because every linear combination of $\boldsymbol X$ is a linear combination of independent normals.
+1. Generate an $n\times d$ matrix `Z` of independent standard normals.
+2. Use `Z %*% R` to introduce covariance $\Sigma$.
+3. Add `mu` to each row with `sweep(..., 2, mu, "+")`.
 
-::: {#rv-block-56 .callout-caution title="Match the Matrix Factor to the Row Convention"}
-
-For **$n$ rows**, each with target mean $\boldsymbol\mu$ and symmetric positive-definite covariance $\boldsymbol\Sigma$:
-
-1. **Factor once.** Compute `R <- chol(Sigma)`. R returns an **upper triangular** factor with $R^\top R=\boldsymbol\Sigma$.
-2. **Generate independent inputs.** Fill an $n\times d$ matrix $Z$ with independent $N(0,1)$ draws.
-3. **Transform each row.** Multiply on the right by $R$, then add the mean to every row:
-
-$$
-X=ZR+\boldsymbol1_n\boldsymbol\mu^\top.
-$$
-
-For a **column** vector, the corresponding formula is $X=\boldsymbol\mu+R^\top Z$. Multiplying rows by `t(R)` instead gives covariance $RR^\top$, generally the wrong matrix. See the [R documentation for `chol()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/chol.html).
+Using `Z %*% t(R)` gives $RR^\top$ instead, generally the wrong covariance. See the [R documentation for `chol()`](https://stat.ethz.ch/R-manual/R-devel/library/base/html/chol.html).
 
 :::
 
-```{r}
-#| label: fig-rv-cholesky-flow
-#| echo: false
-#| fig-width: 8
-#| fig-height: 1.25
-#| fig-cap: "Cholesky generation in R: observations are rows, so multiply by R on the right."
-#| fig-alt: "Specify the mean, covariance, and sample size. Compute the Cholesky factor once, generate an n by d matrix of independent standard normals, multiply by the upper triangular factor, and add the mean to each row."
-rv_flowchart("cholesky")
-```
+:::: {#rv-block-57 .callout-example title="Two Correlated Normal Variables"}
 
-**Work one two-dimensional case before using the matrix formula.** To obtain standard normal marginals with correlation $0.6$, use
+::: {.content-visible when-format="pdf"}
+
+**Example 13. Two Correlated Normal Variables**
+
+:::
+
+Suppose the target mean and covariance are
 
 $$
-\Sigma=\begin{pmatrix}1&0.6\\0.6&1\end{pmatrix},
-\qquad R=\begin{pmatrix}1&0.6\\0&0.8\end{pmatrix},
-\qquad R^\top R=\Sigma.
+\boldsymbol\mu=\begin{pmatrix}1\\2\end{pmatrix},\qquad
+\Sigma=\begin{pmatrix}1&0.6\\0.6&1\end{pmatrix},\qquad
+R=\begin{pmatrix}1&0.6\\0&0.8\end{pmatrix}.
 $$
 
-For independent standard normals $Z_1,Z_2$, row multiplication gives
+Here the transformation is simply
 
 $$
-X_1=Z_1,\qquad X_2=0.6Z_1+0.8Z_2.
+X_1=1+Z_1,\qquad X_2=2+0.6Z_1+0.8Z_2.
 $$
 
-The second variance is $0.6^2+0.8^2=1$, and the covariance is $0.6\operatorname{Var}(Z_1)=0.6$. If $(z_1,z_2)=(1,-1)$, the output is $(1,-0.2)$.
+Both variances are 1 because $0.6^2+0.8^2=1$, and the covariance is $0.6$. Thus the correlation is also $0.6$.
 
 ```{r}
-#| label: rv-cholesky-core
+#| label: rv-mvn-generator
 #| code-fold: false
-Sigma_small <- matrix(c(1, 0.6, 0.6, 1), nrow = 2)
-R_small <- chol(Sigma_small)             # upper triangular factor
-z_row <- matrix(c(1, -1), nrow = 1)      # one observation, two coordinates
-z_row %*% R_small                       # one correlated observation
+set.seed(8670)
+n <- 10000
+mu <- c(1, 2)
+Sigma <- matrix(c(1, 0.6, 0.6, 1), nrow = 2)
+R <- chol(Sigma)
+Z <- matrix(rnorm(n * 2), nrow = n, ncol = 2)
+X <- sweep(Z %*% R, 2, mu, FUN = "+")
+
+colMeans(X)  # should be close to c(1, 2)
+cov(X)      # should be close to Sigma
 ```
 
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
-
-::: {#exr-rv-cholesky}
-
-## In Class: Match the Matrix to the Code
-
-Using the same $R$, transform the row $(z_1,z_2)=(2,0)$. **Multiple choice.** For independent standard normal rows in `Z`, which gives covariance $\Sigma$: **(A)** `Z %*% R` or **(B)** `Z %*% t(R)`?
-
-:::
-
-```{=latex}
-\end{minipage}\par
-```
-
-::: {#sol-rv-cholesky}
-
-1. **Multiply the row by each column.** For $(2,0)R$, the first entry is $2(1)+0(0)=2$; the second is $2(0.6)+0(0.8)=1.2$. The result is $(2,1.2)$.
-2. **Match the covariance.** A row multiplied by $R$ corresponds to a column transformed by $R^\top$, so its covariance is $R^\top R=\Sigma$. Choose **A**.
-3. **Diagnose B.** Multiplying rows by `t(R)` gives $RR^\top=\begin{pmatrix}1.36&0.48\\0.48&0.64\end{pmatrix}$, which does not match the target.
-
-:::
-
-The construction has a geometric interpretation. In @fig-rv-covariance-map, the same points start in a circular cloud, become an ellipse after multiplication by the matrix factor, and then move to the desired mean. Color tracks each point's original first coordinate.
+The sample checks should be close to their targets, with some simulation error. In @fig-rv-covariance-map, multiplication introduces correlation and adding the mean shifts the cloud.
 
 ```{r}
 #| label: fig-rv-covariance-map
 #| code-fold: true
 #| echo: !expr knitr::is_html_output()
-#| fig-cap: "A matrix factor introduces scale and dependence; adding the mean shifts location. The black curves are corresponding 95% normal probability contours. All three panels use the same underlying draws and the same axis scale."
-#| fig-alt: "Three panels show the same colored normal points as a circular cloud, a correlated elliptical cloud, and the same ellipse shifted to mean two, one."
+#| fig-cap: "The same 800 points before and after transformation. Multiplication by R introduces correlation 0.6; adding the mean moves the center to (1, 2). Black curves mark the corresponding 95% normal probability contours."
+#| fig-alt: "Three panels show independent normal points, the same points correlated at 0.6, and the correlated points shifted to mean one, two."
 #| fig-width: 10
 #| fig-height: 4.3
-set.seed(8670)
-geometry_z <- matrix(rnorm(1600), ncol = 2)
-geometry_sigma <- matrix(c(1, 0.8, 0.8, 2), 2)
-geometry_R <- chol(geometry_sigma)
-geometry_correlated <- geometry_z %*% geometry_R
-geometry_shifted <- sweep(geometry_correlated, 2, c(2, 1), FUN = "+")
-stages <- c("1. Independent normals", "2. Apply the factor", "3. Add the mean")
+geometry_z <- Z[seq_len(800), , drop = FALSE]
+geometry_correlated <- geometry_z %*% R
+geometry_shifted <- X[seq_len(800), , drop = FALSE]
+stages <- c("1. Independent normals", "2. Introduce correlation", "3. Add the mean")
 geometry_data <- do.call(rbind, lapply(seq_along(stages), function(j) {
   values <- list(geometry_z, geometry_correlated, geometry_shifted)[[j]]
   data.frame(x = values[, 1], y = values[, 2],
@@ -1643,13 +1539,13 @@ geometry_data <- do.call(rbind, lapply(seq_along(stages), function(j) {
 }))
 theta <- seq(0, 2 * pi, length.out = 301)
 reference_circle <- sqrt(qchisq(0.95, df = 2)) * cbind(cos(theta), sin(theta))
-reference_ellipse <- reference_circle %*% geometry_R
+reference_ellipse <- reference_circle %*% R
 geometry_contours <- do.call(rbind, lapply(seq_along(stages), function(j) {
   values <- list(reference_circle, reference_ellipse,
-                 sweep(reference_ellipse, 2, c(2, 1), FUN = "+"))[[j]]
+                 sweep(reference_ellipse, 2, mu, FUN = "+"))[[j]]
   data.frame(x = values[, 1], y = values[, 2], stage = stages[j])
 }))
-geometry_centers <- data.frame(x = c(0, 0, 2), y = c(0, 0, 1), stage = stages)
+geometry_centers <- data.frame(x = c(0, 0, mu[1]), y = c(0, 0, mu[2]), stage = stages)
 
 ggplot(geometry_data, aes(x, y)) +
   geom_hline(yintercept = 0, color = "grey80", linewidth = 0.4) +
@@ -1664,338 +1560,27 @@ ggplot(geometry_data, aes(x, y)) +
   labs(x = "Coordinate 1", y = "Coordinate 2")
 ```
 
-:::: {#rv-block-57 .callout-example title="A Generator with a Specified Mean and Covariance"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 14. A Generator with a Specified Mean and Covariance**
-
-:::
-
-The reusable `rmvn_chol()` function in the online notes generates rows of independent normals, multiplies by `chol(Sigma)`, and adds `mu` to each row. Here $n=10000$, $\mu=(1,2)^\top$, and $\Sigma=\begin{pmatrix}1&0.8\\0.8&2\end{pmatrix}$. Compare the sample mean and covariance below with these targets.
-
-```{r}
-#| label: rv-mvn-generator
-#| code-summary: "Full multivariate generator and checks"
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-rmvn_chol <- function(n, mu, Sigma) {
-  d <- length(mu)
-  stopifnot(
-    length(n) == 1L, is.finite(n), n >= 0, n == floor(n),
-    d > 0L, all(is.finite(mu)),
-    is.matrix(Sigma), all(dim(Sigma) == c(d, d)),
-    all(is.finite(Sigma)), isSymmetric(Sigma)
-  )
-  R <- chol(Sigma)  # requires positive definiteness here
-  Z <- matrix(rnorm(n * d), nrow = n, ncol = d)
-  sweep(Z %*% R, MARGIN = 2, STATS = mu, FUN = "+")
-}
-
-set.seed(8670)
-mu <- c(1, 2)
-Sigma <- matrix(c(1, 0.8, 0.8, 2), nrow = 2)
-mvn_draws <- rmvn_chol(10000, mu, Sigma)
-
-colMeans(mvn_draws)
-cov(mvn_draws)
-Sigma
-```
-
-The function also returns an $n\times d$ matrix for $n=0$ or $n=1$. This matters when a component in a simulated mixture receives few or no observations.
-
 ::::
 
-:::: {#rv-block-59 .callout-example title="The Same Marginals, Different Joint Tail Probabilities"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 15. The Same Marginals, Different Joint Tail Probabilities**
-
-:::
-
-
-Consider two standardized laboratory measurements with unit marginal variances. We compare independence with correlation $\rho=0.8$ while keeping the marginals the same.
-
-```{r}
-#| label: fig-rv-dependence
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-cap: "The marginal distributions are the same in both panels. Positive correlation puts more probability in the upper-right region where both measurements exceed 1."
-#| fig-width: 9
-set.seed(8670)
-n <- 30000
-independent_pair <- rmvn_chol(n, c(0, 0), diag(2))
-correlated_pair <- rmvn_chol(
-  n, c(0, 0), matrix(c(1, 0.8, 0.8, 1), 2)
-)
-
-joint_probability <- c(
-  mean(independent_pair[, 1] > 1 & independent_pair[, 2] > 1),
-  mean(correlated_pair[, 1] > 1 & correlated_pair[, 2] > 1)
-)
-joint_results <- data.frame(
-  model = c("Independent", "Correlation 0.8"),
-  probability = joint_probability,
-  MCSE = sqrt(joint_probability * (1 - joint_probability) / n)
-)
-
-# Plot a subset for legibility; estimates use all n observations.
-dependence_plot <- rbind(
-  data.frame(x = independent_pair[1:2000, 1],
-             y = independent_pair[1:2000, 2], model = "Independent"),
-  data.frame(x = correlated_pair[1:2000, 1],
-             y = correlated_pair[1:2000, 2], model = "Correlation 0.8")
-)
-ggplot(dependence_plot, aes(x, y)) +
-  annotate("rect", xmin = 1, xmax = Inf, ymin = 1, ymax = Inf,
-           fill = "gold", alpha = 0.15) +
-  geom_point(alpha = 0.2, color = "steelblue", size = 0.8) +
-  geom_vline(xintercept = 1, linetype = "dashed") +
-  geom_hline(yintercept = 1, linetype = "dashed") +
-  facet_wrap(~ model) +
-  coord_equal() +
-  labs(x = "Measurement 1", y = "Measurement 2")
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
 ```
 
-```{r}
-#| label: rv-joint-probability
-#| code-fold: true
-knitr::kable(booktabs = TRUE, joint_results, digits = 4,
-             col.names = c("Model", "Joint probability", "MCSE"))
-(1 - pnorm(1))^2  # exact probability under independence
+::: {#exr-rv-cholesky}
+
+## In Class: Match the Matrix to the Code
+
+Using this example's $R$ and $\mu$, transform the row $(z_1,z_2)=(2,0)$ and add the mean. **Multiple choice.** Which multiplication gives covariance $\Sigma$: **(A)** `Z %*% R` or **(B)** `Z %*% t(R)`?
+
+:::
+
+```{=latex}
+\end{minipage}\par
 ```
 
-The simulated joint probability rises from approximately `r round(joint_probability[1], 3)` to `r round(joint_probability[2], 3)` under these two models. The **Monte Carlo standard error (MCSE)** measures simulation noise; we derive it below.
+::: {#sol-rv-cholesky}
 
-The same issue arises with simultaneous equipment failures, correlated regression errors, and repeated measurements. A study of a joint event must preserve the relevant dependence.
-
-::::
-
-:::: {#rv-block-60 .callout-theorem title="Optional: Wishart Construction"}
-
-::: {.content-visible when-format="pdf"}
-
-**Theorem 10. Optional: Wishart Construction**
-
-:::
-
-
-If $\boldsymbol X_1,\ldots,\boldsymbol X_m$ are independent $N_d(\boldsymbol0,\boldsymbol\Sigma)$ vectors, then
-
-$$
-W=\sum_{i=1}^m\boldsymbol X_i\boldsymbol X_i^\top
-\sim\operatorname{Wishart}_d(m,\boldsymbol\Sigma).
-$$
-
-::::
-
-::: {#rv-block-61 .callout-note title="Optional Connection: Uncertainty in a Sample Covariance"}
-
-With observations stored in rows, this is simply `crossprod(X)`. For a normal sample of size $n$ with an estimated mean, its usual sample covariance satisfies
-
-$$
-(n-1)S\sim\operatorname{Wishart}_d(n-1,\boldsymbol\Sigma).
-$$
-
-This explains why Wishart simulation is relevant to uncertainty in covariance estimates and multivariate inference.
-
-```{r}
-#| label: rv-wishart
-#| code-fold: true
-set.seed(8670)
-Sigma_w <- matrix(c(1, 0.4, 0.4, 2), 2)
-wishart_df <- 12
-W <- crossprod(rmvn_chol(wishart_df, c(0, 0), Sigma_w))
-W / wishart_df  # expectation equals Sigma_w, but one draw is noisy
-```
-
-:::
-
-### Multivariate Normal Mixtures
-
-::: {#rv-block-62 .callout-caution title="One Component Label per Vector"}
-
-Each observation needs **one component label for the entire vector**. Drawing a different label for each coordinate changes the joint model.
-
-:::
-
-:::: {#rv-block-63 .callout-example title="A Mixture of Two Bivariate Normals"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 16. A Mixture of Two Bivariate Normals**
-
-:::
-
-
-```{r}
-#| label: fig-rv-mvn-mixture
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-cap: "Each point is generated from one bivariate normal component. The label determines both its coordinates and its covariance structure."
-set.seed(8670)
-n <- 3000
-component <- sample.int(2, n, replace = TRUE, prob = c(0.65, 0.35))
-means <- list(c(0, 0), c(3, 2))
-covariances <- list(
-  matrix(c(1, 0.6, 0.6, 1), 2),
-  matrix(c(0.6, -0.3, -0.3, 1), 2)
-)
-mixed_vectors <- matrix(NA_real_, nrow = n, ncol = 2)
-
-for (j in seq_len(2)) {
-  rows <- which(component == j)
-  if (length(rows) > 0) {
-    mixed_vectors[rows, ] <- rmvn_chol(
-      length(rows), means[[j]], covariances[[j]]
-    )
-  }
-}
-
-ggplot(
-  data.frame(x = mixed_vectors[, 1], y = mixed_vectors[, 2],
-             component = factor(component)),
-  aes(x, y, color = component)
-) +
-  geom_point(alpha = 0.25, size = 1) +
-  coord_equal() +
-  scale_color_manual(values = c("steelblue", "firebrick")) +
-  labs(x = "Variable 1", y = "Variable 2", color = "Component")
-```
-
-::::
-
-::: {#rv-block-64 .callout-note title="Within-Group and Between-Group Covariance"}
-
-For vector means $\boldsymbol\mu_j$ and covariances $\boldsymbol\Sigma_j$,
-
-$$
-\operatorname{Cov}(\boldsymbol X)=
-\sum_jw_j\boldsymbol\Sigma_j+
-\sum_jw_j(\boldsymbol\mu_j-\boldsymbol\mu)
-        (\boldsymbol\mu_j-\boldsymbol\mu)^\top.
-$$
-
-Between-group differences can create marginal association even if variables are independent *within* every group. This is useful when designing simulation studies for clustering or confounding.
-
-:::
-
-### Uniform Directions and Points in a Ball
-
-:::: {#rv-block-65 .callout-theorem title="Uniform Direction from a Standard Normal Vector"}
-
-::: {.content-visible when-format="pdf"}
-
-**Theorem 11. Uniform Direction from a Standard Normal Vector**
-
-:::
-
-
-Let $\boldsymbol Z\sim N_d(\boldsymbol0,I_d)$. Its distribution is unchanged by rotations, so it has no preferred direction. Consequently,
-
-$$
-\boldsymbol U=\frac{\boldsymbol Z}{\|\boldsymbol Z\|}
-$$
-
-is uniform on the **surface** of the unit sphere in $\mathbb R^d$. The zero vector has probability zero under the ideal normal model.
-
-::::
-
-:::: {#rv-block-66 .callout-theorem title="Uniform Volume Requires a Nonuniform Radius"}
-
-::: {.content-visible when-format="pdf"}
-
-**Theorem 12. Uniform Volume Requires a Nonuniform Radius**
-
-:::
-
-
-Uniform direction alone puts every point at distance 1. To fill the ball uniformly in volume, independently generate a radius $R$ satisfying
-
-$$
-P(R\leq r)=r^d,\quad 0\leq r\leq1.
-$$
-
-This follows because a ball of radius $r$ has $r^d$ times the volume of the unit ball. Therefore,
-
-$$
-R=V^{1/d},\qquad \boldsymbol X=R\boldsymbol U,
-$$
-
-where $V$ is uniform and independent of the direction.
-
-::::
-
-:::: {#rv-block-67 .callout-example title="Generating a Circle and a Disk"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 17. Generating a Circle and a Disk**
-
-:::
-
-
-```{r}
-#| label: rv-sphere-generator
-#| code-fold: true
-runif_sphere <- function(n, d) {
-  stopifnot(
-    length(n) == 1L, is.finite(n), n >= 0, n == floor(n),
-    length(d) == 1L, is.finite(d), d >= 1, d == floor(d)
-  )
-  Z <- matrix(rnorm(n * d), nrow = n, ncol = d)
-  lengths <- sqrt(rowSums(Z^2))
-  sweep(Z, MARGIN = 1, STATS = lengths, FUN = "/")
-}
-```
-
-We divide each row by its length directly. Constructing an $n\times n$ diagonal matrix of inverse lengths would waste memory.
-
-```{r}
-#| label: fig-rv-ball
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-cap: "In two dimensions, normalized normals lie on the circle. Multiplying by an independent square-root-uniform radius fills the disk uniformly in area."
-#| fig-width: 9
-set.seed(8670)
-n <- 2500
-directions <- runif_sphere(n, d = 2)
-disk <- sweep(directions, 1, sqrt(runif(n)), FUN = "*")
-
-sphere_plot <- rbind(
-  data.frame(x = directions[, 1], y = directions[, 2],
-             region = "Surface: unit circle"),
-  data.frame(x = disk[, 1], y = disk[, 2],
-             region = "Interior: unit disk")
-)
-ggplot(sphere_plot, aes(x, y)) +
-  geom_point(alpha = 0.3, size = 0.7, color = "steelblue") +
-  facet_wrap(~ region) +
-  coord_equal() +
-  labs(x = "Coordinate 1", y = "Coordinate 2")
-```
-
-::::
-
-::: {#rv-block-68 .callout-note title="Geometry in High Dimensions" collapse="true"}
-
-Random directions appear in rotationally invariant perturbations, geometric Monte Carlo methods, and randomized algorithms. In high dimensions, a uniform point in a ball is typically close to its boundary: $P(R\leq0.9)=0.9^d$. At $d=100$, this probability is about $0.000027$.
-
-:::
-
-::: {#exr-rv-radius}
-
-## Optional Self-Check: A Uniform Disk
-
-**T/F.** A uniform angle and an independent $R\sim U(0,1)$ give a uniform point inside the unit disk. Compare the proposed $P(R\leq1/2)$ with the fraction of disk area inside radius $1/2$.
-
-:::
-
-::: {#sol-rv-radius}
-
-1. **Compare probability with area.** A uniform radius gives $P(R\leq1/2)=1/2$, but the inner disk occupies only $(1/2)^2=1/4$ of the area. Hence **F**.
-2. **Use the required radial CDF.** Uniform area requires $F_R(r)=r^2$. Solve $u=r^2$ to get $R=\sqrt U$.
+The transformed row is $(2,0)R+(1,2)=(3,3.2)$. Choose **A**, since the covariance of each transformed row is $R^\top R=\Sigma$.
 
 :::
 
@@ -2063,7 +1648,7 @@ $$
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 18. Checking an Exponential Tail Probability**
+**Example 14. Checking an Exponential Tail Probability**
 
 :::
 
@@ -2118,27 +1703,10 @@ More simulation reduces Monte Carlo uncertainty. It does not automatically reduc
 | A known distributional identity | Transform simpler independent variables | Conditions such as independence and common rates |
 | A latent-class or hierarchical model | Generate latent variables, then observations | Which observations share each latent draw |
 | A normal covariance structure | Matrix factorization | Positive definiteness and factor orientation |
-| Rotational or volume symmetry | Geometric construction | Surface versus volume and the correct radius |
 
 Methods are often combined. A hierarchical model may use inverse transformation for event times, normal matrix factors for random effects, and conditional Bernoulli draws for outcomes.
 
 The goal is a generator that is statistically correct, numerically reliable, and efficient enough for the problem. A sophisticated algorithm cannot compensate for an incorrect data-generating mechanism.
-
-:::
-
-::: {#rv-block-75 .callout-note title="The Main Ideas to Keep"}
-
-- A probability model becomes operational when we can generate data from it.
-- Uniform draws can be transformed into observations through a generalized inverse CDF.
-- Rejection sampling reshapes an easy proposal; a valid, tight envelope controls efficiency.
-- Distributional identities connect simulation to the foundations of statistical inference.
-- A mixture selects a component; a sum combines contributions from all components.
-- Hierarchical draws specify both marginal variation and dependence.
-- Multivariate generation must reproduce covariance and joint behavior, not only marginal histograms.
-- Validation combines mathematical reasoning, numerical checks, and distributional diagnostics.
-- More independent replications reduce Monte Carlo error; they do not correct a wrong model.
-
-The next step is to use these generators to approximate expectations, integrals, and sampling distributions. That is the central task of **Monte Carlo simulation**.
 
 :::
 
@@ -2154,7 +1722,7 @@ Try the concept checks first, then the short calculations. Explain your choice b
 2. **T/F.** A larger valid rejection bound $M$ increases the acceptance rate.
 3. **T/F.** A rejected proposal counts toward the requested sample size.
 4. **Multiple choice.** To generate a $t_4$ variable from independent $Z\sim N(0,1)$ and $V\sim\chi^2_4$, use **(A)** $Z/\sqrt{V/4}$ or **(B)** $Z/(V/4)$.
-5. **T/F.** A mixture of bivariate normals uses one component label for the whole row.
+5. **T/F.** To generate independent observations from a mixture, choose a new component label for each observation.
 6. **T/F.** Correct marginal histograms establish that a multivariate generator is correct.
 
 :::
@@ -2167,7 +1735,7 @@ Try the concept checks first, then the short calculations. Explain your choice b
 | 2 | F | The rate is $1/M$ for a normalized target and proposal. |
 | 3 | F | Count accepted values only; continue sampling after a rejection. |
 | 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
-| 5 | T | Both coordinates belong to the chosen component; separate labels change the joint model. |
+| 5 | T | Independently select a component for each observation, then draw from that component. |
 | 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
 
 :::
@@ -2201,7 +1769,7 @@ X <- sweep(Z %*% t(R), 2, mu, FUN = "+")
    - **Compute efficiency:** acceptance rate $=1/M=1/3$; expected proposals $=nM=1000(3)=3000$.
    - **Decide on this proposal:** $a=f(0.5)/\{Mg(0.5)\}=3(0.5)^2/3=0.25$. Since $0.3>0.25$, reject and draw a fresh pair.
 
-3. **Repair the R code** (follow @fig-rv-cholesky-flow).
+3. **Repair the R code** (use the Cholesky construction above).
 
    - **Identify the factor:** `chol(Sigma)` gives $R^\top R=\Sigma$.
    - **Match rows to the factor:** use `X <- sweep(Z %*% R, 2, mu, FUN = "+")`. This gives covariance $R^\top R$; the original gives $RR^\top$.
@@ -2263,7 +1831,7 @@ The core chapter is complete. These examples are for independent study. Choose o
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 19. Application: Experimental Power**
+**Example 15. Application: Experimental Power**
 
 :::
 
@@ -2364,7 +1932,7 @@ If $\sigma$ is estimated, replace the known-variance test with the actual planne
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 20. Application: Predicting Defect Counts**
+**Example 16. Application: Predicting Defect Counts**
 
 :::
 
@@ -2502,7 +2070,7 @@ If we drew a fresh independent $p$ for each individual item instead of one share
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 21. Application: Queue Delays**
+**Example 17. Application: Queue Delays**
 
 :::
 
@@ -2794,4 +2362,4 @@ This is useful for some posterior distributions, where the normalizing constant 
 
 This chapter adapts and expands the [2025 STAT 8670 chapter on generating random variables](https://chikuang.github.io/teaching/2025F_stat8670/03-generating-rv.html) and its [Quarto source in the master branch](https://github.com/chikuang/Teaching-Stat8670/blob/master/03-generating-rv.qmd).
 
-For software details, consult the official R documentation linked at the relevant examples. Useful local help pages include `?RNGkind`, `?Distributions`, `?qgeom`, `?chol`, and `?rWishart`. The course's original reading is Rizzo, M. L. (2007), *Statistical Computing with R*, Chapman & Hall/CRC.
+For software details, consult the official R documentation linked at the relevant examples. Useful local help pages include `?RNGkind`, `?Distributions`, `?qgeom`, and `?chol`. The course's original reading is Rizzo, M. L. (2007), *Statistical Computing with R*, Chapman & Hall/CRC.

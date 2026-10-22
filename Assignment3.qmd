@@ -42,7 +42,7 @@ R code and plots are optional. If you use R, include the code in your source fil
 
 :::
 
-Note: The questions use the main material in Chapter 4. Section 4.10 (**Supplementary**) and topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required. Normalization questions cover only the basic definitions and whether each form can be used for acceptance-rejection sampling.
+Note: The questions use the main material in Chapter 4. Section 4.10 (**Supplementary**) and topics marked **optional** are not required. Normalization questions cover only the basic definitions and whether each form can be used for acceptance-rejection sampling.
 
 **Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$.
 
@@ -281,12 +281,12 @@ D. The numerator is not independent of the chi-square denominator.
 
 ### 2d)
 
-The target is a sample of independent observations from a mixture of two bivariate normal distributions, with probabilities 0.30 and 0.70. How should the component label be generated for each observation?
+The target is a sample of independent observations from a mixture of two normal distributions, with probabilities 0.30 and 0.70. How should each observation be generated?
 
-A. Choose independent labels for the two coordinates.  
-B. Choose one label for the whole vector, then draw that vector from the selected component.  
-C. Draw a vector from each component and return their weighted average.  
-D. Choose one label once and use that component for every observation in the dataset.
+A. Alternate between the two components throughout the sample.  
+B. Independently choose a component with probabilities 0.30 and 0.70, then draw one value from it.  
+C. Draw one value from each component and return their weighted average.  
+D. Choose one component once and use it for every observation in the dataset.
 
 ```{=latex}
 \end{minipage}\par\medskip
