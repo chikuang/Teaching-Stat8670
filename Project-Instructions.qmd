@@ -35,6 +35,12 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |         +-------------------------------+             |
 |         | Truong, Katelyn               |             |
 +---------+-------------------------------+-------------+
+| 6       | Babagana, Yasmeen             | TBA         |
+|         +-------------------------------+             |
+|         | Bambil, Silas                 |             |
+|         +-------------------------------+             |
+|         | Nandy, Shudeshna              |             |
++---------+-------------------------------+-------------+
 
 :::
 
