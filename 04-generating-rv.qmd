@@ -1622,51 +1622,7 @@ $$
 \Sigma_2=\begin{pmatrix}1&0.5\\0.5&1\end{pmatrix}.
 $$
 
-Component 1 has independent coordinates and circular density contours. Component 2 has correlation 0.5 and tilted contours. The right panel of @fig-rv-mvn-mixture shows the **combined joint density of $(X_1,X_2)$**: at each point, take half of the first component's density plus half of the second's.
-
-```{r}
-#| label: fig-rv-mvn-mixture
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-width: 10
-#| fig-height: 4.3
-#| fig-cap: "Two bivariate normal component densities and their equal-weight mixture. All panels use the same axes and density color scale; darker regions have higher density. Lines join points of equal density. The mixture's contours describe the combined joint distribution, which is not a single bivariate normal distribution."
-#| fig-alt: "Component 1 is centered at zero, zero with circular contours; component 2 is centered at three, two with tilted elliptical contours. The combined joint density has two high-density regions near the component centers."
-joint_grid <- expand.grid(x1 = seq(-3.5, 6.5, length.out = 201),
-                           x2 = seq(-3.5, 5.5, length.out = 181))
-# Both component variances are 1; rho controls their correlation.
-bivariate_density <- function(x1, x2, mu, rho) {
-  z1 <- x1 - mu[1]
-  z2 <- x2 - mu[2]
-  exp(-(z1^2 - 2 * rho * z1 * z2 + z2^2) / (2 * (1 - rho^2))) /
-    (2 * pi * sqrt(1 - rho^2))
-}
-joint_f1 <- with(joint_grid, bivariate_density(x1, x2, c(0, 0), 0))
-joint_f2 <- with(joint_grid, bivariate_density(x1, x2, c(3, 2), 0.5))
-joint_panels <- c("1. Component 1: f1", "2. Component 2: f2",
-                  "3. Joint mixture: 0.5 f1 + 0.5 f2")
-joint_densities <- do.call(rbind, lapply(seq_along(joint_panels), function(j) {
-  data.frame(joint_grid,
-    density = list(joint_f1, joint_f2, 0.5 * joint_f1 + 0.5 * joint_f2)[[j]],
-    panel = factor(joint_panels[j], levels = joint_panels))
-}))
-ggplot(joint_densities, aes(x1, x2)) +
-  geom_raster(aes(fill = density)) +
-  geom_contour(aes(z = density), breaks = c(0.01, 0.03, 0.06, 0.10, 0.15),
-               color = "#303030", linewidth = 0.4) +
-  scale_fill_gradient(low = "#FFFFFF", high = "#0072B2", limits = c(0, 0.19),
-                       breaks = c(0, 0.05, 0.10, 0.15), name = "Density") +
-  scale_x_continuous(breaks = c(-3, 0, 3, 6), expand = c(0, 0)) +
-  scale_y_continuous(breaks = c(-3, 0, 3, 5), expand = c(0, 0)) +
-  facet_wrap(~ panel, nrow = 1) +
-  coord_equal() +
-  labs(x = expression(X[1]), y = expression(X[2])) +
-  theme(strip.text = element_text(size = 10, face = "bold"),
-        legend.position = "bottom", legend.key.width = grid::unit(1.3, "cm"),
-        panel.grid = element_blank())
-```
-
-To simulate this model, draw the labels first. For each label, use that component's mean and Cholesky factor to generate the corresponding rows.
+Component 1 has independent coordinates and circular density contours. Component 2 has correlation 0.5 and tilted contours. To simulate the mixture, draw a label for each observation, then use that component's mean and Cholesky factor to generate the whole row.
 
 ```{r}
 #| label: rv-mvn-mixture-generator
@@ -1684,7 +1640,72 @@ for (j in 1:2) {
 }
 ```
 
-Each row of `X_mix` is one bivariate observation. A scatterplot should resemble the two regions in the mixture panel, with roughly half the observations drawn from each component.
+Each row of `X_mix` is one bivariate observation. In @fig-rv-mvn-mixture, **blue circles** come from component 1 and **orange triangles** come from component 2. The first two panels separate the observations by label. The right panel combines those same points, keeping their coordinates and colors unchanged.
+
+The gray contours show the component densities and the **combined joint density of $(X_1,X_2)$**. At each point, the mixture density is half of the first component's density plus half of the second's. Colors identify the generating component, even where the two clouds overlap.
+
+```{r}
+#| label: fig-rv-mvn-mixture
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 10
+#| fig-height: 4.5
+#| fig-cap: "The same 1,000 simulated observations, separated by component in the first two panels and combined in the third. Blue circles identify component 1; orange triangles identify component 2. Each point keeps its coordinates, color, and shape in the mixture panel. Gray shading and contours show the respective theoretical densities; all panels use the same axes."
+#| fig-alt: "Three scatterplots with density contours. Blue circles form the first component near zero, zero; orange triangles form the second near three, two. The mixture panel contains exactly the same blue and orange points at their original coordinates."
+joint_xlim <- range(c(-3.5, 6.5, X_mix[, 1]))
+joint_ylim <- range(c(-3.5, 5.5, X_mix[, 2]))
+joint_grid <- expand.grid(x1 = seq(joint_xlim[1], joint_xlim[2], length.out = 201),
+                           x2 = seq(joint_ylim[1], joint_ylim[2], length.out = 181))
+# Both component variances are 1; rho controls their correlation.
+bivariate_density <- function(x1, x2, mu, rho) {
+  z1 <- x1 - mu[1]
+  z2 <- x2 - mu[2]
+  exp(-(z1^2 - 2 * rho * z1 * z2 + z2^2) / (2 * (1 - rho^2))) /
+    (2 * pi * sqrt(1 - rho^2))
+}
+joint_f1 <- with(joint_grid, bivariate_density(x1, x2, c(0, 0), 0))
+joint_f2 <- with(joint_grid, bivariate_density(x1, x2, c(3, 2), 0.5))
+joint_panels <- c("1. Component 1: f1", "2. Component 2: f2",
+                  "3. Joint mixture: 0.5 f1 + 0.5 f2")
+joint_densities <- do.call(rbind, lapply(seq_along(joint_panels), function(j) {
+  data.frame(joint_grid,
+    density = list(joint_f1, joint_f2, 0.5 * joint_f1 + 0.5 * joint_f2)[[j]],
+    panel = factor(joint_panels[j], levels = joint_panels))
+}))
+# Reuse each observation in its component panel and in the mixture panel.
+joint_observations <- data.frame(
+  id = seq_len(n), x1 = X_mix[, 1], x2 = X_mix[, 2],
+  source = factor(component, levels = 1:2,
+                   labels = c("Component 1", "Component 2"))
+)
+joint_scatter <- rbind(
+  transform(joint_observations, panel = joint_panels[component]),
+  transform(joint_observations, panel = joint_panels[3])
+)
+joint_scatter$panel <- factor(joint_scatter$panel, levels = joint_panels)
+
+ggplot(joint_densities, aes(x1, x2)) +
+  geom_raster(aes(fill = density)) +
+  geom_contour(aes(z = density), breaks = c(0.01, 0.03, 0.06, 0.10, 0.15),
+               color = "#777777", linewidth = 0.4) +
+  geom_point(data = joint_scatter, aes(color = source, shape = source),
+              size = 0.95, alpha = 0.55) +
+  scale_fill_gradient(low = "#FFFFFF", high = "#E0E0E0",
+                       limits = c(0, 0.19), guide = "none") +
+  scale_color_manual(values = c("Component 1" = "#0072B2",
+                                "Component 2" = "#D55E00"), name = NULL) +
+  scale_shape_manual(values = c("Component 1" = 16, "Component 2" = 17),
+                       name = NULL) +
+  guides(color = guide_legend(override.aes = list(alpha = 1, size = 2.8))) +
+  scale_x_continuous(breaks = c(-3, 0, 3, 6), expand = c(0, 0)) +
+  scale_y_continuous(breaks = c(-3, 0, 3, 5), expand = c(0, 0)) +
+  facet_wrap(~ panel, nrow = 1) +
+  coord_equal() +
+  labs(x = expression(X[1]), y = expression(X[2])) +
+  theme(strip.text = element_text(size = 10, face = "bold"),
+        legend.position = "bottom",
+        panel.grid = element_blank())
+```
 
 ::::
 
