@@ -361,12 +361,12 @@ D. Neither coordinate has a standard normal distribution.
 
 ### 2h)
 
-For independent replications with the same finite-variance model, an estimator's Monte Carlo standard error is approximately proportional to $1/\sqrt{B}$. To reduce it from 0.03 to 0.01, approximately how many replications are needed relative to the current number?
+A generator is intended to produce observations from $\operatorname{Uniform}(0,1)$. Which result clearly indicates an error?
 
-A. One third as many  
-B. Three times as many  
-C. Six times as many  
-D. Nine times as many
+A. The sample mean is 0.49 rather than exactly 0.50.  
+B. The sample variance is 0.084 rather than exactly $1/12$.  
+C. The histogram bars are not all the same height.  
+D. Some generated values are below 0 or above 1.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -485,18 +485,19 @@ $$
 
 ### 4b) Checking an exponential generator [4]
 
-The intended distribution is exponential with rate 1. The exact tail probability is
+The intended distribution is exponential with rate 2. A student uses:
 
-$$
-p_0=P(X>\log 5)=0.20.
-$$
+```r
+set.seed(8670)
+x <- rexp(10000, rate = 1 / 2)
+```
 
-A generator produces $B=10{,}000$ independent observations. Of these, 2,400 exceed $\log 5$, so $\hat p=0.24$. All logarithms are natural. Keep full precision until the final rounding.
+The sample mean is about 2 and the sample variance is about 4. You do not need to run the code.
 
-1. Compute the estimated MCSE, $\sqrt{\hat p(1-\hat p)/B}$, to four decimal places.
-2. Compute $|\hat p-p_0|$ divided by the MCSE, to one decimal place. Is this discrepancy small enough to dismiss as ordinary simulation variation, or should the generator be checked?
-3. If the same algorithm produces 40,000 independent observations and $\hat p$ remains close to 0.24, what approximate MCSE would you expect? Give four decimal places.
-4. Name one implementation or parameterization error worth checking. Explain why increasing $B$ would not correct it.
+1. State the theoretical mean and variance of the intended distribution.
+2. Identify the parameter error and write the corrected `rexp()` call.
+3. Describe how you would use a histogram and the target density to check the generated values. What would you look for?
+4. Would generating more observations with the same incorrect code fix the discrepancy? Explain briefly.
 
 ```{=latex}
 \par\endgroup

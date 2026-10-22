@@ -1586,129 +1586,28 @@ The transformed row is $(2,0)R+(1,2)=(3,3.2)$. Choose **A**, since the covarianc
 
 ## Checking a Generator
 
-A mathematical construction tells us the target law. Numerical checks then help detect programming errors and quantify how much disagreement to expect from a finite sample.
+Start with a few simple checks against the intended distribution:
 
-A histogram is a useful first view, but its appearance depends on bin width and sample size. Different distributions can have the same mean, variance, or a similar-looking central region.
-
-A convincing validation combines theory with checks that target different possible mistakes:
-
-| Check | What it can reveal |
+| Check | What to compare |
 |---|---|
-| Support and constraints | Negative waiting times, noninteger counts, proportions outside $(0,1)$ |
-| Mean and variance | Incorrect location, scale, or parameterization |
-| Quantiles, ECDF, and tail probabilities | Distributional errors hidden by matching moments |
-| Correlations and joint events | Incorrect dependence or matrix orientation |
-| Repeated runs and random-number use | Reused seeds or repeated observations |
-| Acceptance rate and proposal count | A costly envelope or an implementation error |
+| **Possible values** | Are all draws in the correct range? Counts should be integers; exponential waiting times should be nonnegative. |
+| **Mean and variance** | Compare the sample summaries with the theoretical mean and variance. |
+| **Distributional shape** | Compare a histogram with the target density. |
+| **Multivariate dependence** | Inspect a scatterplot and compare the sample covariance or correlation with the target. |
 
-For the rejection sampler, the ECDF should track the target CDF, and the transformed values should be approximately uniform.
+For example, an exponential distribution with rate 2 has mean $1/2$ and variance $1/4$:
 
-```{r}
-#| label: fig-rv-validation
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-cap: "The empirical CDF of accepted proposals tracks the Beta(2,2) CDF. Sampling variation creates small discrepancies even for a correct generator."
-ggplot(data.frame(value = beta_tight$draws), aes(value)) +
-  stat_ecdf(geom = "step", color = "steelblue", linewidth = 0.7) +
-  stat_function(fun = function(x) pbeta(x, 2, 2),
-                color = "firebrick", linewidth = 0.9, linetype = "dashed") +
-  labs(x = "Accepted value", y = "Cumulative probability")
-```
-
-Formal goodness-of-fit tests can supplement these checks, but passing a test is not a proof of correctness. A correct generator can occasionally be rejected, and a small sample may fail to detect a faulty one. The algorithm's mathematical justification remains essential.
-
-::: {#rv-block-70 .callout-note title="Monte Carlo Standard Error"}
-
-Suppose we estimate $p=P(X>c)$ using $B$ independent simulated observations:
-
-$$
-\hat p=\frac{1}{B}\sum_{b=1}^B\mathbf1\{X_b>c\}.
-$$
-
-Each indicator is Bernoulli, so
-
-$$
-\operatorname{Var}(\hat p)=\frac{p(1-p)}{B},
-\qquad
-\widehat{\operatorname{MCSE}}(\hat p)
-=\sqrt{\frac{\hat p(1-\hat p)}{B}}.
-$$
-
-For an estimated mean of independent $h(X_b)$ with finite variance, the corresponding MCSE is
-
-$$
-\widehat{\operatorname{MCSE}}
-\left(\frac1B\sum_{b=1}^B h(X_b)\right)
-=\frac{s_h}{\sqrt B}.
-$$
-
-:::
-
-:::: {#rv-block-71 .callout-example title="Checking an Exponential Tail Probability"}
-
-::: {.content-visible when-format="pdf"}
-
-**Example 14. Checking an Exponential Tail Probability**
-
-:::
-
-
-```{r}
-#| label: rv-mcse
-#| code-fold: true
+```r
 set.seed(8670)
-B <- 10000
-event <- rexp(B, rate = 0.7) > 3
-p_hat <- mean(event)
-mcse <- sqrt(p_hat * (1 - p_hat) / B)
-
-knitr::kable(booktabs = TRUE, data.frame(
-  estimate = p_hat,
-  MCSE = mcse,
-  exact = exp(-0.7 * 3),
-  lower_MC_limit = p_hat - 1.96 * mcse,
-  upper_MC_limit = p_hat + 1.96 * mcse
-), digits = 4,
-col.names = c("Estimate", "MCSE", "Exact", "Lower MC limit", "Upper MC limit"))
+x <- rexp(1000, rate = 2)
+range(x)             # all values should be nonnegative
+mean(x)              # should be close to 1/2
+var(x)               # should be close to 1/4
+hist(x, probability = TRUE)
+curve(dexp(x, rate = 2), add = TRUE, col = "red")
 ```
 
-::::
-
-::: {#rv-block-72 .callout-caution title="What More Simulation Can and Cannot Fix"}
-
-These limits quantify numerical uncertainty from the finite simulation. They do not quantify uncertainty about whether the exponential model or its rate describes a real population.
-
-To halve MCSE, we generally need about **four times** as many independent replications. For rare events, zero simulated occurrences do not imply zero probability: the plug-in MCSE also becomes zero and is misleading. A binomial interval or a method designed for rare events is then more informative.
-
-:::
-
-::: {#rv-block-73 .callout-note title="Three Different Sources of Uncertainty"}
-
-- **Sampling uncertainty** concerns what would happen with another real dataset.
-- **Monte Carlo uncertainty** comes from using finitely many simulated replications to study that behavior.
-- **Model uncertainty** concerns whether the assumed mechanism is an adequate description of the setting.
-
-More simulation reduces Monte Carlo uncertainty. It does not automatically reduce the other two.
-
-:::
-
-::: {#rv-block-74 .callout-note title="Choosing a Generation Method"}
-
-| Available structure | Natural approach | Main issue to check |
-|---|---|---|
-| A reliable built-in generator | Use the distribution's `r` function | Parameterization and joint assumptions |
-| A tractable quantile | Inverse transformation | Correct generalized inverse and endpoints |
-| A tractable CDF without a convenient inverse | Numerical root finding | Bracketing, monotonicity, tolerance, and cost |
-| A target density and a suitable proposal | Acceptance-rejection | Global envelope and acceptance rate |
-| A known distributional identity | Transform simpler independent variables | Conditions such as independence and common rates |
-| A latent-class or hierarchical model | Generate latent variables, then observations | Which observations share each latent draw |
-| A normal covariance structure | Matrix factorization | Positive definiteness and factor orientation |
-
-Methods are often combined. A hierarchical model may use inverse transformation for event times, normal matrix factors for random effects, and conditional Bernoulli draws for outcomes.
-
-The goal is a generator that is statistically correct, numerically reliable, and efficient enough for the problem. A sophisticated algorithm cannot compensate for an incorrect data-generating mechanism.
-
-:::
+Small differences are expected in a random sample. These checks can reveal errors, but matching a few summaries does not prove that a generator is correct. If a check fails, review the formula, parameters, and code; generating more observations does not repair an incorrect algorithm.
 
 ## Concept Checks and Practice {#sec-rv-practice}
 
@@ -1736,7 +1635,7 @@ Try the concept checks first, then the short calculations. Explain your choice b
 | 3 | F | Count accepted values only; continue sampling after a rejection. |
 | 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
 | 5 | T | Independently select a component for each observation, then draw from that component. |
-| 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
+| 6 | F | Marginals do not determine dependence; also inspect a scatterplot and compare covariance or correlation. |
 
 :::
 
@@ -1785,8 +1684,7 @@ This chapter answers one question: **How can we turn a probability model into si
 
 - **Choose a suitable method.** Use inverse transformation when the quantile function is available, acceptance-rejection when an easy proposal and a valid bound are available, or known distributional relationships.
 - **Preserve the joint model.** For a mixture, choose a component before drawing an observation. For multivariate data, preserve the required dependence as well as the marginal distributions.
-- **Check the generator.** Compare its support, moments, plots, and joint behavior with the intended model.
-- **Measure simulation error.** For independent replications, MCSE typically decreases like $1/\sqrt{B}$. More simulation reduces Monte Carlo uncertainty; it does not fix an inappropriate model.
+- **Check the generator.** Check the range, mean, variance, and histogram; for multivariate data, also check a scatterplot and covariance. Small sample differences are expected, but more draws do not fix a wrong formula or parameter.
 
 ### Connections to Other Chapters {.unnumbered .unlisted}
 
@@ -1831,7 +1729,7 @@ The core chapter is complete. These examples are for independent study. Choose o
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 15. Application: Experimental Power**
+**Example 14. Application: Experimental Power**
 
 :::
 
@@ -1932,7 +1830,7 @@ If $\sigma$ is estimated, replace the known-variance test with the actual planne
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 16. Application: Predicting Defect Counts**
+**Example 15. Application: Predicting Defect Counts**
 
 :::
 
@@ -2070,7 +1968,7 @@ If we drew a fresh independent $p$ for each individual item instead of one share
 
 ::: {.content-visible when-format="pdf"}
 
-**Example 17. Application: Queue Delays**
+**Example 16. Application: Queue Delays**
 
 :::
 
