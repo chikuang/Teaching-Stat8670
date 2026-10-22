@@ -42,7 +42,7 @@ R code and plots are optional. If you use R, include the code in your source fil
 
 :::
 
-Note: The questions use the main material in Chapter 4. Topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required.
+Note: The questions use the main material in Chapter 4. Section 4.10 (**Supplementary**) and topics marked **optional**, including Box-Muller, truncated-normal simulation, Wishart construction, and the real-world applications, are not required. Normalization questions cover only the basic definitions and whether each form can be used for acceptance-rejection sampling.
 
 **Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$.
 
@@ -105,12 +105,12 @@ D. $5U$
 
 ### 1c)
 
-The $\operatorname{Beta}(2,2)$ density is $f(x)=6x(1-x)$ for $0<x<1$, and zero otherwise. Its height at $x=0.5$ is $1.5$. Which statement is correct?
+A normalized probability density must have:
 
-A. It cannot be a density because its height exceeds 1.  
-B. $P(X=0.5)=1.5$.  
-C. The area under the curve is 1.5.  
-D. It is a valid density: its total area is 1, even though its height can exceed 1.
+A. Maximum height 1.  
+B. Mean 1.  
+C. Variance 1.  
+D. Total area 1.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -123,12 +123,12 @@ D. It is a valid density: its total area is 1, even though its height can exceed
 
 ### 1d)
 
-An unnormalized target is $h(x)=x(1-x)$ on $(0,1)$, with total area $1/6$. Which formula turns it into a normalized density?
+Which statement best describes an unnormalized target?
 
-A. $f(x)=6h(x)$  
-B. $f(x)=h(x)/6$  
-C. $f(x)=h(x)-1/6$  
-D. $f(x)=h(x)$
+A. It has the same shape as the desired density, but its total area need not be 1.  
+B. Its total area must always be 1.  
+C. It must take negative values.  
+D. Its maximum height must be 1.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -143,17 +143,12 @@ D. $f(x)=h(x)$
 
 ### 1e)
 
-For the target in 1d), compare two rejection samplers with a uniform proposal on $(0,1)$:
+Which statement about acceptance-rejection sampling is correct?
 
-- normalized scale: target $f(y)=6y(1-y)$, envelope height $1.5$;
-- unnormalized scale: target $h(y)=y(1-y)$, envelope height $0.25$.
-
-Suppose both samplers use the same proposal $Y$ and the same draw $U\sim\operatorname{Uniform}(0,1)$, independent of $Y$. How do their acceptance decisions compare?
-
-A. The normalized version accepts six times as often.  
-B. The unnormalized version cannot be used for rejection sampling.  
-C. Both accept exactly when $U\leq4Y(1-Y)$.  
-D. Both accept exactly when $U\leq Y(1-Y)$.
+A. The target must be normalized.  
+B. The target must be unnormalized.  
+C. Either form works, provided a valid envelope is used.  
+D. An envelope is unnecessary if the target density is known.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -166,12 +161,12 @@ D. Both accept exactly when $U\leq Y(1-Y)$.
 
 ### 1f)
 
-Use the normalized sampler in 1e). For one proposal, $Y=0.75$ and $U=0.60$. Its acceptance ratio is $f(Y)/1.5=0.75$. What should the sampler do?
+A rejection sampler proposes $Y=0.75$ and draws an independent $U=0.60$. The acceptance probability for this proposal is $0.75$. What should the sampler do?
 
 A. Accept and store $0.75$.  
 B. Accept and store $0.60$.  
 C. Reject because $U<0.75$.  
-D. Accept and store the density height $1.125$.
+D. Accept and store both values as draws from the target.
 
 ```{=latex}
 \end{minipage}\par\medskip
@@ -184,12 +179,12 @@ D. Accept and store the density height $1.125$.
 
 ### 1g)
 
-For the normalized sampler in 1e), a proposal is plotted at $(Y,V)$ with $V=1.5U$, where $U$ is uniform on $(0,1)$ and independent of $Y$. What does the point's height $V$ represent?
+A rejection sampler uses normalized target and proposal densities with a valid bound $M=2.5$. What is the expected number of proposals needed for 400 accepted observations?
 
-A. The probability that the target equals $Y$.  
-B. The value of the target density $f(Y)$.  
-C. A second accepted draw from the target distribution.  
-D. An auxiliary random height between zero and the envelope, used to decide whether to accept $Y$.
+A. 160  
+B. 400  
+C. 600  
+D. 1,000.
 
 ```{=latex}
 \end{minipage}\par\medskip
