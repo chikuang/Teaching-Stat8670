@@ -25,15 +25,15 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 +---------+-------------------------------+-------------+
 | 3       | Nicholas                      | TBA         |
 +---------+-------------------------------+-------------+
-| 4       | Karki, Prakash                | TBA         |
+| 4       | Jangam, Shaswat Bhushan       | TBA         |
 |         +-------------------------------+             |
-|         | Jangam, Shaswat Bhushan       |             |
+|         | Karki, Prakash                |             |
 |         +-------------------------------+             |
 |         | Limbu Pheudin, Mangsa         |             |
 +---------+-------------------------------+-------------+
-| 5       | Zhong, Zhe                    | TBA         |
+| 5       | Truong, Katelyn               | TBA         |
 |         +-------------------------------+             |
-|         | Truong, Katelyn               |             |
+|         | Zhong, Zhe                    |             |
 +---------+-------------------------------+-------------+
 | 6       | Babagana, Yasmeen             | TBA         |
 |         +-------------------------------+             |
