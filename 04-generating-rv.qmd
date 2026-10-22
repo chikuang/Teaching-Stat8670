@@ -1244,6 +1244,8 @@ The integral is a convolution. Simulation avoids computing this integral: genera
 Under the independence conditions below:
 
 
+- If $X_j\sim\operatorname{Poisson}(\lambda_j)$ are independent, then $\sum_j X_j\sim\operatorname{Poisson}(\sum_j\lambda_j)$.
+- If $G_j\sim\operatorname{Gamma}(a_j,\lambda)$ are independent with a **common rate** $\lambda$, then $\sum_jG_j\sim\operatorname{Gamma}(\sum_j a_j,\lambda)$.
 - A sum of independent $\chi^2$ variables is chi-square with the sum of the degrees of freedom.
 - A sum of $k$ independent $\operatorname{Exp}(\lambda)$ variables is $\operatorname{Gamma}(k,\lambda)$.
 - A sum of $k$ independent geometric failure counts with success probability $p$ is negative binomial with `size = k` and `prob = p`.
