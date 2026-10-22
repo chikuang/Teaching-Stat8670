@@ -913,172 +913,16 @@ $$
 Blue points satisfy this rule. **Save their horizontal coordinates $Y$; discard $U$ and $V$.** A point's ordinate is an auxiliary random value used for the decision, not $f(Y)$, an estimated density, or an acceptance probability. The left axis therefore says **Auxiliary ordinate v (density scale)**. The right panel estimates the density of the retained $Y$ values, so its axis says **Density**. The horizontal envelope at 1.5 is a bound on $f$, not a probability density with area 1.
 :::
 
-::: {#rv-density-normalization .callout-note title="Normalized and unnormalized targets"}
-An **unnormalized target** is a nonnegative function $q(y)$ whose relative heights describe the desired distribution. Its total area is $Z=\int q(y)\,dy$, where $0<Z<\infty$. The **normalized density** is $f(y)=q(y)/Z$, so $\int f(y)\,dy=1$. Dividing by the area preserves the shape; it does not set the maximum to 1.
+::: {#rv-normalization-basics .callout-note title="Normalized vs. unnormalized: the essentials"}
 
-For the Beta(2,2) example, choose $q(y)=y(1-y)$ on $[0,1]$ and zero elsewhere. Then
+- A **normalized density** $f$ has total area 1. Use it to calculate probabilities or compare with a density histogram.
+- An **unnormalized target** $q$ has the same shape, but its total area need not be 1. Dividing by its total area gives $f$.
 
-$$
-Z=\int_0^1 y(1-y)\,dy
-=\left[\frac{y^2}{2}-\frac{y^3}{3}\right]_0^1
-=\frac16,
-\qquad f(y)=\frac{q(y)}{1/6}=6y(1-y).
-$$
+**Either form works for acceptance-rejection sampling.** Use a valid envelope on the same scale as the target. Multiplying both the target and its envelope by the same positive constant leaves the acceptance probability unchanged.
 
-| Quantity | Unnormalized target $q$ | Normalized density $f=q/Z$ |
-|:--|:--|:--|
-| Function on $[0,1]$ | $y(1-y)$ | $6y(1-y)$ |
-| Total area | $1/6$ | $1$ |
-| Maximum at $y=1/2$ | $1/4$ | $3/2=1.5$ |
-
-**Why use the normalized version in this figure?** The right-hand histogram uses bar height $\text{count}/(n_{\text{accepted}}\times\text{bin width})$, so its bar areas sum to 1; the smooth density estimate also has area 1. Overlaying $f$, which also has area 1, makes a direct comparison possible. Overlaying $q$ would put the target six times too low even when the accepted sample is correct.
-
-Probabilities are **areas over intervals**: $P(a\leq Y\leq b)=\int_a^b f(y)\,dy$. For example, a histogram density of $1.6$ over a bin of width $0.05$ represents relative frequency $1.6\times0.05=0.08$. The target is already normalized even though its peak is 1.5.
-:::
-
-::: {#rv-unnormalized-rejection .callout-note title="Rejection sampling can also use an unnormalized target"}
-Normalization is needed for a density comparison, but the sampling algorithm need not know $Z$. If the proposal density $g$ is normalized and a known constant $C$ satisfies $q(y)\leq Cg(y)$ everywhere, accept with probability $q(y)/(Cg(y))$. Then
-
-$$
-P(\text{accept})=\frac{Z}{C},
-\qquad
-f_{Y\mid\text{accept}}(y)
-=\frac{g(y)\,q(y)/(Cg(y))}{Z/C}
-=\frac{q(y)}{Z}=f(y).
-$$
-
-Here $g(y)=1$, $q(y)=y(1-y)$ and $C=1/4$, giving acceptance probability $4y(1-y)$ and overall rate $(1/6)/(1/4)=2/3$. These are exactly the same as using normalized $f$ with $M=3/2$. The corresponding unnormalized plot would use ordinate $W=CU=U/4$ and compare it with $q(Y)$; both the target and envelope are one-sixth of the scales used in @fig-rv-rejection. **Keep the target and envelope on the same scale.** The formula $1/M$ for the overall acceptance rate assumes a normalized target; with $q$, the rate is $Z/C$.
-:::
-
-::: {#rv-normalization-choice .callout-warning title="Normalized or unnormalized: when to use which"}
-
-- **Density plots and probabilities: use the normalized density $f=q/Z$.** Compare $f$ with a density histogram or KDE, and integrate $f$ to calculate probabilities. An area under $q$ must be divided by $Z$ before it is a probability.
-- **Rejection sampling: either form works.** Use normalized $f$ when it is available. If $Z$ is unknown or costly to compute, use $q$ with a known valid envelope $Cg$, where $g$ is a normalized proposal density and $q(y)\leq Cg(y)$ everywhere. Accept when $U\leq q(Y)/(Cg(Y))$; this decision does not need $Z$.
-- **For identical accept/reject decisions, rescale both target and envelope.** For Beta(2,2), $f(y)=6y(1-y)$ and $q(y)=y(1-y)$ give the same decision because
-
-$$
-\frac{f(Y)}{3/2}=\frac{q(Y)}{1/4}=4Y(1-Y).
-$$
-
-Keeping $3/2$ as the envelope for $q$ is still valid here, but less efficient. **Do not compare $q$ directly with a density histogram:** their vertical scales do not match.
+The derivations and comparison plots are in [Section 4.10: Supplementary](#sec-rv-normalization-details) and are not on the exam.
 
 :::
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
-
-@fig-rv-normalized-vs-unnormalized uses the **same proposal and decision pairs $(Y,U)$ in both panels**. The right panel divides the target, envelope, and plotted ordinate by 6. Consequently, every point keeps the same accept/reject classification:
-
-$$
-U\leq\frac{f(Y)}{3/2}
-=\frac{q(Y)}{1/4}
-=4Y(1-Y).
-$$
-
-```{=latex}
-\end{minipage}\par
-```
-
-```{r}
-#| label: fig-rv-normalized-vs-unnormalized
-#| code-fold: true
-#| echo: !expr knitr::is_html_output()
-#| fig-width: 11
-#| fig-height: 5.8
-#| fig-cap: "The same (Y,U) pairs on two vertical scales. Solid black curves are targets; orange dashed lines are envelopes. Left: normalized target area 1 and envelope area 3/2. Right: unnormalized target area 1/6 and envelope area 1/4. Their area ratios are both 2/3, the theoretical acceptance probability. Point A uses (Y,U) = (0.2,0.4) and is accepted; point B uses (0.8,0.8) and is rejected in both panels. Areas are measured over the unit interval; each target and its envelope use the same scale."
-#| fig-alt: "Side-by-side normalized and unnormalized rejection plots use the same proposal points and colors. Both label the target, envelope, and their total areas. The unnormalized vertical coordinates are one-sixth of the normalized coordinates, and labeled examples A and B retain identical accept/reject decisions."
-set.seed(8670)
-comparison_pairs <- data.frame(y = runif(160), u = runif(160))
-comparison_pairs$decision <- ifelse(
-  comparison_pairs$u <= 4 * comparison_pairs$y * (1 - comparison_pairs$y),
-  "Accepted", "Rejected"
-)
-comparison_examples <- data.frame(
-  y = c(0.2, 0.8), u = c(0.4, 0.8),
-  decision = c("Accepted", "Rejected"),
-  label = c("A: accept", "B: reject")
-)
-comparison_grid <- data.frame(y = seq(0, 1, length.out = 501))
-comparison_colors <- c("Accepted" = "steelblue", "Rejected" = "grey55")
-
-comparison_panel <- function(envelope, target_multiplier, title,
-                             target_label, envelope_label, axis_label,
-                             acceptance_label, y_breaks) {
-  points <- transform(comparison_pairs, ordinate = envelope * u)
-  examples <- transform(comparison_examples, ordinate = envelope * u)
-  curve <- transform(comparison_grid,
-                     target = target_multiplier * y * (1 - y))
-  ggplot() +
-    geom_ribbon(data = curve, aes(y, ymin = 0, ymax = target),
-                fill = "steelblue", alpha = 0.12) +
-    geom_point(data = points, aes(y, ordinate, color = decision),
-               alpha = 0.55, size = 1.5) +
-    geom_line(data = curve, aes(y, target), color = "black", linewidth = 1) +
-    geom_hline(yintercept = envelope, color = "#B45F06",
-                linetype = "dashed", linewidth = 0.9) +
-    annotate("label", x = 0.5, y = 0.28 * envelope, label = target_label,
-             size = 3.6, color = "black", fill = "white", linewidth = 0) +
-    annotate("label", x = 0.5, y = 1.13 * envelope, label = envelope_label,
-             size = 3.7, color = "#9A4E00", fill = "white", linewidth = 0,
-             lineheight = 1.1) +
-    geom_point(data = examples, aes(y, ordinate, fill = decision),
-               shape = 21, color = "black", size = 3.3, stroke = 0.8,
-               show.legend = FALSE) +
-    geom_label(data = examples,
-               aes(y, ordinate + 0.09 * envelope, label = label),
-               size = 3.4, fill = "white", linewidth = 0.2) +
-    scale_color_manual(values = comparison_colors, breaks = names(comparison_colors)) +
-    scale_fill_manual(values = comparison_colors, guide = "none") +
-    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25),
-                       expand = expansion(mult = c(0.02, 0.02))) +
-    scale_y_continuous(limits = c(0, 1.25 * envelope), breaks = y_breaks,
-                       expand = expansion(mult = c(0, 0))) +
-    labs(title = title, x = "Same proposal y", y = axis_label,
-         color = NULL, caption = acceptance_label) +
-    theme(legend.position = "bottom", legend.text = element_text(size = 11),
-          plot.title = element_text(size = 16),
-          plot.caption = element_text(size = 11, hjust = 0.5),
-          plot.margin = margin(8, 10, 4, 8))
-}
-
-normalized_comparison <- comparison_panel(
-  envelope = 1.5, target_multiplier = 6, title = "Normalized target",
-  target_label = "Target f(y) = 6y(1-y)\nTotal area = 1",
-  envelope_label = "Envelope Mg(y) = 3/2\nTotal area = 3/2",
-  axis_label = "Auxiliary ordinate V = 1.5U\n(normalized density scale)",
-  acceptance_label = "Acceptance probability = 1 / (3/2) = 2/3",
-  y_breaks = c(0, 0.3, 0.6, 0.9, 1.2, 1.5)
-)
-unnormalized_comparison <- comparison_panel(
-  envelope = 0.25, target_multiplier = 1, title = "Unnormalized target",
-  target_label = "Target q(y) = y(1-y)\nTotal area = 1/6",
-  envelope_label = "Envelope Cg(y) = 1/4\nTotal area = 1/4",
-  axis_label = "Auxiliary ordinate W = U/4\n(unnormalized target scale)",
-  acceptance_label = "Acceptance probability = (1/6) / (1/4) = 2/3",
-  y_breaks = seq(0, 0.25, by = 0.05)
-)
-
-# Both scales classify every shared (Y,U) pair identically.
-stopifnot(identical(
-  1.5 * comparison_pairs$u <= dbeta(comparison_pairs$y, 2, 2),
-  0.25 * comparison_pairs$u <= comparison_pairs$y * (1 - comparison_pairs$y)
-))
-grid::grid.newpage()
-grid::pushViewport(grid::viewport(layout = grid::grid.layout(
-  2, 2, heights = grid::unit(c(1, 0.085), "null")
-)))
-print(normalized_comparison, newpage = FALSE,
-      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
-print(unnormalized_comparison, newpage = FALSE,
-      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
-grid::grid.text(
-  "Same Y and U: identical accept/reject decisions. Right vertical scale = left / 6.",
-  gp = grid::gpar(fontsize = 12),
-  vp = grid::viewport(layout.pos.row = 2, layout.pos.col = 1:2)
-)
-grid::popViewport()
-```
 
 The full R function in the online notes stops at exactly $n$ accepted observations. The table compares its proposal counts with the expected cost $nM$.
 
@@ -1157,21 +1001,6 @@ For the same target and uniform proposal, take $y=0.8$ and $u=0.7$.
 ::: {#rv-block-28 .callout-caution title="A Bound Must Hold Everywhere"}
 
 The envelope must satisfy $f(y)\leq Mg(y)$ throughout the support. A plausible histogram cannot establish that condition.
-
-:::
-
-::: {#rv-block-29 .callout-note title="Unnormalized Targets" collapse="true"}
-
-Sometimes we know only $h(x)$ where
-
-$$
-f(x)=\frac{h(x)}{Z},
-\qquad Z=\int h(x)\,dx.
-$$
-
-If we can establish $h(x)\leq Cg(x)$ everywhere, we may accept with probability $h(Y)/\{Cg(Y)\}$ without knowing $Z$. The acceptance rate is then **$Z/C$**, not $1/C$.
-
-This is useful for some posterior distributions, where the normalizing constant is difficult to compute. The challenge remains finding an easy proposal and a valid global bound.
 
 :::
 
@@ -2338,7 +2167,7 @@ Try the concept checks first, then the short calculations. Explain your choice b
 
 1. **Multiple choice.** In inverse transformation, $U$ is **(A)** an observation from the target or **(B)** a probability level to be transformed.
 2. **T/F.** A larger valid rejection bound $M$ increases the acceptance rate.
-3. **T/F.** If $f=h/Z$ and $h\leq Cg$, accepting with probability $h(Y)/(Cg(Y))$ requires knowing $Z$.
+3. **T/F.** Acceptance-rejection sampling requires a normalized target density.
 4. **Multiple choice.** To generate a $t_4$ variable from independent $Z\sim N(0,1)$ and $V\sim\chi^2_4$, use **(A)** $Z/\sqrt{V/4}$ or **(B)** $Z/(V/4)$.
 5. **T/F.** A mixture of bivariate normals uses one component label for the whole row.
 6. **T/F.** Correct marginal histograms establish that a multivariate generator is correct.
@@ -2351,7 +2180,7 @@ Try the concept checks first, then the short calculations. Explain your choice b
 |:----:|:--------:|:--------------------------------------------------|
 | 1 | B | Apply $F^{-1}$ to convert the probability level into an observation. |
 | 2 | F | The rate is $1/M$ for a normalized target and proposal. |
-| 3 | F | $Z$ is unnecessary for the decision; the overall rate is $Z/C$. |
+| 3 | F | Either form works, provided the envelope is valid and uses the same scale as the target. |
 | 4 | A | Divide by the square root of the independent chi-square variable per degree of freedom. |
 | 5 | T | Both coordinates belong to the chosen component; separate labels change the joint model. |
 | 6 | F | Marginals do not determine dependence; also check covariance and joint events. |
@@ -2777,6 +2606,192 @@ This example combines distribution choice, recursive computation, and statistica
 ```{=html}
 </details>
 ```
+
+### Normalized and Unnormalized Targets (Not on the Exam) {#sec-rv-normalization-details .unnumbered}
+
+These optional details will not be on the exam. They give the derivations and plots behind the [brief comparison in the main text](#rv-normalization-basics).
+
+::: {#rv-density-normalization .callout-note title="Normalized and unnormalized targets"}
+An **unnormalized target** is a nonnegative function $q(y)$ whose relative heights describe the desired distribution. Its total area is $Z=\int q(y)\,dy$, where $0<Z<\infty$. The **normalized density** is $f(y)=q(y)/Z$, so $\int f(y)\,dy=1$. Dividing by the area preserves the shape; it does not set the maximum to 1.
+
+For the Beta(2,2) example, choose $q(y)=y(1-y)$ on $[0,1]$ and zero elsewhere. Then
+
+$$
+Z=\int_0^1 y(1-y)\,dy
+=\left[\frac{y^2}{2}-\frac{y^3}{3}\right]_0^1
+=\frac16,
+\qquad f(y)=\frac{q(y)}{1/6}=6y(1-y).
+$$
+
+| Quantity | Unnormalized target $q$ | Normalized density $f=q/Z$ |
+|:--|:--|:--|
+| Function on $[0,1]$ | $y(1-y)$ | $6y(1-y)$ |
+| Total area | $1/6$ | $1$ |
+| Maximum at $y=1/2$ | $1/4$ | $3/2=1.5$ |
+
+**Why use the normalized version in @fig-rv-rejection?** The right-hand histogram uses bar height $\text{count}/(n_{\text{accepted}}\times\text{bin width})$, so its bar areas sum to 1; the smooth density estimate also has area 1. Overlaying $f$, which also has area 1, makes a direct comparison possible. Overlaying $q$ would put the target six times too low even when the accepted sample is correct.
+
+Probabilities are **areas over intervals**: $P(a\leq Y\leq b)=\int_a^b f(y)\,dy$. For example, a histogram density of $1.6$ over a bin of width $0.05$ represents relative frequency $1.6\times0.05=0.08$. The target is already normalized even though its peak is 1.5.
+:::
+
+::: {#rv-unnormalized-rejection .callout-note title="Rejection sampling can also use an unnormalized target"}
+Normalization is needed for a density comparison, but the sampling algorithm need not know $Z$. If the proposal density $g$ is normalized and a known constant $C$ satisfies $q(y)\leq Cg(y)$ everywhere, accept with probability $q(y)/(Cg(y))$. Then
+
+$$
+P(\text{accept})=\frac{Z}{C},
+\qquad
+f_{Y\mid\text{accept}}(y)
+=\frac{g(y)\,q(y)/(Cg(y))}{Z/C}
+=\frac{q(y)}{Z}=f(y).
+$$
+
+Here $g(y)=1$, $q(y)=y(1-y)$ and $C=1/4$, giving acceptance probability $4y(1-y)$ and overall rate $(1/6)/(1/4)=2/3$. These are exactly the same as using normalized $f$ with $M=3/2$. The corresponding unnormalized plot would use ordinate $W=CU=U/4$ and compare it with $q(Y)$; both the target and envelope are one-sixth of the scales used in @fig-rv-rejection. **Keep the target and envelope on the same scale.** The formula $1/M$ for the overall acceptance rate assumes a normalized target; with $q$, the rate is $Z/C$.
+:::
+
+::: {#rv-normalization-choice .callout-warning title="Normalized or unnormalized: when to use which"}
+
+- **Density plots and probabilities: use the normalized density $f=q/Z$.** Compare $f$ with a density histogram or KDE, and integrate $f$ to calculate probabilities. An area under $q$ must be divided by $Z$ before it is a probability.
+- **Rejection sampling: either form works.** Use normalized $f$ when it is available. If $Z$ is unknown or costly to compute, use $q$ with a known valid envelope $Cg$, where $g$ is a normalized proposal density and $q(y)\leq Cg(y)$ everywhere. Accept when $U\leq q(Y)/(Cg(Y))$; this decision does not need $Z$.
+- **For identical accept/reject decisions, rescale both target and envelope.** For Beta(2,2), $f(y)=6y(1-y)$ and $q(y)=y(1-y)$ give the same decision because
+
+$$
+\frac{f(Y)}{3/2}=\frac{q(Y)}{1/4}=4Y(1-Y).
+$$
+
+Keeping $3/2$ as the envelope for $q$ is still valid here, but less efficient. **Do not compare $q$ directly with a density histogram:** their vertical scales do not match.
+
+:::
+
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
+@fig-rv-normalized-vs-unnormalized uses the **same proposal and decision pairs $(Y,U)$ in both panels**. The right panel divides the target, envelope, and plotted ordinate by 6. Consequently, every point keeps the same accept/reject classification:
+
+$$
+U\leq\frac{f(Y)}{3/2}
+=\frac{q(Y)}{1/4}
+=4Y(1-Y).
+$$
+
+```{=latex}
+\end{minipage}\par
+```
+
+```{r}
+#| label: fig-rv-normalized-vs-unnormalized
+#| code-fold: true
+#| echo: !expr knitr::is_html_output()
+#| fig-width: 11
+#| fig-height: 5.8
+#| fig-cap: "The same (Y,U) pairs on two vertical scales. Solid black curves are targets; orange dashed lines are envelopes. Left: normalized target area 1 and envelope area 3/2. Right: unnormalized target area 1/6 and envelope area 1/4. Their area ratios are both 2/3, the theoretical acceptance probability. Point A uses (Y,U) = (0.2,0.4) and is accepted; point B uses (0.8,0.8) and is rejected in both panels. Areas are measured over the unit interval; each target and its envelope use the same scale."
+#| fig-alt: "Side-by-side normalized and unnormalized rejection plots use the same proposal points and colors. Both label the target, envelope, and their total areas. The unnormalized vertical coordinates are one-sixth of the normalized coordinates, and labeled examples A and B retain identical accept/reject decisions."
+set.seed(8670)
+comparison_pairs <- data.frame(y = runif(160), u = runif(160))
+comparison_pairs$decision <- ifelse(
+  comparison_pairs$u <= 4 * comparison_pairs$y * (1 - comparison_pairs$y),
+  "Accepted", "Rejected"
+)
+comparison_examples <- data.frame(
+  y = c(0.2, 0.8), u = c(0.4, 0.8),
+  decision = c("Accepted", "Rejected"),
+  label = c("A: accept", "B: reject")
+)
+comparison_grid <- data.frame(y = seq(0, 1, length.out = 501))
+comparison_colors <- c("Accepted" = "steelblue", "Rejected" = "grey55")
+
+comparison_panel <- function(envelope, target_multiplier, title,
+                             target_label, envelope_label, axis_label,
+                             acceptance_label, y_breaks) {
+  points <- transform(comparison_pairs, ordinate = envelope * u)
+  examples <- transform(comparison_examples, ordinate = envelope * u)
+  curve <- transform(comparison_grid,
+                     target = target_multiplier * y * (1 - y))
+  ggplot() +
+    geom_ribbon(data = curve, aes(y, ymin = 0, ymax = target),
+                fill = "steelblue", alpha = 0.12) +
+    geom_point(data = points, aes(y, ordinate, color = decision),
+               alpha = 0.55, size = 1.5) +
+    geom_line(data = curve, aes(y, target), color = "black", linewidth = 1) +
+    geom_hline(yintercept = envelope, color = "#B45F06",
+                linetype = "dashed", linewidth = 0.9) +
+    annotate("label", x = 0.5, y = 0.28 * envelope, label = target_label,
+             size = 3.6, color = "black", fill = "white", linewidth = 0) +
+    annotate("label", x = 0.5, y = 1.13 * envelope, label = envelope_label,
+             size = 3.7, color = "#9A4E00", fill = "white", linewidth = 0,
+             lineheight = 1.1) +
+    geom_point(data = examples, aes(y, ordinate, fill = decision),
+               shape = 21, color = "black", size = 3.3, stroke = 0.8,
+               show.legend = FALSE) +
+    geom_label(data = examples,
+               aes(y, ordinate + 0.09 * envelope, label = label),
+               size = 3.4, fill = "white", linewidth = 0.2) +
+    scale_color_manual(values = comparison_colors, breaks = names(comparison_colors)) +
+    scale_fill_manual(values = comparison_colors, guide = "none") +
+    scale_x_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25),
+                       expand = expansion(mult = c(0.02, 0.02))) +
+    scale_y_continuous(limits = c(0, 1.25 * envelope), breaks = y_breaks,
+                       expand = expansion(mult = c(0, 0))) +
+    labs(title = title, x = "Same proposal y", y = axis_label,
+         color = NULL, caption = acceptance_label) +
+    theme(legend.position = "bottom", legend.text = element_text(size = 11),
+          plot.title = element_text(size = 16),
+          plot.caption = element_text(size = 11, hjust = 0.5),
+          plot.margin = margin(8, 10, 4, 8))
+}
+
+normalized_comparison <- comparison_panel(
+  envelope = 1.5, target_multiplier = 6, title = "Normalized target",
+  target_label = "Target f(y) = 6y(1-y)\nTotal area = 1",
+  envelope_label = "Envelope Mg(y) = 3/2\nTotal area = 3/2",
+  axis_label = "Auxiliary ordinate V = 1.5U\n(normalized density scale)",
+  acceptance_label = "Acceptance probability = 1 / (3/2) = 2/3",
+  y_breaks = c(0, 0.3, 0.6, 0.9, 1.2, 1.5)
+)
+unnormalized_comparison <- comparison_panel(
+  envelope = 0.25, target_multiplier = 1, title = "Unnormalized target",
+  target_label = "Target q(y) = y(1-y)\nTotal area = 1/6",
+  envelope_label = "Envelope Cg(y) = 1/4\nTotal area = 1/4",
+  axis_label = "Auxiliary ordinate W = U/4\n(unnormalized target scale)",
+  acceptance_label = "Acceptance probability = (1/6) / (1/4) = 2/3",
+  y_breaks = seq(0, 0.25, by = 0.05)
+)
+
+# Both scales classify every shared (Y,U) pair identically.
+stopifnot(identical(
+  1.5 * comparison_pairs$u <= dbeta(comparison_pairs$y, 2, 2),
+  0.25 * comparison_pairs$u <= comparison_pairs$y * (1 - comparison_pairs$y)
+))
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(
+  2, 2, heights = grid::unit(c(1, 0.085), "null")
+)))
+print(normalized_comparison, newpage = FALSE,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(unnormalized_comparison, newpage = FALSE,
+      vp = grid::viewport(layout.pos.row = 1, layout.pos.col = 2))
+grid::grid.text(
+  "Same Y and U: identical accept/reject decisions. Right vertical scale = left / 6.",
+  gp = grid::gpar(fontsize = 12),
+  vp = grid::viewport(layout.pos.row = 2, layout.pos.col = 1:2)
+)
+grid::popViewport()
+```
+
+::: {#rv-block-29 .callout-note title="Unnormalized Targets" collapse="true"}
+
+Sometimes we know only $h(x)$ where
+
+$$
+f(x)=\frac{h(x)}{Z},
+\qquad Z=\int h(x)\,dx.
+$$
+
+If we can establish $h(x)\leq Cg(x)$ everywhere, we may accept with probability $h(Y)/\{Cg(Y)\}$ without knowing $Z$. The acceptance rate is then **$Z/C$**, not $1/C$.
+
+This is useful for some posterior distributions, where the normalizing constant is difficult to compute. The challenge remains finding an easy proposal and a valid global bound.
+
+:::
 
 ## References and Further Reading {.unnumbered}
 
