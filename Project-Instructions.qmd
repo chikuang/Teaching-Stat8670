@@ -23,7 +23,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+         |
 |       | Duc Pham                  |         |
 +-------+---------------------------+---------+
-| 3     | Nicholas                  | TBA     |
+| 3     | Nicholas White            | TBA     |
 +-------+---------------------------+---------+
 | 4     | Shaswat Bhushan Jangam    | TBA     |
 |       +---------------------------+         |
