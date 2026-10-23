@@ -41,6 +41,13 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+         |
 |       | Shudeshna Nandy           |         |
 +-------+---------------------------+---------+
+| 7     | Halimah Akinoso           | TBA     |
+|       +---------------------------+         |
+|       | Seth Kwarteng             |         |
+|       +---------------------------+         |
+|       | Elton Kwashie             |         |
++-------+---------------------------+---------+
+
 
 :::
 
