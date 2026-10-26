@@ -47,6 +47,10 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+         |
 |       | Elton Kwashie             |         |
 +-------+---------------------------+---------+
+| 8     | Qiaoting Gao              | TBA     |
+|       +---------------------------+         |
+|       | Zidu Peng                 |         |
++-------+---------------------------+---------+
 
 
 :::
