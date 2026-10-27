@@ -51,6 +51,10 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+         |
 |       | Zidu Peng                 |         |
 +-------+---------------------------+---------+
+| 9     | Hovor Moses Kwame         | TBA     |
+|       +---------------------------+         |
+|       | Juliet Seadey             |         |
++-------+---------------------------+---------+
 
 
 :::
