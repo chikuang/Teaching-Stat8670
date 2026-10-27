@@ -55,9 +55,17 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+         |
 |       | Juliet Seadey             |         |
 +-------+---------------------------+---------+
+| 10    | Yang Zong                 | TBA     |
++-------+---------------------------+---------+
+| 11    | Kimia Daliran Saravi      | TBA     |
++-------+---------------------------+---------+
 
 
 :::
+
+```{=latex}
+\newpage
+```
 
 ## Project Overview
 
