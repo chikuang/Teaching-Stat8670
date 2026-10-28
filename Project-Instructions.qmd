@@ -50,14 +50,14 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 | 8     | Qiaoting Gao              | TBA     |
 |       +---------------------------+         |
 |       | Zidu Peng                 |         |
+|       +---------------------------+         |
+|       | Kimia Daliran Saravi      |         |
 +-------+---------------------------+---------+
 | 9     | Hovor Moses Kwame         | TBA     |
 |       +---------------------------+         |
 |       | Juliet Seadey             |         |
 +-------+---------------------------+---------+
 | 10    | Yang Zong                 | TBA     |
-+-------+---------------------------+---------+
-| 11    | Kimia Daliran Saravi      | TBA     |
 +-------+---------------------------+---------+
 
 
