@@ -51,3 +51,15 @@ repositories match GitHub. Rendering and uploading are already authorized.
 The primary website source is `~/Documents/GitHub/personal_web/website` (`master`).
 The primary publishing checkout is
 `~/Documents/GitHub/personal_web/chikuang.github.io` (`master`).
+
+## Course pacing
+
+Standing user instruction (2026-10-29): Chapter 4 took too much class time. Keep
+future chapters compact so the course can cover its remaining topics.
+
+- Organize each chapter around the essential concepts, a clear algorithm, and
+  one coherent example where practical.
+- Put longer derivations, repeated illustrations, and extra methods or cases in
+  clearly marked optional Supplementary material.
+- Do not expand a chapter simply to make it exhaustive; distinguish the core
+  teaching sequence from optional reading while keeping the concepts clear.

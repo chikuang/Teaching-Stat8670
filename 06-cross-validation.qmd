@@ -1,0 +1,334 @@
+# Cross Validation {#sec-cross-validation}
+
+<!-- Simplified from the 2025 STAT 8670 Cross Validation lecture. All figures are generated below. -->
+
+```{r}
+#| label: cv-setup
+#| include: false
+#| cache: false
+library(ggplot2)
+cv_ink <- "#51464C"
+cv_rose <- "#C86C85"
+cv_mint <- "#5B9682"
+cv_lavender <- "#8B80B9"
+cv_cream <- "#FFF9F2"
+cv_theme <- theme_minimal(base_size = 12, base_family = "sans") +
+  theme(
+    text = element_text(color = cv_ink),
+    plot.background = element_rect(fill = cv_cream, color = NA),
+    panel.background = element_rect(fill = "#FFFEFC", color = NA),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "#EEE6E2", linewidth = .3),
+    plot.title = element_text(face = "bold", size = 15, margin = margin(b = 5)),
+    plot.subtitle = element_text(size = 10, margin = margin(b = 10)),
+    strip.background = element_rect(fill = "#EDE7F4", color = NA),
+    strip.text = element_text(face = "bold", margin = margin(7, 5, 7, 5)),
+    legend.position = "bottom", legend.title = element_blank(),
+    legend.key = element_rect(fill = cv_cream, color = NA),
+    axis.title = element_text(size = 11),
+    plot.margin = margin(24, 16, 10, 12)
+  )
+# A small vector cat stays in the top margin, outside the data panels.
+cv_cat <- function() {
+  grid::pushViewport(grid::viewport(x = .952, y = .944, width = .065, height = .085))
+  grid::grid.polygon(c(.1, .18, .40), c(.60, .98, .70),
+    gp = grid::gpar(fill = "#F8DFDF", col = cv_ink, lwd = 1))
+  grid::grid.polygon(c(.60, .82, .90), c(.70, .98, .60),
+    gp = grid::gpar(fill = "#F8DFDF", col = cv_ink, lwd = 1))
+  grid::grid.roundrect(.5, .45, .86, .69, r = grid::unit(.24, "snpc"),
+    gp = grid::gpar(fill = "#FFF0DA", col = cv_ink, lwd = 1))
+  grid::grid.circle(c(.30, .70), .50, r = .035, gp = grid::gpar(fill = cv_ink, col = NA))
+  grid::grid.circle(c(.20, .80), .34, r = .065, gp = grid::gpar(fill = "#F2BFC7", col = NA))
+  grid::grid.lines(c(.43, .50, .57), c(.32, .27, .32), gp = grid::gpar(col = cv_ink, lwd = 1))
+  grid::popViewport()
+}
+cv_draw <- function(p) {
+  print(p + cv_theme)
+  cv_cat()
+}
+knitr::opts_chunk$set(fig.width = 8, fig.height = 3.6, fig.align = "center",
+                     dpi = 160, collapse = TRUE, comment = "#>",
+                     warning = FALSE, message = FALSE)
+```
+
+Monte Carlo simulation generates inputs from a specified model. **Cross-validation (CV)** reuses observed data to ask a different question: **how well will a fitting method predict new observations?** We use CV to compare models and choose their complexity.
+
+## Prediction on New Observations {#sec-cv-prediction}
+
+For regression, we want the **average squared prediction error on independent new observations** from the same population.
+
+**Training error** uses the observations that fitted the model. It is usually optimistic: the model has already used their outcomes to choose its coefficients. To assess prediction, evaluate observations left out of fitting.
+
+For $m$ held-out observations, calculate
+
+$$
+\operatorname{MSE}=\frac1m\sum_{i=1}^m(y_i-\widehat y_i)^2.
+$$
+
+For classification, we could instead average $\mathbf{1}\{y_i\ne\widehat y_i\}$ to estimate the misclassification rate. Choose the loss before comparing models.
+
+```{r}
+#| label: fig-cv-data-roles
+#| echo: false
+#| fig-height: 2.9
+#| fig-cap: "Training fits the coefficients; validation chooses the model; a separate test set assesses the chosen procedure. CV rotates the training and validation roles within the development data."
+#| fig-alt: "A mint training card and pink validation card sit inside development data. A separate lavender test card is used after model selection."
+grid::grid.newpage()
+grid::grid.rect(gp = grid::gpar(fill = cv_cream, col = NA))
+grid::grid.roundrect(.34, .46, .61, .73, r = grid::unit(4, "mm"),
+  gp = grid::gpar(fill = "#F2EEE8", col = "#DACBC6", lwd = 1.2))
+grid::grid.text("Development data", .34, .77,
+  gp = grid::gpar(col = cv_ink, fontsize = 15, fontface = "bold"))
+cv_card <- function(x, title, body, fill) {
+  grid::grid.roundrect(x, .43, .255, .45, r = grid::unit(4, "mm"),
+    gp = grid::gpar(fill = fill, col = NA))
+  grid::grid.text(title, x, .53,
+    gp = grid::gpar(col = cv_ink, fontsize = 14, fontface = "bold"))
+  grid::grid.text(body, x, .36,
+    gp = grid::gpar(col = cv_ink, fontsize = 12, lineheight = 1.2))
+}
+cv_card(.19, "Train", "Fit\ncoefficients", "#D8EBE1")
+cv_card(.49, "Validate", "Compare\ncandidates", "#F6D8DF")
+cv_card(.83, "Test", "Assess once\nafter selection", "#E6DFF2")
+grid::grid.text("CV rotates these roles", .34, .145,
+  gp = grid::gpar(col = cv_ink, fontsize = 11))
+grid::grid.lines(c(.66, .69), c(.43, .43),
+  arrow = grid::arrow(length = grid::unit(2, "mm")),
+  gp = grid::gpar(col = cv_ink, lwd = 1.5))
+cv_cat()
+```
+
+A single training/validation split is simple, but its result depends on which observations were held out. CV spreads validation across several subsets. A final **test set** remains separate from this model-selection process.
+
+## One Example: Choose a Polynomial Degree {#sec-cv-example}
+
+We compare polynomial regressions
+
+$$
+\widehat f_d(x)=\widehat\beta_0+\widehat\beta_1x+\cdots+\widehat\beta_dx^d,
+\qquad d\in\{1,\ldots,8\}.
+$$
+
+The degree $d$ is a **hyperparameter**: it specifies the model's flexibility. Fitting estimates the coefficients for a chosen degree; CV helps choose the degree.
+
+Generate one illustrative data set with a quadratic mean and random noise. Reserve 40 observations for the final test; use 80 for development. All observations are generated independently, so these disjoint groups are independent samples.
+
+```{r}
+#| label: cv-example-data
+#| code-fold: false
+set.seed(8670)
+x <- runif(120, -2, 2)
+dat <- data.frame(x, y = 1 + 2 * x - x^2 + rnorm(120, sd = 0.7))
+development <- dat[1:80, ]
+test <- dat[81:120, ]
+```
+
+```{r}
+#| label: fig-cv-model-flexibility
+#| echo: false
+#| fig-height: 3.5
+#| fig-cap: "The same development observations are fitted three ways. The dashed curve is the known simulation mean, shown only to explain the example. CV uses held-out outcomes to compare degrees."
+#| fig-alt: "Three panels show degree 1 missing the curvature, degree 2 following the quadratic mean, and degree 8 adding flexibility. All show the same observations and the true mean."
+cv_grid <- data.frame(x = seq(-2, 2, length.out = 301))
+cv_panels <- c("Degree 1: too rigid", "Degree 2: quadratic", "Degree 8: flexible")
+cv_fit_curves <- do.call(rbind, lapply(seq_along(cv_panels), function(j) {
+  d <- c(1, 2, 8)[j]
+  fit <- lm(y ~ poly(x, d), data = development)
+  data.frame(x = cv_grid$x, y = predict(fit, cv_grid), Panel = cv_panels[j])
+}))
+cv_fit_curves$Panel <- factor(cv_fit_curves$Panel, levels = cv_panels)
+cv_truth <- data.frame(x = cv_grid$x, y = 1 + 2 * cv_grid$x - cv_grid$x^2)
+cv_draw(ggplot(development, aes(x, y)) +
+  geom_point(shape = 21, fill = "#F2CBD3", color = "#A66B7E", size = 1.9, alpha = .75) +
+  geom_line(data = cv_truth, linetype = "dashed", color = "#766D70", linewidth = .6) +
+  geom_line(data = cv_fit_curves, aes(color = Panel), linewidth = 1) +
+  facet_wrap(~Panel, nrow = 1) +
+  scale_color_manual(values = c(cv_lavender, cv_mint, cv_rose)) +
+  scale_x_continuous(breaks = c(-2, 0, 2)) +
+  labs(x = "Input x", y = "Response y", title = "More flexibility changes the fitted curve") +
+  guides(color = "none"))
+```
+
+A rigid model may miss the mean pattern (**bias**). A very flexible model can react strongly to the particular sample (**variance**) and fit noise. For nested least-squares models, training MSE cannot increase when we add polynomial terms. Error on new observations can increase. CV checks this prediction tradeoff without knowing the true mean.
+
+## How K-Fold CV Works {#sec-cv-kfold}
+
+Split the $n$ development observations into $K$ roughly equal **folds**. Each fold serves once as validation data; the other $K-1$ folds supply the training data. Every observation receives a prediction from a model fitted **without that observation**.
+
+```{r}
+#| label: fig-cv-folds
+#| echo: false
+#| fig-height: 3.9
+#| fig-cap: "In 5-fold CV, each row is a fresh model fit. Pink is held out; mint is used for training. With 80 observations, each fit trains on 64 and predicts the remaining 16."
+#| fig-alt: "A five-by-five grid has pink validation cells on the diagonal and mint training cells elsewhere, showing the held-out fold rotating across five fits."
+cv_tiles <- expand.grid(Fold = 1:5, Fit = 1:5)
+cv_tiles$Role <- ifelse(cv_tiles$Fold == cv_tiles$Fit, "Validate", "Train")
+cv_draw(ggplot(cv_tiles, aes(Fold, Fit)) +
+  geom_tile(aes(fill = Role), width = .91, height = .78, color = "#FFFEFC", linewidth = 1) +
+  geom_text(aes(label = Role), size = 3.8, color = cv_ink, fontface = "bold") +
+  scale_fill_manual(values = c(Train = "#CDE5D9", Validate = "#F3C5D1")) +
+  scale_x_continuous(breaks = 1:5, labels = paste("Fold", 1:5), position = "top", expand = expansion(.02)) +
+  scale_y_reverse(breaks = 1:5, labels = paste("Fit", 1:5), expand = expansion(.04)) +
+  labs(x = NULL, y = NULL, title = "Held-out folds rotate across fits") +
+  guides(fill = "none") +
+  theme(panel.grid = element_blank(), axis.text = element_text(color = cv_ink)))
+```
+
+::: {.callout-algorithm title="K-fold CV for model comparison"}
+
+1. Choose the candidate models and the loss. Randomly assign the development observations to $K$ folds; use the **same folds for every candidate**.
+2. For each candidate, and for each fold $k$, fit a fresh model on all folds except $k$.
+3. Predict the outcomes in fold $k$ and store their losses. Repeat until every observation has one held-out prediction.
+4. Average all $n$ held-out losses to obtain that candidate's CV error. Select the candidate with the smallest error.
+
+:::
+
+Let $S_k$ contain the indices in fold $k$, and let $\widehat f_d^{(-k)}$ be the degree-$d$ model fitted without that fold. Then
+
+$$
+\operatorname{CV}(d)
+=\frac1n\sum_{k=1}^K\sum_{i\in S_k}
+\left(y_i-\widehat f_d^{(-k)}(x_i)\right)^2.
+$$
+
+**What is averaged?** The squared errors of the held-out predictions. If a held-out outcome is 3 and its prediction is 2.5, it contributes $(3-2.5)^2=0.25$. With $n=80$, sum all 80 such errors and divide by 80. Equal-sized folds also allow averaging their MSEs; unequal folds require weights $|S_k|/n$.
+
+## Select, Refit, and Test {#sec-cv-select}
+
+`prediction[fold == k]` stores the held-out predictions. `poly(x, d)` uses a numerically stable basis for a degree-$d$ polynomial.
+
+```{r}
+#| label: cv-comparison-code
+#| code-fold: false
+K <- 5
+fold <- sample(rep(1:K, length.out = nrow(development)))
+degrees <- 1:8
+cv_mse <- numeric(length(degrees))
+for (d in degrees) {
+  prediction <- numeric(nrow(development))
+  for (k in 1:K) {
+    fit <- lm(y ~ poly(x, d), data = development[fold != k, ])
+    prediction[fold == k] <- predict(fit, development[fold == k, ])
+  }
+  cv_mse[d] <- mean((development$y - prediction)^2)
+}
+best_degree <- degrees[which.min(cv_mse)]
+```
+
+```{r}
+#| label: cv-training-scores
+#| include: false
+cv_train_mse <- vapply(degrees, function(d) {
+  mean(residuals(lm(y ~ poly(x, d), data = development))^2)
+}, numeric(1))
+```
+
+```{r}
+#| label: fig-cv-error-curves
+#| echo: false
+#| fig-height: 3.6
+#| fig-cap: "Training error keeps falling, while CV reaches its minimum at degree 2. The right panel enlarges degrees 2-8; its vertical scale differs from the left panel. Both curves use the same development data; only CV predictions exclude the scored observations."
+#| fig-alt: "Training and CV errors are plotted against polynomial degree. CV is smallest at degree 2; a second panel shows the small increases in CV for more flexible models."
+cv_scores <- rbind(
+  data.frame(Degree = degrees, MSE = cv_train_mse, Error = "Training"),
+  data.frame(Degree = degrees, MSE = cv_mse, Error = "Cross-validation"))
+cv_score_panels <- rbind(transform(cv_scores, View = "All candidates"),
+  transform(subset(cv_scores, Degree >= 2), View = "Closer view: degrees 2-8"))
+cv_score_panels$View <- factor(cv_score_panels$View,
+  levels = c("All candidates", "Closer view: degrees 2-8"))
+cv_draw(ggplot(cv_score_panels, aes(Degree, MSE, color = Error, shape = Error, linetype = Error)) +
+  geom_line(linewidth = .8) + geom_point(size = 2.7) +
+  geom_vline(xintercept = best_degree, linetype = "dotted", color = "#9A8A90", linewidth = .6) +
+  facet_wrap(~View, scales = "free", nrow = 1) +
+  scale_color_manual(values = c("Cross-validation" = cv_rose, Training = cv_mint)) +
+  scale_shape_manual(values = c("Cross-validation" = 16, Training = 17)) +
+  scale_linetype_manual(values = c("Cross-validation" = "solid", Training = "dashed")) +
+  scale_x_continuous(breaks = 1:8) +
+  labs(x = "Polynomial degree", y = "Mean squared error", title = "Choose by held-out error"))
+```
+
+CV selects degree **`r best_degree`**, with MSE **`r sprintf("%.3f", min(cv_mse))`**. We now refit that degree on **all 80 development observations**, then use the 40 reserved test observations once:
+
+```{r}
+#| label: cv-final-fit
+#| code-fold: false
+final_fit <- lm(y ~ poly(x, best_degree), data = development)
+test_prediction <- predict(final_fit, newdata = test)
+c(degree = best_degree, test_MSE = mean((test$y - test_prediction)^2))
+```
+
+The test MSE estimates prediction error for this final fit. It need not equal the CV MSE: CV used smaller training sets and different held-out observations. Also, the smallest CV error was selected from several candidates, so it can be optimistic as a final performance report. Keep the test set out of model selection.
+
+## Choose Folds and Avoid Leakage {#sec-cv-choices}
+
+**5-fold or 10-fold CV** is a useful starting point for independent observations. Each fit uses a fraction $(K-1)/K$ of the development data. **Leave-one-out CV (LOOCV)** sets $K=n$: fit on $n-1$ observations and predict the remaining one, repeating for every observation.
+
+Larger $K$ reduces the training-size difference from the final fit but requires more fits. It does not guarantee a less variable CV estimate. A repeated-CV illustration is in [Supplementary](#sec-cv-supplement).
+
+Two practical details determine whether the comparison is fair:
+
+- **Fit the whole procedure inside each training fold.** Learn imputation, scaling, or feature selection using that fold's training observations, then apply those choices to its validation observations. Using validation outcomes to select features before CV leaks information.
+- **Split according to the prediction task.** Keep repeated observations from the same person together when predicting new people. For future prediction, train on the past and validate on later times; randomly shuffling time points can use future information.
+
+## Summary {#sec-cv-summary}
+
+Cross-validation estimates how a **fitting procedure predicts observations excluded from training**. It helps choose a model or hyperparameter when the population prediction error cannot be calculated directly. Its score measures predictive performance for the chosen loss and a comparable population; it does not establish that the model is the true data-generating mechanism.
+
+The workflow is: **define the prediction task and loss, hold out a test set, compare candidates by CV, refit the selected candidate, and assess it on the test set**. Use the same folds for all candidates, and keep all data-dependent fitting inside the training folds.
+
+| Method | Training / validation per fit | Fits per candidate | Main consideration |
+|:----------------|:--------------------------|:-----------------:|:-------------------------|
+| One split | One training set / one holdout | 1 | Fast; sensitive to the split |
+| $K$-fold CV | $K-1$ folds / one fold | $K$ | Every observation is held out once |
+| LOOCV | $n-1$ observations / one | $n$ | Nearly full training size; often costly |
+| Repeated $K$-fold (optional) | Repeat the fold assignment | $RK$ | Checks sensitivity to partitioning |
+
+Here $n$ is the development sample size and $R$ is the number of repetitions. The separate final test set is not one of the CV folds.
+
+```{=latex}
+\clearpage
+```
+
+## Supplementary {#sec-cv-supplement}
+
+Optional reading:
+
+- James, Witten, Hastie, and Tibshirani (2021), [*An Introduction to Statistical Learning*, 2nd edition](https://www.statlearning.com/). Chapter 5, especially Section 5.1 and the R lab, develops validation, LOOCV, and $K$-fold CV.
+- Hastie, Tibshirani, and Friedman (2009), [*The Elements of Statistical Learning*, 2nd edition](https://hastie.su.domains/ElemStatLearn/). Sections 7.2-7.3 discuss bias and variance; Section 7.10 covers CV and why every model-building step belongs inside validation.
+- [2025 STAT 8670 lecture](https://chikuang.github.io/teaching/2025F_stat8670/05-cv.html): additional models and the ironslag example.
+
+### Repeated CV (optional)
+
+```{r}
+#| label: fig-cv-repeat-splits
+#| echo: false
+#| fig-height: 3.4
+#| fig-cap: "Ten new 5-fold partitions of the same development data give slightly different CV curves. Only degrees 2-8 are shown to make nearby candidates visible. Thin curves are individual partitions; the thick curve is their average. No test observations are used."
+#| fig-alt: "Ten pastel CV curves over degrees 2 through 8 show variation from reassigning folds, with a darker average curve and low errors near degree 2."
+cv_repeat <- matrix(NA_real_, nrow = 10, ncol = length(degrees))
+for (r in 1:10) {
+  fold_r <- sample(rep(1:K, length.out = nrow(development)))
+  for (d in degrees) {
+    pred_r <- numeric(nrow(development))
+    for (k in 1:K) {
+      fit_r <- lm(y ~ poly(x, d), data = development[fold_r != k, ])
+      pred_r[fold_r == k] <- predict(fit_r, development[fold_r == k, ])
+    }
+    cv_repeat[r, d] <- mean((development$y - pred_r)^2)
+  }
+}
+cv_rep_long <- data.frame(Partition = rep(1:10, each = 8),
+  Degree = rep(degrees, times = 10), MSE = as.vector(t(cv_repeat)))
+cv_rep_mean <- data.frame(Degree = degrees, MSE = colMeans(cv_repeat))
+cv_draw(ggplot(subset(cv_rep_long, Degree >= 2), aes(Degree, MSE)) +
+  geom_line(aes(group = Partition), color = "#D8AEC9", linewidth = .65, alpha = .75) +
+  geom_point(aes(group = Partition), color = "#D8AEC9", size = 1.3, alpha = .75) +
+  geom_line(data = subset(cv_rep_mean, Degree >= 2), color = cv_lavender, linewidth = 1.3) +
+  geom_point(data = subset(cv_rep_mean, Degree >= 2), shape = 21, fill = "#E6DFF2",
+    color = cv_lavender, size = 2.6, stroke = 1) +
+  scale_x_continuous(breaks = 2:8) +
+  labs(x = "Polynomial degree", y = "5-fold CV MSE", title = "A different split can change the comparison"))
+```
+
+Repeating CV checks sensitivity to the fold assignment; it does not create new observations. Here several degrees have similar scores. A tiny improvement in one partition is weak evidence for a more complex model. The repeated curves describe **split sensitivity**, not independent experiments or a confidence interval.
+
