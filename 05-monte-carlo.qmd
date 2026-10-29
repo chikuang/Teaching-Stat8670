@@ -385,13 +385,14 @@ The width is 2. Use `2 * mean(exp(-x))`, or average `y24 <- 2 * exp(-x)`.
 
 ## Monte Carlo Standard Error {#sec-mc-error}
 
-We use the same example throughout:
+Let $X\sim P$ be the input and $Y=g(X)$ the output. From $N$ independent draws, estimate
 
 $$
-\theta=\mathbb{E}[e^U]=e-1,\qquad U\sim\operatorname{Uniform}(0,1).
+\theta=\mathbb{E}[g(X)],\qquad
+\widehat\theta=\overline Y=\frac1N\sum_{i=1}^N Y_i.
 $$
 
-For each independent input $U_i$, calculate one output $Y_i=e^{U_i}$. The values being averaged are $Y_1,\ldots,Y_N$, and the estimate is $\widehat\theta=\overline Y=N^{-1}\sum_{i=1}^N Y_i$. Fresh inputs change both the individual outputs and their average.
+Our example uses $X=U\sim\operatorname{Uniform}(0,1)$ and $g(u)=e^u$, so $\theta=e-1$. Fresh draws change both the outputs and their average.
 
 ```{r}
 #| label: fig-mc-variation
@@ -418,22 +419,29 @@ ggplot(variation_data, aes(value, fill = level)) +
   theme(legend.position = "none", strip.text = element_text(size = 11))
 ```
 
-The **standard deviation** $s_Y$ describes the spread of individual outputs. The **Monte Carlo standard error (MCSE)** estimates the standard deviation of their average across runs. Independence gives
+The population variance $\operatorname{Var}(Y)=\sigma_Y^2$ describes output spread. From one run, estimate it using
 
 $$
-\operatorname{Var}(\overline Y)=\frac{\operatorname{Var}(Y)}{N},
+s_Y^2=\frac{1}{N-1}\sum_{i=1}^N(Y_i-\overline Y)^2,
+\qquad s_Y=\sqrt{s_Y^2}.
+$$
+
+R's `var(y)` is $s_Y^2$; `sd(y)` is $s_Y$. **MCSE** is the SD of the average across runs. For independent outputs with finite variance,
+
+$$
+\operatorname{Var}(\overline Y)=\frac{\sigma_Y^2}{N},
 \qquad
-\widehat{\operatorname{MCSE}}=\frac{s_Y}{\sqrt N}.
+\widehat{\operatorname{MCSE}}=\sqrt{\frac{s_Y^2}{N}}=\frac{s_Y}{\sqrt N}.
 $$
 
-We estimate the unknown variance of $Y$ with the sample variance $s_Y^2$, so MCSE can be calculated from a single run.
+The subscript matters: $s_X$ measures input spread; $s_Y$ measures output spread. Use $s_Y/\sqrt N$ for $\mathbb{E}[g(X)]$, or $s_X/\sqrt N$ when averaging $X$ itself.
 
 ::: {.callout-algorithm title="Plain Monte Carlo"}
 
-1. Choose $N$ and draw $U_1,\ldots,U_N$ independently from $\operatorname{Uniform}(0,1)$.
-2. Calculate $Y_i=e^{U_i}$ for each draw.
-3. Average these $N$ outputs: $\widehat\theta=N^{-1}\sum_{i=1}^N Y_i$.
-4. Report $\widehat\theta$ and $s_Y/\sqrt N$, using the same $N$ outputs to calculate $s_Y$.
+1. Specify the input distribution $P$, output function $g$, and sample size $N$.
+2. Draw $X_1,\ldots,X_N$ independently from $P$; compute $Y_i=g(X_i)$.
+3. Calculate $\widehat\theta=\overline Y$ and the sample SD $s_Y$ of these outputs.
+4. Report $\widehat\theta$ and estimated MCSE $s_Y/\sqrt N$.
 
 :::
 
@@ -444,7 +452,8 @@ set.seed(8670)
 N <- 10000
 u <- runif(N)
 y <- exp(u)
-c(estimate = mean(y), MCSE = sd(y) / sqrt(N))
+c(estimate = mean(y), var_Y = var(y), s_Y = sd(y),
+  MCSE = sd(y) / sqrt(N))
 ```
 
 For large $N$, an approximate 95% Monte Carlo interval is $\overline Y\pm1.96\,s_Y/\sqrt N$. It describes simulation error with the model held fixed. Halving MCSE requires about four times as many draws; it does not reduce the spread of individual outputs.
@@ -530,14 +539,14 @@ With a budget of $N=2K$ evaluations, the antithetic estimator has variance $(\si
 
 ::: {.callout-algorithm title="Antithetic variables"}
 
-1. Choose the number of pairs $K$ and draw $U_1,\ldots,U_K$ independently from $\operatorname{Uniform}(0,1)$.
-2. For each $U_k$, evaluate both $e^{U_k}$ and $e^{1-U_k}$.
-3. Store their pair average $A_k=(e^{U_k}+e^{1-U_k})/2$.
-4. Report $\widehat\theta_{\mathrm{anti}}=K^{-1}\sum_{k=1}^K A_k$ and MCSE $s_A/\sqrt K$.
+1. Choose $K$ and $T$ so $T(X)\sim P$ when $X\sim P$, and paired outputs have negative covariance.
+2. Draw independent $X_k\sim P$; evaluate $Y_k=g(X_k)$ and $Y_k^{\prime}=g(T(X_k))$.
+3. Store $A_k=(Y_k+Y_k^{\prime})/2$ for each pair.
+4. Report $\widehat\theta_{\mathrm{anti}}=K^{-1}\sum_{k=1}^K A_k$ and estimated MCSE $s_A/\sqrt K$.
 
 :::
 
-The independent units are the **$K$ pair averages**, so both `sd()` and MCSE use `pair_y`. Here 5,000 pairs cost 10,000 evaluations.
+Here $g(u)=e^u$ and $T(u)=1-u$. Compute `sd(pair_y)` from the **$K$ independent pair averages**. With $K=5000$, the cost is 10,000 evaluations.
 
 ```{r}
 #| label: mc-antithetic-core
@@ -551,60 +560,59 @@ c(estimate = mean(pair_y), MCSE = sd(pair_y) / sqrt(K))
 
 ## Control Variates {#sec-mc-control}
 
-A **control variate** is a variable $C$ related to the output $Y$, with a known mean $\mu_C$. For a fixed coefficient $c$, replace $Y$ by the adjusted value
+A **control variate** $C=h(X)$ has a known mean $\mu_C$ and accompanies the output $Y=g(X)$. Uppercase $C$ is random; lowercase $c$ is a fixed weight controlling the adjustment:
 
 $$
 Z=Y+c(C-\mu_C).
 $$
 
-Because $\mathbb{E}[C-\mu_C]=0$, the adjustment preserves $\mathbb{E}[Z]=\mathbb{E}[Y]=\theta$. We average the **adjusted values** $Z_1,\ldots,Z_N$:
+Since $\mathbb{E}[C-\mu_C]=0$, $\mathbb{E}[Z]=\theta$ for any fixed $c$. Average the adjusted outputs:
 
 $$
 \widehat\theta_{\mathrm{cv}}=\overline Z
 =\overline Y+c(\overline C-\mu_C).
 $$
 
-This corrects the original estimate using the difference between the simulated control mean $\overline C$ and its known mean $\mu_C$.
+The difference $\overline C-\mu_C$ measures how far this run's control mean is from its known value.
 
 ### How do we choose the coefficient?
 
-Choose $c$ to minimize the variance of $Z$. Expanding the variance gives a quadratic in $c$:
+Covariance measures joint variation:
+
+$$
+\operatorname{Cov}(C,Y)=\mathbb{E}[CY]-\mu_C\theta
+=\operatorname{Cov}(Y,C).
+$$
+
+Positive covariance means $C$ and $Y$ tend to deviate from their means in the same direction; negative covariance means opposite directions. Choose $c$ to minimize
 
 $$
 \operatorname{Var}(Z)
 =\operatorname{Var}(Y)+c^2\operatorname{Var}(C)
-+2c\operatorname{Cov}(Y,C).
++2c\operatorname{Cov}(C,Y).
 $$
 
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
 ```
 
-Differentiate and set the derivative to zero:
+Differentiate with respect to $c$ and set the derivative to zero:
 
 $$
-2c\operatorname{Var}(C)+2\operatorname{Cov}(Y,C)=0
+2c\operatorname{Var}(C)+2\operatorname{Cov}(C,Y)=0
 \quad\Longrightarrow\quad
-c^*=-\frac{\operatorname{Cov}(Y,C)}{\operatorname{Var}(C)}.
+c^*=-\frac{\operatorname{Cov}(C,Y)}{\operatorname{Var}(C)}.
 $$
 
 ```{=latex}
 \end{minipage}\par
 ```
 
-For $\operatorname{Var}(C)>0$, the quadratic opens upward, so this is its minimum. Substitution gives
-
-$$
-\operatorname{Var}(Z_{c^*})
-=\operatorname{Var}(Y)
--\frac{\operatorname{Cov}(Y,C)^2}{\operatorname{Var}(C)}.
-$$
-
-A larger absolute correlation with $Y$ removes more variance; an uncorrelated control gives $c^*=0$.
+For $\operatorname{Var}(C)>0$, this is the minimum. The weight $c^*$ has the **opposite sign** to the covariance: it cancels the variation in $Y$ associated with $C$. Zero covariance gives $c^*=0$.
 
 ### Calculate c for our example
 
-Take $Y=e^U$ and $C=U$. We know $\mu_C=1/2$ and $\operatorname{Var}(U)=1/12$. To find the covariance, first use integration by parts:
+Here $g(u)=e^u$, $h(u)=u$, $\mu_C=1/2$, and $\operatorname{Var}(C)=1/12$. Integration by parts gives
 
 $$
 \mathbb{E}[Ue^U]=\int_0^1 ue^u\,du
@@ -615,14 +623,14 @@ Therefore,
 
 $$
 \begin{aligned}
-\operatorname{Cov}(e^U,U)
+\operatorname{Cov}(U,e^U)
 &=1-\frac{e-1}{2}\approx0.140859,\\
 c^*&=-\frac{1-(e-1)/2}{1/12}
 =6e-18\approx-1.690309.
 \end{aligned}
 $$
 
-The coefficient is negative because $e^U$ and $U$ move together. Inputs above 0.5 receive a downward correction; inputs below 0.5 receive an upward correction. For $U=0.2$, the original output is $e^{0.2}\approx1.2214$, and the adjusted value is $Z\approx1.2214+(-1.6903)(0.2-0.5)=1.7285$.
+The positive covariance gives $c^*<0$: correct downward when $U>0.5$ and upward when $U<0.5$. For $U=0.2$, $Y\approx1.2214$ becomes $Z\approx1.2214+(-1.6903)(0.2-0.5)=1.7285$.
 
 ```{r}
 #| label: fig-mc-control
@@ -658,10 +666,10 @@ ggplot(control_curves, aes(u, value, color = Method)) +
 
 ::: {.callout-algorithm title="Control variates"}
 
-1. Choose $N$, the control $C=U$, its known mean $1/2$, and the fixed coefficient $c=c^*$ calculated above.
-2. Draw $U_1,\ldots,U_N$ independently from $\operatorname{Uniform}(0,1)$ and calculate $Y_i=e^{U_i}$.
-3. Store each adjusted output $Z_i=Y_i+c(U_i-1/2)$.
-4. Report $\widehat\theta_{\mathrm{cv}}=N^{-1}\sum_{i=1}^N Z_i$ and MCSE $s_Z/\sqrt N$.
+1. Choose $N$, a control function $h$ with known mean $\mu_C=\mathbb{E}[h(X)]$, and a fixed coefficient $c$ (ideally $c^*$).
+2. Draw independent $X_i\sim P$. From each input, calculate $Y_i=g(X_i)$ and $C_i=h(X_i)$.
+3. Store $Z_i=Y_i+c(C_i-\mu_C)$.
+4. Report $\widehat\theta_{\mathrm{cv}}=\overline Z$ and estimated MCSE $s_Z/\sqrt N$, using the sample SD of the adjusted outputs.
 
 :::
 
@@ -676,7 +684,7 @@ adjusted_y <- exp(u) + c_star * (u - 0.5)
 c(estimate = mean(adjusted_y), MCSE = sd(adjusted_y) / sqrt(N))
 ```
 
-Use the **known mean** 0.5. Replacing it with `mean(u)` makes $\overline C-\overline C=0$ and leaves the original estimate unchanged. When the covariance is unknown, estimate $c^*$ from a separate pilot sample: divide the negative sample covariance of $Y$ and $C$ by the sample variance of $C$. Keep that coefficient fixed for fresh main-run draws.
+Use the **known mean** 0.5; substituting `mean(u)` makes the average adjustment zero. If the covariance is unknown, estimate $c$ from independent pilot pairs with `-cov(C, Y) / var(C)`, then hold it fixed for the main run.
 
 ```{=latex}
 \clearpage
