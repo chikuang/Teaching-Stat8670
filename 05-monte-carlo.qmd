@@ -383,34 +383,30 @@ The width is 2. Use `2 * mean(exp(-x))`, or average `y24 <- 2 * exp(-x)`.
 
 :::
 
-## Where Does the Variation Come From? {#sec-mc-error}
+## Monte Carlo Standard Error {#sec-mc-error}
 
-In our example, **`runif()` introduces the randomness**. Once $U$ is known, `exp(U)` is determined. A different set of uniforms gives different outputs, so their average also changes.
+We use the same example throughout:
 
-There are two levels of variation:
+$$
+\theta=\mathbb{E}[e^U]=e-1,\qquad U\sim\operatorname{Uniform}(0,1).
+$$
 
-| Level | What changes? | What stays fixed? |
-|:----------------|:-----------------------------------|:--------------------------|
-| Within one run | Individual inputs $U_i$ and outputs $e^{U_i}$ | The model and function |
-| Across fresh runs | The average $\widehat\theta$ | The target $\theta=e-1$ |
+Fresh random inputs give different outputs $Y_i=e^{U_i}$ and a different average $\widehat\theta=\overline Y$. The figure separates the variation of one output from the variation of an average.
 
 ```{r}
 #| label: fig-mc-variation
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
+#| echo: false
 #| fig-width: 9
 #| fig-height: 3.8
-#| fig-cap: "Left: 400 individual outputs. Right: 400 estimates, each averaging 100 fresh outputs. Both panels use the same horizontal scale. The dashed line is the fixed target e - 1; the averages cluster more tightly around it. The vertical scales differ."
-#| fig-alt: "Side-by-side histograms distinguish the broad spread of individual exp(U) values from the much smaller spread of averages of 100 such values. A dashed vertical line marks the same target in both panels."
+#| fig-cap: "Left: 400 individual outputs. Right: 400 independent runs, each averaging 100 outputs. The horizontal scale is the same; the dashed line marks e - 1."
+#| fig-alt: "Individual exp(U) values spread from 1 to e, while averages of 100 outputs cluster near e minus one."
 set.seed(8670)
 variation_draws <- exp(runif(400))
 variation_means <- replicate(400, mean(exp(runif(100))))
 variation_data <- data.frame(
   value = c(variation_draws, variation_means),
-  level = factor(rep(c("One draw: individual output",
-                      "One run: average of 100 outputs"), each = 400),
-                 levels = c("One draw: individual output",
-                            "One run: average of 100 outputs"))
+  level = factor(rep(c("Individual output", "Average of 100 outputs"), each = 400),
+                 levels = c("Individual output", "Average of 100 outputs"))
 )
 ggplot(variation_data, aes(value, fill = level)) +
   geom_histogram(binwidth = .05, boundary = 1, color = "white") +
@@ -418,162 +414,49 @@ ggplot(variation_data, aes(value, fill = level)) +
   facet_wrap(~level, scales = "free_y") +
   scale_fill_manual(values = c("#0072B2", "#D55E00")) +
   coord_cartesian(xlim = c(1, 2.75)) +
-  labs(x = "Value (same horizontal scale)", y = "Count") +
+  labs(x = "Value", y = "Count") +
   theme(legend.position = "none", strip.text = element_text(size = 11))
 ```
 
-**Read the right panel carefully:** one observation in that histogram is a whole run's average, not one simulated output. We repeat entire runs here to *see* the variability of the estimator.
-
-### SD describes outputs; MCSE describes the estimate
-
-| Quantity | What it describes |
-|:-------------------------|:--------------------------------------------------------|
-| `sd(y)` | How much the individual simulated values vary |
-| `sd(y) / sqrt(N)` | How much their average would vary across repeated simulations |
-
-The second quantity is the **Monte Carlo standard error**, or MCSE. We can estimate it from a single run; we do not need hundreds of runs to report it. For independent values with finite variance,
+The **standard deviation** $s_Y$ describes the spread of individual outputs. The **Monte Carlo standard error (MCSE)** estimates the standard deviation of their average across runs. From one run of $N$ independent outputs with finite variance,
 
 $$
-\widehat{\operatorname{MCSE}}=\frac{s_Y}{\sqrt{N}}.
+\widehat{\operatorname{MCSE}}=\frac{s_Y}{\sqrt N}.
 $$
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
 
 ```{r}
 #| label: mc-error-core
 #| code-fold: false
 set.seed(8670)
 N <- 10000
-u <- runif(N)
-y <- exp(u)
-estimate <- mean(y)
-mcse <- sd(y) / sqrt(N)
-c(estimate = estimate, MCSE = mcse)
+y <- exp(runif(N))
+c(estimate = mean(y), MCSE = sd(y) / sqrt(N))
 ```
 
-```{=latex}
-\end{minipage}\par
-```
+For large $N$, an approximate 95% Monte Carlo interval is $\overline Y\pm1.96\,s_Y/\sqrt N$. It describes simulation error with the model held fixed. Halving MCSE requires about four times as many draws; it does not reduce the spread of individual outputs.
 
-A smaller MCSE means less simulation noise. For a sufficiently large sample, an approximate 95% Monte Carlo interval is
+## Variance Reduction {#sec-mc-efficiency}
+
+Instead of increasing $N$, we can average less variable quantities with the same expectation. **Variance reduction** changes how we construct the estimate while preserving its target. We compare methods using the same number of evaluations of `exp()`.
+
+## Antithetic Variables {#sec-mc-antithetic}
+
+Both $U$ and $1-U$ are uniform. Pair their outputs and average:
 
 $$
-\widehat\theta\ \pm\ 1.96\,\widehat{\operatorname{MCSE}}.
+A_k=\frac{e^{U_k}+e^{1-U_k}}{2},\qquad
+\widehat\theta_{\mathrm{anti}}=\frac1K\sum_{k=1}^K A_k.
 $$
 
-```{r}
-#| label: mc-interval-core
-c(lower = estimate - 1.96 * mcse,
-  upper = estimate + 1.96 * mcse)
-```
-
-::: {#mc-error-warning .callout-warning title="What this interval means"}
-
-It measures uncertainty caused by the **simulation**, with the probability model held fixed. It does not include uncertainty about whether the model matches reality or about parameters estimated from real data. A tiny MCSE does not fix a wrong formula or a coding mistake.
-
-For a rare event, seeing zero successes does not prove the probability is zero; the simple MCSE formula can be misleading in that case.
-
-:::
-
-### The rule of four
-
-MCSE decreases like $1/\sqrt{N}$. To **halve MCSE**, use about **four times as many draws**.
-
-Larger $N$ makes the **average** more stable. Individual outputs still come from the same distribution and retain the same underlying variability.
-
-For example, if 1,000 draws give MCSE 0.02, then 4,000 draws should give MCSE about 0.01. This is a planning approximation, not a guarantee for one run.
-
-
-
-::: {#exr-mc-precision}
-
-## In Class: Halve the MCSE
-
-A run with 2,000 draws has MCSE 0.04. About how many draws are needed for MCSE 0.02?
-
-:::
-
-::: {#sol-mc-precision}
-
-Use about $4\times2000=8000$ draws.
-
-:::
-
-## Variance Reduction: A More Stable Average {#sec-mc-efficiency}
-
-Increasing $N$ is one way to improve precision. Another is to keep the same target but average **less variable values**.
-
-We are reducing the variation of our **numerical estimate across runs**. We are not making the modeled system itself less random. Simply forcing every answer toward a convenient number would change the question; a valid method must preserve the target.
-
-For the [muffin shop](#sec-mc-muffin-shop), this means obtaining more stable estimates of the shortage probability **with the stock still fixed at 12**. Preparing more muffins changes the probability being estimated; that is a different stocking policy, not variance reduction.
-
-We will try two methods:
-
-| Method | Idea |
-|:----------------------|:----------------------------------------------------------|
-| Antithetic variables | Pair a high value with a low value, then average the pair |
-| Control variates | Use a quantity with a known mean to correct some of the noise |
-
-For a fair comparison, use the **same target** and count the work. In our examples, we give each method the same number of evaluations of `exp()`.
-
-A method is better when its estimates vary less **across repeated experiments**. Being closer to the answer in one run can just be luck.
-
-## Antithetic Variables: Pair Opposites {#sec-mc-antithetic}
-
-Keep the target $\theta=\mathbb{E}[e^U]$. Since both $U$ and $1-U$ are uniform, both $e^U$ and $e^{1-U}$ have expectation $\theta$.
-
-If $U=0.2$, the two values are approximately 1.221 and 2.226. Their average is 1.723. As $U$ increases, one value rises and the other falls, so the pair average is more stable.
-
-::: {#mc-antithetic-algorithm .callout-algorithm title="Three steps"}
-
-1. Draw $K$ independent uniforms.
-2. For each uniform, calculate the **pair average**
-
-$$
-A_k=\frac{e^{U_k}+e^{1-U_k}}{2}.
-$$
-
-3. Average the $K$ pair averages.
-
-Each pair uses two evaluations of `exp()`: **500 pairs cost 1,000 evaluations**.
-
-:::
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
-
-```{r}
-#| label: mc-antithetic-core
-#| code-fold: false
-set.seed(8670)
-K <- 500
-u <- runif(K)
-pair_y <- (exp(u) + exp(1 - u)) / 2
-c(estimate = mean(pair_y), MCSE = sd(pair_y) / sqrt(K),
-  exact = exp(1) - 1)
-```
-
-```{=latex}
-\end{minipage}\par
-```
-
-::: {#mc-antithetic-mcse .callout-warning title="Count pairs when calculating MCSE"}
-
-The two values within a pair are dependent. The **pair averages** are independent across pairs. Use `sd(pair_y) / sqrt(K)`, with $K$ equal to the number of pairs.
-
-:::
+As $U$ increases, one output rises and the other falls. Their fluctuations partly cancel, so the pair average varies less. Since both outputs have mean $\theta$, so does $A_k$.
 
 ```{r}
 #| label: fig-mc-antithetic
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
+#| echo: false
 #| fig-width: 8
-#| fig-height: 4.1
-#| fig-cap: "The pair average changes much less with U than either member of the pair. Its expectation is still e - 1 (dashed line)."
-#| fig-alt: "The curves exp(U) and exp(1-U) move in opposite directions. Their pair average is flatter and stays close to the target."
+#| fig-height: 3.8
+#| fig-cap: "The two outputs move in opposite directions. Their pair average is flatter, with the same mean e - 1 (dashed line)."
+#| fig-alt: "The curves exp(U) and exp(1-U) slope in opposite directions; their pair average remains near the target."
 anti_grid <- seq(0, 1, length.out = 301)
 anti_curves <- rbind(
   data.frame(u = anti_grid, value = exp(anti_grid), Method = "exp(U)"),
@@ -584,49 +467,64 @@ anti_curves <- rbind(
 ggplot(anti_curves, aes(u, value, color = Method)) +
   geom_line(linewidth = .9) +
   geom_hline(yintercept = exp(1) - 1, linetype = "dashed", color = "grey35") +
-  scale_color_manual(values = c("exp(U)" = "#0072B2", "exp(1 - U)" = "#999999",
+  scale_color_manual(values = c("exp(U)" = "#0072B2", "exp(1 - U)" = "#777777",
                                 "Pair average" = "#D55E00")) +
   labs(x = "Uniform input U", y = "Value", color = NULL) +
   theme(legend.position = "bottom")
 ```
 
-**When does it help?** When the two output values tend to move in opposite directions. Reflection alone does not guarantee improvement. For example, $g(u)=(u-1/2)^2$ gives identical values at $u$ and $1-u$, so the pair adds no new information.
+With $K=5000$ independent pairs, the cost is 10,000 evaluations. Calculate MCSE from the **pair averages**, because the two outputs within each pair are dependent.
 
-::: {#exr-mc-antithetic}
+```{r}
+#| label: mc-antithetic-core
+#| code-fold: false
+set.seed(8670)
+K <- 5000
+u <- runif(K)
+pair_y <- (exp(u) + exp(1 - u)) / 2
+c(estimate = mean(pair_y), MCSE = sd(pair_y) / sqrt(K))
+```
 
-## In Class: What Is the Sample Size?
+At equal cost, pairing helps when the paired outputs have negative covariance. Reflection alone does not guarantee this for every function.
 
-You generate 500 independent pairs. Should the MCSE use `sqrt(500)` or `sqrt(1000)` in the denominator, and which values go into `sd()`?
+## Control Variates {#sec-mc-control}
 
-:::
-
-::: {#sol-mc-antithetic}
-
-Use `sd(pair_y) / sqrt(500)`: there are 500 independent pair averages.
-
-:::
-
-## Control Variates: Use a Known Mean {#sec-mc-control}
-
-Again, estimate $\mathbb{E}[e^U]$. We know that $\mathbb{E}[U]=0.5$.
-
-If the sampled uniforms happen to be large, the sampled values of $e^U$ also tend to be large. We can use $U-0.5$ to correct part of this fluctuation:
+A **control variate** is a variable related to the output whose mean is known. Here $e^U$ increases with $U$, and $\mathbb{E}[U]=0.5$. Use
 
 $$
-Y_{\mathrm{adj}}=e^U+c(U-0.5).
+Z=e^U+c(U-0.5).
 $$
 
-For any **fixed** $c$, the adjustment has expectation zero. It changes the variability while keeping the same target.
+For any fixed $c$, the adjustment has mean zero, so $\mathbb{E}[Z]=\theta$. We choose $c=-1.7$: inputs above 0.5 receive a downward correction, and inputs below 0.5 receive an upward correction.
 
-### Which direction should the correction go?
-
-We use **$c=-1.7$**, which is close to the best coefficient for this example:
-
-- If the sampled inputs are unusually large on average, their outputs also tend to be large. The correction moves the estimate **down**.
-- If the sampled inputs are unusually small on average, the correction moves the estimate **up**.
-- Across repeated runs, the correction averages to **zero**, so the target stays the same.
-
-The coefficient controls the size of this correction. Its optimal formula and derivation are in [Supplementary](#mc-control-derivation).
+```{r}
+#| label: fig-mc-control
+#| echo: false
+#| fig-width: 8
+#| fig-height: 3.8
+#| fig-cap: "Arrows show the correction from exp(U) to exp(U) - 1.7(U - 0.5). The adjusted curve is flatter; both curves have mean e - 1 (dashed line)."
+#| fig-alt: "The original curve rises steeply. Arrows move low-input outputs upward and high-input outputs downward to a flatter adjusted curve."
+control_grid <- seq(0, 1, length.out = 301)
+control_curves <- rbind(
+  data.frame(u = control_grid, value = exp(control_grid), Method = "Original"),
+  data.frame(u = control_grid, value = exp(control_grid) - 1.7 * (control_grid - .5),
+             Method = "Adjusted")
+)
+control_arrows <- data.frame(u = c(.1, .25, .75, .9))
+control_arrows$original <- exp(control_arrows$u)
+control_arrows$adjusted <- control_arrows$original - 1.7 * (control_arrows$u - .5)
+ggplot(control_curves, aes(u, value, color = Method)) +
+  geom_hline(yintercept = exp(1) - 1, linetype = "dashed", color = "grey35") +
+  geom_segment(data = control_arrows,
+    aes(x = u, xend = u, y = original, yend = adjusted), inherit.aes = FALSE,
+    arrow = grid::arrow(length = grid::unit(2.5, "mm"), type = "closed"),
+    color = "#555555", linewidth = .6) +
+  geom_line(linewidth = .9) +
+  scale_color_manual(values = c(Original = "#0072B2", Adjusted = "#D55E00"),
+                     breaks = c("Original", "Adjusted")) +
+  labs(x = "Uniform input U", y = "Value", color = NULL) +
+  theme(legend.position = "bottom")
+```
 
 ```{r}
 #| label: mc-control-core
@@ -634,468 +532,30 @@ The coefficient controls the size of this correction. Its optimal formula and de
 set.seed(8670)
 N <- 10000
 u <- runif(N)
-c_used <- -1.7
-controlled_y <- exp(u) + c_used * (u - 0.5)
-c(estimate = mean(controlled_y),
-  MCSE = sd(controlled_y) / sqrt(N), exact = exp(1) - 1)
+adjusted_y <- exp(u) - 1.7 * (u - 0.5)
+c(estimate = mean(adjusted_y), MCSE = sd(adjusted_y) / sqrt(N))
 ```
 
-```{r}
-#| label: mc-target-value
-#| include: false
-theta_exp <- exp(1) - 1
-```
+Use the **known mean** 0.5. Replacing it with `mean(u)` makes the average correction zero and leaves the original estimate unchanged. The best coefficient is $c^*=-\operatorname{Cov}(e^U,U)/\operatorname{Var}(U)\approx-1.6903$. If it must be estimated, use a separate pilot sample and keep it fixed for the main run.
 
-```{r}
-#| label: fig-mc-control
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4.1
-#| fig-cap: "The adjusted curve is flatter. Both curves have mean e - 1 under uniform sampling; the dashed line marks that common target."
-#| fig-alt: "The original contribution exp(U) increases steeply; the adjusted contribution stays close to the expectation. Both are plotted on the same vertical scale."
-control_grid <- seq(0, 1, length.out = 301)
-control_curves <- rbind(
-  data.frame(u = control_grid, value = exp(control_grid), Method = "Original"),
-  data.frame(u = control_grid,
-    value = exp(control_grid) + c_used * (control_grid - .5), Method = "Controlled")
-)
-ggplot(control_curves, aes(u, value, color = Method)) +
-  geom_line(linewidth = .9) +
-  geom_hline(yintercept = theta_exp, linetype = "dashed", color = "grey35") +
-  scale_color_manual(values = c(Original = "#0072B2", Controlled = "#D55E00")) +
-  labs(x = "Uniform input U", y = "Value being averaged", color = NULL) +
-  theme(legend.position = "bottom")
-```
+## Summary {#sec-mc-summary}
 
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
+[]{#sec-mc-comparison}
 
-::: {#mc-control-warning .callout-warning title="The control mean must be known"}
+In these examples, all three methods use 10,000 evaluations of `exp()`. MCSE measures precision; closeness to $e-1$ in one run can be due to chance.
 
-Use the known mean **0.5**, not `mean(u)`. Subtracting `mean(u)` would make the average adjustment zero and leave the original estimate unchanged.
+| Method | Values to average | Estimated MCSE |
+|:----------------|:-----------------------------------------|:-------------------------|
+| Plain Monte Carlo | $Y_i=e^{U_i}$ | $s_Y/\sqrt N$ |
+| Antithetic | $A_k=(e^{U_k}+e^{1-U_k})/2$ | $s_A/\sqrt K$ |
+| Control variate | $Z_i=e^{U_i}-1.7(U_i-0.5)$ | $s_Z/\sqrt N$ |
 
-If you need to estimate $c$, use a separate pilot sample and then keep $c$ fixed for the main run. A worked example is in [Supplementary](#mc-control-pilot-details).
-
-:::
-
-```{=latex}
-\end{minipage}\par
-```
-
-::: {#exr-mc-control}
-
-## In Class: Which Sign Removes the Noise?
-
-In one run, `mean(u)` is 0.55 instead of the known mean 0.5. Would you expect `mean(exp(u))` to be too high or too low? With $c=-1.7$, which direction does the correction move it? Must this run become closer to the truth?
-
-:::
-
-::: {#sol-mc-control}
-
-It tends to be too high. The average correction is $-1.7(0.55-0.5)=-0.085$, so it moves downward. Improvement is about smaller variability across repeated runs; a particular run is not guaranteed to be closer to the truth.
-
-:::
-
-## Compare the Three Methods {#sec-mc-comparison}
-
-We repeat the estimation of $\mathbb{E}[e^U]$ **800 times**. Every experiment gives each method 1,000 evaluations of `exp()`:
-
-- **Plain:** average 1,000 values of $e^U$.
-- **Antithetic:** average 500 pair averages.
-- **Control:** average 1,000 adjusted values, using fixed $c=-1.7$.
-
-Different experiments use fresh random draws. Less vertical spread in the boxplot means the method gives more stable answers.
-
-Here **$N=1000$** is the work budget for one estimate, while **$B=800$** is how many times we repeat the experiment to compare methods. We keep the 800 estimates separate to inspect their spread.
-
-```{r}
-#| label: mc-common-budget
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
-#| code-summary: "Repeated experiments with the correct MCSE for each method"
-set.seed(8670)
-N <- 1000
-B <- 800
-benchmark <- replicate(B, {
-  u <- runif(N)
-  raw_y <- exp(u)
-  pair_index <- seq_len(N / 2)
-  outputs <- list(
-    Plain = raw_y,
-    Antithetic = (raw_y[pair_index] + exp(1 - u[pair_index])) / 2,
-    Control = raw_y + c_used * (u - .5)
-  )
-  vapply(outputs, function(y) {
-    c(Estimate = mean(y), MCSE = sd(y) / sqrt(length(y)))
-  }, numeric(2))
-})
-benchmark_estimates <- benchmark["Estimate", , ]
-benchmark_mcses <- benchmark["MCSE", , ]
-benchmark_variances <- apply(benchmark_estimates, 1, var)
-benchmark_table <- data.frame(
-  Method = rownames(benchmark_estimates),
-  Bias = rowMeans(benchmark_estimates) - theta_exp,
-  Empirical_SD = sqrt(benchmark_variances),
-  Mean_MCSE = rowMeans(benchmark_mcses),
-  Reduction_percent = 100 * (1 - benchmark_variances / benchmark_variances["Plain"]),
-  row.names = NULL
-)
-knitr::kable(benchmark_table[, c("Method", "Empirical_SD", "Reduction_percent")],
-  digits = c(0, 5, 1), booktabs = TRUE,
-  col.names = c("Method", "SD of repeated estimates", "Variance removed (%)"))
-```
-
-```{r}
-#| label: fig-mc-method-comparison
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4.7
-#| fig-cap: "Each boxplot contains 800 estimates made with 1,000 evaluations per estimate. The dashed line is the true answer e - 1. Antithetic pairs and the fixed control adjustment reduce the spread."
-#| fig-alt: "Boxplots for ordinary, antithetic, and controlled estimates, all centered near e minus one; the latter two have visibly smaller spread."
-benchmark_long <- data.frame(
-  Method = factor(rep(rownames(benchmark_estimates), each = B),
-                  levels = c("Plain", "Antithetic", "Control")),
-  Estimate = as.vector(t(benchmark_estimates))
-)
-ggplot(benchmark_long, aes(Method, Estimate, fill = Method)) +
-  geom_boxplot(width = .5, outlier.alpha = .2) +
-  geom_hline(yintercept = theta_exp, linetype = "dashed") +
-  scale_fill_manual(values = c(Plain = "#0072B2", Antithetic = "#D55E00",
-                               Control = "#009E73")) +
-  labs(x = NULL, y = "Estimated E[exp(U)]") +
-  theme(legend.position = "none")
-```
-
-**What should students notice?** All three methods aim at the same dashed line. Antithetic pairing and the control adjustment produce a tighter cluster of estimates. The improvement comes from how we construct the values being averaged.
-
-These results apply to this example. A method's name alone does not guarantee a gain. If runtime matters, also count pilot runs and the work needed to calculate a control.
-
-## Quick Check {#sec-mc-practice}
-
-::: {#exr-mc-concepts}
-
-## True or False?
-
-1. A different random seed changes the target $\mathbb{E}[e^U]$.
-2. Increasing $N$ makes the average more stable, even though individual outputs still vary.
-3. Reusing the same seed proves that the estimate has no simulation uncertainty.
-4. Variance reduction aims to keep the same target while reducing the spread of estimates.
-
-:::
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
-
-::: {#sol-mc-concepts}
-
-| Item | Answer | Reason |
-|:-----:|:-----:|:------------------------------------------------------------|
-| 1 | F | The target is fixed; the random draws and estimate change. |
-| 2 | T | Averaging reduces simulation noise in the estimate. |
-| 3 | F | The same seed reproduces the same draws; fresh draws would give other estimates. |
-| 4 | T | We improve the estimator's stability while preserving its expectation. |
-
-:::
-
-```{=latex}
-\end{minipage}\par
-```
-
-::: {#exr-mc-calculations}
-
-## Check the Code
-
-1. For $\int_1^3 x^2\,dx$, you draw `x <- runif(N, 1, 3)`. What values should you average?
-2. You have 500 antithetic pair averages stored in `pair_y`. Write the estimate and MCSE.
-3. Why does `mean(exp(u) - 1.7 * (u - mean(u)))` equal `mean(exp(u))`?
-
-:::
-
-::: {#sol-mc-calculations}
-
-1. Average `2 * x^2`, because the interval width is 2.
-2. Use `mean(pair_y)` and `sd(pair_y) / sqrt(500)`.
-3. The average of `u - mean(u)` is zero. Use the known mean 0.5 for the control adjustment.
-
-:::
-
-## What to Remember {#sec-mc-summary}
-
-**Simulation answers a model-based question by generating possible outcomes.** One run produces one estimate. Fresh runs vary because their random inputs vary. MCSE describes this variation of the estimate; variance reduction makes it smaller while preserving the target.
-
-| Method | Values to average | MCSE |
-|:----------------|:-----------------------------------------|:------------------------------|
-| Plain MC | Individual values `y` | `sd(y) / sqrt(N)` |
-| Antithetic | Pair averages `pair_y` | `sd(pair_y) / sqrt(K)` |
-| Control | Adjusted values $Y_i+c(C_i-\mu_C)$ | `sd(adjusted_y) / sqrt(N)` |
-
-Here $N$ counts independent draws and $K$ counts independent pairs. Keep the target unchanged, use the correct independent units, and compare methods at the same amount of work.
+$N$ counts independent draws; $K=N/2$ counts independent pairs.
 
 ## Supplementary {#sec-mc-supplement}
 
-The content here won't be on the exam
+Optional reading; not on the exam:
 
-These examples are for independent study.
-
-### Why the average works {#mc-mean-properties}
-
-For independent, identically distributed values $Y_i$ with $\mathbb{E}|Y_i|<\infty$, their average is unbiased for $\theta=\mathbb{E}[Y_i]$ and converges to $\theta$ almost surely. This is the strong law of large numbers.
-
-If $\operatorname{Var}(Y_i)=\sigma_Y^2<\infty$, independence gives
-
-$$
-\operatorname{Var}(\overline Y)=\frac{\sigma_Y^2}{N}.
-$$
-
-When $0<\sigma_Y^2<\infty$, the central limit theorem gives
-
-$$
-\frac{\overline Y-\theta}{\sigma_Y/\sqrt N}\xrightarrow{d}N(0,1),
-$$
-
-which explains the approximate 95% interval. In R, `sd(y)` uses the sample-variance denominator $N-1$.
-
-### Planning a sample size
-
-For target MCSE $\varepsilon$, use approximately $N\geq\sigma_Y^2/\varepsilon^2$. For a 95% interval half-width $h$, use approximately
-
-$$
-N\geq\frac{1.96^2\sigma_Y^2}{h^2}.
-$$
-
-If the variance is unknown, estimate it in a pilot run. This gives a planning approximation, not a guaranteed bound.
-
-```{r}
-#| label: fig-mc-precision
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4.5
-#| fig-cap: "More draws reduce the spread of repeated estimates. The points come from 400 experiments at each sample size; the line shows the theoretical MCSE."
-#| fig-alt: "Empirical standard deviations at increasing sample sizes track a decreasing theoretical curve on logarithmic axes."
-set.seed(8670)
-precision_sizes <- c(50, 100, 200, 500, 1000, 2000, 5000)
-variance_exp <- (exp(2) - 1) / 2 - (exp(1) - 1)^2
-precision_results <- data.frame(N = precision_sizes)
-precision_results$empirical <- vapply(precision_sizes, function(n) {
-  sd(replicate(400, mean(exp(runif(n)))))
-}, numeric(1))
-precision_results$theoretical <- sqrt(variance_exp / precision_sizes)
-ggplot(precision_results, aes(N)) +
-  geom_line(aes(y = theoretical, color = "Theoretical MCSE"), linewidth = .8) +
-  geom_point(aes(y = empirical, color = "SD across experiments"), size = 2.7) +
-  scale_x_log10(breaks = precision_sizes) +
-  scale_y_log10() +
-  scale_color_manual(values = c("Theoretical MCSE" = "black",
-                                "SD across experiments" = "#0072B2")) +
-  labs(x = "Draws per experiment N",
-       y = "Standard deviation of the estimate", color = NULL) +
-  theme(legend.position = "bottom")
-```
-
-### Reporting variance reduction
-
-The percentage reported in our comparison table is
-
-$$
-100\left(1-\frac{\text{variance of estimates with the new method}}{\text{variance of estimates with plain Monte Carlo}}\right).
-$$
-
-If variance falls from 4 to 1, the reduction is 75%. Standard error falls from 2 to 1, a 50% reduction. Variance and standard error are on different scales.
-
-### Why antithetic pairing helps {#mc-monotonicity}
-
-Let $Y=g(U)$ and $Y'=g(1-U)$ have variance $\sigma^2>0$ and correlation $\rho$. For one pair average,
-
-$$
-\operatorname{Var}\left(\frac{Y+Y'}2\right)=\frac{\sigma^2}{2}(1+\rho).
-$$
-
-With $K$ independent pairs and $N=2K$ evaluations,
-
-$$
-\operatorname{Var}(\widehat\theta_{\mathrm{anti}})
-=\frac{\sigma^2}{N}(1+\rho),
-\qquad
-\operatorname{Var}(\widehat\theta_{\mathrm{plain}})=\frac{\sigma^2}{N}.
-$$
-
-Thus, negative correlation helps; positive correlation makes the estimator worse at this budget.
-
-A monotone $g$ with finite variance guarantees nonpositive covariance. To see why, let $V$ be an independent copy of $U$. Then
-
-$$
-2\operatorname{Cov}(a(U),b(U))
-=\mathbb{E}[(a(U)-a(V))(b(U)-b(V))].
-$$
-
-For $a(u)=g(u)$ and $b(u)=g(1-u)$, one function increases while the other decreases. The product is nonpositive.
-
-### Deriving the control coefficient {#mc-control-derivation}
-
-Assume $Y$ and $C$ have finite, positive variances. For fixed $c$ and known $\mu_C=\mathbb{E}[C]$,
-
-$$
-\operatorname{Var}\{Y+c(C-\mu_C)\}
-=\operatorname{Var}(Y)+c^2\operatorname{Var}(C)+2c\operatorname{Cov}(Y,C).
-$$
-
-Differentiate with respect to $c$ and set the result to zero:
-
-$$
-c^*=-\frac{\operatorname{Cov}(Y,C)}{\operatorname{Var}(C)},
-\qquad
-\operatorname{Var}(Y_{c^*})=\operatorname{Var}(Y)(1-\rho_{YC}^2).
-$$
-
-At the optimal coefficient, the fraction of variance removed is $\rho_{YC}^2$. Strong positive or negative correlation can both help.
-
-For $Y=e^U$ and $C=U$, integration by parts gives $\mathbb{E}[Ue^U]=1$. Therefore,
-
-$$
-\operatorname{Cov}(e^U,U)=1-\frac{e-1}{2},
-\quad \operatorname{Var}(U)=\frac1{12},
-\quad c^*=6e-18\approx-1.690309.
-$$
-
-```{r}
-#| label: mc-control-theory
-#| code-fold: false
-var_exp <- (exp(2) - 1) / 2 - (exp(1) - 1)^2
-cov_exp_u <- 1 - (exp(1) - 1) / 2
-c_star <- -cov_exp_u / (1 / 12)
-var_optimal <- var_exp - cov_exp_u^2 / (1 / 12)
-var_used <- var_exp + c_used^2 / 12 + 2 * c_used * cov_exp_u
-c(best_coefficient = c_star,
-  optimal_reduction_percent = 100 * (1 - var_optimal / var_exp),
-  reduction_with_minus_1.7 = 100 * (1 - var_used / var_exp))
-```
-
-The covariance is squared in the **variance reduction**, but not in the formula for $c^*$. Our fixed choice $-1.7$ gives nearly the same reduction as the optimum.
-
-### Estimating the coefficient in a pilot run {#mc-control-pilot-details}
-
-When $c^*$ is unknown, estimate it using a separate pilot sample. Keep that estimate fixed, then generate fresh draws for the main run.
-
-```{r}
-#| label: mc-control-pilot
-#| code-fold: false
-set.seed(8670)
-pilot_u <- runif(1000)
-c_hat <- -cov(exp(pilot_u), pilot_u) / var(pilot_u)
-
-production_u <- runif(10000)  # fresh draws; do not reset the seed
-production_y <- exp(production_u) + c_hat * (production_u - 0.5)
-c(coefficient = c_hat, mc_summary(production_y))
-```
-
-Conditional on the pilot, the coefficient is fixed and the adjustment still has mean zero. Estimating and applying $c$ on the same observations does not automatically preserve exact unbiasedness. Include the pilot cost when comparing total work.
-
-### Application: Estimate a Normal Probability {#sec-mc-normal-cdf}
-
-The original notes used $\Phi(x)=P(Z\leq x)$ for $Z\sim N(0,1)$. We can estimate this probability in two ways.
-
-**Method 1: count successes.** Draw standard normals and average the indicators of $Z\leq x$.
-
-```{r}
-#| label: mc-normal-indicator
-#| code-fold: false
-set.seed(8670)
-x <- 2
-N <- 10000
-indicator_y <- as.numeric(rnorm(N) <= x)
-c(estimate = mean(indicator_y),
-  MCSE = sd(indicator_y) / sqrt(N),
-  exact = pnorm(x))
-```
-
-**Method 2: use a bounded integral.** For $x>0$, symmetry gives
-
-$$
-\Phi(x)=\frac12+\int_0^x\phi(z)\,dz
-=\frac12+\mathbb{E}[x\phi(xU)],
-\qquad U\sim\operatorname{Uniform}(0,1).
-$$
-
-Thus we can average $0.5+x\phi(xU)$.
-
-```{r}
-#| label: mc-normal-uniform
-#| code-fold: false
-set.seed(8670)
-u <- runif(N)
-uniform_y <- 0.5 + x * dnorm(x * u)  # x > 0 here
-c(estimate = mean(uniform_y),
-  MCSE = sd(uniform_y) / sqrt(N),
-  exact = pnorm(x))
-```
-
-Both methods estimate the same probability, but their variances differ. For $x<0$, use symmetry, $\Phi(x)=1-\Phi(|x|)$; at $x=0$, the answer is exactly 0.5.
-
-We cannot draw uniformly over the infinite interval $(-\infty,x]$. The second method works because it uses the finite interval $[0,x]$.
-
-```{r}
-#| label: fig-mc-cdf-variance
-#| echo: !expr knitr::is_html_output()
-#| code-fold: true
-#| fig-width: 8
-#| fig-height: 4.6
-#| fig-cap: "Two unbiased estimators can have different variances. The uniform-integral contribution is more stable near zero; the indicator is more stable farther into the positive tail. Divide the plotted variances by N for the variance of an ordinary Monte Carlo average."
-#| fig-alt: "Contribution variance versus x, comparing indicator and uniform-integral methods; the curves cross as x increases."
-cdf_grid <- seq(.1, 3, length.out = 100)
-cdf_variances <- data.frame(
-  x = cdf_grid,
-  Indicator = pnorm(cdf_grid) * pnorm(cdf_grid, lower.tail = FALSE),
-  Uniform = vapply(cdf_grid, function(a) {
-    integrate(function(u) (a * dnorm(a * u))^2, 0, 1)$value -
-      (pnorm(a) - .5)^2
-  }, numeric(1))
-)
-cdf_variance_long <- rbind(
-  data.frame(x = cdf_grid, variance = cdf_variances$Indicator,
-             Method = "Normal indicator"),
-  data.frame(x = cdf_grid, variance = cdf_variances$Uniform,
-             Method = "Uniform integral")
-)
-ggplot(cdf_variance_long, aes(x, variance, color = Method)) +
-  geom_line(linewidth = .85) +
-  scale_y_log10() +
-  scale_color_manual(values = c("Normal indicator" = "#0072B2",
-                                "Uniform integral" = "#D55E00")) +
-  labs(x = "CDF evaluation point x", y = "Variance of one contribution",
-       color = NULL) +
-  theme(legend.position = "bottom")
-```
-
-The better choice depends on $x$. At the same number of independent draws, divide each plotted contribution variance by $N$ to obtain the estimator variance. A contribution such as $0.5+x\phi(xU)$ can exceed 1 even though its expectation is a probability.
-
-### Two more variance-reduction ideas
-
-- **Importance sampling:** draw more often where the integrand matters, then correct for the changed sampling distribution with weights. For $\theta=\int g(x)f(x)\,dx$, draw $X\sim q$ and average $g(X)f(X)/q(X)$. The proposal must cover every region where $g(x)f(x)\neq0$, and a finite second moment is needed for ordinary MCSE calculations.
-- **Stratification:** divide the input space into groups with known probabilities, sample within each group, and combine the group averages using those probabilities as weights.
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
-
-::: {#mc-importance-preview .callout-warning title="Normalization still matters"}
-
-The ordinary importance-sampling formula above uses a normalized target density $f$. With only an unnormalized target, a self-normalized ratio estimator is a different method and is generally biased at finite sample sizes. Cancellation of a constant in rejection sampling does not justify dropping a constant from an importance weight.
-
-:::
-
-```{=latex}
-\end{minipage}\par
-```
-
-## References and Further Reading {.unnumbered}
-
-Adapted from the instructor's [2025 Monte Carlo notes](https://github.com/chikuang/Teaching-Stat8670/blob/392c7fb002c1b8b171a26deac8ffe69f294441bd/04-monte-carlo.qmd). All figures are generated by the R code in this chapter.
-
-- Rizzo, M. L. (2007), *Statistical Computing with R*, Chapter 6, Chapman & Hall/CRC.
-- Wasserman, L. (2003), [*All of Statistics*](https://link.springer.com/book/10.1007/978-0-387-21736-9), Springer.
-- R help: `?runif`, `?rnorm`, `?pnorm`, `?var`, and `?cov`.
+- [2025 notes: variance and efficiency](https://chikuang.github.io/teaching/2025F_stat8670/04-monte-carlo.html#variance-and-efficiency).
+- [2025 notes: antithetic variables](https://chikuang.github.io/teaching/2025F_stat8670/04-monte-carlo.html#antithetic-variables) and [control variates](https://chikuang.github.io/teaching/2025F_stat8670/04-monte-carlo.html#control-variates).
+- [Detailed derivations, pilot estimation, and additional examples](https://github.com/chikuang/Teaching-Stat8670/blob/78f2316/05-monte-carlo.qmd): the earlier version of this chapter, under Supplementary.
