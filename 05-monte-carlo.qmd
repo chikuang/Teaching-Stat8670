@@ -392,7 +392,7 @@ $$
 \widehat\theta=\overline Y=\frac1N\sum_{i=1}^N Y_i.
 $$
 
-Our example uses $X=U\sim\operatorname{Uniform}(0,1)$ and $g(u)=e^u$, so $\theta=e-1$. Fresh draws change both the outputs and their average.
+Our example uses $X=U\sim\operatorname{Uniform}(0,1)$ and $g(u)=e^u$, so $\theta=e-1$.
 
 ```{r}
 #| label: fig-mc-variation
@@ -419,22 +419,25 @@ ggplot(variation_data, aes(value, fill = level)) +
   theme(legend.position = "none", strip.text = element_text(size = 11))
 ```
 
-The population variance $\operatorname{Var}(Y)=\sigma_Y^2$ describes output spread. From one run, estimate it using
+| Quantity | Meaning |
+|:--|:--|
+| $s_X$ | Sample SD of inputs: `sd(x)` estimates $\sqrt{\operatorname{Var}(X)}$. |
+| $\operatorname{Var}(Y)=\sigma_Y^2$ | Population variance of one output. |
+| $s_Y$ | Sample SD of outputs: `sd(y)` estimates $\sigma_Y$; its square `var(y)` estimates $\operatorname{Var}(Y)$. |
+| MCSE | SD of the estimated mean $\overline Y$ across runs. |
+
+: {tbl-colwidths="[25,75]"}
+
+For independent outputs with finite variance,
 
 $$
-s_Y^2=\frac{1}{N-1}\sum_{i=1}^N(Y_i-\overline Y)^2,
-\qquad s_Y=\sqrt{s_Y^2}.
-$$
-
-R's `var(y)` is $s_Y^2$; `sd(y)` is $s_Y$. **MCSE** is the SD of the average across runs. For independent outputs with finite variance,
-
-$$
-\operatorname{Var}(\overline Y)=\frac{\sigma_Y^2}{N},
+\operatorname{MCSE}=\sqrt{\operatorname{Var}(\overline Y)}
+=\sqrt{\frac{\operatorname{Var}(Y)}{N}},
 \qquad
-\widehat{\operatorname{MCSE}}=\sqrt{\frac{s_Y^2}{N}}=\frac{s_Y}{\sqrt N}.
+\widehat{\operatorname{MCSE}}=\frac{s_Y}{\sqrt N}.
 $$
 
-The subscript matters: $s_X$ measures input spread; $s_Y$ measures output spread. Use $s_Y/\sqrt N$ for $\mathbb{E}[g(X)]$, or $s_X/\sqrt N$ when averaging $X$ itself.
+**To assess simulation precision, report the estimate and estimated MCSE.** Use $s_Y$ to describe individual outputs. Use $s_X/\sqrt N$ only when averaging $X$; here we average $e^U$.
 
 ::: {.callout-algorithm title="Plain Monte Carlo"}
 
@@ -452,11 +455,11 @@ set.seed(8670)
 N <- 10000
 u <- runif(N)
 y <- exp(u)
-c(estimate = mean(y), var_Y = var(y), s_Y = sd(y),
-  MCSE = sd(y) / sqrt(N))
+c(estimate = mean(y), s_X = sd(u), var_Y = var(y),
+  s_Y = sd(y), MCSE = sd(y) / sqrt(N))
 ```
 
-For large $N$, an approximate 95% Monte Carlo interval is $\overline Y\pm1.96\,s_Y/\sqrt N$. It describes simulation error with the model held fixed. Halving MCSE requires about four times as many draws; it does not reduce the spread of individual outputs.
+Here $s_Y\approx0.494$ describes output spread; MCSE $\approx0.00494$ describes precision of the mean. For large $N$, an approximate 95% Monte Carlo interval is $\overline Y\pm1.96\,\widehat{\operatorname{MCSE}}$. Four times as many draws halve MCSE; the population variance $\operatorname{Var}(Y)$ stays unchanged.
 
 ## Variance Reduction {#sec-mc-efficiency}
 
