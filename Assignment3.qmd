@@ -1,5 +1,5 @@
 ---
-show-solutions: false
+show-assignment3-solutions: true
 ---
 
 # Assignment 3 {.unnumbered}
@@ -46,6 +46,16 @@ Note: The questions use the main material in Chapter 4. Section 4.10 (**Suppleme
 
 **Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$.
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {.callout-important title="Solutions"}
+
+Expand the **Solution** below each question to view the answer and explanation.
+
+:::
+
+::::
+
 {{< pagebreak >}}
 
 ## Question 1: Generating Random Variables [8]
@@ -80,6 +90,16 @@ D. A uniform generator cannot be used inside a loop.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1a .callout-tip collapse="true" title="Solution 1(a)"}
+
+**C.** Each reset restores the same generator state. The first draw is therefore repeated. Set the seed once before the loop and let the generator advance.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -97,6 +117,16 @@ D. $5U$
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1b .callout-tip collapse="true" title="Solution 1(b)"}
+
+**B.** The rate is $\lambda=1/5$, so inverse transformation gives $-\log(1-U)/\lambda=-5\log(1-U)$. Dividing by 5 would give mean $1/5$.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -116,6 +146,16 @@ D. Total area 1.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1c .callout-tip collapse="true" title="Solution 1(c)"}
+
+**D.** A normalized density has total area 1. Its maximum height, mean, and variance need not be 1.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -133,6 +173,16 @@ D. Its maximum height must be 1.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1d .callout-tip collapse="true" title="Solution 1(d)"}
+
+**A.** An unnormalized target is proportional to the desired density and preserves its shape. Its total area need not be 1. No normalization calculation is required.
+
+:::
+
+::::
 
 {{< pagebreak >}}
 
@@ -154,6 +204,16 @@ D. An envelope is unnecessary if the target density is known.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1e .callout-tip collapse="true" title="Solution 1(e)"}
+
+**C.** Acceptance-rejection can use either a normalized density or an unnormalized target, provided the envelope is valid for the chosen target. Scaling formulas and derivations are outside this assignment.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -171,6 +231,16 @@ D. Accept and store both values as draws from the target.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1f .callout-tip collapse="true" title="Solution 1(f)"}
+
+**A.** Since $U=0.60\leq0.75$, accept and store the proposal $Y=0.75$. The decision uniform is not a draw from the target.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -190,6 +260,16 @@ D. 1,000.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1g .callout-tip collapse="true" title="Solution 1(g)"}
+
+**D.** The expected proposal count is $nM=400(2.5)=1000$. This is an expectation, not an exact count in every run.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -207,6 +287,16 @@ D. Every proposal is accepted.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-1h .callout-tip collapse="true" title="Solution 1(h)"}
+
+**B.** A finite grid can miss a larger ratio between grid points or outside the grid's range. A valid global bound is required. Clipping an invalid ratio generally changes the accepted density.
+
+:::
+
+::::
 
 {{< pagebreak >}}
 
@@ -232,6 +322,16 @@ D. $\operatorname{Binomial}(4,0.5)$
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2a .callout-tip collapse="true" title="Solution 2(a)"}
+
+**C.** Independent Poisson variables add to a Poisson variable whose rate is the sum: $1.2+2.8=4$.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -249,6 +349,16 @@ D. $\operatorname{Unif}(0,1)$
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2b .callout-tip collapse="true" title="Solution 2(b)"}
+
+**A.** Independent gamma variables with a common rate give a beta ratio with the two shape parameters. Their sum, rather than their ratio, has the $\operatorname{Gamma}(7,4)$ distribution.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -274,6 +384,16 @@ D. The numerator is not independent of the chi-square denominator.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2c .callout-tip collapse="true" title="Solution 2(c)"}
+
+**D.** The denominator uses $Z_1^2$, so it is not independent of $Z_1$. Use a fresh independent standard normal in the numerator. Also, $|W|\leq\sqrt6$, whereas a $t_6$ variable has unbounded support.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -291,6 +411,16 @@ D. Choose one component once and use it for every pair in the dataset.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2d .callout-tip collapse="true" title="Solution 2(d)"}
+
+**B.** Choose one label for each pair using probabilities 0.30 and 0.70, then generate the whole pair from the selected bivariate normal distribution. Separate coordinate labels generally change the joint distribution. A weighted average is not a mixture, and sharing one label across the whole dataset does not produce independent mixture observations.
+
+:::
+
+::::
 
 {{< pagebreak >}}
 
@@ -311,6 +441,16 @@ D. No value is defined at a jump.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2e .callout-tip collapse="true" title="Solution 2(e)"}
+
+**A.** The cumulative probabilities are $0.20$, $0.70$, and $1$. The first support value whose CDF reaches $0.70$ is $1$. The definition uses $\geq$, including equality.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -336,6 +476,16 @@ D. $\begin{pmatrix}2&1\\0&1\end{pmatrix}$
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2f .callout-tip collapse="true" title="Solution 2(f)"}
+
+**C.** For the row convention, $\operatorname{Cov}(\boldsymbol X_i)=R^\mathsf{T}R=\begin{pmatrix}4&2\\2&2\end{pmatrix}$. The first option is $RR^\mathsf{T}$ and corresponds to the wrong orientation.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -354,6 +504,16 @@ D. Neither coordinate has a standard normal distribution.
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2g .callout-tip collapse="true" title="Solution 2(g)"}
+
+**B.** Inverse transformation gives the correct marginal distribution, but both coordinates are identical. Two independent uniforms would yield two independent standard normals.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -371,6 +531,16 @@ D. Some generated values are below 0 or above 1.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-2h .callout-tip collapse="true" title="Solution 2(h)"}
+
+**D.** Values from Uniform(0,1) must lie between 0 and 1. A sample mean, variance, or histogram need not match its population counterpart exactly.
+
+:::
+
+::::
 
 {{< pagebreak >}}
 
@@ -391,6 +561,16 @@ With the same code and computing environment, setting the same seed at the start
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3a .callout-tip collapse="true" title="Solution 3(a)"}
+
+**True.** With the same code and computing environment, resetting the same seed at the start reproduces the same pseudorandom sequence and simulation results.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -403,6 +583,16 @@ If $X$ has a discrete CDF $F$, then $F(X)$ is necessarily uniform on $(0,1)$.
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3b .callout-tip collapse="true" title="Solution 3(b)"}
+
+**False.** The ordinary probability integral transform requires a continuous CDF. For a discrete distribution, $F(X)$ takes a discrete set of values.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -417,6 +607,16 @@ If independent gamma variables have the same rate, their sum is gamma with the s
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3c .callout-tip collapse="true" title="Solution 3(c)"}
+
+**True.** This is the common-rate gamma convolution identity; independence is also required.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -429,6 +629,16 @@ In R, `rnorm(100, mean = 0, sd = 2)` targets a normal distribution with variance
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3d .callout-tip collapse="true" title="Solution 3(d)"}
+
+**False.** The `sd` parameter is a standard deviation. The target variance is $2^2=4$.
+
+:::
+
+::::
 
 ```{=latex}
 \par\noindent
@@ -443,6 +653,16 @@ In rejection sampling, replacing a valid bound $M$ by a larger valid bound prese
 \end{minipage}\par\medskip
 ```
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3e .callout-tip collapse="true" title="Solution 3(e)"}
+
+**True.** The accepted density stays $f$ while the acceptance probability $1/M$ decreases. This statement assumes normalized densities and otherwise correct sampling.
+
+:::
+
+::::
+
 ```{=latex}
 \par\noindent
 \begin{minipage}{\linewidth}
@@ -455,6 +675,16 @@ A mixture of two bivariate normal distributions must itself have a bivariate nor
 ```{=latex}
 \end{minipage}\par\medskip
 ```
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-3f .callout-tip collapse="true" title="Solution 3(f)"}
+
+**False.** A mixture of bivariate normals need not be bivariate normal. For example, the separated components in Section 4.6.2 produce a joint density with two high-density regions rather than the elliptical contours of one bivariate normal. Identical components would be a special case that is still normal.
+
+:::
+
+::::
 
 {{< pagebreak >}}
 
@@ -481,6 +711,44 @@ $$
 3. Find the variance of the target mixture and $\operatorname{Var}(W)$.
 4. Both sets of simulated values are recentered and rescaled to have mean 0 and variance 1. Does this show that they have the same distribution? Name one additional distributional check.
 
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-4a .callout-tip collapse="true" title="Solution 4(a)"}
+
+**4a(1).** Draw a label $K$ with $P(K=1)=0.25$ and $P(K=2)=0.75$. Then generate one draw from $N(-2,1)$ if $K=1$, or from $N(2,1)$ if $K=2$. Use fresh inputs for independent observations.
+
+**4a(2).**
+
+$$
+E(X)=0.25(-2)+0.75(2)=1,\qquad E(W)=1.
+$$
+
+Checking only the mean would not detect the incorrect construction.
+
+**4a(3).** By the law of total variance,
+
+$$
+\begin{aligned}
+\operatorname{Var}(X)
+&=E\{\operatorname{Var}(X\mid K)\}
+  +\operatorname{Var}\{E(X\mid K)\}\\
+&=1+0.25(-2-1)^2+0.75(2-1)^2=4.
+\end{aligned}
+$$
+
+Independence of $A$ and $B$ gives
+
+$$
+\operatorname{Var}(W)
+=0.25^2(1)+0.75^2(1)=0.625.
+$$
+
+**4a(4).** No. Matching the first two moments does not identify a distribution. Compare histograms of the standardized values to check their shapes. At the population level, the standardized weighted average is normal, whereas the standardized separated-component mixture is not.
+
+:::
+
+::::
+
 {{< pagebreak >}}
 
 ### 4b) Checking an exponential generator [4]
@@ -498,6 +766,23 @@ The sample mean is about 2 and the sample variance is about 4. You do not need t
 2. Identify the parameter error and write the corrected `rexp()` call.
 3. Describe how you would use a histogram and the target density to check the generated values. What would you look for?
 4. Would generating more observations with the same incorrect code fix the discrepancy? Explain briefly.
+
+
+:::: {.content-visible when-meta="show-assignment3-solutions"}
+
+::: {#a3-solution-4b .callout-tip collapse="true" title="Solution 4(b)"}
+
+**4b(1).** With rate $\lambda=2$, the mean is $1/\lambda=0.5$ and the variance is $1/\lambda^2=0.25$.
+
+**4b(2).** The code uses rate $1/2$, which gives mean 2 and variance 4. The corrected call is `rexp(10000, rate = 2)`.
+
+**4b(3).** Draw a histogram on the density scale and overlay the exponential density with rate 2. Values should be nonnegative, and the histogram should roughly follow the decreasing, right-skewed target curve in both shape and scale. Allow ordinary differences between a random sample and the density.
+
+**4b(4).** No. The unchanged code continues to draw from an exponential distribution with rate 0.5. A larger sample does not change that distribution to rate 2; the parameter must be corrected.
+
+:::
+
+::::
 
 ```{=latex}
 \par\endgroup

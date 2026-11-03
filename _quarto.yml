@@ -56,6 +56,9 @@ bibliography: references.bib
 # Preserve the archived exam answers in the combined PDF as well as HTML.
 show-exam-solutions: true
 
+# Release Assignment 3 solutions in both HTML and the combined PDF.
+show-assignment3-solutions: true
+
 execute:
   cache: true
   freeze: auto
