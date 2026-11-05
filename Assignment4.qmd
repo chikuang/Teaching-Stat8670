@@ -8,9 +8,9 @@ pagetitle: Assignment 4
 **STAT 8670 | Fall 2026**  
 **Due date:** TBA  
 **Total:** 30 points  
-**Coverage:** [Chapter 5: Monte Carlo Simulation and Variance Reduction](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html), with a guided introduction to [Chapter 6: Cross Validation](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html).
+**Coverage:** [Chapter 5: Monte Carlo Simulation and Variance Reduction](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html), with a guided introduction to [Chapter 6: Cross Validation](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html). The additional practice also reviews [Chapter 4: Generating Random Variables](https://chikuang.github.io/teaching/2026F_stat8670/04-generating-rv.html).
 
-Questions 1-3 cover Chapter 5 [24 points]. Question 4 is a guided preview of Chapter 6 [6 points]; the necessary procedure is supplied. Supplementary and optional material is not required.
+Questions 1-3 cover Chapter 5 [24 points]. Question 4 is a guided preview of Chapter 6 [6 points]; the necessary procedure is supplied. **The graded total remains 30 points.** Ten additional Exam 2 practice questions (P1-P10) review Chapters 4-6; they are recommended but **not graded and not required for submission**. Optional material in the course notes is not required.
 
 | Question | Topic / format | Points |
 |:---:|:---:|:---:|
@@ -19,6 +19,7 @@ Questions 1-3 cover Chapter 5 [24 points]. Question 4 is a guided preview of Cha
 | 3 | Precision and implementation (4 short-answer parts) | 8 |
 | 4 | Guided preview: cross-validation (3 short parts) | 6 |
 | **Total** | | **30** |
+| P1-P10 | Additional Exam 2 practice | Not graded |
 
 [Assignment PDF](https://chikuang.github.io/teaching/2026F_stat8670/Assignment4.pdf) | [Response template (.qmd)](https://chikuang.github.io/teaching/2026F_stat8670/Assignment4-response-template.qmd)
 
@@ -266,3 +267,154 @@ Enter `T` or `F` for each statement (**1 point each**).
 
 1. Selecting features using all development outcomes before forming the folds gives a valid CV assessment of that feature-selection procedure.
 2. After choosing the degree by CV, it is appropriate to refit on all development data and evaluate once on an untouched test set.
+
+<!-- exam2-practice-start -->
+
+{{< pagebreak >}}
+
+## Additional Exam 2 Practice (Not Graded) {#exam2-practice}
+
+These ten questions complement Questions 1-4 and Assignment 3. They practice the same core skills in new situations. They are **not an additional submission requirement** and do not change the 30-point assignment total. No programming is required; use short explanations and calculations where requested.
+
+- P1-P5: random-variable generation and checking (Chapter 4).
+- P6-P8: Monte Carlo precision and variance reduction (Chapter 5).
+- P9-P10: validation design and prediction loss (Chapter 6, with reading guides).
+
+Vectors are bold and are column vectors. Gamma parameters are shape and rate unless stated otherwise. Exclude the optional and supplementary material in the notes.
+
+### P1. Inverse transformation
+
+A lifetime $X$ has CDF
+
+$$F(x)=\begin{cases}0,&x\leq0,\\x^2/4,&0<x<2,\\1,&x\geq2.\end{cases}$$
+
+For $U\sim\operatorname{Uniform}(0,1)$, select the correct generator. Check your choice by substituting it into $F$.
+
+**A.** $X=2U^2$.  
+**B.** $X=\sqrt{U}/2$.  
+**C.** $X=2\sqrt{U}$.  
+**D.** $X=4U$.
+
+### P2. Construct a distribution from normal draws
+
+Let $Z_1,\ldots,Z_4$ be independent standard normal variables and define
+
+$$T=\frac{Z_1^2+Z_2^2+Z_3^2+Z_4^2}{6}.$$
+
+Which distribution does $T$ have? Here $\operatorname{Gamma}(a,b)$ uses shape $a$ and **rate** $b$.
+
+**A.** $\operatorname{Gamma}(2,3)$.  
+**B.** $\operatorname{Gamma}(4,6)$.  
+**C.** $\operatorname{Gamma}(2,1/3)$.  
+**D.** $\chi^2_4$.
+
+{{< pagebreak >}}
+
+### P3. Check the joint distribution
+
+Let $\mathbf Z=(Z_1,Z_2)^\top\sim N_2(\mathbf0,I_2)$ and define
+
+$$\mathbf X=\begin{pmatrix}1&0\\1&2\end{pmatrix}\mathbf Z,
+\qquad \mathbf W=\begin{pmatrix}1&0\\0&\sqrt5\end{pmatrix}\mathbf Z.$$
+
+Which statement is correct? Treat the vectors as columns.
+
+**A.** The two vectors have the same joint distribution because their coordinate variances agree.  
+**B.** $X_1$ and $X_2$ are independent because $Z_1$ and $Z_2$ are independent.  
+**C.** $\operatorname{Var}(X_2)=4$, whereas $\operatorname{Var}(W_2)=5$.  
+**D.** Both vectors have coordinate variances 1 and 5, but $\operatorname{Cov}(X_1,X_2)=1$ and $\operatorname{Cov}(W_1,W_2)=0$.
+
+Write the two covariance matrices as a check.
+
+### P4. Proposal support
+
+A rejection sampler targets $\operatorname{Uniform}(0,1)$ and proposes $Y\sim\operatorname{Exp}(1)$ on $(0,\infty)$.
+
+Mark **T or F** and give one sentence: "The proposal is unusable because it can generate values greater than 1."
+
+For this question, you may use the valid envelope constant $M=e$: the target density is 1 on $(0,1)$ and zero elsewhere, while the proposal density is $g(y)=e^{-y}$ for $y>0$.
+
+{{< pagebreak >}}
+
+### P5. A changed acceptance test
+
+The target is $f(x)=3x^2$ on $(0,1)$. Draw fresh independent $Y,U\sim\operatorname{Uniform}(0,1)$ on every attempt. Compare:
+
+- Rule A: accept $Y$ if $U\leq Y^2$.
+- Rule B: accept $Y$ if $\sqrt U\leq Y^2$.
+
+1. Write each rule's acceptance probability conditional on $Y=y$.
+2. Which rule gives the target density? Explain why the other rule overweights values near 1 relative to the target.
+
+**Guide.** If the proposal density is $g(y)$ and the acceptance probability is $a(y)$, the accepted density is proportional to $g(y)a(y)$.
+
+### P6. Combine independent simulation batches
+
+Two independent batches contain $n_1=100$ and $n_2=400$ independent outputs from the same distribution, with mean $\theta$ and variance 8. Let their means be $\overline Y_1$ and $\overline Y_2$. Compare
+
+$$\widehat\theta_A=\tfrac12\overline Y_1+\tfrac12\overline Y_2,
+\qquad
+\widehat\theta_B=\tfrac15\overline Y_1+\tfrac45\overline Y_2.$$
+
+1. Are both estimators unbiased? Explain using their expectations.
+2. Calculate both estimator variances. Which uses the 500 outputs more efficiently, and why?
+
+Use $\operatorname{Var}(aV+bW)=a^2\operatorname{Var}(V)+b^2\operatorname{Var}(W)$ for independent $V,W$.
+
+{{< pagebreak >}}
+
+### P7. Evaluate a proposed pairing
+
+Each paired run averages $K$ independent pair averages $(Y_k+Y'_k)/2$. Both members have the correct target marginal distribution and variance 1. Their within-pair covariance differs:
+
+| Pairing | $\operatorname{Cov}(Y_k,Y'_k)$ |
+|:---:|:---:|
+| A | $-0.6$ |
+| B | $0.4$ |
+
+Each method uses $2K$ function evaluations. The plain comparison averages $2K$ independent outputs of variance 1.
+
+1. Calculate the ratio of each paired estimator's variance to the plain estimator's variance. Which pairing improves precision?
+2. A ratio of 0.4 for estimator **variance** is reported as an MCSE ratio of 0.4. Is that conversion correct? Give the correct ratio.
+
+Use $\operatorname{Var}\{(Y+Y')/2\}=\{\operatorname{Var}(Y)+\operatorname{Var}(Y')+2\operatorname{Cov}(Y,Y')\}/4$.
+
+### P8. Can a larger adjustment be worse?
+
+Suppose $E[Y]=\theta$, $E[C]=\mu_C$ is known, $\operatorname{Var}(Y)=9$, $\operatorname{Var}(C)=4$, and $\operatorname{Cov}(Y,C)=3$. Use
+
+$$Z_c=Y+c(C-\mu_C).$$
+
+Compare the two fixed coefficients $c=-0.5$ and $c=-2$.
+
+1. State the expectation and variance of $Z_c$ for each coefficient.
+2. A student argues that making $c$ more negative must keep improving precision because the covariance is positive. Use your results to assess this claim at the same number of independent draws.
+
+You may use $\operatorname{Var}(Z_c)=\operatorname{Var}(Y)+c^2\operatorname{Var}(C)+2c\operatorname{Cov}(Y,C)$.
+
+{{< pagebreak >}}
+
+### P9. Match validation to the prediction task
+
+**Reading guide.** A validation split should resemble the future prediction task. For a new group, keep its observations out of training; for forecasting, train on earlier times and validate on later times. Learn preprocessing from the training portion of each split. See [Chapter 6: choosing folds and avoiding leakage](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-choices).
+
+A retailer records monthly sales for several stores. Address these two different goals:
+
+1. To predict the next month's sales at the **existing stores**, should validation randomly mix past and future months, or hold out later months and train on earlier months? Explain briefly.
+2. To predict sales at a **new store**, should rows from the same store be spread across training and validation, or kept in the same fold? Explain briefly.
+3. Within a CV fit, a predictor is standardized using a mean and SD estimated from **all** development rows before splitting. State where those quantities should instead be estimated and how they should be applied to the validation rows.
+
+### P10. Aggregate held-out loss
+
+A fixed candidate model has the following held-out results from three folds:
+
+| Fold | Number of validation observations | Sum of squared prediction errors |
+|:---:|:---:|:---:|
+| 1 | 2 | 2 |
+| 2 | 3 | 9 |
+| 3 | 5 | 4 |
+
+1. Calculate the overall CV MSE, giving every validation observation equal weight.
+2. A student instead averages the three fold MSEs without weights. Calculate that result and explain why it answers a different averaging question.
+
+**Guide.** Add the squared held-out errors over all observations and divide by their total count. Unequal folds require size weights if you start from fold MSEs.
