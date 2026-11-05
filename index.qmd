@@ -35,7 +35,9 @@ Wednesday 9:00 - 12:00 or by appointment
 - [x] [Assignment 1](Assignment1.qmd): September 11, 2026
 - [x] [Assignment 2](Assignment2.qmd): October 2, 2026
 - [x] [Assignment 3](Assignment3.qmd): November 2, 2026
-- [ ] [Assignment 4](Assignment4.qmd): TBA
+- [ ] [Assignment 4](Assignment4.qmd): **Friday, November 20, 2026** ([PDF](Assignment4.pdf) | [Response template](Assignment4-response-template.qmd))
+
+**Assignment 4:** Submit Questions 1-4 (30 points). P1-P10 are optional, ungraded Exam 2 practice. For the November 16 exam, work through A4 beforehand and review Assignment 3 and the main material in Chapters 4-6; the A4 submission deadline remains November 20.
 
 ## Midterm
 
