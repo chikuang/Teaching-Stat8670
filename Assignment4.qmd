@@ -1,25 +1,268 @@
 ---
-show-solutions: false
+show-assignment4-solutions: false
+pagetitle: Assignment 4
 ---
 
 # Assignment 4 {.unnumbered}
 
-**Due date:** TBA
+**STAT 8670 | Fall 2026**  
+**Due date:** TBA  
+**Total:** 30 points  
+**Coverage:** [Chapter 5: Monte Carlo Simulation and Variance Reduction](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html), with a guided introduction to [Chapter 6: Cross Validation](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html).
 
-Questions will be posted here when the assignment is released.
+Questions 1-3 cover Chapter 5 [24 points]. Question 4 is a guided preview of Chapter 6 [6 points]; the necessary procedure is supplied. Supplementary and optional material is not required.
 
-::: {.callout-note title="Instructions"}
+| Question | Topic / format | Points |
+|:---:|:---:|:---:|
+| 1 | Monte Carlo concepts (8 multiple-choice items) | 8 |
+| 2 | Variance reduction (8 multiple-choice items) | 8 |
+| 3 | Precision and implementation (4 short-answer parts) | 8 |
+| 4 | Guided preview: cross-validation (3 short parts) | 6 |
+| **Total** | | **30** |
 
-Use **Quarto** or **R Markdown**. Upload **both** files to the **Assignment 4** submission folder on **iCollege**:
+[Assignment PDF](https://chikuang.github.io/teaching/2026F_stat8670/Assignment4.pdf) | [Response template (.qmd)](https://chikuang.github.io/teaching/2026F_stat8670/Assignment4-response-template.qmd)
+
+::: {.callout-note title="Instruction"}
+
+Use **Quarto** or **R Markdown**. Upload **both** files to the **Assignment 4** folder on **iCollege**:
 
 1. Your rendered **PDF**, named `A4_LastName_FirstName.pdf`.
-2. Its matching source file, named `A4_LastName_FirstName.qmd` or `A4_LastName_FirstName.Rmd`.
+2. Its matching source, named `A4_LastName_FirstName.qmd` or `A4_LastName_FirstName.Rmd`.
 
-The PDF must be generated from the submitted source file. **HTML alone does not satisfy the submission requirement.**
+The PDF must be generated from the submitted source. **HTML alone does not satisfy the submission requirement.**
 
-- Put your name and course number at the beginning of the PDF.
-- Clearly label every question and subpart.
-- Include any R code used to obtain your answers in executable chunks. Before generating random values, set a seed (e.g., `set.seed(8670)`) and keep that line in your code.
-- Your source must render from beginning to end without errors. Type mathematical expressions using LaTeX; do not submit screenshots of answers or code.
+- Put your name and course number at the beginning, and label every question and subpart. Use the response template or follow its labeling format; you do not need to copy a table.
+- For Questions 1-2, enter exactly one letter for each item. For Question 3, give the requested values and a one-sentence interpretation in part (b). For Question 4, follow the requested response type; part (b) needs one sentence. Equivalent correct reasoning is accepted.
+- Round numerical answers to **three decimal places**, retaining full precision during calculations. Counts and degrees of freedom should be integers.
+- R code and plots are optional. If you use R, include the code in executable chunks after your answers. Before generating random values, use `set.seed(8670)`.
+- Your source must render from beginning to end without errors. Use LaTeX for mathematics; do not submit screenshots of answers or code.
 
 :::
+
+
+{{< pagebreak >}}
+
+## Question 1: Monte Carlo Concepts [8]
+
+Select **one best answer** for each item. Each item is worth **1 point**.
+
+### (a) The target [1]
+
+Let $U\sim\operatorname{Uniform}(0,1)$, $Y=g(U)$, and $\theta=E[Y]$. What does the average of many independent $g(U_i)$ values estimate?
+
+**A.** The variance of $U$.  
+**B.** The expectation $E[g(U)]$.  
+**C.** The largest possible value of $g(U)$.  
+**D.** The value $g(E[U])$, which always equals $E[g(U)]$.
+
+### (b) Output spread and simulation precision [1]
+
+An estimate averages $N$ independent outputs $Y_i=g(U_i)$ with finite, nonzero variance. Which estimates its Monte Carlo standard error (MCSE)?
+
+**A.** $s_U/\sqrt N$.  
+**B.** $s_Y$.  
+**C.** $s_Y/N$.  
+**D.** $s_Y/\sqrt N$.
+
+### (c) A larger simulation [1]
+
+With the same output distribution, approximately how many independent draws are needed to reduce MCSE from 0.03 to 0.01 if the current run uses 2,000 draws?
+
+**A.** 18,000.  
+**B.** 6,000.  
+**C.** 2,000.  
+**D.** 200.
+
+### (d) An integral [1]
+
+To estimate $I=\int_2^5 g(x)\,dx$, generate independent $X_i\sim\operatorname{Uniform}(2,5)$. Which estimator is correct?
+
+**A.** $\operatorname{mean}(g(X_i))/3$.  
+**B.** $\operatorname{mean}(X_i)$.  
+**C.** $3\operatorname{mean}(g(X_i))$.  
+**D.** $\operatorname{mean}(g(X_i))$.
+
+{{< pagebreak >}}
+
+### (e) A probability [1]
+
+Independent draws $X_i$ follow the specified model. Which expression estimates $P(X>8)$?
+
+**A.** `mean(x > 8)`.  
+**B.** `mean(x[x > 8])`.  
+**C.** `sum(x > 8)`.  
+**D.** `mean(x) > 8`.
+
+### (f) An uncertainty interval [1]
+
+A large independent simulation reports $\widehat\theta\pm1.96\widehat{\mathrm{MCSE}}$. What uncertainty does this interval address?
+
+**A.** The spread of individual simulated outputs.  
+**B.** All uncertainty in the scientific model and its assumptions.  
+**C.** Monte Carlo error in estimating the specified model expectation.  
+**D.** Only measurement error in the original dataset.
+
+### (g) Reproducibility [1]
+
+A script sets `set.seed(8670)` once before a simulation. Which statement is correct?
+
+**A.** The seed guarantees the estimate equals the target.  
+**B.** The seed makes the simulation error zero.  
+**C.** Every independently chosen seed gives the same estimate.  
+**D.** The seed supports reproducibility; MCSE is still needed to assess precision.
+
+### (h) A missing factor [1]
+
+A program estimates $\int_2^5 g(x)\,dx$ by `mean(g(runif(N, 2, 5)))`, omitting the interval-width factor. Assume the desired integral is nonzero. What does increasing $N$ accomplish?
+
+**A.** It automatically supplies the missing factor.  
+**B.** It estimates the wrong scaled target more precisely.  
+**C.** It makes the output distribution uniform.  
+**D.** It guarantees a larger estimated MCSE.
+
+
+{{< pagebreak >}}
+
+## Question 2: Variance Reduction [8]
+
+Select **one best answer** for each item. Each item is worth **1 point**. Use the conventions from [Chapter 5](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html#sec-mc-efficiency).
+
+### (a) Antithetic inputs [1]
+
+For $U\sim\operatorname{Uniform}(0,1)$, which statement about $(U,1-U)$ is correct?
+
+**A.** The two values are independent.  
+**B.** Their sum is random.  
+**C.** Each is uniform, but they are dependent.  
+**D.** Only the first value is uniform.
+
+### (b) The independent unit [1]
+
+From $K$ independent uniforms, form $A_k=\{g(U_k)+g(1-U_k)\}/2$. Which estimates the MCSE of $\overline A$?
+
+**A.** $s_A/\sqrt K$.  
+**B.** $s_A/\sqrt{2K}$.  
+**C.** The SD of all $2K$ outputs divided by $\sqrt{2K}$, treating them as independent.  
+**D.** $s_U/\sqrt K$.
+
+### (c) A fair cost comparison [1]
+
+Each call to $g$ has the same cost. An antithetic run uses 600 pairs. Which plain Monte Carlo run has the same number of calls to $g$?
+
+**A.** 300 independent outputs.  
+**B.** 600 independent outputs.  
+**C.** 2,400 independent outputs.  
+**D.** 1,200 independent outputs.
+
+### (d) When reflection helps [1]
+
+At the same number of calls to $g$, antithetic pairing reduces estimator variance relative to independent outputs when:
+
+**A.** $g(U)$ and $g(1-U)$ have positive covariance.  
+**B.** $g(U)$ and $g(1-U)$ have negative covariance.  
+**C.** $U$ is resampled until it exceeds 0.5.  
+**D.** $g$ is any function, without further conditions.
+
+{{< pagebreak >}}
+
+### (e) The sign of a control coefficient [1]
+
+Use $Z=Y+c(C-\mu_C)$ with known $\mu_C=E[C]$ and $\operatorname{Var}(C)>0$. If $\operatorname{Cov}(Y,C)>0$, the variance-minimizing fixed coefficient $c^*$ is:
+
+**A.** Positive.  
+**B.** Zero.  
+**C.** Negative.  
+**D.** Always equal to 1.
+
+### (f) Preserving the target [1]
+
+For a fixed coefficient $c$, why does $Z=Y+c(C-\mu_C)$ have the same expectation as $Y$?
+
+**A.** $E[C-\mu_C]=0$.  
+**B.** $C$ is always zero.  
+**C.** $C$ and $Y$ must be independent.  
+**D.** $Z$ must equal $Y$ for every draw.
+
+### (g) Replacing a known mean [1]
+
+A programmer uses $Z_i=Y_i+c(C_i-\overline C)$ with the same sample mean $\overline C$ and the same fixed $c$ in every row. What happens to $\overline Z$?
+
+**A.** It always becomes zero.  
+**B.** Its variance must be smaller than that of the original sample mean.  
+**C.** It becomes the known control mean.  
+**D.** It equals the original sample mean of the outputs.
+
+### (h) No association with the control [1]
+
+If $\operatorname{Cov}(Y,C)=0$ and $\operatorname{Var}(C)>0$, which fixed coefficient minimizes $\operatorname{Var}\{Y+c(C-\mu_C)\}$?
+
+**A.** $c=1$.  
+**B.** $c=0$.  
+**C.** $c=-1$.  
+**D.** Every value gives the same variance.
+
+
+{{< pagebreak >}}
+
+## Question 3: Precision and Implementation [8]
+
+Two runs estimate the same $\theta=E[g(U)]$, where $U\sim\operatorname{Uniform}(0,1)$. Each evaluates $g$ exactly **1,200 times**. The plain run averages independent outputs; the antithetic run averages independent pair averages $A_k$.
+
+| Method | Independent contributions | Estimate | Sample SD of contributions |
+|:---:|:---:|:---:|:---:|
+| Plain | $N=1200$ outputs | 1.721 | 0.600 |
+| Antithetic | $K=600$ pair averages | 1.718 | 0.120 |
+
+Treat the displayed SDs as exact for these calculations. Retain full precision until the final answer.
+
+### (a) MCSE [2]
+
+Report the estimated MCSE for **plain** and **antithetic** Monte Carlo, in that order. Each value is worth **1 point**.
+
+### (b) Relative precision [2]
+
+Compute the ratio of estimated **estimator variances**, $\widehat{\operatorname{Var}}(\widehat\theta_{\mathrm{plain}})/\widehat{\operatorname{Var}}(\widehat\theta_{\mathrm{anti}})$ **[1]**. In one sentence, interpret the ratio at the stated computational budget **[1]**.
+
+### (c) A Monte Carlo interval [2]
+
+Using the antithetic result, give the lower and upper endpoints of the approximate 95% interval $\widehat\theta\pm1.96\widehat{\mathrm{MCSE}}$ (**1 point each**).
+
+### (d) A separate control-variate calculation [2]
+
+In a separate simulation, $E[C]=2$, $\operatorname{Var}(C)=0.25$, and $\operatorname{Cov}(Y,C)=0.50$. Use the fixed optimal coefficient in
+
+$$Z=Y+c(C-2),\qquad c^*=-\frac{\operatorname{Cov}(Y,C)}{\operatorname{Var}(C)}.$$
+
+The run gives $\overline Y=3.4$ and $\overline C=2.1$. Report $c^*$ and the adjusted estimate $\overline Z$ (**1 point each**).
+
+
+{{< pagebreak >}}
+
+## Question 4: Guided Preview: Cross-Validation [6]
+
+**New material.** Read [Chapter 6: prediction on new observations](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-prediction) and [K-fold CV](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-kfold).
+
+**Reading guide.** Split the development data into $K$ folds. For each candidate and each fold, fit using the other folds and predict the held-out observations. Average their squared errors to obtain the CV MSE. Use the same folds for all candidates. Select the smallest CV MSE, refit on all development observations, and assess the result on a separate test set that was not used for selection. Data-dependent preprocessing and feature selection belong inside each training fold.
+
+### (a) Data roles [2]
+
+There are 100 independent development observations in five equal folds. For each fit, how many observations are used for **training** and for **validation**, respectively (**1 point each**)?
+
+### (b) Choose a candidate [2]
+
+Three polynomial models use the same folds:
+
+| Degree | Training MSE | CV MSE |
+|:---:|:---:|:---:|
+| 1 | 9.0 | 10.0 |
+| 2 | 4.0 | 6.0 |
+| 6 | 1.0 | 12.0 |
+
+Which degree should be selected by CV **[1]**? In one sentence, explain why the smallest training MSE does not determine this choice **[1]**.
+
+### (c) Valid assessment [2]
+
+Enter `T` or `F` for each statement (**1 point each**).
+
+1. Selecting features using all development outcomes before forming the folds gives a valid CV assessment of that feature-selection procedure.
+2. After choosing the degree by CV, it is appropriate to refit on all development data and evaluate once on an untouched test set.
