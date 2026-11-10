@@ -23,7 +23,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+                                                                                      |
 |       | Duc Pham                  |                                                                                      |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
-| 3     | Nicholas White            | TBA                                                                                  |
+| 3     | Nicholas White            | Genetic Algorithms for Function Optimization: Effects of Mutation on Convergence     |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
 | 4     | Shaswat Bhushan Jangam    | TBA                                                                                  |
 |       +---------------------------+                                                                                      |
