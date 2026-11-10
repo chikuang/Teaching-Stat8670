@@ -35,9 +35,7 @@ Wednesday 9:00 - 12:00 or by appointment
 - [x] [Assignment 1](Assignment1.qmd): September 11, 2026
 - [x] [Assignment 2](Assignment2.qmd): October 2, 2026
 - [x] [Assignment 3](Assignment3.qmd): November 2, 2026
-- [ ] [Assignment 4](Assignment4.qmd): **Friday, November 20, 2026** ([PDF](Assignment4.pdf) | [Response template](Assignment4-response-template.qmd))
-
-**Assignment 4:** Submit Questions 1-4 (30 points). P1-P10 are optional, ungraded Exam 2 practice. For the November 16 exam, work through A4 beforehand and review Assignment 3 and the main material in Chapters 4-6; the A4 submission deadline remains November 20.
+- [ ] [Assignment 4](Assignment4.qmd): November 20, 2026
 
 ## Midterm
 
@@ -60,7 +58,7 @@ Work in groups of **1-3 students** on a statistical method implemented in **R or
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-**Progress after Lecture 21:** Chapter 5 is complete. Next: [Chapter 6: Cross Validation](06-cross-validation.qmd).
+**Current progress:** [Chapter 6: Cross Validation](06-cross-validation.qmd) began in Lecture 22.
 
 | Status | Chapter | Topic | Lecture |
 |:------:|:---------:|:------------------------------------------------:|:---------:|
@@ -69,7 +67,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 3 | [Optimization](03-optimization.qmd) | 6--10 |
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 4 | [Generating Random Variable](04-generating-rv.qmd) | 11--20 |
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 5 | [Monte Carlo Simulation and Variance Reduction](05-monte-carlo.qmd) | 20--21 |
-| `r if (knitr::is_latex_output()) "Next" else "⏳"` | Ch. 6 | [Cross Validation](06-cross-validation.qmd) | TBA |
+| `r if (knitr::is_latex_output()) "In progress" else "⏳"` | Ch. 6 | [Cross Validation](06-cross-validation.qmd) | 22-- |
 | `r if (knitr::is_latex_output()) "Done" else "✅"` |  | [Exam 1](Exam1-2026F.qmd) | 13 |
 | `r if (knitr::is_latex_output()) "Exam" else "📝"` |  | Exam 2 | 24 |
 
