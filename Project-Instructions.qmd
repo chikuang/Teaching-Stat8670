@@ -31,7 +31,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+                                                                                      |
 |       | Mangsa Limbu Pheudin      |                                                                                      |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
-| 5     | Katelyn Truong            | TBA                                                                                  |
+| 5     | Katelyn Truong            | How do more random draws improve accuracy of Monte Carlo simulation?                 |
 |       +---------------------------+                                                                                      |
 |       | Zhe Zhong                 |                                                                                      |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
