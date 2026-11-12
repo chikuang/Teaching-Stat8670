@@ -58,8 +58,6 @@ Work in groups of **1-3 students** on a statistical method implemented in **R or
 
 Those chapters are based on the lecture notes. This part will be updated frequently.
 
-**Current progress:** [Chapter 6: Cross Validation](06-cross-validation.qmd) began in Lecture 22.
-
 | Status | Chapter | Topic | Lecture |
 |:------:|:---------:|:------------------------------------------------:|:---------:|
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 1 | [R Programming](01-R.qmd) | 1--3 |
