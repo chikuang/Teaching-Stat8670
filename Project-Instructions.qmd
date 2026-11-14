@@ -35,7 +35,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+                                                                                      |
 |       | Zhe Zhong                 |                                                                                      |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
-| 6     | Yasmeen Babagana          | TBA                                                                                  |
+| 6     | Yasmeen Babagana          | A Regression Package That Shrinks Coefficients Using a Penalty.                      |
 |       +---------------------------+                                                                                      |
 |       | Silas Bambil              |                                                                                      |
 |       +---------------------------+                                                                                      |
