@@ -34,6 +34,7 @@ book:
     - part: "Exam"
       chapters:
         - Exam1-2026F.qmd
+        - Exam2-2026F.qmd
         - Exam1-2025F.qmd
     - part: "Project"
       chapters:

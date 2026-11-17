@@ -1,0 +1,638 @@
+---
+show-exam-solutions: true
+---
+
+# Exam 2 {.unnumbered}
+
+**Term:** 2026F (Fall 2026)  
+**Date:** November 16, 2026  
+**Status:** Completed  
+**Time:** 75 minutes  
+**Total:** 100 points  
+**Coverage:** [Chapter 4](04-generating-rv.qmd) (Generating Random Variables), [Chapter 5](05-monte-carlo.qmd) (Monte Carlo Simulation and Variance Reduction), and [Sections 6.1-6.3](06-cross-validation.qmd) (Cross Validation).
+
+::: {tbl-colwidths="[16,72,12]"}
+
+| Question | Format | Points |
+|:---:|:---:|:---:|
+| 1 | 9 multiple-choice questions, 6 points each | 54 |
+| 2 | 6 true/false questions, 3 points each | 18 |
+| 3 | 3 short-answer scenarios, with 2 subparts each | 28 |
+| **Total** | | **100** |
+
+:::
+
+::: {.callout-note title="Exam instructions"}
+
+- Work independently. Only a **non-programmable calculator** is permitted as an electronic device.
+- Write all final answers on the **separate answer sheet**. For Questions 1-2, enter one letter A-D or True/False per item; no explanations are required.
+- For Question 3, give the requested formulas and brief explanations. One or two sentences per part are sufficient.
+
+:::
+
+**Notation:** $N(\mu,\sigma^2)$ uses variance as its second parameter. $\operatorname{Gamma}(a,b)$ uses shape $a$ and rate $b$. Vectors are bold and are column vectors unless stated otherwise.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {.callout-important title="Solutions"}
+
+Expand the **Answer** below each question to view the solution and explanation. A compact answer key and the Question 3 grading rubric appear at the end.
+
+:::
+
+::::
+
+{{< pagebreak >}}
+
+## Question 1: Multiple Choice [54] {#exam2-2026-q1}
+
+Select the **single best answer**. Each part is worth **6 points**.
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1a) {#exam2-2026-1a}
+
+A target distribution has CDF $F(x)=1-(1-x)^3$ for $0<x<1$, with $F(x)=0$ for $x\leq0$ and $F(x)=1$ for $x\geq1$. For $U\sim\operatorname{Uniform}(0,1)$, which is its inverse-CDF generator?
+
+A. $X=1-(1-U)^3$.  
+B. $X=1-(1-U)^{1/3}$.  
+C. $X=U^3$.  
+D. $X=3U(1-U)$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1a .callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+Solving $u=1-(1-x)^3$ gives $x=1-(1-u)^{1/3}$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1b) {#exam2-2026-1b}
+
+In rejection sampling with target density $f$ and proposal density $g$, which support condition is required?
+
+A. The target and proposal must have exactly the same support.  
+B. The proposal must be uniform on its support.  
+C. $g(x)>0$ wherever $f(x)>0$.  
+D. The proposal must have a smaller mean than the target.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1b .callout-tip collapse="true" title="Answer"}
+
+**Answer: C.**
+The proposal density must be positive wherever the target density is positive, so every part of the target support is accessible.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1c) {#exam2-2026-1c}
+
+Let $U_1,U_2,U_3$ be independent $\operatorname{Uniform}(0,1)$ variables. What is the distribution of $T=-\log(U_1U_2U_3)/2$?
+
+A. $\operatorname{Gamma}(3,2)$.  
+B. $\operatorname{Gamma}(2,3)$.  
+C. $\operatorname{Gamma}(3,1/2)$.  
+D. Exponential with rate 6.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1c .callout-tip collapse="true" title="Answer"}
+
+**Answer: A.**
+Each $-\log U_j/2$ is exponential with rate 2. The independent sum has gamma shape 3 and rate 2.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1d) {#exam2-2026-1d}
+
+Let $\mathbf Z\sim N_p(\mathbf0,I_p)$ and let the upper triangular matrix $R$ satisfy $R^\top R=\Sigma$. Which construction always has distribution $N_p(\boldsymbol\mu,\Sigma)$?
+
+A. $\mathbf X=\boldsymbol\mu+R\mathbf Z$.  
+B. $\mathbf X=\boldsymbol\mu+\Sigma\mathbf Z$.  
+C. $\mathbf X=R^\top(\boldsymbol\mu+\mathbf Z)$.  
+D. $\mathbf X=\boldsymbol\mu+R^\top\mathbf Z$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1d .callout-tip collapse="true" title="Answer"}
+
+**Answer: D.**
+$\operatorname{Cov}(R^\top\mathbf Z)=R^\top I_pR=\Sigma$ and the mean is $\boldsymbol\mu$. Here the random vectors are columns.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1e) {#exam2-2026-1e}
+
+Two batches of independent outputs from the same model have sample sizes 100 and 900, with means 2.0 and 3.0, respectively. What is the mean of all 1,000 outputs?
+
+A. 2.5.  
+B. 2.9.  
+C. 5.0.  
+D. It cannot be determined without the two sample variances.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1e .callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+Pooling the observations gives $(100\cdot2+900\cdot3)/1000=2.9$. The two batch means must be weighted by their batch sizes.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1f) {#exam2-2026-1f}
+
+Let $E[Y]=\theta$, $E[C]=3$, and $Z=Y-2(C-2.5)$. What is $E[Z]$?
+
+A. $\theta-1$.  
+B. $\theta$.  
+C. $\theta+1$.  
+D. $\theta-5$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1f .callout-tip collapse="true" title="Answer"}
+
+**Answer: A.**
+By linearity, $E[Z]=\theta-2(3-2.5)=\theta-1$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1g) {#exam2-2026-1g}
+
+Let $g(u)=(u-1/2)^2$ and $U\sim\operatorname{Uniform}(0,1)$. Note that $g(1-u)=g(u)$. Compare the mean of $K$ independent pair averages $\{g(U_k)+g(1-U_k)\}/2$ with the mean of $2K$ independent $g(U)$ outputs. For the same $2K$ function evaluations, the antithetic estimator's variance is:
+
+A. Zero.  
+B. Half the independent estimator's variance.  
+C. Equal to the independent estimator's variance.  
+D. Twice the independent estimator's variance.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1g .callout-tip collapse="true" title="Answer"}
+
+**Answer: D.**
+$g(1-u)=g(u)$, so each pair average is just $g(U)$. With $2K$ function calls, the antithetic variance is $\sigma_g^2/K$, whereas the independent variance is $\sigma_g^2/(2K)$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1h) {#exam2-2026-1h}
+
+Let $\widehat\theta_N$ be the mean of $N$ independent, identically distributed simulation outputs with finite mean $\theta$. Which statement about Monte Carlo error is correct?
+
+A. $|\widehat\theta_N-\theta|$ must decrease whenever one more output is added.  
+B. The estimate equals $\theta$ exactly once $N$ is sufficiently large.  
+C. The absolute error can increase after one more output is added, even though the law of large numbers applies.  
+D. Doubling $N$ makes the realized absolute error exactly half as large.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1h .callout-tip collapse="true" title="Answer"}
+
+**Answer: C.**
+Convergence of the average does not mean that its absolute error decreases at every step. A new observation can move an estimate farther from its target.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 1i) {#exam2-2026-1i}
+
+In 5-fold CV for a fixed candidate model, which data are used to fit the model that predicts observations in the held-out fold?
+
+A. Only the held-out fold.  
+B. Only the other four folds.  
+C. All five development folds.  
+D. The separate test set.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-1i .callout-tip collapse="true" title="Answer"}
+
+**Answer: B.**
+When one fold is held out, its predictions come from a fit using only the other four folds.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 2: True or False [18] {#exam2-2026-q2}
+
+Write **True** or **False**. Each part is worth **3 points**; no explanation is required.
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2a) {#exam2-2026-2a}
+
+A gamma distribution with shape $2$ and rate $3$ is the same distribution as a gamma distribution with shape $2$ and scale $3$.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2a .callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+A gamma rate of 3 corresponds to scale $1/3$, not scale 3.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2b) {#exam2-2026-2b}
+
+A discrete distribution can be generated from a $\operatorname{Uniform}(0,1)$ draw by partitioning $(0,1)$ into intervals whose lengths equal the category probabilities and returning the category of the interval containing the draw.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2b .callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+A uniform draw falls in each interval with probability equal to its length, giving the specified category probabilities.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2c) {#exam2-2026-2c}
+
+If independent simulation outputs have variance 9, then the average of 900 such outputs has Monte Carlo standard error 0.1, although an individual output has standard deviation 3.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2c .callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+The output SD is 3, while the SD of the average of 900 independent outputs is $3/\sqrt{900}=0.1$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2d) {#exam2-2026-2d}
+
+If an unbiased control-variate estimator has smaller variance than the plain Monte Carlo estimator, its realized value must be closer to the target in every simulation run.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2d .callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+Variance is a repeated-run property. Smaller variance does not force every realized estimate to be closer to $\theta$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2e) {#exam2-2026-2e}
+
+In ordinary $K$-fold CV without repetitions, for each candidate model, each development observation is used for validation once and belongs to the training set for the other $K-1$ fits.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2e .callout-tip collapse="true" title="Answer"}
+
+**Answer: True.**
+Each observation belongs to one validation fold and is available for training in the other $K-1$ fits, for each candidate.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 2f) {#exam2-2026-2f}
+
+For a polynomial model, the degree $d$ and the coefficients $\beta_0,\ldots,\beta_d$ are all estimated by least squares in each CV fit.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-2f .callout-tip collapse="true" title="Answer"}
+
+**Answer: False.**
+The degree $d$ is a candidate hyperparameter held fixed within each CV fit; least squares estimates the coefficients $\beta_0,\ldots,\beta_d$ from that fit's training observations. CV compares candidate degrees.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+## Question 3: Short Answers [28] {#exam2-2026-q3}
+
+Answer each part separately. Brief formulas and one or two sentences per part are sufficient.
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 3a) Rejection sampling [10] {#exam2-2026-3a}
+
+The target density is $f(x)=2(1-x)$ on $0<x<1$ and zero otherwise. The proposal is uniform on $(0,1)$, with density $g(x)=1$ there.
+
+#### 3a(i) [4] {#exam2-2026-3a-i}
+
+Find the smallest envelope constant $M_{\min}$ satisfying $f(x)\leq M_{\min}g(x)$ for every $0<x<1$, and state its overall acceptance probability.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3a-i .callout-tip collapse="true" title="Answer"}
+
+**Answer:** $M_{\min}=2$, and the overall acceptance probability is $1/M_{\min}=1/2$. The ratio $f(x)/g(x)=2(1-x)$ has supremum 2 on $(0,1)$. No proof of the rejection algorithm is required.
+
+:::
+
+::::
+
+#### 3a(ii) [6] {#exam2-2026-3a-ii}
+
+For 400 independent proposals, calculate the expected number of accepted draws using $M=4$ and using $M=M_{\min}$. Which choice is more efficient at this proposal budget, and by what factor?
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3a-ii .callout-tip collapse="true" title="Answer"}
+
+**Answer:** The expected accepted counts are $400/4=100$ for $M=4$ and $400/2=200$ for $M=M_{\min}=2$. The smaller constant $M=2$ is more efficient, yielding twice as many accepted draws for the same proposal budget.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 3b) Two control adjustments [10] {#exam2-2026-3b}
+
+Let $E[Y]=\theta$, $E[C]=\mu_C$ (known), $\operatorname{Var}(Y)=4$, $\operatorname{Var}(C)=1$, and $\operatorname{Cov}(Y,C)=1.5$. Consider $Z_A=Y-(C-\mu_C)$ and $Z_B=Y+(C-\mu_C)$. Each estimator averages $N$ independent $(Y,C)$ pairs, using the same $N$.
+
+You may use
+
+$$
+\operatorname{Var}(Y+cC)=\operatorname{Var}(Y)+c^2\operatorname{Var}(C)+2c\operatorname{Cov}(Y,C).
+$$
+
+#### 3b(i) [4] {#exam2-2026-3b-i}
+
+State $E[Z_A]$ and $E[Z_B]$, and explain why.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3b-i .callout-tip collapse="true" title="Answer"}
+
+**Answer:** Both $E[Z_A]=\theta$ and $E[Z_B]=\theta$, because $E[C-\mu_C]=0$. The sign affects precision without changing the expectation.
+
+:::
+
+::::
+
+#### 3b(ii) [6] {#exam2-2026-3b-ii}
+
+Calculate $\operatorname{Var}(Z_A)$ and $\operatorname{Var}(Z_B)$. Which adjustment improves precision over the plain mean of $Y$, and why?
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3b-ii .callout-tip collapse="true" title="Answer"}
+
+**Answer:**
+
+$$
+\operatorname{Var}(Z_A)=4+1-2(1.5)=2,\qquad
+\operatorname{Var}(Z_B)=4+1+2(1.5)=8.
+$$
+
+Choose **A**. For $N$ independent pairs, the estimator variances are $2/N$ and $8/N$, compared with $4/N$ for the plain mean. Thus A improves precision, whereas B reduces precision. The optimal coefficient is not requested.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+```{=latex}
+\noindent\begin{minipage}{\linewidth}
+```
+
+### 3c) Held-out prediction error [8] {#exam2-2026-3c}
+
+A dataset has 20 independent observations, divided into four equal folds. Two candidate models use the same folds. The table gives the **sum** of squared held-out prediction errors in each fold, not the fold MSE.
+
+| Model | Fold 1 | Fold 2 | Fold 3 | Fold 4 |
+|:---|---:|---:|---:|---:|
+| A | 4 | 8 | 6 | 2 |
+| B | 5 | 5 | 7 | 7 |
+
+#### 3c(i) [4] {#exam2-2026-3c-i}
+
+Compute the overall CV MSE for each model, giving every observation equal weight. Show the denominator used.
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3c-i .callout-tip collapse="true" title="Answer"}
+
+**Answer:**
+
+$$
+\operatorname{CV}(A)=\frac{4+8+6+2}{20}=1,\qquad
+\operatorname{CV}(B)=\frac{5+5+7+7}{20}=1.2.
+$$
+
+Divide each total squared error by all 20 held-out observations. Equivalently, average the four fold MSEs, since all folds contain five observations.
+
+:::
+
+::::
+
+#### 3c(ii) [4] {#exam2-2026-3c-ii}
+
+Model B has the smaller training MSE. Which model should be selected by CV, and why does the smaller training MSE not determine this choice?
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+::: {#exam2-2026-answer-3c-ii .callout-tip collapse="true" title="Answer"}
+
+**Answer:** Select **A**, since it has the smaller held-out MSE. Training error uses the data that fitted the model and can favour fitting noise. A smaller training MSE need not imply better prediction on new observations, so it does not determine this CV choice.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+```
+
+{{< pagebreak >}}
+
+:::: {.content-visible when-meta="show-exam-solutions"}
+
+## Answer Key and Grading Rubric {#exam2-2026-answer-key}
+
+### Question 1: Multiple Choice [54]
+
+| Part | 1a | 1b | 1c | 1d | 1e | 1f | 1g | 1h | 1i |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Answer | B | C | A | D | B | A | D | C | B |
+
+Award **6 points** for each correct answer and **0 points** otherwise.
+
+### Question 2: True or False [18]
+
+| Part | 2a | 2b | 2c | 2d | 2e | 2f |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Answer | False | True | True | False | True | False |
+
+Award **3 points** for each correct answer and **0 points** otherwise.
+
+### Question 3: Short Answers [28]
+
+Accept equivalent correct reasoning. Award method credit for a correct formula with an arithmetic slip. In later parts, award follow-through credit for otherwise correct reasoning using an earlier numerical result; do not deduct twice for the same arithmetic error.
+
+::: {tbl-colwidths="[14,74,12]"}
+
+| Part | Grading criteria | Points |
+|:---:|:---|:---:|
+| 3a(i) | Gives $M_{\min}=2$ (2) and acceptance probability $1/2$ (2). No proof of the algorithm is required. | 4 |
+| 3a(ii) | Gives expected counts 100 (2) and 200 (2); identifies $M=2$ as more efficient (1) and the factor of two (1). | 6 |
+| 3b(i) | States $E[Z_A]=\theta$ (1) and $E[Z_B]=\theta$ (1); explains $E[C-\mu_C]=0$ (2). | 4 |
+| 3b(ii) | Calculates variances 2 (2) and 8 (2); chooses A (1) and compares $2/N<4/N<8/N$ (1). Accept $2<4<8$ with an explicit same-$N$ comparison. | 6 |
+| 3c(i) | Gives CV MSEs 1 (1) and 1.2 (1); shows the denominator 20 for each model (1 each). Equivalent averaging of the four fold MSEs is accepted. | 4 |
+| 3c(ii) | Selects A (1) for its smaller held-out MSE (1); notes that training error is evaluated on fitting data (1) and explains why this can give an optimistic prediction assessment (1). | 4 |
+| **Total** | | **28** |
+
+:::
+
+::::

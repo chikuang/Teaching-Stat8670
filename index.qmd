@@ -40,7 +40,7 @@ Wednesday 9:00 - 12:00 or by appointment
 ## Midterm
 
 - [x] [Exam 1](Exam1-2026F.qmd): October 7, 2026
-- [ ] Exam 2: November 16, 2026
+- [x] [Exam 2](Exam2-2026F.qmd): November 16, 2026
 
 ## Project
 
@@ -67,7 +67,7 @@ Those chapters are based on the lecture notes. This part will be updated frequen
 | `r if (knitr::is_latex_output()) "Done" else "✅"` | Ch. 5 | [Monte Carlo Simulation and Variance Reduction](05-monte-carlo.qmd) | 20--21 |
 | `r if (knitr::is_latex_output()) "In progress" else "⏳"` | Ch. 6 | [Cross Validation](06-cross-validation.qmd) | 22-- |
 | `r if (knitr::is_latex_output()) "Done" else "✅"` |  | [Exam 1](Exam1-2026F.qmd) | 13 |
-| `r if (knitr::is_latex_output()) "Exam" else "📝"` |  | Exam 2 | 24 |
+| `r if (knitr::is_latex_output()) "Done" else "✅"` |  | [Exam 2](Exam2-2026F.qmd) | 24 |
 
 <!-- 🚧🛠️⏳ ✅    --> <!-- ⏳ In Progress  -->
 
