@@ -25,6 +25,7 @@ book:
     - 04-generating-rv.qmd
     - 05-monte-carlo.qmd
     - 06-cross-validation.qmd
+    - 07-resampling.qmd
     - part: "Assignment"
       chapters:
         - Assignment1.qmd

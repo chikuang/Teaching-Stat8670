@@ -1,0 +1,358 @@
+---
+execute:
+  cache: false
+  freeze: false
+format:
+  html:
+    code-fold: true
+    code-summary: "Show R code"
+---
+
+# Cross-Validation and Bootstrap {#sec-resampling}
+
+<!-- Adapted from 2025 master:05-cv.qmd and 06-resample.qmd at
+392c7fb002c1b8b171a26deac8ffe69f294441bd.
+Core teaching plan, 112.5 minutes total (1.5 meetings of 75 minutes):
+two questions/data 7.5; CV recap and fold-by-fold output 25; resampling
+algorithm and illustration 25; SE, bias and percentile CI 25; practical
+decisions, code walkthrough, and summary/check 30. Supplementary is outside this plan.
+The existing Chapter 6 remains the detailed CV reference. -->
+
+[Chapter 6](06-cross-validation.qmd) used cross-validation to assess prediction. This chapter connects that idea to **bootstrap uncertainty**. We reuse one dataset throughout and focus on one algorithm and one confidence interval. The core lesson ends at [Summary](#sec-resampling-summary); jackknife and additional methods are in [Supplementary](#sec-resampling-supplement).
+
+By the end, you should be able to distinguish **prediction error** from **estimator uncertainty**, resample the correct observational unit, and calculate and interpret a bootstrap SE, bias estimate, and percentile interval.
+
+```{r}
+#| label: resampling-setup
+#| include: false
+library(ggplot2)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5, fig.align = "center",
+  dpi = 160, collapse = TRUE, comment = "#>", message = FALSE, warning = FALSE)
+rs_theme <- theme_minimal(base_size = 11) + theme(
+  panel.grid.minor = element_blank(),
+  plot.background = element_rect(fill = "#FFF9F2", colour = NA),
+  panel.background = element_rect(fill = "#FFFEFC", colour = NA),
+  panel.grid.major = element_line(colour = "#EEE6E2", linewidth = 0.3),
+  plot.title = element_text(face = "bold", colour = "#51464C"),
+  legend.position = "bottom", legend.title = element_blank())
+```
+
+## One Dataset, Two Questions {#sec-resampling-questions}
+
+Last year's bootstrap example used `bootstrap::law`: average LSAT scores and average undergraduate GPA for **15 law schools**. Each row is a school, not a student. We use the usual independent-school sampling approximation for this illustration. See the [dataset documentation](https://cran.r-project.org/web/packages/bootstrap/bootstrap.pdf).
+
+```{r}
+#| label: resampling-law-data
+# Install the data package once if needed: install.packages("bootstrap")
+data(law, package = "bootstrap")
+n <- nrow(law)
+theta_hat <- cor(law$LSAT, law$GPA)
+head(law, 3)
+```
+
+```{r}
+#| label: fig-resampling-law
+#| echo: false
+#| fig-height: 3.1
+#| fig-cap: "Each point is one school. The sample correlation is about 0.776. A strong association does not by itself tell us either the prediction error for another school or the precision of the estimated correlation."
+#| fig-alt: "Scatterplot of GPA against LSAT for 15 law schools, showing a positive association and sample correlation 0.776."
+ggplot(law, aes(LSAT, GPA)) +
+  geom_point(shape = 21, size = 3, fill = "#D8EBE1", colour = "#427D6B") +
+  labs(x = "School-average LSAT", y = "School-average GPA",
+    title = "The same data can answer different questions") + rs_theme
+```
+
+- **Prediction:** how accurately can we predict GPA for another school from LSAT? Use held-out prediction errors, as in CV.
+- **Estimation:** how much would the sample correlation change if we observed another sample of schools? Bootstrap approximates this sampling variability. Here the parameter is the population correlation $\theta=\operatorname{Corr}(\mathrm{LSAT},\mathrm{GPA})$, and the observed estimate is $\hat\theta=`r sprintf("%.3f", theta_hat)`$.
+
+The GPA prediction error and the SE of a correlation measure different quantities and have different units. Neither is a substitute for the other.
+
+## Cross-Validation: Predict the Observations Left Out {#sec-resampling-cv}
+
+For a brief review, compare a straight line with a quadratic regression for GPA. Split the 15 schools into **five folds of three**. For each candidate, fit on 12 schools and predict the three left out; repeat for all five folds. Use identical folds for both candidates.
+
+If $k(i)$ is the fold containing school $i$, then
+
+$$
+\operatorname{CV}=\frac1n\sum_{i=1}^n
+\left\{y_i-\hat f^{(-k(i))}(x_i)\right\}^2.
+$$
+
+The superscript means that the fitted model excludes the entire fold containing $i$. Average **held-out losses**, not coefficients from the five fits.
+
+```{=latex}
+\par\noindent\begin{minipage}{\linewidth}
+```
+
+```{r}
+#| label: resampling-cv-comparison
+set.seed(8670)
+fold <- sample(rep(1:5, each = 3))
+cv_mse <- training_mse <- numeric(2)
+fold_mse <- matrix(NA_real_, nrow = 5, ncol = 2)
+for (degree in 1:2) {
+  held_out <- numeric(n)
+  for (k in 1:5) {
+    fit <- lm(GPA ~ poly(LSAT, degree), data = law[fold != k, ])
+    held_out[fold == k] <- predict(fit, newdata = law[fold == k, ])
+    fold_mse[k, degree] <- mean((law$GPA[fold == k] - held_out[fold == k])^2)
+  }
+  cv_mse[degree] <- mean((law$GPA - held_out)^2)
+  full_fit <- lm(GPA ~ poly(LSAT, degree), data = law)
+  training_mse[degree] <- mean(residuals(full_fit)^2)
+}
+```
+
+```{=latex}
+\end{minipage}\par
+```
+
+```{r}
+#| label: resampling-cv-results
+#| echo: false
+knitr::kable(data.frame(Model = c("Straight line", "Quadratic"),
+  `Training MSE` = training_mse, `5-fold CV MSE` = cv_mse,
+  `CV RMSE` = sqrt(cv_mse), check.names = FALSE),
+  digits = 4, align = "c", row.names = FALSE)
+```
+
+**Where does the CV number come from?** Each row below uses a different training set of 12 schools and scores the three schools left out. The two models use the same held-out schools in each row.
+
+```{r}
+#| label: resampling-cv-fold-results
+#| echo: false
+knitr::kable(data.frame(Fold = 1:5,
+  `Straight-line MSE` = fold_mse[, 1], `Quadratic MSE` = fold_mse[, 2],
+  check.names = FALSE), digits = 4, align = "c", row.names = FALSE)
+```
+
+For example, the straight line's first-fold MSE is **`r sprintf("%.4f", fold_mse[1, 1])`**, the average squared error for its three held-out schools. The five folds have equal sizes, so their five MSEs average to **`r sprintf("%.4f", mean(fold_mse[, 1]))`**, exactly the pooled CV MSE above. With unequal fold sizes, weight fold MSEs by their validation counts. A single fold is not the result; different schools produce different prediction errors.
+
+The quadratic reduces training MSE slightly but has **higher CV MSE** on this split. CV favours the straight line, with an RMSE of about **`r sprintf("%.3f", sqrt(cv_mse[1]))` GPA points**. Refit the chosen form on all development observations. With only 15 schools, the ranking can be sensitive to the split; the selected minimum CV score is not an independent final test result.
+
+The two rules from [Chapter 6](06-cross-validation.qmd#sec-cv-choices) still apply: learn preprocessing and selection inside each training fold, and split according to the prediction task. LOOCV uses $K=n$; it changes the partition, not the goal. A separate untouched test set or nested CV is needed for a final assessment after model selection.
+
+## Bootstrap: Resample Whole Observations {#sec-resampling-bootstrap}
+
+To estimate the sampling variability of the correlation, we would ideally collect many new samples of 15 schools and recompute it. We only have one sample. The **nonparametric bootstrap** substitutes its empirical distribution $F_n$ for the unknown population distribution $F$.
+
+Think of putting the 15 school IDs into a bag. Draw one ID, record that school's **entire LSAT/GPA row**, return the ID to the bag, and repeat until you have 15 rows. Some schools appear more than once; others are absent. Compute one correlation, then repeat the whole process.
+
+**The algorithm.** For $b=1,\ldots,B$:
+
+1. Draw $n$ row indices independently, uniformly from $\{1,\ldots,n\}$, **with replacement**.
+2. Take those rows together as one bootstrap sample, $D^{*(b)}$.
+3. Calculate the same statistic, $\hat\theta^{*(b)}=T(D^{*(b)})$.
+
+The $B$ resulting **statistics** form the bootstrap distribution. We use its variation to approximate how $\hat\theta$ varies across fresh samples. This is a plug-in approximation, not $B$ new samples from the real population.
+
+```{r}
+#| label: resampling-bootstrap-loop
+# A separate experiment: seed once, then continue across all B resamples.
+set.seed(8670)
+B <- 5000
+boot_theta <- numeric(B)
+first_indices <- matrix(NA_integer_, nrow = n, ncol = 3)
+for (b in seq_len(B)) {
+  i <- sample.int(n, size = n, replace = TRUE)
+  boot_theta[b] <- cor(law$LSAT[i], law$GPA[i])
+  if (b <= 3) first_indices[, b] <- i
+}
+```
+
+```{r}
+#| label: fig-resampling-rows
+#| echo: false
+#| fig-height: 2.8
+#| fig-cap: "Numbers are original school IDs, not new observations. Every row contains 15 draws. The first bootstrap sample includes school 14 four times and omits several schools; its correlation is about 0.853. LSAT and GPA always move together."
+#| fig-alt: "Four rows of 15 labelled tiles show school IDs 1 through 15 in the original data and the selected IDs in three bootstrap samples. Repeated and missing IDs are visible."
+rs_row_names <- c("Original", paste("Resample", 1:3))
+rs_ids <- cbind(seq_len(n), first_indices)
+rs_tiles <- data.frame(Position = rep(seq_len(n), 4),
+  Sample = factor(rep(rs_row_names, each = n), levels = rev(rs_row_names)),
+  School = as.vector(rs_ids))
+rs_tiles$Type <- ifelse(rs_tiles$Sample == "Original", "Original", "Resampled")
+ggplot(rs_tiles, aes(Position, Sample)) +
+  geom_tile(aes(fill = Type), width = .9, height = .7, colour = "white") +
+  geom_text(aes(label = School), size = 3.4, colour = "#51464C") +
+  scale_fill_manual(values = c(Original = "#D8EBE1", Resampled = "#E6DFF2")) +
+  scale_x_continuous(breaks = seq_len(n), expand = expansion(mult = .01)) +
+  labs(x = "Draw position within a sample", y = NULL,
+    title = "Resample 15 school rows, with replacement") +
+  rs_theme + theme(panel.grid = element_blank(), legend.position = "none")
+```
+
+```{r}
+#| label: resampling-first-three
+#| echo: false
+knitr::kable(data.frame(Resample = 1:3,
+  `Distinct schools` = apply(first_indices, 2, function(i) length(unique(i))),
+  Correlation = boot_theta[1:3], check.names = FALSE),
+  digits = 3, align = "c", row.names = FALSE)
+```
+
+**Why replacement?** Sampling all 15 rows without replacement only rearranges the same data, so every correlation would equal `r sprintf("%.3f", theta_hat)` and the estimated SE would be zero. **Why whole rows?** Resampling LSAT and GPA separately breaks the observed pairing and destroys the association we want to study.
+
+Each row has probability $1/n$ on a draw. If several rows share a value, its total probability includes all of those rows. The bootstrap does not make distinct observed values equally likely.
+
+## From the Replicates to SE, Bias, and a Confidence Interval {#sec-resampling-accuracy}
+
+Let $\bar\theta^*=B^{-1}\sum_{b=1}^B\hat\theta^{*(b)}$. Two summaries answer different questions:
+
+$$
+\begin{aligned}
+\widehat{\operatorname{SE}}_{\mathrm{boot}}(\hat\theta)
+&=\sqrt{\frac{1}{B-1}\sum_{b=1}^B
+(\hat\theta^{*(b)}-\bar\theta^*)^2},\\
+\widehat{\operatorname{bias}}_{\mathrm{boot}}
+&=\bar\theta^*-\hat\theta.
+\end{aligned}
+$$
+
+The **SE** describes the spread of the estimator across hypothetical samples. The **bias estimate** compares the bootstrap centre with the original estimate, which plays the population-parameter role under $F_n$.
+
+```{r}
+#| label: resampling-accuracy-results
+boot_se <- sd(boot_theta)
+boot_bias <- mean(boot_theta) - theta_hat
+percentile_ci <- quantile(boot_theta, c(.025, .975))
+```
+
+```{r}
+#| label: resampling-accuracy-table
+#| echo: false
+knitr::kable(data.frame(
+  Summary = c("Observed correlation", "Bootstrap mean", "Bootstrap SE",
+    "Estimated bias", "Percentile lower limit", "Percentile upper limit"),
+  Value = c(theta_hat, mean(boot_theta), boot_se, boot_bias, percentile_ci)),
+  digits = 3, align = "c", row.names = FALSE)
+```
+
+Here the estimated SE is **`r sprintf("%.3f", boot_se)`**, while estimated bias is **`r sprintf("%.3f", boot_bias)`**. The estimated bias is small relative to the spread; this alone is not a reason to replace the observed correlation with a bias-corrected estimate.
+
+**A percentile interval.** Take the 2.5th and 97.5th percentiles of the bootstrap statistics:
+
+$$
+\mathrm{CI}_{\mathrm{perc}}=
+\left[q^*_{0.025},\ q^*_{0.975}\right].
+$$
+
+For these data, the nominal 95% percentile interval is **[`r sprintf("%.3f", percentile_ci[1])`, `r sprintf("%.3f", percentile_ci[2])`]**. It follows the asymmetry of the bootstrap distribution instead of forcing equal distances on each side of $\hat\theta$.
+
+```{r}
+#| label: fig-resampling-distribution
+#| echo: false
+#| fig-height: 3.3
+#| fig-cap: "Distribution of 5,000 bootstrap correlations. The solid line is the observed correlation; dashed lines mark the percentile interval. The histogram describes estimator uncertainty, not the distribution of individual schools' GPA."
+#| fig-alt: "Histogram of 5,000 bootstrap correlation estimates, concentrated near 0.8 with a left tail. The observed correlation is 0.776; the percentile interval runs from about 0.462 to 0.960."
+rs_lines <- data.frame(Value = c(theta_hat, percentile_ci),
+  Meaning = c("Observed estimate", "Percentile limits", "Percentile limits"))
+ggplot(data.frame(Correlation = boot_theta), aes(Correlation)) +
+  geom_histogram(binwidth = .025, boundary = 0,
+    fill = "#CDE5D9", colour = "white") +
+  geom_vline(data = rs_lines, aes(xintercept = Value,
+    colour = Meaning, linetype = Meaning), linewidth = .8) +
+  scale_colour_manual(values = c(`Observed estimate` = "#8B80B9",
+    `Percentile limits` = "#C86C85")) +
+  scale_linetype_manual(values = c(`Observed estimate` = "solid",
+    `Percentile limits` = "dashed")) +
+  labs(x = "Bootstrap correlation", y = "Number of resamples",
+    title = "How much could the estimated correlation vary?") + rs_theme
+```
+
+The data suggest a positive association between school-level averages, with substantial uncertainty about its magnitude. A nominal 95% confidence procedure aims for about 95% coverage across repeated original samples. This interval is approximate, especially with only 15 schools; it is not a 95% probability statement about the fixed parameter, a prediction interval for a new GPA, or a causal conclusion.
+
+## What More Resamples Can and Cannot Fix {#sec-resampling-decisions}
+
+**Keep $n$ and $B$ separate.** Here $n=15$ is the number of observed schools, while $B=5000$ is the number of computer-generated resamples. Increasing $B$ reduces Monte Carlo noise in the estimated SE and percentiles; it does not add schools or eliminate sampling uncertainty. Check that the reported digits are stable if the results matter.
+
+**Do not divide the bootstrap SE by $\sqrt B$.** `sd(boot_theta)` estimates the sampling SE of the original correlation. `sd(boot_theta) / sqrt(B)` instead estimates the Monte Carlo SE of the *mean of the bootstrap replicates*, conditional on the observed data. These are different targets, connecting back to [Chapter 5](05-monte-carlo.qmd#sec-monte-carlo).
+
+**Match the resampling unit to the design.** Independent observations can be resampled by row. Repeated measurements from one person should be resampled together for an independent-person target; dependent time series need an appropriate block or model-based method. A bootstrap cannot repair selection bias, missing population features, or an inappropriate model. For a sample maximum or other boundary/non-smooth problems, ordinary resampling can fail; use a method justified for that statistic.
+
+## Summary {#sec-resampling-summary}
+
+| Task | What gets reused? | What do we calculate? |
+|:---:|:---:|:---:|
+| Compare prediction methods | Rotate disjoint training and validation folds. | Mean held-out loss; use it to choose a candidate, then refit. |
+| Estimate sampling SE or bias | Draw $n$ whole observations with replacement, $B$ times. | SD of the $B$ statistics; their mean minus the original estimate. |
+| Form a percentile interval | Use those same bootstrap statistics. | The requested lower and upper quantiles; check assumptions and small-sample limitations. |
+
+**Before reporting:** state the target, preserve the observation structure, distinguish $n$ from $B$, and say whether the result measures prediction error or estimator uncertainty.
+
+::: {#exr-resampling-check}
+
+## Check Your Understanding
+
+1. The quadratic fits the observed schools slightly better but has higher CV MSE. Which model does this split favour, and what does the CV RMSE measure?
+2. A student resamples all 15 schools without replacement and gets a bootstrap SE of zero. Why?
+3. Another student resamples the LSAT and GPA columns independently. Which feature of the data is lost?
+4. A third reports `sd(boot_theta) / sqrt(5000)` as the SE of the observed correlation. What does that quantity actually measure?
+
+:::
+
+::: {#sol-resampling-check}
+
+1. The straight line. CV RMSE summarises held-out GPA prediction error, in GPA points; it is not the SE of the estimated correlation. With only 15 schools, a small advantage on one split is not a decisive general ranking.
+2. Every sample contains the same paired observations; changing their order does not change the correlation.
+3. The pairing within each school, and therefore its association structure.
+4. Monte Carlo uncertainty in the estimated bootstrap mean, conditional on these data. Use `sd(boot_theta)` for the bootstrap estimate of the original statistic's sampling SE.
+
+:::
+
+```{=latex}
+\clearpage
+```
+
+## Supplementary {#sec-resampling-supplement}
+
+These topics extend the core lesson and can be read separately.
+
+### Jackknife: Same Deletion Pattern, Different Goal
+
+LOOCV and the delete-one jackknife both omit one observation, but they summarise different quantities. LOOCV scores a prediction for the omitted response. Jackknife recomputes a statistic on the retained $n-1$ observations to approximate its bias or SE.
+
+If $\hat\theta_{(-i)}$ is the statistic with row $i$ omitted and $\bar\theta_{(-\cdot)}=n^{-1}\sum_i\hat\theta_{(-i)}$, then
+
+$$
+\begin{aligned}
+\widehat{\operatorname{SE}}_{\mathrm{jack}}
+&=\sqrt{\frac{n-1}{n}\sum_i
+(\hat\theta_{(-i)}-\bar\theta_{(-\cdot)})^2},\\
+\widehat{\operatorname{bias}}_{\mathrm{jack}}
+&=(n-1)(\bar\theta_{(-\cdot)}-\hat\theta).
+\end{aligned}
+$$
+
+```{r}
+#| label: resampling-jackknife
+jack_theta <- vapply(seq_len(n), function(i)
+  cor(law$LSAT[-i], law$GPA[-i]), numeric(1))
+c(SE = sqrt((n - 1) / n * sum((jack_theta - mean(jack_theta))^2)),
+  bias = (n - 1) * (mean(jack_theta) - theta_hat))
+```
+
+The ordinary delete-one jackknife is most suitable for sufficiently smooth statistics; it can be unreliable for non-smooth statistics such as a sample median. The [2025 resampling lecture](https://chikuang.github.io/teaching/2025F_stat8670/06-resample.html#jackknife) gives additional examples and derivations.
+
+### Other Bootstrap Intervals and the `boot` Package
+
+A normal approximation uses $\hat\theta\pm1.96\widehat{\operatorname{SE}}$ when bias is negligible and the sampling distribution is approximately normal. A basic interval reflects the percentile limits around the observed estimate: $[2\hat\theta-q^*_{0.975},\ 2\hat\theta-q^*_{0.025}]$. For bounded or skewed statistics, these simple intervals can be inappropriate. Studentized and BCa intervals make further adjustments; they need additional calculations and assumptions.
+
+The [official `boot` documentation](https://stat.ethz.ch/R-manual/R-devel/library/boot/html/boot.html) describes a reusable implementation. Its statistic function must take the original data and a vector of resampled row indices:
+
+```{r}
+#| label: resampling-boot-package
+#| eval: false
+cor_stat <- function(data, indices) {
+  cor(data$LSAT[indices], data$GPA[indices])
+}
+set.seed(8670)  # Independent package demonstration
+result <- boot::boot(law, statistic = cor_stat, R = 5000)
+boot::boot.ci(result, type = "perc")
+```
+
+This optional code performs another Monte Carlo run; its endpoints need not exactly match the manual loop. See [`boot.ci()`](https://stat.ethz.ch/R-manual/R-devel/library/boot/html/boot.ci.html) for percentile, basic, normal, studentized, and BCa intervals. A **parametric bootstrap** instead simulates new samples from a fitted probability model; its validity depends on that model.
+
+### Sources and Further Reading
+
+This compact chapter adapts the [2025 cross-validation lecture](https://chikuang.github.io/teaching/2025F_stat8670/05-cv.html) and [2025 jackknife/bootstrap lecture](https://chikuang.github.io/teaching/2025F_stat8670/06-resample.html), retaining the law-school example. The original resampling notes draw on Rizzo, *Statistical Computing with R*, Chapter 8, and Efron and Tibshirani, *An Introduction to the Bootstrap*. [Chapter 6](06-cross-validation.qmd) contains the fuller CV treatment for the current course.
