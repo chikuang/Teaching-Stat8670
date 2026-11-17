@@ -29,12 +29,46 @@ library(ggplot2)
 knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5, fig.align = "center",
   dpi = 160, collapse = TRUE, comment = "#>", message = FALSE, warning = FALSE)
 rs_theme <- theme_minimal(base_size = 11) + theme(
+  text = element_text(colour = "#594A63"),
+  axis.text = element_text(colour = "#706477"),
   panel.grid.minor = element_blank(),
-  plot.background = element_rect(fill = "#FFF9F2", colour = NA),
+  plot.background = element_rect(fill = "#FFF9F5", colour = NA),
   panel.background = element_rect(fill = "#FFFEFC", colour = NA),
-  panel.grid.major = element_line(colour = "#EEE6E2", linewidth = 0.3),
-  plot.title = element_text(face = "bold", colour = "#51464C"),
-  legend.position = "bottom", legend.title = element_blank())
+  panel.grid.major = element_line(colour = "#EDE4ED", linewidth = 0.3),
+  plot.title = element_text(face = "bold", size = 14, colour = "#635080"),
+  plot.subtitle = element_text(size = 10, colour = "#87788F"),
+  plot.title.position = "plot", plot.margin = margin(12, 15, 8, 10),
+  legend.position = "bottom", legend.title = element_blank(),
+  legend.key = element_rect(fill = "#FFF9F5", colour = NA))
+# Small decorative friends live in the title margin, outside the data panel.
+rs_friend <- function(x, y, fill, width = .043, height = .085, label = NULL) {
+  grid::grid.roundrect(x, y - .005, width, height,
+    r = grid::unit(2, "mm"), gp = grid::gpar(fill = "#EDE3EC", col = NA))
+  grid::grid.roundrect(x, y, width, height,
+    r = grid::unit(2, "mm"), gp = grid::gpar(fill = fill,
+      col = "#C7B8CF", lwd = .65))
+  if (!is.null(label)) grid::grid.text(label, x, y + height * .19,
+    gp = grid::gpar(col = "#55445E", fontsize = 10, fontface = "bold"))
+  eye_y <- y - if (is.null(label)) 0 else height * .16
+  grid::grid.circle(x + c(-1, 1) * width * .17, rep(eye_y, 2),
+    r = grid::unit(.35, "mm"),
+    gp = grid::gpar(fill = "#6E577A", col = NA))
+  angle <- seq(0, 2 * pi, length.out = 24)
+  for (side in c(-1, 1)) grid::grid.polygon(
+    x + side * width * .32 + width * .075 * cos(angle),
+    eye_y - height * .12 + height * .04 * sin(angle),
+    gp = grid::gpar(fill = "#EBA5B5", col = NA))
+  u <- seq(-1, 1, length.out = 15)
+  grid::grid.lines(x + width * .12 * u,
+    eye_y - height * .13 - height * .07 * (1 - u^2),
+    gp = grid::gpar(col = "#6E577A", lwd = .8, lineend = "round"))
+}
+rs_draw_plot <- function(p) {
+  print(p)
+  rs_friend(.932, .93, "#DAECDD")
+  rs_friend(.978, .92, "#F8DCE6", width = .032, height = .065)
+}
+
 ```
 
 ## One Dataset, Two Questions {#sec-resampling-questions}
@@ -56,10 +90,12 @@ head(law, 3)
 #| fig-height: 3.1
 #| fig-cap: "Each point is one school. The sample correlation is about 0.776. A strong association does not by itself tell us either the prediction error for another school or the precision of the estimated correlation."
 #| fig-alt: "Scatterplot of GPA against LSAT for 15 law schools, showing a positive association and sample correlation 0.776."
-ggplot(law, aes(LSAT, GPA)) +
-  geom_point(shape = 21, size = 3, fill = "#D8EBE1", colour = "#427D6B") +
+rs_draw_plot(ggplot(law, aes(LSAT, GPA)) +
+  geom_point(shape = 21, size = 3.5, stroke = .75,
+    fill = "#F3CADC", colour = "#8F729F") +
   labs(x = "School-average LSAT", y = "School-average GPA",
-    title = "The same data can answer different questions") + rs_theme
+    title = "One dataset, two questions",
+    subtitle = "15 schools | correlation = 0.776") + rs_theme)
 ```
 
 - **Prediction:** how accurately can we predict GPA for another school from LSAT? Use held-out prediction errors, as in CV.
@@ -164,22 +200,38 @@ for (b in seq_len(B)) {
 #| label: fig-resampling-rows
 #| echo: false
 #| fig-height: 2.8
-#| fig-cap: "Numbers are original school IDs, not new observations. Every row contains 15 draws. The first bootstrap sample includes school 14 four times and omits several schools; its correlation is about 0.853. LSAT and GPA always move together."
-#| fig-alt: "Four rows of 15 labelled tiles show school IDs 1 through 15 in the original data and the selected IDs in three bootstrap samples. Repeated and missing IDs are visible."
+#| fig-cap: "Numbers are original school IDs, not new observations. Every row contains 15 draws. The first bootstrap sample includes school 14 four times and omits several schools; its correlation is about 0.853. Matching IDs keep the same colour. LSAT and GPA always move together."
+#| fig-alt: "Four rows of 15 pastel rounded cards show school IDs 1 through 15 in the original data and the selected IDs in three bootstrap samples. Repeated and missing IDs are visible."
 rs_row_names <- c("Original", paste("Resample", 1:3))
 rs_ids <- cbind(seq_len(n), first_indices)
-rs_tiles <- data.frame(Position = rep(seq_len(n), 4),
-  Sample = factor(rep(rs_row_names, each = n), levels = rev(rs_row_names)),
-  School = as.vector(rs_ids))
-rs_tiles$Type <- ifelse(rs_tiles$Sample == "Original", "Original", "Resampled")
-ggplot(rs_tiles, aes(Position, Sample)) +
-  geom_tile(aes(fill = Type), width = .9, height = .7, colour = "white") +
-  geom_text(aes(label = School), size = 3.4, colour = "#51464C") +
-  scale_fill_manual(values = c(Original = "#D8EBE1", Resampled = "#E6DFF2")) +
-  scale_x_continuous(breaks = seq_len(n), expand = expansion(mult = .01)) +
-  labs(x = "Draw position within a sample", y = NULL,
-    title = "Resample 15 school rows, with replacement") +
-  rs_theme + theme(panel.grid = element_blank(), legend.position = "none")
+# Colour follows the school ID across samples; positions are draw order only.
+rs_school_colours <- c("#D9ECDD", "#F6D9E5", "#E3DDF6", "#F8E3CC",
+  "#D8EAF5", "#F7EDC9", "#E9D6EA", "#D9EBD6", "#F8DAD3",
+  "#D8E9EA", "#EADFF2", "#F6E8D5", "#E5ECCF", "#D6DFF4", "#EFD8DF")
+grid::grid.newpage()
+grid::grid.rect(gp = grid::gpar(fill = "#FFF9F5", col = NA))
+grid::grid.text("Same schools, fresh samples", .025, .94, just = "left",
+  gp = grid::gpar(col = "#635080", fontsize = 14, fontface = "bold"))
+grid::grid.text("15 whole rows per sample | with replacement", .025, .865,
+  just = "left", gp = grid::gpar(col = "#87788F", fontsize = 9.5))
+rs_x <- seq(.19, .964, length.out = n)
+rs_y <- c(.72, .545, .37, .195)
+for (row in seq_len(4)) {
+  grid::grid.roundrect(.09, rs_y[row], .145, .10,
+    r = grid::unit(3, "mm"), gp = grid::gpar(col = NA,
+      fill = if (row == 1) "#E3EFE4" else "#EEE5F5"))
+  grid::grid.text(rs_row_names[row], .09, rs_y[row],
+    gp = grid::gpar(col = "#695475", fontsize = 9))
+  for (j in seq_len(n)) {
+    id <- rs_ids[j, row]
+    rs_friend(rs_x[j], rs_y[row], rs_school_colours[id],
+      width = .044, height = .13, label = id)
+  }
+}
+grid::grid.text(seq_len(n), rs_x, .08,
+  gp = grid::gpar(col = "#8A7B92", fontsize = 8))
+grid::grid.text("Draw position within a sample", .575, .03,
+  gp = grid::gpar(col = "#706477", fontsize = 9))
 ```
 
 ```{r}
@@ -247,17 +299,18 @@ For these data, the nominal 95% percentile interval is **[`r sprintf("%.3f", per
 #| fig-alt: "Histogram of 5,000 bootstrap correlation estimates, concentrated near 0.8 with a left tail. The observed correlation is 0.776; the percentile interval runs from about 0.462 to 0.960."
 rs_lines <- data.frame(Value = c(theta_hat, percentile_ci),
   Meaning = c("Observed estimate", "Percentile limits", "Percentile limits"))
-ggplot(data.frame(Correlation = boot_theta), aes(Correlation)) +
+rs_draw_plot(ggplot(data.frame(Correlation = boot_theta), aes(Correlation)) +
   geom_histogram(binwidth = .025, boundary = 0,
-    fill = "#CDE5D9", colour = "white") +
+    fill = "#D9CDEA", colour = "#FFFEFC", linewidth = .4) +
   geom_vline(data = rs_lines, aes(xintercept = Value,
     colour = Meaning, linetype = Meaning), linewidth = .8) +
-  scale_colour_manual(values = c(`Observed estimate` = "#8B80B9",
-    `Percentile limits` = "#C86C85")) +
+  scale_colour_manual(values = c(`Observed estimate` = "#4C917E",
+    `Percentile limits` = "#CC7799")) +
   scale_linetype_manual(values = c(`Observed estimate` = "solid",
     `Percentile limits` = "dashed")) +
   labs(x = "Bootstrap correlation", y = "Number of resamples",
-    title = "How much could the estimated correlation vary?") + rs_theme
+    title = "How much can our estimate vary?",
+    subtitle = "5,000 bootstrap correlations | the same 15 schools") + rs_theme)
 ```
 
 The data suggest a positive association between school-level averages, with substantial uncertainty about its magnitude. A nominal 95% confidence procedure aims for about 95% coverage across repeated original samples. This interval is approximate, especially with only 15 schools; it is not a 95% probability statement about the fixed parameter, a prediction interval for a new GPA, or a causal conclusion.
