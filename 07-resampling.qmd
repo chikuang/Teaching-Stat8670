@@ -12,11 +12,11 @@ format:
 
 <!-- Adapted from 2025 master:06-resample.qmd at
 392c7fb002c1b8b171a26deac8ffe69f294441bd.
-Core teaching plan, 112.5 minutes total (1.5 meetings of 75 minutes):
-estimator uncertainty/data 10; jackknife algorithm, SE and bias 30;
-bootstrap algorithm 25; bootstrap accuracy and percentile CI 25;
-comparison, practical choices and check questions 22.5.
-Derivations and additional intervals are optional Supplementary reading. -->
+Core teaching plan, at most 100 minutes:
+three distributions and data 20; jackknife concept/algorithm/example 20;
+bootstrap concept/algorithm/example 25; percentile CI 10;
+comparison and check questions 15; questions and transitions 10.
+Derivations, additional intervals, and package code are optional reading. -->
 
 How much would an estimate change if we collected another sample? **Jackknife and bootstrap** use the observed data to estimate its sampling uncertainty. We study both methods using one dataset, then compare their SE and bias estimates. Prediction assessment belongs to [Chapter 6](06-cross-validation.qmd); this chapter focuses on the accuracy of an estimated parameter.
 
@@ -108,9 +108,115 @@ rs_draw_samples <- function(ids, labels, title, subtitle, position_label) {
 }
 ```
 
-## How Uncertain Is Our Estimate? {#sec-resampling-questions}
+## Three Distributions and Sampling Uncertainty {#sec-resampling-questions}
 
-Last year's bootstrap example used `bootstrap::law`: average LSAT scores and average undergraduate GPA for **15 law schools**. Each row is a school, not a student. We use the usual independent-school sampling approximation for this illustration. See the [dataset documentation](https://cran.r-project.org/web/packages/bootstrap/bootstrap.pdf).
+::: {#rs-estimator-accuracy .callout-definition title="Sampling distribution, standard error, and bias"}
+
+Let $D=(X_1,\ldots,X_n)$ be an independent sample from a population distribution $F$. A **parameter** $\theta$ describes the population; an **estimator** $\hat\theta=T(D)$ is a rule calculated from the sample. Once we observe $D$, it gives one numerical **estimate**.
+
+The **sampling distribution** is the distribution of $\hat\theta$ across repeated samples of size $n$ from $F$.
+
+$$
+\operatorname{SE}(\hat\theta)=\sqrt{\operatorname{Var}_F(\hat\theta)},
+\qquad
+\operatorname{Bias}(\hat\theta)=\mathbb E_F(\hat\theta)-\theta.
+$$
+
+SE measures spread; bias measures average displacement from the true parameter. Both concern repeated samples, not the spread of the individual observations.
+
+:::
+
+::: {#rs-three-distributions .callout-definition title="Underlying, sampling, and bootstrap distributions"}
+
+- **Underlying distribution $F$:** the population distribution of **one observation $X$**. A fresh sample contains $n$ independent draws from $F$.
+- **Sampling distribution of $\hat\theta$:** the distribution of **$T(D)$** across fresh samples of size $n$ from $F$. It depends on $F$, $n$, and $T$; its SD is the estimator's SE.
+- **Bootstrap distribution of $\hat\theta^*$:** the conditional distribution of **$T(D^*)$** given **one fixed observed sample $D$**. Draw $n$ rows with replacement from $F_n$ to form each $D^*$. Under suitable conditions, this approximates the sampling distribution.
+
+The first describes **individual data values**; the others describe **estimates from entire samples**. Population sampling changes $D$; bootstrap sampling fixes $D$ and changes $D^*$.
+
+:::
+
+### See the Difference with a Known Population
+
+For this illustration only, let $X\sim\operatorname{Exp}(1)$ and estimate $\mu=1$ using the mean of $n=30$ observations. The first two curves are known: an exponential density for $X$, and the exact sampling density of $\bar X$ (a gamma density with shape 30 and rate 30). The last panel uses 5,000 bootstrap means from **one** observed sample of size 30.
+
+```{r}
+#| label: resampling-three-distributions-data
+#| include: false
+set.seed(8670)  # Independent illustration; main school example has its own seed.
+demo_n <- 30
+demo_x <- rexp(demo_n, rate = 1)
+demo_mean <- mean(demo_x)
+demo_B <- 5000
+demo_boot <- replicate(demo_B, mean(sample(demo_x, demo_n, replace = TRUE)))
+demo_labels <- c("1. Underlying distribution: one observation X",
+  "2. Sampling distribution: mean of 30 NEW observations",
+  "3. Bootstrap distribution: mean of 30 RESAMPLED observations")
+demo_grid <- seq(0, 4, length.out = 1001)
+demo_curves <- rbind(
+  data.frame(Value = demo_grid, Density = dexp(demo_grid),
+    Distribution = demo_labels[1]),
+  data.frame(Value = demo_grid, Density = dgamma(demo_grid, demo_n, rate = demo_n),
+    Distribution = demo_labels[2]))
+demo_hist <- data.frame(Value = demo_boot, Distribution = demo_labels[3])
+demo_centres <- data.frame(Distribution = demo_labels,
+  Centre = c(1, 1, demo_mean))
+demo_notes <- data.frame(Distribution = demo_labels,
+  Value = c(3.95, 3.95, 3.95), Density = c(.83, 1.9, 1.7),
+  Text = c("Population F\nMean = 1; SD = 1",
+    sprintf("Fresh samples from F\nMean = 1; SE = %.3f", 1 / sqrt(demo_n)),
+    sprintf("One fixed sample; resample from Fn\nObserved mean = %.3f; bootstrap SE = %.3f",
+      demo_mean, sd(demo_boot))))
+demo_curves$Distribution <- factor(demo_curves$Distribution, levels = demo_labels)
+demo_hist$Distribution <- factor(demo_hist$Distribution, levels = demo_labels)
+demo_centres$Distribution <- factor(demo_centres$Distribution, levels = demo_labels)
+demo_notes$Distribution <- factor(demo_notes$Distribution, levels = demo_labels)
+```
+
+```{r}
+#| label: fig-resampling-three-distributions
+#| echo: false
+#| fig-height: 5.5
+#| fig-cap: "Three distributions for a sample mean. The horizontal scale is identical in all panels, so their widths can be compared; density heights use separate vertical scales. Top: individual observations from Exp(1). Middle: the exact distribution of means of 30 fresh observations. Bottom: 5,000 bootstrap means conditional on one observed sample of 30. Dashed lines mark the population mean (top and middle) and the observed mean (bottom)."
+#| fig-alt: "Three vertically stacked distribution plots on the same horizontal scale from 0 to 4. The underlying exponential distribution is right-skewed and broad. The sampling distribution of the mean is concentrated around 1. The bootstrap histogram is concentrated near the observed mean 1.084, with a slightly different spread."
+rs_draw_plot(ggplot() +
+  geom_area(data = demo_curves, aes(Value, Density, fill = Distribution), alpha = .6) +
+  geom_line(data = demo_curves, aes(Value, Density), colour = "#806B95", linewidth = .65) +
+  geom_histogram(data = demo_hist, aes(Value, after_stat(density)),
+    binwidth = .04, boundary = 0, fill = "#CDBFE5", colour = "#FFFEFC", linewidth = .25) +
+  geom_vline(data = demo_centres, aes(xintercept = Centre),
+    colour = "#4C917E", linetype = "dashed", linewidth = .65) +
+  geom_text(data = demo_notes, aes(Value, Density, label = Text),
+    hjust = 1, vjust = 1, size = 3, lineheight = 1.2, colour = "#594A63") +
+  facet_wrap(~Distribution, ncol = 1, scales = "free_y") +
+  scale_fill_manual(values = setNames(c("#F2CAD8", "#C6E2D5"), demo_labels[1:2])) +
+  scale_x_continuous(limits = c(0, 4), breaks = 0:4, expand = expansion(mult = c(0, .01))) +
+  labs(x = "Value: an observation in panel 1; a sample mean in panels 2 and 3",
+    y = "Density", title = "Three distributions, three random quantities",
+    subtitle = "Known population for illustration | n = 30 observations per sample") +
+  rs_theme + theme(legend.position = "none",
+    strip.background = element_rect(fill = "#EDE6F3", colour = NA),
+    strip.text = element_text(face = "bold", size = 10, hjust = 0),
+    panel.spacing = grid::unit(.7, "lines")))
+```
+
+The individual observations have $\operatorname{SD}(X)=1$; their mean has the much smaller $\operatorname{SE}(\bar X)=1/\sqrt{30}\approx0.183$. The bootstrap histogram is centred near the **observed mean**, `r sprintf("%.3f", demo_mean)`, rather than exactly at the population mean 1. Its centre and spread reflect the particular sample we observed.
+
+The empirical distribution $F_n$ is a fourth, related object: it puts mass $1/30$ on each observed data point. It supplies the **rows to resample**; the bottom histogram instead contains **means of whole resamples**. Increasing $B$ makes that histogram more stable but does not change the fixed $F_n$ or add population information.
+
+### Return to the School Correlation
+
+For real data, the underlying distribution and the true sampling distribution are usually unknown. We cannot draw the first two curves for the schools without additional assumptions. **Resampling** uses the observed rows to approximate uncertainty in the correlation. Cross-validation instead assesses prediction on held-out outcomes.
+
+::: {#rs-law-example .callout-example title="One example throughout: correlation between school averages"}
+
+The dataset `bootstrap::law` contains average LSAT scores and average undergraduate GPA for **15 law schools**. Each row is one school. Our parameter is the population correlation $\theta=\operatorname{Corr}(\mathrm{LSAT},\mathrm{GPA})$; our estimator is the sample correlation. We use the independent-school sampling approximation for this illustration.
+
+**Question:** How much would the estimated correlation change if we sampled another 15 schools?
+
+:::
+
+See the [dataset documentation](https://cran.r-project.org/web/packages/bootstrap/bootstrap.pdf). Keep each school's LSAT and GPA together in every resample.
 
 ```{r}
 #| label: resampling-law-data
@@ -135,16 +241,19 @@ rs_draw_plot(ggplot(law, aes(LSAT, GPA)) +
     subtitle = "15 schools | correlation = 0.776") + rs_theme)
 ```
 
-Our parameter is the population correlation $\theta=\operatorname{Corr}(\mathrm{LSAT},\mathrm{GPA})$. Its observed estimate is $\hat\theta=`r sprintf("%.3f", theta_hat)`$. If we sampled another 15 schools, we would generally get a different correlation.
-
-- **Standard error:** $\operatorname{SE}(\hat\theta)=\sqrt{\operatorname{Var}(\hat\theta)}$, the spread of the estimator across repeated original samples.
-- **Bias:** $\operatorname{Bias}(\hat\theta)=\mathbb E(\hat\theta)-\theta$, its average displacement from the true parameter.
-
-Both refer to repeated sampling from the population. We cannot observe that entire sampling process, so we estimate these quantities by systematically deleting or resampling observed rows.
+The observed estimate is $\hat\theta=`r sprintf("%.3f", theta_hat)`$. We now estimate its SE and bias by deleting or resampling whole school rows.
 
 ## Jackknife: Leave One Observation Out {#sec-resampling-jackknife}
 
-The **delete-one jackknife** removes each school once and recomputes the same correlation on the schools that remain. With $n=15$, there are exactly **15 replicates**, each based on **14 schools**. There are no repeated rows within a replicate and no random draws.
+::: {#rs-jackknife-concept .callout-definition title="Delete-one jackknife"}
+
+Remove observation $i$ to obtain $D_{(-i)}$. The **jackknife replicate** is $\hat\theta_{(-i)}=T(D_{(-i)})$, the same statistic calculated from the remaining $n-1$ observations.
+
+There are exactly $n$ delete-one samples. Every observation is omitted once; no random sampling is needed. The changes in the statistic measure its sensitivity to individual observations.
+
+:::
+
+For our correlation, $n=15$ gives **15 replicates**, each based on **14 schools**.
 
 ```{r}
 #| label: fig-resampling-jackknife
@@ -160,7 +269,30 @@ rs_draw_samples(jack_ids, c("Original", paste("Omit", 1:3)),
   "Original school ID")
 ```
 
-**The algorithm.** Start with the full-sample estimate $\hat\theta=T(D)$. For each $i=1,\ldots,n$, remove row $i$ to form $D_{(-i)}$, then calculate $\hat\theta_{(-i)}=T(D_{(-i)})$ on the retained data. Finally, summarise the $n$ estimates.
+::: {#rs-jackknife-algorithm .callout-algorithm title="Jackknife estimates of SE and bias"}
+
+**Input:** $n$ independent observations $D$ and a statistic $T$.
+
+1. Calculate the full-sample estimate $\hat\theta=T(D)$.
+2. For each $i=1,\ldots,n$, delete row $i$ and calculate $\hat\theta_{(-i)}=T(D_{(-i)})$.
+3. Calculate their mean $\bar\theta_{(-\cdot)}=n^{-1}\sum_{i=1}^n\hat\theta_{(-i)}$.
+4. Return the following estimates of the full-sample estimator's accuracy:
+
+$$
+\begin{aligned}
+\widehat{\operatorname{SE}}_{\mathrm{jack}}(\hat\theta)
+&=\sqrt{\frac{n-1}{n}\sum_{i=1}^n
+(\hat\theta_{(-i)}-\bar\theta_{(-\cdot)})^2},\\
+\widehat{\operatorname{bias}}_{\mathrm{jack}}
+&=(n-1)(\bar\theta_{(-\cdot)}-\hat\theta).
+\end{aligned}
+$$
+
+If bias correction is wanted, calculate $\hat\theta_{\mathrm{jack,bc}}=\hat\theta-\widehat{\operatorname{bias}}_{\mathrm{jack}}$.
+
+:::
+
+### Apply the Algorithm to the Schools
 
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
@@ -190,21 +322,7 @@ knitr::kable(data.frame(
 
 For example, omitting school 1 changes the correlation from **`r sprintf("%.3f", theta_hat)` to `r sprintf("%.3f", jack_theta[1])`**. This shows sensitivity to that observation; it does not establish that the school is invalid or should be discarded. Use **all 15** delete-one estimates for the following calculations.
 
-**From deletions to SE and bias.** Let $\bar\theta_{(-\cdot)}=n^{-1}\sum_{i=1}^n\hat\theta_{(-i)}$. The jackknife estimates are
-
-$$
-\begin{aligned}
-\widehat{\operatorname{SE}}_{\mathrm{jack}}(\hat\theta)
-&=\sqrt{\frac{n-1}{n}\sum_{i=1}^n
-(\hat\theta_{(-i)}-\bar\theta_{(-\cdot)})^2},\\
-\widehat{\operatorname{bias}}_{\mathrm{jack}}
-&=(n-1)(\bar\theta_{(-\cdot)}-\hat\theta).
-\end{aligned}
-$$
-
-```{=latex}
-\par\noindent\begin{minipage}{\linewidth}
-```
+::: {#rs-jackknife-scaling .callout-note title="Why not use the raw SD of the jackknife replicates?"}
 
 The delete-one datasets overlap almost completely. Their raw SD measures the size of these small deletion changes; it is **not** the sampling SE of the full-sample estimator. With R's sample-SD convention, the formula above equals
 
@@ -213,11 +331,9 @@ $$
 =\frac{n-1}{\sqrt n}\,\operatorname{sd}(\hat\theta_{(-1)},\ldots,\hat\theta_{(-n)}).
 $$
 
-```{=latex}
-\end{minipage}\par
-```
-
 For the sample mean, this scaling gives exactly $s/\sqrt n$. The bias factor $n-1$ converts the small change from sample size $n$ to $n-1$ into an estimate of the leading bias at size $n$. The derivations are in [Supplementary](#sec-resampling-supplement).
+
+:::
 
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
@@ -249,17 +365,40 @@ Here the raw SD is **`r sprintf("%.4f", sd(jack_theta))`**, but the jackknife SE
 
 ## Bootstrap: Resample Whole Observations {#sec-resampling-bootstrap}
 
-To estimate the sampling variability of the correlation, we would ideally collect many new samples of 15 schools and recompute it. We only have one sample. The **nonparametric bootstrap** substitutes its empirical distribution $F_n$ for the unknown population distribution $F$.
+::: {#rs-bootstrap-concept .callout-definition title="Empirical distribution and the nonparametric bootstrap"}
+
+The **empirical distribution** $F_n$ assigns probability $1/n$ to each observed row. For scalar data, its empirical CDF is
+
+$$
+F_n(t)=\frac1n\sum_{i=1}^n\mathbf 1\{x_i\le t\}.
+$$
+
+The **nonparametric bootstrap** substitutes $F_n$ for the unknown population distribution $F$. Conditional on the observed data, draw $n$ observations independently from $F_n$ to obtain a **bootstrap sample** $D^*$. Its **bootstrap replicate** is the statistic $\hat\theta^*=T(D^*)$.
+
+Sampling from $F_n$ means sampling observed rows **with replacement**. Repeated values receive their combined probability; distinct values are not necessarily equally likely. For paired data, $F_n$ is the empirical joint distribution of whole rows.
+
+:::
 
 Think of putting the 15 school IDs into a bag. Draw one ID, record that school's **entire LSAT/GPA row**, return the ID to the bag, and repeat until you have 15 rows. Some schools appear more than once; others are absent. Compute one correlation, then repeat the whole process.
 
-**The algorithm.** For $b=1,\ldots,B$:
+::: {#rs-bootstrap-algorithm .callout-algorithm title="Nonparametric bootstrap"}
 
-1. Draw $n$ row indices independently, uniformly from $\{1,\ldots,n\}$, **with replacement**.
-2. Take those rows together as one bootstrap sample, $D^{*(b)}$.
-3. Calculate the same statistic, $\hat\theta^{*(b)}=T(D^{*(b)})$.
+**Input:** $n$ independent observations $D$, a statistic $T$, and a number of resamples $B$.
 
-The $B$ resulting **statistics** form the bootstrap distribution. We use its variation to approximate how $\hat\theta$ varies across fresh samples. This is a plug-in approximation, not $B$ new samples from the real population.
+1. Calculate the observed estimate $\hat\theta=T(D)$.
+2. For each $b=1,\ldots,B$:
+   a. Draw $n$ row indices independently and uniformly from $\{1,\ldots,n\}$, **with replacement**.
+   b. Take those whole rows as one bootstrap sample $D^{*(b)}$.
+   c. Calculate one statistic $\hat\theta^{*(b)}=T(D^{*(b)})$.
+3. Return the $B$ statistics. Use their SD to estimate SE, their mean minus $\hat\theta$ to estimate bias, and their quantiles for a percentile interval, as shown below.
+
+**Output:** the empirical distribution of $\hat\theta^{*(1)},\ldots,\hat\theta^{*(B)}$, which approximates the conditional bootstrap distribution of the statistic.
+
+:::
+
+As in @fig-resampling-three-distributions, $F_n$ supplies individual observations, while the bootstrap distribution contains statistics. Here each statistic is a correlation of 15 pairs, rather than a mean of 30 values.
+
+### Apply the Algorithm to the Same Schools
 
 ```{=latex}
 \par\noindent\begin{minipage}{\linewidth}
@@ -305,9 +444,13 @@ knitr::kable(data.frame(Resample = 1:3,
   digits = 3, align = "c", row.names = FALSE)
 ```
 
-**Why replacement?** Sampling all 15 rows without replacement only rearranges the same data, so every correlation would equal `r sprintf("%.3f", theta_hat)` and the estimated SE would be zero. **Why whole rows?** Resampling LSAT and GPA separately breaks the observed pairing and destroys the association we want to study.
+::: {#rs-bootstrap-pairing .callout-warning title="Resample whole rows, with replacement"}
 
-Each row has probability $1/n$ on a draw. If several rows share a value, its total probability includes all of those rows. The bootstrap does not make distinct observed values equally likely.
+**Without replacement:** drawing all 15 rows only rearranges the same data, so every correlation equals `r sprintf("%.3f", theta_hat)` and the estimated SE is zero.
+
+**Separate column resampling:** drawing LSAT and GPA independently breaks the observed pairing and destroys the association we want to study.
+
+:::
 
 ```{=latex}
 \clearpage
@@ -315,7 +458,9 @@ Each row has probability $1/n$ on a draw. If several rows share a value, its tot
 
 ## From the Replicates to SE, Bias, and a Confidence Interval {#sec-resampling-accuracy}
 
-Let $\bar\theta^*=B^{-1}\sum_{b=1}^B\hat\theta^{*(b)}$. Two summaries answer different questions:
+::: {#rs-bootstrap-accuracy .callout-note title="Bootstrap estimates of SE and bias"}
+
+Let $\bar\theta^*=B^{-1}\sum_{b=1}^B\hat\theta^{*(b)}$. Summarise the $B$ statistics from the bootstrap algorithm:
 
 $$
 \begin{aligned}
@@ -327,13 +472,16 @@ $$
 \end{aligned}
 $$
 
-The **SE** describes the spread of the estimator across hypothetical samples. The **bias estimate** compares the bootstrap centre with the original estimate, which plays the population-parameter role under $F_n$.
+The **SE estimate** is their spread. The **bias estimate** compares the bootstrap centre with the original estimate, which plays the population-parameter role under $F_n$ for this plug-in statistic. If bias correction is wanted, use $\hat\theta_{\mathrm{boot,bc}}=\hat\theta-\widehat{\operatorname{bias}}_{\mathrm{boot}}$.
+
+Do **not** divide this SD by $\sqrt B$: that would estimate Monte Carlo error of the bootstrap mean, not sampling uncertainty of $\hat\theta$.
+
+:::
 
 ```{r}
 #| label: resampling-accuracy-results
 boot_se <- sd(boot_theta)
 boot_bias <- mean(boot_theta) - theta_hat
-percentile_ci <- quantile(boot_theta, c(.025, .975))
 ```
 
 ```{r}
@@ -341,19 +489,34 @@ percentile_ci <- quantile(boot_theta, c(.025, .975))
 #| echo: false
 knitr::kable(data.frame(
   Summary = c("Observed correlation", "Bootstrap mean", "Bootstrap SE",
-    "Estimated bias", "Percentile lower limit", "Percentile upper limit"),
-  Value = c(theta_hat, mean(boot_theta), boot_se, boot_bias, percentile_ci)),
+    "Estimated bias"),
+  Value = c(theta_hat, mean(boot_theta), boot_se, boot_bias)),
   digits = 3, align = "c", row.names = FALSE)
 ```
 
 Here the estimated SE is **`r sprintf("%.3f", boot_se)`**, while estimated bias is **`r sprintf("%.3f", boot_bias)`**. The estimated bias is small relative to the spread; this alone is not a reason to replace the observed correlation with a bias-corrected estimate.
 
-**A percentile interval.** Take the 2.5th and 97.5th percentiles of the bootstrap statistics:
+::: {#rs-percentile-algorithm .callout-algorithm title="Bootstrap percentile confidence interval"}
+
+**Input:** the $B$ bootstrap statistics and a confidence level $1-\alpha$.
+
+1. Find their empirical quantiles $q^*_{\alpha/2}$ and $q^*_{1-\alpha/2}$.
+2. Return the approximate $100(1-\alpha)\%$ interval
 
 $$
 \mathrm{CI}_{\mathrm{perc}}=
-\left[q^*_{0.025},\ q^*_{0.975}\right].
+\left[q^*_{\alpha/2},\ q^*_{1-\alpha/2}\right].
 $$
+
+For 95% confidence, use the 2.5th and 97.5th percentiles of the **statistics**, not percentiles of the original observations.
+
+:::
+
+```{r}
+#| label: resampling-percentile-interval
+percentile_ci <- quantile(boot_theta, c(.025, .975))
+percentile_ci
+```
 
 For these data, the nominal 95% percentile interval is **[`r sprintf("%.3f", percentile_ci[1])`, `r sprintf("%.3f", percentile_ci[2])`]**. It follows the asymmetry of the bootstrap distribution instead of forcing equal distances on each side of $\hat\theta$.
 
@@ -379,7 +542,11 @@ rs_draw_plot(ggplot(data.frame(Correlation = boot_theta), aes(Correlation)) +
     subtitle = "5,000 bootstrap correlations | the same 15 schools") + rs_theme)
 ```
 
+::: {#rs-interval-interpretation .callout-note title="Interpretation"}
+
 The data suggest a positive association between school-level averages, with substantial uncertainty about its magnitude. A nominal 95% confidence procedure aims for about 95% coverage across repeated original samples. This interval is approximate, especially with only 15 schools; it is not a 95% probability statement about the fixed parameter, a prediction interval for a new GPA, or a causal conclusion.
+
+:::
 
 ## Summary and Practical Choices {#sec-resampling-summary}
 
@@ -410,7 +577,7 @@ The SE estimates are similar, and both bias estimates are small compared with th
 ```
 
 - **Use the right formula.** Jackknife needs the deletion scaling; bootstrap SE is the SD of its $B$ statistics. Jackknife replicates are small perturbations, so their raw quantiles are not a bootstrap percentile interval.
-- **Keep data size and computing effort separate.** Here $n=15$ schools, versus $B=5000$ bootstrap resamples. A larger $B$ reduces Monte Carlo noise, not sampling uncertainty. `sd(boot_theta) / sqrt(B)` estimates Monte Carlo SE of the bootstrap *mean*, not SE of the original correlation; see [Chapter 5](05-monte-carlo.qmd#sec-monte-carlo).
+- **Keep data size and computing effort separate.** Here $n=15$ schools, versus $B=5000$ resamples. More resamples stabilise the bootstrap calculation; they do not supply more schools. This is the distinction between sampling uncertainty and Monte Carlo error from [Chapter 5](05-monte-carlo.qmd#sec-monte-carlo).
 - **Match the method to the statistic and design.** Ordinary delete-one jackknife can fail for a non-smooth statistic such as the sample median. Bootstrap can handle many such statistics under suitable conditions, but ordinary resampling can also fail for extremes or boundary problems. Preserve whole independent units: paired measurements move together; clustered or time-dependent data need a suitable cluster or block method. Neither method repairs selection bias in the original sample.
 
 ::: {#exr-resampling-check}
@@ -439,7 +606,23 @@ The SE estimates are similar, and both bias estimates are small compared with th
 
 ## Supplementary {#sec-resampling-supplement}
 
-These derivations and additional intervals extend the core lesson.
+The core lesson ends above. These derivations, additional intervals, and package details are optional reading.
+
+### Bias, Variance, and Mean Squared Error
+
+::: {#rs-mse .callout-definition title="Mean squared error of an estimator"}
+
+For a scalar estimator with finite second moment,
+
+$$
+\operatorname{MSE}_F(\hat\theta)
+=\mathbb E_F[(\hat\theta-\theta)^2]
+=\operatorname{Var}_F(\hat\theta)+\{\operatorname{Bias}_F(\hat\theta)\}^2.
+$$
+
+:::
+
+Subtracting an estimated bias can change the estimator's variance. A bias-corrected estimate need not have smaller MSE; small bias relative to SE does not by itself justify a correction.
 
 ### Why the Jackknife SE Scaling Works for a Mean
 
