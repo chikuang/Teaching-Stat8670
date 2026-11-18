@@ -48,7 +48,7 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 |       +---------------------------+                                                                                      |
 |       | Elton Kwashie             |                                                                                      |
 +-------+---------------------------+--------------------------------------------------------------------------------------+
-| 8     | Qiaoting Gao              | TBA                                                                                  |
+| 8     | Qiaoting Gao              | GradePredictR: An R Package for Student Grade Prediction and Model Evaluation        |
 |       +---------------------------+                                                                                      |
 |       | Zidu Peng                 |                                                                                      |
 |       +---------------------------+                                                                                      |
