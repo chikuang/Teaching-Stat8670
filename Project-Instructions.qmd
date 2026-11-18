@@ -11,7 +11,8 @@ Choose **one statistical method**, implement its main algorithm, test it, and ex
 +-------+---------------------------+--------------------------------------------------------------------------------------+
 | Group | Members                   | Topic                                                                                |
 +:=====:+===========================+:====================================================================================:+
-| 1     | Jada Grant                | TBA                                                                                  |
+| 1     | Jada Grant                | How does learning rate affect the accuracy and efficiency of gradient descent in     |
+|       |                           | logistic regression?                                                                 |
 |       +---------------------------+                                                                                      |
 |       | Shravya Honne             |                                                                                      |
 |       +---------------------------+                                                                                      |
