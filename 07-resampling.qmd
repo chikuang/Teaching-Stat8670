@@ -35,33 +35,114 @@ rs_theme <- theme_classic(base_size = 11) + theme(
   legend.position = "bottom", legend.title = element_blank())
 rs_draw_plot <- function(p) print(p)
 
-# Numbered tiles represent patient rows, not simulated new patients.
-rs_draw_samples <- function(ids, labels, title, subtitle, position_label) {
-  grid::grid.newpage()
-  grid::grid.rect(gp = grid::gpar(fill = "white", col = NA))
-  grid::grid.text(title, .02, .95, just = "left",
-    gp = grid::gpar(fontsize = 13, fontface = "bold"))
-  grid::grid.text(subtitle, .02, .86, just = "left",
-    gp = grid::gpar(col = "#555555", fontsize = 9))
-  xs <- seq(.19, .974, length.out = nrow(ids))
-  ys <- c(.70, .53, .36, .19)
-  fills <- rep(c("#DCEAF4", "#C7DCEB", "#E7EFF5", "#B8D2E4"),
-    length.out = max(ids, na.rm = TRUE))
-  for (row in seq_len(ncol(ids))) {
-    grid::grid.text(labels[row], .02, ys[row], just = "left",
-      gp = grid::gpar(fontsize = 9))
-    for (j in seq_len(nrow(ids))) {
-      id <- ids[j, row]
-      grid::grid.rect(xs[j], ys[row], .035, .12,
-        gp = grid::gpar(fill = if (is.na(id)) "white" else fills[id],
-          col = if (is.na(id)) "#999999" else "#67869A",
-          lty = if (is.na(id)) "dashed" else "solid", lwd = .6))
-      grid::grid.text(if (is.na(id)) "-" else id, xs[j], ys[row],
-        gp = grid::gpar(fontsize = 8, col = "#243B4A"))
-    }
+# Patient IDs, colours, and paired measurements stay together in every sample.
+# This figure uses actual sample indices and statistics from the CD4 example.
+rs_draw_flow <- function(method, ids, statistics) {
+  stopifnot(method %in% c("bootstrap", "jackknife"),
+    nrow(ids) == 20, ncol(ids) == 3, length(statistics) == 3)
+  boot <- method == "bootstrap"
+  ink <- "#273B50"
+  accent <- if (boot) "#8065AC" else "#388B83"
+  pale <- if (boot) "#F3EEF9" else "#EAF6F2"
+  palette <- c("#F9DDA7", "#CDE9DF", "#D6E3F6", "#F2D5E5", "#DFD9F2")
+  gp_text <- function(size = 10, bold = FALSE, colour = ink) {
+    grid::gpar(fontfamily = "sans", fontsize = size,
+      fontface = if (bold) "bold" else "plain", col = colour)
   }
-  grid::grid.text(position_label, .58, .045,
-    gp = grid::gpar(fontsize = 9, col = "#555555"))
+  label <- function(text, x, y, size = 10, bold = FALSE,
+                    colour = ink, just = "centre") {
+    grid::grid.text(text, x, y, just = just,
+      gp = gp_text(size, bold, colour))
+  }
+  card <- function(x, y, width, height, fill = "white", border = "#D8DFE7") {
+    grid::grid.roundrect(x, y, width, height,
+      r = grid::unit(3, "mm"), gp = grid::gpar(fill = fill, col = border, lwd = 1))
+  }
+  arrow <- function(x, y) {
+    grid::grid.lines(x, y,
+      arrow = grid::arrow(type = "closed", length = grid::unit(1.8, "mm")),
+      gp = grid::gpar(col = accent, fill = accent, lwd = 1.3))
+  }
+  patient <- function(id, x, y, omitted = FALSE) {
+    grid::pushViewport(grid::viewport(x, y,
+      width = grid::unit(9, "mm"), height = grid::unit(10, "mm")))
+    colour <- if (omitted) "#FEF7F5" else palette[(id - 1) %% length(palette) + 1]
+    outline <- if (omitted) "#CA756C" else "#6C7985"
+    pen <- grid::gpar(fill = colour, col = outline, lwd = .65,
+      lty = if (omitted) "dashed" else "solid")
+    grid::grid.roundrect(.5, .25, .75, .39, r = grid::unit(1.2, "mm"), gp = pen)
+    grid::grid.circle(.5, .72, r = grid::unit(2.3, "mm"), gp = pen)
+    if (omitted) {
+      grid::grid.lines(c(.31, .69), c(.88, .55),
+        gp = grid::gpar(col = "#C15F55", lwd = 1.2))
+      grid::grid.lines(c(.31, .69), c(.55, .88),
+        gp = grid::gpar(col = "#C15F55", lwd = 1.2))
+    } else {
+      grid::grid.circle(c(.41, .59), c(.77, .77), r = grid::unit(.17, "mm"),
+        gp = grid::gpar(fill = ink, col = NA))
+      grid::grid.lines(c(.39, .44, .50, .56, .61), c(.67, .64, .63, .64, .67),
+        gp = grid::gpar(col = ink, lwd = .65, lineend = "round"))
+    }
+    grid::grid.text(id, .5, .245, gp = gp_text(8, TRUE, outline))
+    grid::popViewport()
+  }
+
+  grid::grid.newpage()
+  grid::grid.rect(gp = grid::gpar(fill = "#FFFDF9", col = NA))
+  label(if (boot) "Bootstrap: draw a fresh resample each time"
+    else "Jackknife: leave one patient out at a time", .035, .963,
+    size = 16, bold = TRUE, just = "left")
+  label("One little patient = one whole baseline + one-year CD4 pair",
+    .035, .922, size = 10, just = "left", colour = "#566779")
+
+  card(.5, .786, .91, .215, fill = "#F1F5FA")
+  label("1. Start with the SAME observed sample: 20 patients", .5, .873,
+    size = 11.5, bold = TRUE)
+  orig_x <- seq(.17, .83, length.out = 10)
+  for (j in 1:20) patient(j, orig_x[(j - 1) %% 10 + 1],
+    if (j <= 10) .820 else .752)
+  label("Keep these original patient IDs fixed throughout.", .5, .696,
+    size = 9, colour = "#566779")
+
+  centres <- c(.17, .5, .83)
+  grid::grid.lines(c(.5, .5), c(.678, .612),
+    gp = grid::gpar(col = accent, lwd = 1.3))
+  grid::grid.lines(c(centres[1], centres[3]), c(.612, .612),
+    gp = grid::gpar(col = accent, lwd = 1.3))
+  label(if (boot) "2. Sample WITH replacement" else "2. Leave ONE patient out",
+    .04, .645, size = 10.5, bold = TRUE, colour = accent, just = "left")
+  label(if (boot) "Start each resample from the original 20."
+    else "Restore all 20 before the next deletion.",
+    .96, .645, size = 9, colour = "#566779", just = "right")
+
+  for (b in 1:3) {
+    x <- centres[b]
+    arrow(c(x, x), c(.612, .568))
+    card(x, .396, .30, .337, fill = "white", border = "#D8DFE7")
+    label(if (boot) paste("Resample", b) else paste("Omit patient", b),
+      x, .542, size = 11, bold = TRUE, colour = accent)
+    label(if (boot) "20 draws; repeats are allowed" else "19 retained; no repeated patients",
+      x, .513, size = 8.5, colour = "#566779")
+    xs <- x + seq(-.112, .112, length.out = 5)
+    ys <- c(.468, .406, .344, .282)
+    for (j in 1:20) {
+      id <- ids[j, b]
+      patient(if (is.na(id)) j else id, xs[(j - 1) %% 5 + 1],
+        ys[(j - 1) %/% 5 + 1], omitted = is.na(id))
+    }
+    label(if (boot) paste(length(unique(ids[, b])), "distinct patient IDs")
+      else paste("Crossed out:", b, "only"), x, .238, size = 8.5,
+      colour = if (boot) "#566779" else "#B15C52")
+    arrow(c(x, x), c(.227, .193))
+    card(x, .152, .30, .077, fill = pale, border = accent)
+    label("3. Compute one correlation", x, .168, size = 9, colour = accent)
+    label(sprintf("r = %.3f", statistics[b]), x, .139, size = 12, bold = TRUE)
+    arrow(c(x, x), c(.113, .085))
+  }
+  card(.5, .049, .96, .065, fill = pale, border = accent)
+  label(if (boot) "Repeat B = 5,000 times: B correlations give SE, bias, and a percentile CI."
+    else "Repeat for all 20 patients: 20 correlations give the scaled jackknife SE and bias.",
+    .5, .05, size = 10.4, bold = TRUE, colour = accent)
 }
 ```
 
@@ -334,24 +415,13 @@ for (b in seq_len(B)) {
 ```{r}
 #| label: fig-resampling-rows
 #| echo: false
-#| fig-height: 2.8
-#| fig-cap: "Numbers identify original patient rows. Each bootstrap sample contains 20 draws with replacement, so some patients repeat and others are absent. Baseline and one-year CD4 measurements always move together."
-#| fig-alt: "The original twenty patient row IDs and three bootstrap resamples of twenty rows, with repeated and missing IDs."
-rs_ids <- cbind(seq_len(n), first_indices)
-rs_draw_samples(rs_ids, c("Original", paste("Resample", 1:3)),
-  "Resample whole patient pairs",
-  "20 paired observations per sample | with replacement",
-  "Draw position within a resample")
+#| fig-width: 8
+#| fig-height: 6.5
+#| fig-cap: "Bootstrap flow: every resample starts from the same observed sample of 20 patients. Each resample makes 20 draws with replacement, so some IDs repeat and others are absent. The first three actual resamples lead to correlations 0.768, 0.671, and 0.858. Continue to B = 5,000 resamples and summarise their correlations. A patient icon always carries the whole baseline/one-year pair."
+#| fig-alt: "Cute numbered patient icons show a fixed sample of 20 patients branching into three separate bootstrap samples, each with 20 draws with replacement. Repeated IDs retain their colour. Each sample points to its correlation, and the correlations feed into SE, bias, and a percentile interval."
+rs_draw_flow("bootstrap", first_indices, boot_theta[1:3])
 ```
 
-```{r}
-#| label: resampling-first-three
-#| echo: false
-knitr::kable(data.frame(Resample = 1:3,
-  `Distinct patients` = apply(first_indices, 2, function(i) length(unique(i))),
-  Correlation = boot_theta[1:3], check.names = FALSE),
-  digits = 3, align = "c", row.names = FALSE)
-```
 
 ::: {#rs-bootstrap-pairing .callout-warning title="Resample whole rows, with replacement"}
 
@@ -439,20 +509,22 @@ There are exactly $n$ delete-one samples. Every observation is omitted once; no 
 \end{minipage}\par
 ```
 
-For our correlation, $n=20$ gives **20 replicates**, each based on **19 patients**.
+For our correlation, $n=20$ gives **20 replicates**, each based on **19 patients**. @fig-resampling-jackknife follows the first three deletions.
 
 ```{r}
 #| label: fig-resampling-jackknife
 #| echo: false
-#| fig-height: 2.8
-#| fig-cap: "The first three of 20 jackknife samples. A dashed empty tile marks the omitted patient; the other 19 patients each appear once. Remove the entire baseline/one-year pair and calculate a correlation from the retained rows."
-#| fig-alt: "The original 20 numbered patient rows and three jackknife samples omitting patient 1, 2, and 3. The remaining patient IDs appear once each."
-jack_ids <- matrix(rep(seq_len(n), 4), nrow = n)
-for (i in 1:3) jack_ids[i, i + 1] <- NA_integer_
-rs_draw_samples(jack_ids, c("Original", paste("Omit", 1:3)),
-  "Delete one patient at a time",
-  "19 paired observations per jackknife sample | 20 samples in total",
-  "Original patient row ID")
+#| fig-pos: "htbp"
+#| fig-width: 8
+#| fig-height: 6.5
+#| fig-cap: "Jackknife flow: return to the same full sample before every deletion. The first three samples omit patients 1, 2, and 3 separately; a crossed-out icon is excluded from the calculation. Each retained sample contains 19 distinct patients and gives one correlation. Continue through all 20 patients, then use the jackknife scaling formulas for SE and bias. There is no random redraw and deletions do not accumulate."
+#| fig-alt: "Cute numbered patient icons show the original 20 patients branching into three leave-one-out samples. Patient 1, 2, or 3 is crossed out in a different sample; all other patients remain. The 19-patient samples give correlations 0.688, 0.730, and 0.737. All 20 deletions feed into the scaled jackknife SE and bias."
+jack_ids <- matrix(rep(seq_len(n), 3), nrow = n)
+for (i in 1:3) jack_ids[i, i] <- NA_integer_
+jack_first <- vapply(1:3, function(i) {
+  cor(cd4$baseline[-i], cd4$oneyear[-i])
+}, numeric(1))
+rs_draw_flow("jackknife", jack_ids, jack_first)
 ```
 
 ### Jackknife Estimate of Bias
