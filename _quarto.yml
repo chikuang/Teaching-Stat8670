@@ -1,6 +1,8 @@
 project:
   type: book
   resources:
+    - Assignment5-response-template.qmd
+    - Assignment5.pdf
     - Assignment4-response-template.qmd
     - Assignment4.pdf
     - project-report-template.zip
@@ -32,6 +34,7 @@ book:
         - Assignment2.qmd
         - Assignment3.qmd
         - Assignment4.qmd
+        - Assignment5.qmd
     - part: "Exam"
       chapters:
         - Exam1-2026F.qmd

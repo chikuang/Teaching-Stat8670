@@ -36,6 +36,7 @@ Wednesday 9:00 - 12:00 or by appointment
 - [x] [Assignment 2](Assignment2.qmd): October 2, 2026
 - [x] [Assignment 3](Assignment3.qmd): November 2, 2026
 - [ ] [Assignment 4](Assignment4.qmd): November 20, 2026
+- [ ] [Assignment 5](Assignment5.qmd): December 7, 2026
 
 ## Midterm
 
