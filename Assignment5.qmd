@@ -22,13 +22,13 @@ pagetitle: Assignment 5
 
 ::: {.callout-note title="Submission instructions"}
 
-Use **Quarto** or **R Markdown**. Submit your **PDF and matching source** to **Assignment 5** on **iCollege**, named `A5_LastName_FirstName.pdf` and `A5_LastName_FirstName.qmd` (or `.Rmd`). Include your name, course number, and question/subpart labels.
+Use **Quarto** or **R Markdown**. Upload your **PDF and matching source** to **Assignment 5** on **iCollege**. Name them `A5_LastName_FirstName.pdf` and `A5_LastName_FirstName.qmd` (or `.Rmd`). Include your name and course number. Label each question and subpart.
 
 - **Questions 1-2:** Enter exactly one letter, A, B, C, or D, for each item. No explanation is required.
-- **Questions 3-4:** Show a brief formula or substitution for each calculation and give the requested short explanations. Equivalent correct reasoning is accepted.
-- Round numerical answers to **three decimal places**, retaining full precision until the end. Report counts as integers.
-- **Question 5:** Explain two errors and write corrected R lines; execution is not required.
-- **No simulation or plots are required.** Put any R calculations in executable chunks; set `set.seed(8670)` once before each independent simulation, not within repetitions.
+- **Questions 3-4:** Show the formula or substitution for each calculation. Give the requested short explanations.
+- Round numerical answers to **three decimal places** only at the end. Report counts as integers.
+- **Question 5:** Explain two errors and write corrected R lines.
+- **No simulation or plots are required.** Put any R calculations in executable chunks. If you run a simulation, set `set.seed(8670)` once before its repetitions.
 - Check that your source renders to your PDF. HTML or screenshots alone are not accepted.
 
 :::
@@ -37,11 +37,11 @@ Use **Quarto** or **R Markdown**. Submit your **PDF and matching source** to **A
 
 ## Question 1: Cross-Validation [6]
 
-Select **one best answer** for each item. Each item is worth **1 point**. Unless stated otherwise, development observations are independent and the prediction target is a new observation from the same population.
+Select **one best answer** per item (**1 point each**). Unless stated otherwise, observations are independent. The prediction target is a new observation from the same population.
 
 ### (a) What is tuned? [1]
 
-A polynomial regression is fitted by least squares, and CV compares degrees 1, 2, and 3. Which quantity is the model **hyperparameter** being tuned?
+A polynomial regression uses least squares. CV compares degrees 1, 2, and 3. Which quantity is the **hyperparameter** being tuned?
 
 **A.** The fitted intercept.  
 **B.** The estimated residual variance.  
@@ -50,71 +50,71 @@ A polynomial regression is fitted by least squares, and CV compares degrees 1, 2
 
 ### (b) Feature selection [1]
 
-A fitting procedure first selects predictors using their associations with the outcome, then fits a regression. How should CV evaluate this **whole procedure**?
+A procedure selects predictors using their associations with the outcome. It then fits a regression. How should CV evaluate this **whole procedure**?
 
-**A.** Select predictors once using all development outcomes, then cross-validate only the regression fit.  
-**B.** Repeat predictor selection using only each training fold, then fit and predict its held-out fold.  
+**A.** Select predictors using all development outcomes. Then cross-validate only the regression fit.  
+**B.** Select predictors within each training set. Fit the model there and predict the held-out fold.  
 **C.** Select predictors using the final test outcomes.  
-**D.** Select predictors separately using the outcomes in each validation fold.
+**D.** Select predictors using each validation fold's outcomes.
 
 ### (c) Predicting new people [1]
 
-A dataset has four visits per patient. The goal is to predict outcomes for **new patients**. Which fold construction best matches this goal?
+Each patient has four visits. We want to predict outcomes for **new patients**. How should the folds be formed?
 
-**A.** Randomly assign each visit to a fold, even when one patient's visits appear in several folds.  
-**B.** Put the first visit from every patient in validation and all their other visits in training.  
-**C.** Use the patient identifier as a predictor and then split visits randomly.  
-**D.** Assign patients to folds, keeping all visits from the same patient together.
+**A.** Randomly assign visits to folds. One patient's visits may appear in different folds.  
+**B.** Use each patient's first visit for validation and their other visits for training.  
+**C.** Use patient ID as a predictor. Then split visits randomly.  
+**D.** Assign patients to folds. Keep each patient's visits together.
 
 {{< pagebreak >}}
 
 ### (d) Predicting the future [1]
 
-The goal is to forecast next month's demand from past monthly records. Which validation design best matches that goal?
+We want to forecast next month's demand using past monthly records. Which validation design fits this goal?
 
-**A.** Randomly shuffle all months into folds, allowing later months to predict earlier ones.  
+**A.** Shuffle months into random folds. Allow later months to predict earlier ones.  
 **B.** Train on earlier months and validate on later months.  
 **C.** Train on later months and validate on earlier months.  
 **D.** Fit to every month and report the training error.
 
 ### (e) Leave-one-out CV [1]
 
-For a fixed dataset and a deterministic fitting procedure, which statement about LOOCV is correct?
+Use a fixed dataset and a deterministic fitting procedure. Which statement about LOOCV is correct?
 
 **A.** It uses one fitted model to predict all observations.  
 **B.** Its prediction error must be zero because each training set is large.  
-**C.** It has no random fold assignment, but its score can change when a new dataset is collected.  
+**C.** It needs no random fold assignment. Collecting a new dataset can change its score.  
 **D.** It is guaranteed to have lower variability than 5-fold CV.
 
 ### (f) Reusing the test set [1]
 
-After inspecting the final test error, an analyst changes the polynomial degree and chooses the version with the best result on that same test set. What has happened?
+An analyst checks the final test error. They then change the polynomial degree to get the lowest error on that same test set. What has happened?
 
-**A.** The test set has become part of model selection; its chosen score is no longer an untouched final assessment.  
-**B.** The test set is still untouched because its rows were not used to fit coefficients.  
-**C.** The original CV scores automatically adjust for this additional selection.  
-**D.** Refitting on the development data makes the selected test score unbiased automatically.
+**A.** The test set now guides model selection. It no longer provides an untouched final assessment.  
+**B.** The test set is still untouched because it was not used to fit coefficients.  
+**C.** CV automatically adjusts for this extra model selection.  
+**D.** A final refit on the development data removes any bias in the selected test score.
 
 {{< pagebreak >}}
 
 ## Question 2: Jackknife and Bootstrap [6]
 
-Select **one best answer** for each item. Each item is worth **1 point**. Use the ordinary delete-one jackknife and the nonparametric bootstrap for independent observational units.
+Select **one best answer** per item (**1 point each**). Use the ordinary delete-one jackknife and the nonparametric bootstrap. Assume independent observational units.
 
 ### (a) Resampling paired measurements [1]
 
-Each of 20 patients has a baseline and a follow-up measurement. To bootstrap their correlation, how should one bootstrap sample be formed?
+Each of 20 patients has a baseline and a follow-up measurement. We want to bootstrap their correlation. How should one bootstrap sample be formed?
 
 **A.** Independently resample the baseline and follow-up columns.  
 **B.** Randomly reorder all 20 patient rows without replacement.  
-**C.** Draw 20 patient IDs with replacement and take each selected patient's two measurements together.  
+**C.** Sample 20 patient IDs with replacement. Keep both measurements from each selected patient.  
 **D.** Draw 20 baseline measurements and keep the follow-up column in its original order.
 
 ### (b) What does the histogram describe? [1]
 
-Each of 5,000 bootstrap samples gives one correlation. A histogram of these 5,000 correlations describes:
+Compute one correlation from each of 5,000 bootstrap samples. What does a histogram of these correlations describe?
 
-**A.** Variation of a statistic under resampling from the observed data, used to approximate its sampling distribution.  
+**A.** Variation of the statistic when resampling the observed data. This approximates its sampling distribution.  
 **B.** The population distribution of individual patient measurements.  
 **C.** The distribution of 5,000 newly recruited patients.  
 **D.** The exact sampling distribution under the unknown population, without approximation.
@@ -132,36 +132,36 @@ The observed estimate is $\hat\theta=0.60$, and the bootstrap estimates average 
 
 ### (d) Interpreting a confidence procedure [1]
 
-When its approximation is appropriate, what is the intended interpretation of a nominal 95% bootstrap confidence procedure for a population correlation?
+Consider a nominal 95% bootstrap confidence procedure for a population correlation. Assume its approximation is appropriate. What is its frequentist interpretation?
 
 **A.** About 95% of individual measurements fall inside each interval.  
 **B.** It is a 95% prediction interval for the next patient's measurement.  
-**C.** Across repeated original samples, about 95% of the resulting intervals contain the fixed population correlation.  
-**D.** Once the interval has been computed, the frequentist interpretation assigns probability 0.95 to the fixed parameter being inside it.
+**C.** Across repeated original samples, about 95% of the intervals contain the fixed population correlation.  
+**D.** For the one computed interval, the fixed parameter has probability 0.95 of lying inside it.
 
 ### (e) More resamples [1]
 
-For the same fixed dataset, $B$ increases from 2,000 to 8,000, using independent bootstrap draws. Which statement is correct?
+For the same dataset, increase $B$ from 2,000 to 8,000. The bootstrap draws are independent. Which statement is correct?
 
-**A.** Monte Carlo noise decreases; the conditional Monte Carlo SE of the bootstrap mean is approximately halved, while the original sample size is unchanged.  
+**A.** The conditional Monte Carlo SE of the bootstrap mean is approximately halved. The original sample size stays the same.  
 **B.** The original estimator's sampling SE must be halved.  
 **C.** The dataset now contains four times as many independent observations.  
 **D.** Selection bias in the original sample is removed.
 
 ### (f) Jackknife versus LOOCV [1]
 
-Both methods omit one observation at a time. What distinguishes their usual goals in these notes?
+Both jackknife and LOOCV omit one observation at a time. What is the usual goal of each method?
 
 **A.** Both estimate prediction error by averaging the retained-sample correlations.  
 **B.** Jackknife predicts the omitted outcome; LOOCV estimates bias from parameter replicates.  
 **C.** Jackknife requires random fold assignments, whereas LOOCV samples with replacement.  
-**D.** Jackknife summarises parameter estimates to estimate SE/bias; LOOCV averages held-out prediction losses to assess prediction.
+**D.** Jackknife uses parameter estimates to estimate SE and bias. LOOCV averages held-out losses to assess prediction.
 
 {{< pagebreak >}}
 
 ## Question 3: Comparing Prediction Methods [6]
 
-Two candidate regression procedures, A and B, use the **same three folds** of 11 independent development observations. Each procedure is fitted afresh using the other two folds. Each observation receives exactly one held-out prediction. The folds are slightly unequal in size:
+Two regression procedures, A and B, use the **same three folds** of 11 independent development observations. For each fold, fit each procedure on the other two folds. Then predict the held-out fold. Each observation receives exactly one held-out prediction.
 
 | Fold | Validation observations | Held-out MSE: A | Held-out MSE: B |
 |:---:|:---:|:---:|:---:|
@@ -169,19 +169,19 @@ Two candidate regression procedures, A and B, use the **same three folds** of 11
 | 2 | 4 | 1 | 4 |
 | 3 | 3 | 9 | 2 |
 
-Each displayed MSE averages the squared prediction errors **within that fold**. Treat these values as exact. Use the definition in [Section 6.3: How K-Fold CV Works](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-kfold).
+Each MSE averages squared prediction errors **within that fold**. Treat the values as exact. Use the definition in [Section 6.3: How K-Fold CV Works](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-kfold).
 
 ### (a) Overall CV error [2]
 
-Calculate the overall CV MSE for **A** and **B**, giving every held-out observation equal weight (**1 point each**). Show the weights or the conversion from fold MSEs to sums of squared errors.
+Calculate the overall CV MSE for **A** and **B** (**1 point each**). Give each held-out observation equal weight. Show your weights or your total squared-error calculation.
 
 ### (b) Model comparison [2]
 
-Which procedure should be selected by the CV rule **[1]**? Explain in one or two sentences why taking an unweighted average of the three fold MSEs is inappropriate for the observation-weighted target here **[1]**.
+Which procedure should CV select **[1]**? Why is an unweighted average of the three fold MSEs inappropriate here **[1]**? Explain in one or two sentences.
 
 ### (c) Final assessment [2]
 
-The selected procedure is refitted on **all 11 development observations**. It then gives the following predictions on a separate test set, which was not used for fitting, preprocessing, or selection:
+Refit the selected procedure on **all 11 development observations**. Its predictions on a separate test set are shown below. This test set was not used for preprocessing, fitting, or model selection.
 
 | Test observation | Observed outcome | Prediction |
 |:---:|:---:|:---:|
@@ -190,15 +190,15 @@ The selected procedure is refitted on **all 11 development observations**. It th
 | 3 | 3 | 5 |
 | 4 | 4 | 4 |
 
-Calculate the test MSE **[1]**. Give one reason why it need not equal the selected procedure's CV MSE **[1]**. See [Section 6.5: Select, Refit, and Test](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-select).
+Calculate the test MSE **[1]**. Give one reason why it may differ from the selected procedure's CV MSE **[1]**. See [Section 6.5: Select, Refit, and Test](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-select).
 
 {{< pagebreak >}}
 
 ## Question 4: Estimator Uncertainty [8]
 
-An illustrative dataset contains **$n=10$ independent units**, with two measurements recorded for each unit. The statistic is their sample correlation. The jackknife and bootstrap summaries below were computed using the appropriate resampling procedures for these paired data.
+There are **$n=10$ independent units**. Each unit has two paired measurements. The statistic is their sample correlation.
 
-The following summaries come from the full sample, all 10 jackknife replicates, and $B=5000$ bootstrap replicates. **Treat the displayed values as exact inputs for this question**; raw data and programming are not needed.
+The table summarizes the full sample, all 10 jackknife replicates, and $B=5000$ bootstrap replicates. **Treat the displayed values as exact**. You do not need raw data or programming.
 
 | Quantity | Value |
 |:---:|:---:|
@@ -214,11 +214,11 @@ The raw jackknife SD uses denominator $n-1$, as R's `sd()` does. The bootstrap S
 
 ### (a) Jackknife SE and bias [2]
 
-Calculate the jackknife SE **[1]** and jackknife bias estimate **[1]**. Show the calculation for each quantity.
+Calculate the jackknife SE **[1]** and jackknife bias estimate **[1]**. Show both calculations.
 
 ### (b) Bias correction [2]
 
-Calculate the jackknife bias-corrected estimate, $\hat\theta-\widehat{\operatorname{bias}}_{\mathrm{jack}}$ **[1]**. Does subtracting an estimated bias necessarily reduce mean squared error? Explain in one sentence **[1]**.
+Calculate the jackknife bias-corrected estimate, $\hat\theta-\widehat{\operatorname{bias}}_{\mathrm{jack}}$ **[1]**. Does bias correction always reduce mean squared error? Explain in one sentence **[1]**.
 
 ### (c) Bootstrap SE and bias [2]
 
@@ -226,13 +226,13 @@ Report the bootstrap SE **[1]** and calculate the bootstrap bias estimate **[1]*
 
 ### (d) Percentile interval [2]
 
-Give both endpoints of the nominal 95% bootstrap percentile interval **[1 total]**. In one sentence, explain why this is an interval for the **population correlation**, rather than a prediction interval for a new unit's measurement **[1]**.
+Report the nominal 95% bootstrap percentile interval (**1 point for both endpoints**). The interval concerns the **population correlation**. Explain why it does not predict a new unit's measurement **[1]**. Use one sentence.
 
 {{< pagebreak >}}
 
 ## Question 5: Checking a CV Implementation [4]
 
-Suppose `dat` contains 20 independent observations with numeric columns `x` and `y`, with no missing values. The row order is arbitrary. We want the **5-fold CV MSE** for the fixed regression model `y ~ x`. Use the five folds specified below; choosing or changing folds is not part of this question.
+Suppose `dat` has 20 independent observations. It contains numeric columns `x` and `y`, with no missing values. The rows are in arbitrary order. We want the **5-fold CV MSE** for the regression model `y ~ x`. Use the five folds given below.
 
 The following R code runs, but contains **two statistical errors**:
 
@@ -252,10 +252,10 @@ cv_mse <- mean(dat$y - pred)^2
 
 ### (a) First error [2]
 
-Identify one error and explain why it fails to give the intended CV MSE **[1]**. Write corrected R line(s), indicating where they belong **[1]**.
+Identify one error. Explain why it gives an incorrect CV MSE **[1]**. Write corrected R line(s) and state where they belong **[1]**.
 
 ### (b) Second error [2]
 
-Identify a different error and explain why it fails to give the intended CV MSE **[1]**. Write corrected R line(s), indicating where they belong **[1]**.
+Identify a second error. Explain the problem **[1]**. Write corrected R line(s) and state where they belong **[1]**.
 
-You may discuss the errors in either order. Brief explanations and code fragments are sufficient; **no code execution or numerical CV score is required**. See [Section 6.3: How K-Fold CV Works](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-kfold).
+List the errors in either order. Code fragments are enough. **No code execution or numerical CV score is required.** See [Section 6.3: How K-Fold CV Works](https://chikuang.github.io/teaching/2026F_stat8670/06-cross-validation.html#sec-cv-kfold).
