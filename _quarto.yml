@@ -66,6 +66,9 @@ show-exam-solutions: true
 # Release Assignment 3 solutions in both HTML and the combined PDF.
 show-assignment3-solutions: true
 
+# Release Assignment 4 solutions in both HTML and the combined PDF.
+show-assignment4-solutions: true
+
 execute:
   cache: true
   freeze: auto

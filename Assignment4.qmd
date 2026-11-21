@@ -1,5 +1,5 @@
 ---
-show-assignment4-solutions: false
+show-assignment4-solutions: true
 pagetitle: Assignment 4
 ---
 
@@ -53,11 +53,27 @@ The PDF must be generated from the submitted source. **HTML alone does not satis
 \endgroup
 ```
 
+:::: {.content-visible when-meta="show-assignment4-solutions" when-format="html"}
+
+::: {.callout-important title="Solutions"}
+
+Solutions are provided below each part, including P1-P10. Expand a **Solution** to view the answer and explanation. Solutions are also included in the [course PDF](https://chikuang.github.io/teaching/2026F_stat8670/STAT-8670-Computational-Methods-in-Statistics.pdf).
+
+:::
+
+::::
+
 {{< pagebreak >}}
 
 ## Question 1: Monte Carlo Concepts [8]
 
 Select **one best answer** for each item. Each item is worth **1 point**. Assume the expectations and variances used below are finite. Here $s_Y$ denotes the sample standard deviation of the outputs $Y_i$.
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (a) The target [1]
 
@@ -68,6 +84,27 @@ Let $U\sim\operatorname{Uniform}(0,1)$, $Y=g(U)$, and $\theta=E[Y]$. What does t
 **C.** The largest possible value of $g(U)$.  
 **D.** The value $g(E[U])$, which always equals $E[g(U)]$.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1a .callout-tip collapse="true" title="Solution 1(a)"}
+
+**B [1].** The estimator averages the outputs $Y_i=g(U_i)$, so its target is their expectation. In general, $E[g(U)]\ne g(E[U])$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (b) Output spread and simulation precision [1]
 
 An estimate averages $N>1$ independent, identically distributed outputs $Y_i=g(U_i)$ with nonzero variance. Which estimates its Monte Carlo standard error (MCSE)?
@@ -76,6 +113,27 @@ An estimate averages $N>1$ independent, identically distributed outputs $Y_i=g(U
 **B.** $s_Y$.  
 **C.** $s_Y/N$.  
 **D.** $s_Y/\sqrt N$.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1b .callout-tip collapse="true" title="Solution 1(b)"}
+
+**D [1].** MCSE concerns the average of the outputs, so it uses their SD divided by $\sqrt N$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (c) A larger simulation [1]
 
@@ -86,6 +144,27 @@ With the same output distribution, approximately how many independent draws are 
 **C.** 2,000.  
 **D.** 200.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1c .callout-tip collapse="true" title="Solution 1(c)"}
+
+**A [1].** A threefold reduction in MCSE requires nine times the draws: $2000(0.03/0.01)^2=18000$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (d) An integral [1]
 
 To estimate $I=\int_2^5 g(x)\,dx$, generate independent $X_i\sim\operatorname{Uniform}(2,5)$. Which estimator is correct?
@@ -95,7 +174,26 @@ To estimate $I=\int_2^5 g(x)\,dx$, generate independent $X_i\sim\operatorname{Un
 **C.** $3\operatorname{mean}(g(X_i))$.  
 **D.** $\operatorname{mean}(g(X_i))$.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1d .callout-tip collapse="true" title="Solution 1(d)"}
+
+**C [1].** The interval has width 3 and the uniform density is $1/3$, so $I=3E[g(X)]$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (e) A probability [1]
 
@@ -106,6 +204,27 @@ Independent draws $X_1,\ldots,X_N$ follow the specified model. Let $I_i=1$ if $X
 **C.** $\sum_{i=1}^N I_i$.\
 **D.** The indicator that the sample mean of the $X_i$ exceeds 8.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1e .callout-tip collapse="true" title="Solution 1(e)"}
+
+**A [1].** Average the event indicators. The other expressions return a conditional sample mean, a count, or a single logical value.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (f) An uncertainty interval [1]
 
 A large simulation of independent, identically distributed outputs reports $\widehat\theta\pm1.96\widehat{\mathrm{MCSE}}$. What uncertainty does this interval address?
@@ -114,6 +233,27 @@ A large simulation of independent, identically distributed outputs reports $\wid
 **B.** All uncertainty in the scientific model and its assumptions.  
 **C.** Monte Carlo error in estimating the specified model expectation.  
 **D.** Only measurement error in the original dataset.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1f .callout-tip collapse="true" title="Solution 1(f)"}
+
+**C [1].** The interval describes simulation error under the specified model, using a large-sample approximation. It does not include model misspecification or parameter-estimation uncertainty unless those are separately incorporated.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (g) Reproducibility [1]
 
@@ -124,6 +264,27 @@ A script sets `set.seed(8670)` once before a simulation. Which statement is corr
 **C.** Every independently chosen seed gives the same estimate.  
 **D.** The seed supports reproducibility; MCSE is still needed to assess precision.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1g .callout-tip collapse="true" title="Solution 1(g)"}
+
+**D [1].** A reproducible result can still have Monte Carlo error.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (h) A missing factor [1]
 
 An estimate of $\int_2^5 g(x)\,dx$ uses $N^{-1}\sum_{i=1}^N g(X_i)$ for independent $X_i\sim\operatorname{Uniform}(2,5)$, omitting the interval-width factor. Assume the desired integral is nonzero. What does increasing $N$ accomplish?
@@ -133,12 +294,32 @@ An estimate of $\int_2^5 g(x)\,dx$ uses $N^{-1}\sum_{i=1}^N g(X_i)$ for independ
 **C.** It makes the output distribution uniform.  
 **D.** It guarantees a larger estimated MCSE.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-1h .callout-tip collapse="true" title="Solution 1(h)"}
+
+**B [1].** The average converges to one third of the integral. More draws do not repair the estimator.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
 
 {{< pagebreak >}}
 
 ## Question 2: Variance Reduction [8]
 
 Select **one best answer** for each item. Each item is worth **1 point**. Use the conventions from [Chapter 5](https://chikuang.github.io/teaching/2026F_stat8670/05-monte-carlo.html#sec-mc-efficiency). Assume finite second moments; $s_A$ is the sample standard deviation of the $K$ pair averages, with $K>1$.
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (a) Antithetic inputs [1]
 
@@ -149,6 +330,27 @@ For $U\sim\operatorname{Uniform}(0,1)$, which statement about $(U,1-U)$ is corre
 **C.** Each is uniform, but they are dependent.  
 **D.** Only the first value is uniform.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2a .callout-tip collapse="true" title="Solution 2(a)"}
+
+**C [1].** Reflection preserves the uniform distribution, but $1-U$ is determined by $U$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (b) The independent unit [1]
 
 From $K$ independent uniforms, form $A_k=\{g(U_k)+g(1-U_k)\}/2$. Which estimates the MCSE of $\overline A$?
@@ -157,6 +359,27 @@ From $K$ independent uniforms, form $A_k=\{g(U_k)+g(1-U_k)\}/2$. Which estimates
 **B.** $s_A/\sqrt{2K}$.  
 **C.** The SD of all $2K$ outputs divided by $\sqrt{2K}$, treating them as independent.  
 **D.** $s_U/\sqrt K$.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2b .callout-tip collapse="true" title="Solution 2(b)"}
+
+**A [1].** There are $K$ independent pair averages. Outputs within a pair are dependent.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (c) A fair cost comparison [1]
 
@@ -167,6 +390,27 @@ Each call to $g$ has the same cost. An antithetic run uses 600 pairs. Which plai
 **C.** 2,400 independent outputs.  
 **D.** 1,200 independent outputs.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2c .callout-tip collapse="true" title="Solution 2(c)"}
+
+**D [1].** Each pair uses two evaluations, giving $2(600)=1200$ calls.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (d) When reflection helps [1]
 
 At the same number of calls to $g$, antithetic pairing reduces estimator variance relative to independent outputs when:
@@ -176,7 +420,26 @@ At the same number of calls to $g$, antithetic pairing reduces estimator varianc
 **C.** $U$ is resampled until it exceeds 0.5.  
 **D.** $g$ is any function, without further conditions.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2d .callout-tip collapse="true" title="Solution 2(d)"}
+
+**B [1].** The paired variance contains the covariance term. Negative output covariance reduces it; reflection alone is not a guarantee.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (e) The sign of a control coefficient [1]
 
@@ -187,6 +450,27 @@ Use $Z=Y+c(C-\mu_C)$ with known $\mu_C=E[C]$ and $\operatorname{Var}(C)>0$. If $
 **C.** Negative.  
 **D.** Always equal to 1.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2e .callout-tip collapse="true" title="Solution 2(e)"}
+
+**C [1].** With this plus-sign convention, $c^*=-\operatorname{Cov}(Y,C)/\operatorname{Var}(C)<0$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (f) Preserving the target [1]
 
 For a fixed coefficient $c$, why does $Z=Y+c(C-\mu_C)$ have the same expectation as $Y$?
@@ -195,6 +479,27 @@ For a fixed coefficient $c$, why does $Z=Y+c(C-\mu_C)$ have the same expectation
 **B.** $C$ is always zero.  
 **C.** $C$ and $Y$ must be independent.  
 **D.** $Z$ must equal $Y$ for every draw.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2f .callout-tip collapse="true" title="Solution 2(f)"}
+
+**A [1].** The adjustment has mean zero, so $E[Z]=E[Y]$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (g) Replacing a known mean [1]
 
@@ -205,6 +510,27 @@ A programmer uses $Z_i=Y_i+c(C_i-\overline C)$ with the same sample mean $\overl
 **C.** It becomes the known control mean.  
 **D.** It equals the original sample mean of the outputs.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2g .callout-tip collapse="true" title="Solution 2(g)"}
+
+**D [1].** The sample average of $C_i-\overline C$ is exactly zero, so $\overline Z=\overline Y$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (h) No association with the control [1]
 
 If $\operatorname{Cov}(Y,C)=0$ and $\operatorname{Var}(C)>0$, which fixed coefficient minimizes $\operatorname{Var}\{Y+c(C-\mu_C)\}$?
@@ -214,6 +540,20 @@ If $\operatorname{Cov}(Y,C)=0$ and $\operatorname{Var}(C)>0$, which fixed coeffi
 **C.** $c=-1$.  
 **D.** Every value gives the same variance.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-2h .callout-tip collapse="true" title="Solution 2(h)"}
+
+**B [1].** The variance becomes $\operatorname{Var}(Y)+c^2\operatorname{Var}(C)$, minimized at zero.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
 
 {{< pagebreak >}}
 
@@ -228,17 +568,86 @@ Two runs estimate the same $\theta=E[g(U)]$, where $U\sim\operatorname{Uniform}(
 
 Treat the displayed SDs as exact for these calculations. Retain full precision until the final answer.
 
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (a) MCSE [2]
 
 Report the estimated MCSE for **plain** and **antithetic** Monte Carlo, in that order. Each value is worth **1 point**.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-3a .callout-tip collapse="true" title="Solution 3(a)"}
+
+**[1 each].** Plain: $0.600/\sqrt{1200}=0.0173205\approx0.017$. Antithetic: $0.120/\sqrt{600}=0.0048990\approx0.005$. Use 600, not 1,200, independent pair averages.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (b) Relative precision [2]
 
 Compute the ratio of estimated **estimator variances**, $\widehat{\operatorname{Var}}(\widehat\theta_{\mathrm{plain}})/\widehat{\operatorname{Var}}(\widehat\theta_{\mathrm{anti}})$ **[1]**. In one sentence, identify the more precise estimator and interpret this variance ratio at the stated computational budget (do not call it an MCSE ratio) **[1]**.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-3b .callout-tip collapse="true" title="Solution 3(b)"}
+
+**12.500 [1].** $(0.600^2/1200)/(0.120^2/600)=12.5$. **Interpretation [1]:** at the same number of function evaluations, the plain estimator has about 12.5 times the estimated variance of the antithetic estimator (equivalently, the antithetic estimate has about 8% of the variance). This is not a ratio of SDs.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (c) A Monte Carlo interval [2]
 
 Using the antithetic result, give the lower and upper endpoints of the approximate 95% interval $\widehat\theta\pm1.96\widehat{\mathrm{MCSE}}$ (**1 point each**).
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-3c .callout-tip collapse="true" title="Solution 3(c)"}
+
+**[1 each].** $1.718\pm1.96(0.120/\sqrt{600})$ gives **(1.708, 1.728)**. This is an interval for the specified expectation due to Monte Carlo error.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (d) A separate control-variate calculation [2]
 
@@ -248,6 +657,20 @@ $$Z=Y+c(C-2),\qquad c^*=-\frac{\operatorname{Cov}(Y,C)}{\operatorname{Var}(C)}.$
 
 The run gives $\overline Y=3.4$ and $\overline C=2.1$. Report $c^*$ and the adjusted estimate $\overline Z$ (**1 point each**).
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-3d .callout-tip collapse="true" title="Solution 3(d)"}
+
+**[1 each].** $c^*=-0.50/0.25=-2.000$ and $\overline Z=3.4-2(2.1-2)=3.200$.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
 
 {{< pagebreak >}}
 
@@ -257,9 +680,36 @@ The run gives $\overline Y=3.4$ and $\overline C=2.1$. Report $c^*$ and the adju
 
 **Reading guide.** Split the development data into $K$ folds. For each candidate and each fold, fit using the other folds and predict the held-out observations. Average their squared errors to obtain the CV MSE. Use the same folds for all candidates. Select the candidate with the smallest CV MSE, refit it on all development observations, and assess it once on a separate test set that was not used for selection. Data-dependent preprocessing and feature selection belong inside each training fold.
 
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (a) Data roles [2]
 
 There are 100 independent development observations in five equal folds. For each fit, how many observations are used for **training** and for **validation**, respectively (**1 point each**)?
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-4a .callout-tip collapse="true" title="Solution 4(a)"}
+
+**80 and 20 [1 each].** Each fit trains on four folds and validates on the remaining fold.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### (b) Choose a candidate [2]
 
@@ -273,6 +723,27 @@ Three polynomial regression candidates use the same five folds and squared-error
 
 Which degree should be selected by CV **[1]**? In one sentence, explain why the smallest training MSE does not determine this choice **[1]**.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-4b .callout-tip collapse="true" title="Solution 4(b)"}
+
+**Degree 2 [1].** **Reason [1]:** it has the smallest held-out prediction error; training error evaluates observations already used for fitting and can favor an overly flexible model.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### (c) Valid assessment [2]
 
 Enter `T` or `F` for each statement (**1 point each**).
@@ -280,7 +751,22 @@ Enter `T` or `F` for each statement (**1 point each**).
 1. Selecting features using all development outcomes before forming the folds gives a valid CV assessment of that feature-selection procedure.
 2. After choosing the degree by CV, it is appropriate to refit on all development data and evaluate once on an untouched test set.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-4c .callout-tip collapse="true" title="Solution 4(c)"}
+
+**F, T [1 each].** Feature selection must be repeated inside each training fold; otherwise held-out outcomes influence the fitted procedure. The reserved test set is used after selection.
+
+:::
+
+::::
+
 <!-- exam2-practice-start -->
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
 
 {{< pagebreak >}}
 
@@ -293,6 +779,12 @@ These ten questions complement Questions 1-4 and [Assignment 3](https://chikuang
 - P9-P10: validation design and prediction loss (Chapter 6, with reading guides).
 
 Vectors are bold and are column vectors. Gamma parameters are shape and rate unless stated otherwise. Exclude the optional and supplementary material in the notes.
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P1. Inverse transformation
 
@@ -307,6 +799,27 @@ For $U\sim\operatorname{Uniform}(0,1)$, select the correct generator. Check your
 **C.** $X=2\sqrt{U}$.  
 **D.** $X=4U$.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p1 .callout-tip collapse="true" title="Solution P1"}
+
+**C.** Solving $u=x^2/4$ on $0<x<2$ gives $x=2\sqrt u$. Then $F(2\sqrt U)=U$, and the generated values have the required support. This is an inverse transformation, not direct substitution of a uniform draw into the CDF.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### P2. Construct a distribution from normal draws
 
 Let $Z_1,\ldots,Z_4$ be independent standard normal variables and define
@@ -320,7 +833,26 @@ Which distribution does $T$ have? Here $\operatorname{Gamma}(a,b)$ uses shape $a
 **C.** $\operatorname{Gamma}(2,1/3)$.  
 **D.** $\chi^2_4$.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p2 .callout-tip collapse="true" title="Solution P2"}
+
+**A.** The numerator is $\chi^2_4=\operatorname{Gamma}(2,1/2)$. Dividing by 6 multiplies the rate by 6, giving $\operatorname{Gamma}(2,3)$, with mean $2/3$ and variance $2/9$. Rate and scale transform in opposite directions.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P3. Check the joint distribution
 
@@ -338,6 +870,38 @@ Which statement is correct? Treat the vectors as columns.
 
 Write the two covariance matrices as a check.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p3 .callout-tip collapse="true" title="Solution P3"}
+
+**D.** The covariance matrices are
+
+$$
+\operatorname{Cov}(\mathbf X)=
+\begin{pmatrix}1&0\\1&2\end{pmatrix}
+\begin{pmatrix}1&1\\0&2\end{pmatrix}
+=\begin{pmatrix}1&1\\1&5\end{pmatrix},
+\qquad
+\operatorname{Cov}(\mathbf W)=\begin{pmatrix}1&0\\0&5\end{pmatrix}.
+$$
+
+The shared $Z_1$ term induces covariance in $\mathbf X$. Matching the two univariate marginal distributions does not determine the joint distribution.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### P4. Proposal support
 
 A rejection sampler targets $\operatorname{Uniform}(0,1)$ and proposes $Y\sim\operatorname{Exp}(1)$ on $(0,\infty)$.
@@ -346,7 +910,26 @@ Mark **T or F** and give one sentence: "The proposal is unusable because it can 
 
 For this question, you may use the valid envelope constant $M=e$: the target density is 1 on $(0,1)$ and zero elsewhere, while the proposal density is $g(y)=e^{-y}$ for $y>0$.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p4 .callout-tip collapse="true" title="Solution P4"}
+
+**F.** A proposal may cover more than the target support; proposals outside $(0,1)$ are rejected. For $0<y<1$, $f(y)/g(y)=e^y\leq e$, and for $y\geq1$ the target density is zero. Missing part of the target support is a problem; extra proposal support is not itself a validity problem.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P5. Rejection-sampling efficiency
 
@@ -356,6 +939,28 @@ Two rejection samplers use the same **normalized** target density $f$ and propos
 2. Which sampler gives more accepted draws per proposal, and by what factor? Does the larger valid envelope change the target distribution of accepted draws?
 
 **Guide.** For normalized target and proposal densities, the overall acceptance probability is $1/M$. An expected count need not equal the count in a particular run.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p5 .callout-tip collapse="true" title="Solution P5"}
+
+1. For sampler A, $P(\text{accept})=1/1.5=2/3\approx0.667$, so the expected count is $600(2/3)=400$. For sampler B, $P(\text{accept})=1/3\approx0.333$, so the expected count is $600/3=200$.
+2. **Sampler A** gives twice as many accepted draws per proposal on average: $(2/3)/(1/3)=2$. Both samplers still produce the same target distribution among accepted draws because both envelopes are valid. Increasing a valid envelope constant lowers efficiency; it does not change that target. Actual accepted counts are random and need not equal their expectations.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P6. Combine independent simulation batches
 
@@ -371,7 +976,38 @@ $$\widehat\theta_A=\tfrac12\overline Y_1+\tfrac12\overline Y_2,
 
 Use $\operatorname{Var}(aV+bW)=a^2\operatorname{Var}(V)+b^2\operatorname{Var}(W)$ for independent $V,W$.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p6 .callout-tip collapse="true" title="Solution P6"}
+
+1. **Both are unbiased:** $E[\widehat\theta_A]=(1/2+1/2)\theta=\theta$ and $E[\widehat\theta_B]=(1/5+4/5)\theta=\theta$.
+2. Independence gives
+
+$$
+\operatorname{Var}(\widehat\theta_A)=\tfrac14(8/100)+\tfrac14(8/400)=0.025,
+$$
+$$
+\operatorname{Var}(\widehat\theta_B)=\tfrac1{25}(8/100)+\tfrac{16}{25}(8/400)=0.016.
+$$
+
+**B is more efficient.** It is the mean of all 500 outputs. Equal weighting of unequal batches overweights the less precise small-batch mean here.
+
+3. **No.** Smaller variance describes repeated-run precision, not an ordering of the absolute errors in every pair of realized runs. Either estimate can happen to be closer in a particular run.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P7. Evaluate a proposed pairing
 
@@ -389,6 +1025,29 @@ Each method uses $2K$ function evaluations. The plain comparison averages $2K$ i
 
 Use $\operatorname{Var}\{(Y+Y')/2\}=\{\operatorname{Var}(Y)+\operatorname{Var}(Y')+2\operatorname{Cov}(Y,Y')\}/4$.
 
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p7 .callout-tip collapse="true" title="Solution P7"}
+
+For A, one pair average has variance $(2-1.2)/4=0.2$, giving estimator variance $0.2/K$. For B, the corresponding values are $0.7$ and $0.7/K$. Plain Monte Carlo has variance $1/(2K)$, so the ratios are **0.400** and **1.400**. A improves precision; B worsens it at the same evaluation budget.
+
+The MCSE ratio is the square root of the variance ratio: **$\sqrt{0.4}\approx0.632$**, not 0.4. Correct marginal distributions preserve the target but do not by themselves guarantee a useful pairing.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
+
 ### P8. Can a larger adjustment be worse?
 
 Suppose $E[Y]=\theta$, $E[C]=\mu_C$ is known, $\operatorname{Var}(Y)=9$, $\operatorname{Var}(C)=4$, and $\operatorname{Cov}(Y,C)=3$. Use
@@ -402,7 +1061,29 @@ Compare the two fixed coefficients $c=-0.5$ and $c=-2$.
 
 You may use $\operatorname{Var}(Z_c)=\operatorname{Var}(Y)+c^2\operatorname{Var}(C)+2c\operatorname{Cov}(Y,C)$.
 
-{{< pagebreak >}}
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p8 .callout-tip collapse="true" title="Solution P8"}
+
+Both expectations equal $\theta$, since the control is centered at its known mean.
+For $c=-0.5$, the variance is $9+0.25(4)-3=7$.
+For $c=-2$, the variance is $9+4(4)-12=13$.
+With $N$ independent draws, the estimator variances are $7/N$ and $13/N$, versus $9/N$ for plain Monte Carlo. Thus the smaller-magnitude adjustment helps, but the larger one is worse than no adjustment. Positive covariance motivates a negative coefficient under this convention; it does not justify an arbitrarily large magnitude. The optimum is $-3/4$, although finding it is not required.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P9. Match validation to the prediction task
 
@@ -413,6 +1094,29 @@ A retailer records monthly sales for several stores. Address these two different
 1. To predict the next month's sales at the **existing stores**, should validation randomly mix past and future months, or hold out later months and train on earlier months? Explain briefly.
 2. For the separate goal of predicting sales at a **new store during the same calendar period** (not forecasting future months), should rows from the same store be spread across training and validation, or kept in the same fold? Assume stores are the independent sampling units. Explain briefly.
 3. Within a CV fit, a predictor is standardized using a mean and SD estimated from **all** development rows before splitting. State where those quantities should instead be estimated and how they should be applied to the validation rows.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p9 .callout-tip collapse="true" title="Solution P9"}
+
+1. Hold out later months and train only on earlier months. Random mixing can let future observations inform predictions of earlier observations, which does not represent forecasting.
+2. Keep each store's rows together, holding out entire stores to assess prediction for a new store. A model trained on other records from the validation store has already seen that group.
+3. Estimate the mean and SD using only the current fit's training observations, then apply those same training-derived values to validation. Do not estimate separate validation scaling parameters or use the held-out rows to learn the transformation. The central point is validation of the entire fitting procedure.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
+
+```{=latex}
+\begingroup
+\tcbset{breakable/.style={breakable@false}}
+\noindent\begin{minipage}{\linewidth}
+```
 
 ### P10. Aggregate held-out loss
 
@@ -428,3 +1132,20 @@ A candidate model specification is fixed. It is refitted separately on the other
 2. A student instead averages the three fold MSEs without weights. Calculate that result and explain why it answers a different averaging question.
 
 **Guide.** Add the squared held-out errors over all observations and divide by their total count. Unequal folds require size weights if you start from fold MSEs.
+
+:::: {.content-visible when-meta="show-assignment4-solutions"}
+
+::: {#a4-solution-p10 .callout-tip collapse="true" title="Solution P10"}
+
+The overall CV MSE is **$(2+9+4)/(2+3+5)=1.500$**.
+The fold MSEs are 1, 3, and 0.8; their unweighted average is **1.600**.
+Equal fold weighting gives each fold the same influence, so observations in the smaller folds receive greater weight. To give every observation equal weight, use $(2/10)(1)+(3/10)(3)+(5/10)(0.8)=1.5$. Neither result is a training MSE: both use held-out predictions, but their aggregation differs.
+
+:::
+
+::::
+
+```{=latex}
+\end{minipage}\par\medskip
+\endgroup
+```
